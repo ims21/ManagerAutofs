@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-30 23:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "ManagerAutofs"
+msgstr ""
+
+msgid "Manage autofs files"
+msgstr ""
+
+#, python-format
+msgid "ManagerAutofs v.%s - select auto mount file with OK"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Edit auto file"
+msgstr ""
+
+msgid "Reading auto.master file - Please wait..."
+msgstr ""
+
+#, python-format
+msgid "File %s with %d lines"
+msgstr ""
+
+#, python-format
+msgid "Empty file %s"
+msgstr ""
+
+#, python-format
+msgid "ManagerAutofs - edited record: %s"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "mountpoint name"
+msgstr ""
+
+msgid "auto.name"
+msgstr ""
+
+msgid "ghost"
+msgstr ""
+
+msgid "cifs"
+msgstr ""
+
+msgid "nfs"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "ntlm"
+msgstr ""
+
+msgid "ntlm2"
+msgstr ""
+
+msgid "utf8"
+msgstr ""
+
+msgid "1250"
+msgstr ""
+
+msgid "4096"
+msgstr ""
+
+msgid "8192"
+msgstr ""
+
+msgid "16384"
+msgstr ""
+
+msgid "32768"
+msgstr ""
+
+#, python-format
+msgid "ManagerAutofs - editeded autofile: %s"
+msgstr ""
+
+msgid "local directory"
+msgstr ""
+
+msgid "fstype"
+msgstr ""
+
+msgid "rw"
+msgstr ""
+
+msgid "user"
+msgstr ""
+
+msgid "password"
+msgstr ""
+
+msgid "domain"
+msgstr ""
+
+msgid "domain name"
+msgstr ""
+
+msgid "noperm"
+msgstr ""
+
+msgid "noatime"
+msgstr ""
+
+msgid "noserverino"
+msgstr ""
+
+msgid "ip"
+msgstr ""
+
+msgid "remote directory"
+msgstr ""
+
+msgid "security"
+msgstr ""
+
+msgid "iocharset"
+msgstr ""
+
+msgid "rsize"
+msgstr ""
+
+msgid "wsize"
+msgstr ""
