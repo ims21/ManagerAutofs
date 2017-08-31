@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = 1.01
+VERSION = 1.04
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -29,6 +29,7 @@ from Components.ConfigList import ConfigListScreen
 from Components.config import config, ConfigSubsection, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
 from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from Tools.BoundFunction import boundFunction
+from Screens.ChoiceBox import ChoiceBox
 import skin
 
 config.plugins.mautofs = ConfigSubsection()
@@ -52,7 +53,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def __init__(self, session, *args):
 		Screen.__init__(self, session)
 		self.session = session
-		self.setTitle(_("ManagerAutofs v.%s - select auto mount file with OK") % VERSION)
+		self.setTitle(_("ManagerAutofs v.%s - use Menu on auto mount file") % VERSION)
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Ok"))
@@ -62,10 +63,10 @@ class ManagerAutofsMasterSelection(Screen):
 
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions", "KeyboardInputActions", "MenuActions"],
 		{
-			"ok": self.editMaster,
+			"ok": self.menu,
 			"cancel": boundFunction(self.close, None),
 			"red": boundFunction(self.close, None),
-			"green": self.editMaster,
+			"green": self.editMasterRecord,
 			"yellow": self.editAutofile,
 			"up": self.keyUp,
 			"down": self.keyDown,
@@ -75,7 +76,7 @@ class ManagerAutofsMasterSelection(Screen):
 			"downRepeated": self.keyDown,
 			"leftRepeated": self.keyLeft,
 			"rightRepeated": self.keyRight,
-			"menu": boundFunction(self.close, True),
+			"menu": self.menu,
 		}, -1)
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -92,11 +93,12 @@ class ManagerAutofsMasterSelection(Screen):
 	def keyDown(self):
 		self["list"].instance.moveSelection(self["list"].instance.moveDown)
 		
-	def readMasterFile(self, change=None):
+	def readMasterFile(self, edit=None, action=None):
+		# 0 - status 1 - mountpoint 2 - autofile 3 - ghost
 		list = []
+		self.masterList = []
 
-		self.master = None
-		self.auto = None
+		self.m = None
 		fi = open("/etc/auto.master", "r")
 		for line in fi:
 			line = line.replace('\n','')
@@ -105,31 +107,99 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("disabled")
 				line = line[1:]
 			line = status + ' ' + line
-			self.master = line.split(' ')
-			if change:
-				if self.master[1] == change[1] and self.master[2] == change[2]:
-					self.master = change
-			# 0 - status 1 - mountpoint 2 - autofile 3 - ghost
-			list.append(ChoiceEntryComponent('',('{0:30}{1:30}{3:10}{2:8}'.format(self.master[2],self.master[1],self.master[3],self.master[0]), self.master[1], self.master[2], self.master[3], self.master[0])))
+			self.m = line.split(' ')
+			if not action and edit: 	# change record's parameters
+				if self.m[1] == edit[1] and self.m[2] == edit[2]:
+					self.m = edit
+			if action == "remove" and edit: # remove record
+				if self.m[1] == edit[1] and self.m[2] == edit[2] and self.m[3] == edit[3] and self.m[0] == edit[0]:
+					continue
+			list.append(ChoiceEntryComponent('',('{0:30}{1:30}{3:10}{2:8}'.format(self.m[2],self.m[1],self.m[3],self.m[0]), self.m[1], self.m[2], self.m[3], self.m[0])))
+			self.masterList.append((self.m[0], self.m[1], self.m[2], self.m[3]))
 		fi.close()
-
+		if edit and action == "new": 		# add new record
+			list.append(ChoiceEntryComponent('',('{0:30}{1:30}{3:10}{2:8}'.format(edit[2],edit[1],edit[3],edit[0]), edit[1], edit[2], edit[3], edit[0])))
+			self.masterList.append((edit[0], edit[1], edit[2], edit[3]))
 		self["list"].setList(list)
 
-#	def keyOk(self):
+	def saveMasterFile(self):
+		fo = open("/etc/auto.master_new", "w")
+		for x in self.masterList:
+			fo.write("%s%s %s %s\n" % ("" if x[0]=="enabled" else "#", x[1], x[2], x[3]))
+		fo.close()
 
-	def editMaster(self):
-		def callBack():
-			self.change = ""
-			mountpoint = "/mnt/%s" % cfg.mountpoint.value
-			autofile = "/etc/auto.%s" % cfg.autofile.value
-			enabled =  cfg.enabled.value and "enabled" or "disabled"
-			ghost = cfg.ghost.value and "--ghost" or ""
-			self.change = (enabled, mountpoint, autofile, ghost)
-			self.readMasterFile(self.change)
+	def menu(self):
+		menu = []
+		text = _("Select operation for record")
+		sel = self["list"].l.getCurrentSelection()
+		if sel:
+			text += ": %s" % (sel[0][1].split('/')[2])
+			menu.append((_("Edit"),0))
+		menu.append((_("Add"),1))
+		menu.append((_("Remove"),2))
+
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu)
+
+	def menuCallback(self, choice):
+		if choice is None:
+			return
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
-		self.session.openWithCallback(callBack, ManagerAutofsMasterEdit, sel)
+		if choice[1] == 0:
+			self.editMasterRecord()
+		elif choice[1] == 1:
+			self.addMasterRecord()
+		elif choice[1] == 2:
+			self.removeMasterRecord()
+		else:
+			return
+
+	def addMasterRecord(self):
+		def callback(change=False):
+			if change:
+				add = ""
+				mountpoint = "/mnt/%s" % cfg.mountpoint.value
+				autofile = "/etc/auto.%s" % cfg.autofile.value
+				enabled =  cfg.enabled.value and "enabled" or "disabled"
+				ghost = cfg.ghost.value and "--ghost" or ""
+				add = (enabled, mountpoint, autofile, ghost)
+				self.readMasterFile(edit=add, action="new")
+				self.saveMasterFile()
+		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, None)
+
+
+	def editMasterRecord(self):
+		def callback(change=False):
+			if change:
+				edit = ""
+				mountpoint = "/mnt/%s" % cfg.mountpoint.value
+				autofile = "/etc/auto.%s" % cfg.autofile.value
+				enabled =  cfg.enabled.value and "enabled" or "disabled"
+				ghost = cfg.ghost.value and "--ghost" or ""
+				edit = (enabled, mountpoint, autofile, ghost)
+				self.readMasterFile(edit=edit)
+				self.saveMasterFile()
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, sel)
+
+	def removeMasterRecord(self):
+		def callback(change=False):
+			if change:
+				rm = ""
+				mountpoint = sel[0][1]
+				autofile = sel[0][2]
+				enabled = sel[0][4]
+				ghost = sel[0][3]
+				rm = (enabled, mountpoint, autofile, ghost)
+				self.readMasterFile(edit=rm, action="remove")
+				self.saveMasterFile()
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+		self.session.openWithCallback(callback, MessageBox, _("Remove record for %s?") % sel[0][1] , type=MessageBox.TYPE_YESNO, default=False, simple=True)
 
 	def editAutofile(self):
 		def callBack():
@@ -177,7 +247,11 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, pars):
 		Screen.__init__(self, session)
-		self.setTitle(_("ManagerAutofs - edited record: %s") % pars[0][1].split('/')[2])
+		if not pars:
+			text = _("ManagerAutofs - create new record")
+		else:
+			text = _("ManagerAutofs - edited record: %s") % pars[0][1].split('/')[2]
+		self.setTitle(text)
 		self.pars = pars
 		self["text"] = Label()
 
@@ -204,14 +278,20 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.actualizeString()
 
 	def createConfig(self):
+		self.setDefault()
+
 		self.list = [ ]
 
-		if self.pars[0][4] == "enabled":
-			cfg.enabled.value = True
-		cfg.mountpoint.value = self.pars[0][1].split('/')[2]
-		cfg.autofile.value = self.pars[0][2].split('.')[1]
-		if self.pars[0][3] == "--ghost":
-			cfg.ghost.value = True
+		if self.pars:
+			if self.pars[0][4] == "enabled":
+				cfg.enabled.value = True
+			cfg.mountpoint.value = self.pars[0][1].split('/')[2]
+			cfg.autofile.value = self.pars[0][2].split('.')[1]
+			if self.pars[0][3] == "--ghost":
+				cfg.ghost.value = True
+		else:
+			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
+
 		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
 		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
 		self.list.append(getConfigListEntry(_("auto.name"), cfg.autofile))
@@ -219,6 +299,12 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
+
+	def setDefault(self):
+		cfg.enabled.value = cfg.enabled.default
+		cfg.mountpoint.value = cfg.mountpoint.default
+		cfg.autofile.value = cfg.autofile.default
+		cfg.ghost.value == cfg.ghost.default
 
 	def changedEntry(self):
 		self.actualizeString()
@@ -233,7 +319,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self["text"].setText(string)
 
 	def keyOk(self):
-		self.close()
+		#save file
+		self.close(True)
 
 	def keyClose(self):
 		self.close()
