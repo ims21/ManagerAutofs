@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = 1.04
+VERSION = 1.07
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -30,6 +30,7 @@ from Components.config import config, ConfigSubsection, ConfigIP, ConfigInteger,
 from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
+import enigma
 import skin
 
 config.plugins.mautofs = ConfigSubsection()
@@ -55,8 +56,15 @@ class ManagerAutofsMasterSelection(Screen):
 		self.session = session
 		self.setTitle(_("ManagerAutofs v.%s - use Menu on auto mount file") % VERSION)
 
+		self.data = ''
+		self.container = enigma.eConsoleAppContainer()
+		self.container.appClosed.append(self.appClosed)
+		self.container.dataAvail.append(self.dataAvail)
+		self["status"] = Label()
+		self["statusbar"] = Label()
+
 		self["key_red"] = Button(_("Cancel"))
-		self["key_green"] = Button(_("Ok"))
+		self["key_green"] = Button(_("Edit master record"))
 		self["key_yellow"] = Button(_("Edit auto file"))
 
 		self["list"] = ChoiceList(list=[ChoiceEntryComponent('',((_("Reading auto.master file - Please wait...")), "Waiter"))])
@@ -82,17 +90,25 @@ class ManagerAutofsMasterSelection(Screen):
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def keyLeft(self):
+		self.clearTexts()
 		self["list"].instance.moveSelection(self["list"].instance.pageUp)
 
 	def keyRight(self):
+		self.clearTexts()
 		self["list"].instance.moveSelection(self["list"].instance.pageDown)
 
 	def keyUp(self):
+		self.clearTexts()
 		self["list"].instance.moveSelection(self["list"].instance.moveUp)
 
 	def keyDown(self):
+		self.clearTexts()
 		self["list"].instance.moveSelection(self["list"].instance.moveDown)
-		
+
+	def clearTexts(self):
+		self["status"].setText("")
+		self["statusbar"].setText("")
+
 	def readMasterFile(self, edit=None, action=None):
 		# 0 - status 1 - mountpoint 2 - autofile 3 - ghost
 		list = []
@@ -123,22 +139,29 @@ class ManagerAutofsMasterSelection(Screen):
 		self["list"].setList(list)
 
 	def saveMasterFile(self):
-		fo = open("/etc/auto.master_new", "w")
+		# TODO: backup previous version
+		fo = open("/etc/auto.master", "w")
 		for x in self.masterList:
 			fo.write("%s%s %s %s\n" % ("" if x[0]=="enabled" else "#", x[1], x[2], x[3]))
 		fo.close()
 
 	def menu(self):
 		menu = []
+		buttons = []
 		text = _("Select operation for record")
 		sel = self["list"].l.getCurrentSelection()
 		if sel:
 			text += ": %s" % (sel[0][1].split('/')[2])
 			menu.append((_("Edit"),0))
+			buttons = ["4"]
 		menu.append((_("Add"),1))
 		menu.append((_("Remove"),2))
+		menu.append((_("Reload autofs"),13))
+		menu.append((_("Reload autofs with restart GUI"),14))
 
-		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu)
+		buttons += ["1","8","green","red"]
+
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
 	def menuCallback(self, choice):
 		if choice is None:
@@ -152,8 +175,38 @@ class ManagerAutofsMasterSelection(Screen):
 			self.addMasterRecord()
 		elif choice[1] == 2:
 			self.removeMasterRecord()
+		elif choice[1] == 13:
+			self.restartAutofs()
+		elif choice[1] == 14:
+			self.restartAutofs(restart=True)
 		else:
 			return
+
+	def restartAutofs(self, restart=False):
+		cmd = '/etc/init.d/autofs reload'
+		if restart:
+			cmd += '; killall enigma2'
+		if self.container.execute(cmd):
+			print "[ManagerAutofs] failed to execute"
+			self.showOutput()
+
+	def appClosed(self, retval):
+		print "[ManagerAutofs] done:", retval
+		if retval:
+			txt = _("Failed")
+		else:
+			txt = _("Done")
+		self.showOutput()
+		self.data = ''
+		self["statusbar"].setText(txt)
+
+	def dataAvail(self, s):
+		self.data += s
+		print "[ManagerAutofs]", s.strip()
+		self.showOutput()
+
+	def showOutput(self):
+		self["status"].setText(self.data)
 
 	def addMasterRecord(self):
 		def callback(change=False):
