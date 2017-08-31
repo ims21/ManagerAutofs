@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma 2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 00:01+0200\n"
-"PO-Revision-Date: 2017-08-31 00:01+0100\n"
+"POT-Creation-Date: 2017-08-30 23:57+0200\n"
+"PO-Revision-Date: 2017-08-31 19:13+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Poedit 1.5.4\n"
-
 
 msgid "ManagerAutofs"
 msgstr ""
@@ -49,7 +48,7 @@ msgid "ManagerAutofs - edited record: %s"
 msgstr ""
 
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 msgid "enabled"
 msgstr ""
@@ -70,7 +69,7 @@ msgid "nfs"
 msgstr ""
 
 msgid "no"
-msgstr ""
+msgstr "ne"
 
 msgid "ntlm"
 msgstr ""
@@ -97,7 +96,7 @@ msgid "32768"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs - editeded autofile: %s"
+msgid "ManagerAutofs - edited autofile: %s"
 msgstr ""
 
 msgid "local directory"

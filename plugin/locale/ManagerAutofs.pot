@@ -100,7 +100,7 @@ msgid "32768"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs - editeded autofile: %s"
+msgid "ManagerAutofs - edited autofile: %s"
 msgstr ""
 
 msgid "local directory"

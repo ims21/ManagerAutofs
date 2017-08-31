@@ -199,6 +199,7 @@ class ManagerAutofsMasterSelection(Screen):
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
+		#TODO ... question, if remove autofile too, then delete it too
 		self.session.openWithCallback(callback, MessageBox, _("Remove record for %s?") % sel[0][1] , type=MessageBox.TYPE_YESNO, default=False, simple=True)
 
 	def editAutofile(self):
@@ -365,7 +366,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, filename):
 		Screen.__init__(self, session)
-		self.setTitle(_("ManagerAutofs - editeded autofile: %s") % filename)
+		self.setTitle(_("ManagerAutofs - edited autofile: %s") % filename)
 		self.session = session
 		self["text"] = Label("")
 		self.auto = filename
