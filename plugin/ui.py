@@ -329,7 +329,7 @@ class ManagerAutofsMasterSelection(Screen):
 			return
 		record = sel[0][1]
 		autofile = sel[0][2]
-		removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and autofile %s") % (record, autofile), 2) ]
+		removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and its file %s") % (record, autofile), 2) ]
 		self.session.openWithCallback(callback, MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, simple=True, list=removing)
 
 	def editAutofile(self):

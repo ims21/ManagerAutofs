@@ -73,8 +73,8 @@ msgid "Record %s only"
 msgstr "Pouze záznam %s"
 
 #, python-format
-msgid "Record %s and autofile %s"
-msgstr "Záznam %s a auto soubor %s"
+msgid "Record %s and its file %s"
+msgstr "Záznam %s a jeho soubor %s"
 
 msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"

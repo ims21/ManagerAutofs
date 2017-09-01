@@ -77,7 +77,7 @@ msgid "Record %s only"
 msgstr ""
 
 #, python-format
-msgid "Record %s and autofile %s"
+msgid "Record %s and its file %s"
 msgstr ""
 
 msgid "What all do You want to remove?"
