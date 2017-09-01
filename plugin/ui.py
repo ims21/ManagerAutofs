@@ -55,7 +55,7 @@ def hex2strColor(argb):
 		out += "%s" % chr(0x30 + (argb>>i & 0xf))
 	return out
 
-dC = "\c%s" % hex2strColor(int(skin.parseColor("grey").argb()))
+dC = "\c%s" % hex2strColor(int(skin.parseColor("#00999999").argb()))
 eC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 yC = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
 fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
