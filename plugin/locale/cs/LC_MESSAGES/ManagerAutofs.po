@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma 2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-30 23:57+0200\n"
-"PO-Revision-Date: 2017-08-31 19:13+0100\n"
+"POT-Creation-Date: 2017-09-01 12:02+0200\n"
+"PO-Revision-Date: 2017-09-01 12:03+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -13,20 +13,20 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Poedit 1.5.4\n"
 
-msgid "ManagerAutofs"
+msgid "Manager Autofs"
 msgstr ""
 
 msgid "Manage autofs files"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs v.%s - select auto mount file with OK"
+msgid "ManagerAutofs v.%s - use %sMenu%s or %sOK%s on record"
 msgstr ""
 
 msgid "Cancel"
 msgstr ""
 
-msgid "Ok"
+msgid "Edit master record"
 msgstr ""
 
 msgid "Edit auto file"
@@ -35,20 +35,59 @@ msgstr ""
 msgid "Reading auto.master file - Please wait..."
 msgstr ""
 
-#, python-format
-msgid "File %s with %d lines"
+msgid "Select operation:"
 msgstr ""
 
 #, python-format
-msgid "Empty file %s"
+msgid "Edit - %s%s%s"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Reload autofs"
+msgstr ""
+
+msgid "Reload autofs with restart GUI"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+#, python-format
+msgid "Remove record for %s?"
+msgstr ""
+
+#, python-format
+msgid "File %s with %d lines. Not supported yet"
+msgstr ""
+
+#, python-format
+msgid "File %s is missing!"
+msgstr ""
+
+#, python-format
+msgid "File %s is empty!"
 msgstr ""
 
 #, python-format
 msgid "ManagerAutofs - edited record: %s"
 msgstr ""
 
+msgid "ManagerAutofs - create new record"
+msgstr ""
+
 msgid "Close"
 msgstr "Zavřít"
+
+msgid "Ok"
+msgstr ""
 
 msgid "enabled"
 msgstr ""

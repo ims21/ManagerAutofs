@@ -28,6 +28,6 @@ def main(session, **kwargs):
 	session.open(ui.ManagerAutofsMasterSelection)
 
 def Plugins(**kwargs):
-	name = _("ManagerAutofs")
+	name = _("Manager Autofs")
 	descr = _("Manage autofs files")
 	return [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, fnc = main)]

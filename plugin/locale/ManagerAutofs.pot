@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-30 23:57+0200\n"
+"POT-Creation-Date: 2017-09-01 12:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "ManagerAutofs"
+msgid "Manager Autofs"
 msgstr ""
 
 msgid "Manage autofs files"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs v.%s - select auto mount file with OK"
+msgid "ManagerAutofs v.%s - use %sMenu%s or %sOK%s on record"
 msgstr ""
 
 msgid "Cancel"
 msgstr ""
 
-msgid "Ok"
+msgid "Edit master record"
 msgstr ""
 
 msgid "Edit auto file"
@@ -39,19 +39,58 @@ msgstr ""
 msgid "Reading auto.master file - Please wait..."
 msgstr ""
 
-#, python-format
-msgid "File %s with %d lines"
+msgid "Select operation:"
 msgstr ""
 
 #, python-format
-msgid "Empty file %s"
+msgid "Edit - %s%s%s"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Reload autofs"
+msgstr ""
+
+msgid "Reload autofs with restart GUI"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+#, python-format
+msgid "Remove record for %s?"
+msgstr ""
+
+#, python-format
+msgid "File %s with %d lines. Not supported yet"
+msgstr ""
+
+#, python-format
+msgid "File %s is missing!"
+msgstr ""
+
+#, python-format
+msgid "File %s is empty!"
 msgstr ""
 
 #, python-format
 msgid "ManagerAutofs - edited record: %s"
 msgstr ""
 
+msgid "ManagerAutofs - create new record"
+msgstr ""
+
 msgid "Close"
+msgstr ""
+
+msgid "Ok"
 msgstr ""
 
 msgid "enabled"

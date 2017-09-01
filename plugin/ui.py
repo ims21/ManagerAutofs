@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = 1.07
+VERSION = 1.10
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -32,6 +32,7 @@ from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
 import enigma
 import skin
+import os
 
 config.plugins.mautofs = ConfigSubsection()
 # parameters for auto.master file
@@ -39,8 +40,25 @@ config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.mountpoint = NoSave(ConfigText(default = "/mnt/remote", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_width = 30, fixed_size = False ))
 config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = False))
-
+#config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
+#choicelist = [("", _("no"))]
+#for i in range(0, 1000, 10):
+#	choicelist.append(("%d" % i, "%d" % i))
+#config.plugins.mautofs.delay = NoSave(ConfigSelection(default="", choices=choicelist))
 cfg = config.plugins.mautofs
+
+MASTERFILE="/etc/auto.master"
+
+def hex2strColor(argb):
+	out = ""
+	for i in range(28,-1,-4):
+		out += "%s" % chr(0x30 + (argb>>i & 0xf))
+	return out
+
+dC = "\c%s" % hex2strColor(int(skin.parseColor("grey").argb()))
+eC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
+yC = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
+fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
@@ -54,7 +72,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def __init__(self, session, *args):
 		Screen.__init__(self, session)
 		self.session = session
-		self.setTitle(_("ManagerAutofs v.%s - use Menu on auto mount file") % VERSION)
+		self.setTitle(_("ManagerAutofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
 
 		self.data = ''
 		self.container = enigma.eConsoleAppContainer()
@@ -86,7 +104,7 @@ class ManagerAutofsMasterSelection(Screen):
 			"rightRepeated": self.keyRight,
 			"menu": self.menu,
 		}, -1)
-
+		self.msgNM=None
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def keyLeft(self):
@@ -106,6 +124,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self["list"].instance.moveSelection(self["list"].instance.moveDown)
 
 	def clearTexts(self):
+		self.MessageBoxNM()
 		self["status"].setText("")
 		self["statusbar"].setText("")
 
@@ -114,33 +133,39 @@ class ManagerAutofsMasterSelection(Screen):
 		list = []
 		self.masterList = []
 
-		self.m = None
-		fi = open("/etc/auto.master", "r")
+		m = None
+		fi = open( MASTERFILE, "r")
 		for line in fi:
 			line = line.replace('\n','')
-			status = ("enabled")
 			if '#' in line:
 				status = ("disabled")
+				color = dC
 				line = line[1:]
+			else:
+				status = ("enabled")
+				color = eC
 			line = status + ' ' + line
-			self.m = line.split(' ')
+			m = line.split(' ')
 			if not action and edit: 	# change record's parameters
-				if self.m[1] == edit[1] and self.m[2] == edit[2]:
-					self.m = edit
+				if m[1] == edit[1] and m[2] == edit[2]:
+					m = edit
 			if action == "remove" and edit: # remove record
-				if self.m[1] == edit[1] and self.m[2] == edit[2] and self.m[3] == edit[3] and self.m[0] == edit[0]:
+				if m[1] == edit[1] and m[2] == edit[2]:
 					continue
-			list.append(ChoiceEntryComponent('',('{0:30}{1:30}{3:10}{2:8}'.format(self.m[2],self.m[1],self.m[3],self.m[0]), self.m[1], self.m[2], self.m[3], self.m[0])))
-			self.masterList.append((self.m[0], self.m[1], self.m[2], self.m[3]))
+			list.append(ChoiceEntryComponent('',('{0:}{1:40}{2:30}'.format(color, m[1], m[2]), m[1], m[2], m[3], m[0])))
+			self.masterList.append((m[0], m[1], m[2], m[3]))
 		fi.close()
 		if edit and action == "new": 		# add new record
-			list.append(ChoiceEntryComponent('',('{0:30}{1:30}{3:10}{2:8}'.format(edit[2],edit[1],edit[3],edit[0]), edit[1], edit[2], edit[3], edit[0])))
+			if edit[0] == "disabled":
+				color = dC
+			else:
+				color = eC
+			list.append(ChoiceEntryComponent('',('{0:}{1:40}{2:30}'.format(color, edit[1], edit[2]), edit[1], edit[2], edit[3], edit[0])))
 			self.masterList.append((edit[0], edit[1], edit[2], edit[3]))
 		self["list"].setList(list)
 
 	def saveMasterFile(self):
-		# TODO: backup previous version
-		fo = open("/etc/auto.master", "w")
+		fo = open( MASTERFILE, "w")
 		for x in self.masterList:
 			fo.write("%s%s %s %s\n" % ("" if x[0]=="enabled" else "#", x[1], x[2], x[3]))
 		fo.close()
@@ -148,18 +173,22 @@ class ManagerAutofsMasterSelection(Screen):
 	def menu(self):
 		menu = []
 		buttons = []
-		text = _("Select operation for record")
+		text = _("Select operation:")
 		sel = self["list"].l.getCurrentSelection()
 		if sel:
-			text += ": %s" % (sel[0][1].split('/')[2])
-			menu.append((_("Edit"),0))
+			recordname = "%s" % (sel[0][1].split('/')[2])
+			autoname = "%s" % sel[0][2].split('/')[2]
+			menu.append((_("Edit - %s%s%s" % (yC,recordname,fC)),0))
 			buttons = ["4"]
 		menu.append((_("Add"),1))
 		menu.append((_("Remove"),2))
+		buttons += ["1", "8"]
+		if sel:
+			menu.append((_("Edit - %s%s%s" % (yC,autoname,fC)),10))
+			buttons += ["yellow"]
 		menu.append((_("Reload autofs"),13))
 		menu.append((_("Reload autofs with restart GUI"),14))
-
-		buttons += ["1","8","green","red"]
+		buttons += ["green", "red"]
 
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
@@ -175,6 +204,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.addMasterRecord()
 		elif choice[1] == 2:
 			self.removeMasterRecord()
+		elif choice[1] == 10:
+			self.editAutofile()
 		elif choice[1] == 13:
 			self.restartAutofs()
 		elif choice[1] == 14:
@@ -221,7 +252,6 @@ class ManagerAutofsMasterSelection(Screen):
 				self.saveMasterFile()
 		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, None)
 
-
 	def editMasterRecord(self):
 		def callback(change=False):
 			if change:
@@ -264,18 +294,22 @@ class ManagerAutofsMasterSelection(Screen):
 		name = sel[0][2]
 		lines = self.getAutoLines(name)
 		if lines == 1:
-			self.setTitle(_("File %s with %d lines") % (name, lines))
 			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
 		elif lines > 1:
-			self.setTitle(_("File %s with %d lines") % (name, lines))
-			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name) # predelat
+			self.MessageBoxNM(True, _("File %s with %d lines. Not supported yet") % (name, lines), 5)
+			#TODO: nejak vyresit jak na viceradkovy soubor
+			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name) # dodelat
+		elif lines == -1:
+			self.MessageBoxNM(True, _("File %s is missing!") % name, 5)
+			#TODO: create
 		else:
-			self.setTitle(_("Empty file %s") % name )
-#		nacti soubor ... kdyz vice jak 1, zobraz list, jinak rovnou
-#		self.session.openWithCallback(callBack, ManagerAutofsMasterEdit, sel)
+			self.MessageBoxNM(True, _("File %s is empty!") % name, 5)
+			#TODO: add line
 
 	def getAutoLines(self, name):
 		nr = 0
+		if not os.path.exists(name):
+			return -1
 		fi = open(name, "r")
 		for mline in fi:
 			mline = mline.replace('\n','')
@@ -283,7 +317,16 @@ class ManagerAutofsMasterSelection(Screen):
 				nr += 1
 		fi.close()
 		return nr
-	
+
+	def MessageBoxNM(self, display=False, text="", delay=0):
+		if self.msgNM:
+			self.session.deleteDialog(self.msgNM)
+			self.msgNM = None
+		else:
+			if display and self.session is not None:
+				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
+				self.msgNM.show()
+
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	skin = """
 		<screen position="center,center" size="560,320">
@@ -301,18 +344,17 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, pars):
 		Screen.__init__(self, session)
-		if not pars:
-			text = _("ManagerAutofs - create new record")
-		else:
+		if pars:
 			text = _("ManagerAutofs - edited record: %s") % pars[0][1].split('/')[2]
+		else:
+			text = _("ManagerAutofs - create new record")
+
 		self.setTitle(text)
 		self.pars = pars
 		self["text"] = Label()
 
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
-#		self["key_yellow"] = Button(_("Edit auto"))
-#		self["key_blue"] = Button(_("Add"))
 
 		self.list = [ ]
 		self.onChangedEntry = [ ]
@@ -324,8 +366,6 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"cancel":	self.keyClose,
 			"green":	self.keyOk,
 			"red":		self.keyClose,
-#			"yellow":	self.keyEdit,
-#			"blue": 	self.keyAdd,
 			 }, -1)
 
 		self.createConfig()
@@ -343,6 +383,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			cfg.autofile.value = self.pars[0][2].split('.')[1]
 			if self.pars[0][3] == "--ghost":
 				cfg.ghost.value = True
+#			if self.pars[0][4] == "--timeout":
+#				cfg.timeout.value = True
 		else:
 			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
 
@@ -350,6 +392,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
 		self.list.append(getConfigListEntry(_("auto.name"), cfg.autofile))
 		self.list.append(getConfigListEntry(_("ghost"), cfg.ghost))
+#		self.list.append(getConfigListEntry(_("timeout"), cfg.ghost))
+#		if cfg.timeout.value:
+#			self.list.append(getConfigListEntry(_("delay"), cfg.delay))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
@@ -422,7 +467,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.setTitle(_("ManagerAutofs - edited autofile: %s") % filename)
 		self.session = session
 		self["text"] = Label("")
-		self.auto = filename
+		self.autoName = filename
 		
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
@@ -472,7 +517,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.useddomain:
 			self.createConfig()
-		self.actualizeString()
+		self["text"].setText(self.actualizeString())
 
 	def actualizeString(self):
 		string = cfg.localdir.value
@@ -492,16 +537,25 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += " "
 		ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
 		string += "://%s/%s" % (ip, cfg.remotedir.value)
-		self["text"].setText(string)
+		return string
+
+	def writeFile(self):
+		bakName = self.autoName + "_bak"
+		os.rename(self.autoName, bakName)
+
+		fo = open(self.autoName, "w")
+		fo.write("%s\n" % self["text"].getText())
+		fo.close()
 
 	def keyOk(self):
+		self.writeFile()
 		self.close()
 
 	def keyClose(self):
 		self.close()
 
 	def parseParams(self):
-		mount = open(self.auto, "r")
+		mount = open(self.autoName, "r")
 		for mline in mount:
 			line = mline.replace('\n','').strip()
 			if line:
@@ -574,4 +628,30 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			ip.append(int(x))
 		return ip
 
-#ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
+class NonModalMessageBoxDialog(Screen):
+	skin="""
+		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00404040" zPosition="2" flags="wfNoBorder">
+			<widget name="message" position="center,center" size="460,110" font="Regular;20" valign="center" halign="center"/>
+		</screen>
+	"""
+	def __init__(self, session, text="", delay=0):
+		Screen.__init__(self, session)
+		self.text = text
+		self.delay = delay
+		self["message"]=Label()
+
+		self.timer = enigma.eTimer()
+		self.timer.callback.append(self.timerLoop)
+
+		self.onLayoutFinish.append(self.timerStart)
+
+	def timerStart(self):
+		self["message"].setText(self.text)
+		self.timer.start(1000, True)
+
+	def timerLoop(self):
+		self.delay -= 1
+		if self.delay > 0:
+			self.timer.start(1000, True)
+		else:
+			self.session.deleteDialog(self)
