@@ -83,7 +83,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self["statusbar"] = Label()
 
 		self["key_red"] = Button(_("Close"))
-		self["key_green"] = Button("")
+		self["key_blue"] = Button("")
 		self["key_yellow"] = Button(_("Edit auto file"))
 
 		self["list"] = ChoiceList(list)
@@ -94,7 +94,7 @@ class ManagerAutofsMasterSelection(Screen):
 			"ok": self.menu,
 			"cancel": self.keyClose,
 			"red": self.keyClose,
-			"green": self.changeMasterRecordStatus,
+			"blue": self.changeMasterRecordStatus,
 			"yellow": self.editAutofile,
 			"up": self.keyUp,
 			"down": self.keyDown,
@@ -125,7 +125,7 @@ class ManagerAutofsMasterSelection(Screen):
 			text = _("Disable")
 		else:
 			text = _("Enable")
-		self["key_green"].setText(text)
+		self["key_blue"].setText(text)
 
 	def keyClose(self):
 		self.restartAutofs()
