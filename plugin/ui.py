@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.15"
+VERSION = "1.16"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -91,8 +91,8 @@ class ManagerAutofsMasterSelection(Screen):
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions", "KeyboardInputActions", "MenuActions"],
 		{
 			"ok": self.menu,
-			"cancel": boundFunction(self.close, None),
-			"red": boundFunction(self.close, None),
+			"cancel": self.keyClose,
+			"red": self.keyClose,
 			"green": self.editMasterRecord,
 			"yellow": self.editAutofile,
 			"up": self.keyUp,
@@ -115,6 +115,10 @@ class ManagerAutofsMasterSelection(Screen):
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
+
+	def keyClose(self):
+		self.restartAutofs()
+		self.close()
 
 	def keyLeft(self):
 		self.clearTexts()
@@ -191,9 +195,10 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append((_("Edit - %s%s%s" % (yC,autoname,fC)),10))
 			menu.append((_("Remove - %s%s%s" % (yC,autoname,fC)),11))
 			buttons += ["yellow", ""]
-		menu.append((_("Reload autofs"),13))
+#		menu.append((_("Reload autofs"),13))
+#		buttons += ["green"]
 		menu.append((_("Reload autofs with restart GUI"),14))
-		buttons += ["green", "red"]
+		buttons += ["red"]
 
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
@@ -213,16 +218,16 @@ class ManagerAutofsMasterSelection(Screen):
 			self.editAutofile()
 		elif choice[1] == 11:
 			self.removeAutofile()
-		elif choice[1] == 13:
-			self.restartAutofs()
+#		elif choice[1] == 13:
+#			self.restartAutofs()
 		elif choice[1] == 14:
-			self.restartAutofs(restart=True)
+			self.restartAutofs(restartGui=True)
 		else:
 			return
 
-	def restartAutofs(self, restart=False):
+	def restartAutofs(self, restartGui=False):
 		cmd = '/etc/init.d/autofs reload'
-		if restart:
+		if restartGui:
 			cmd += '; killall enigma2'
 		if self.container.execute(cmd):
 			print "[ManagerAutofs] failed to execute"
