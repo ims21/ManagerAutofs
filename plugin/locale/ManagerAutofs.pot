@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-01 12:02+0200\n"
+"POT-Creation-Date: 2017-09-01 18:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,13 +43,22 @@ msgid "Select operation:"
 msgstr ""
 
 #, python-format
+msgid "Edit record:  %s%s%s"
+msgstr ""
+
+msgid "Add record"
+msgstr ""
+
+#, python-format
+msgid "Remove record:  %s%s%s"
+msgstr ""
+
+#, python-format
 msgid "Edit - %s%s%s"
 msgstr ""
 
-msgid "Add"
-msgstr ""
-
-msgid "Remove"
+#, python-format
+msgid "Remove - %s%s%s"
 msgstr ""
 
 msgid "Reload autofs"
@@ -64,20 +73,22 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
+msgid "Nothing"
+msgstr ""
+
 #, python-format
-msgid "Remove record for %s?"
+msgid "Record %s only"
+msgstr ""
+
+#, python-format
+msgid "Record %s and autofile %s"
+msgstr ""
+
+msgid "What all do You want to remove?"
 msgstr ""
 
 #, python-format
 msgid "File %s with %d lines. Not supported yet"
-msgstr ""
-
-#, python-format
-msgid "File %s is missing!"
-msgstr ""
-
-#, python-format
-msgid "File %s is empty!"
 msgstr ""
 
 #, python-format

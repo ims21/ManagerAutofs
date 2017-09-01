@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = 1.10
+VERSION = "1.15"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -30,6 +30,7 @@ from Components.config import config, ConfigSubsection, ConfigIP, ConfigInteger,
 from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
+from shutil import copyfile
 import enigma
 import skin
 import os
@@ -105,6 +106,14 @@ class ManagerAutofsMasterSelection(Screen):
 			"menu": self.menu,
 		}, -1)
 		self.msgNM=None
+
+		if os.path.exists(MASTERFILE):
+			copyfile(MASTERFILE, MASTERFILE+"_bak")
+		else:
+			f = open(MASTERFILE, "w")
+			f.write("%s%s /etc/auto.%s %s\n" % ("" if cfg.enabled.value else "#", cfg.mountpoint.value, cfg.autofile.value, "--ghost" if cfg.ghost.value else ""))
+			f.close()
+
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def keyLeft(self):
@@ -139,11 +148,9 @@ class ManagerAutofsMasterSelection(Screen):
 			line = line.replace('\n','')
 			if '#' in line:
 				status = ("disabled")
-				color = dC
 				line = line[1:]
 			else:
 				status = ("enabled")
-				color = eC
 			line = status + ' ' + line
 			m = line.split(' ')
 			if not action and edit: 	# change record's parameters
@@ -152,15 +159,12 @@ class ManagerAutofsMasterSelection(Screen):
 			if action == "remove" and edit: # remove record
 				if m[1] == edit[1] and m[2] == edit[2]:
 					continue
-			list.append(ChoiceEntryComponent('',('{0:}{1:40}{2:30}'.format(color, m[1], m[2]), m[1], m[2], m[3], m[0])))
+			s = "\t\t" #if len(m[1]) > 8 else "\t\t"
+			list.append(ChoiceEntryComponent('bullet' if m[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(m[1],m[2],s), m[1],m[2],m[3],m[0])))
 			self.masterList.append((m[0], m[1], m[2], m[3]))
 		fi.close()
 		if edit and action == "new": 		# add new record
-			if edit[0] == "disabled":
-				color = dC
-			else:
-				color = eC
-			list.append(ChoiceEntryComponent('',('{0:}{1:40}{2:30}'.format(color, edit[1], edit[2]), edit[1], edit[2], edit[3], edit[0])))
+			list.append(ChoiceEntryComponent('bullet' if edit[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(edit[1],edit[2],s), edit[1],edit[2],edit[3],edit[0])))
 			self.masterList.append((edit[0], edit[1], edit[2], edit[3]))
 		self["list"].setList(list)
 
@@ -178,14 +182,15 @@ class ManagerAutofsMasterSelection(Screen):
 		if sel:
 			recordname = "%s" % (sel[0][1].split('/')[2])
 			autoname = "%s" % sel[0][2].split('/')[2]
-			menu.append((_("Edit - %s%s%s" % (yC,recordname,fC)),0))
+			menu.append((_("Edit record:  %s%s%s" % (yC,recordname,fC)),0))
 			buttons = ["4"]
-		menu.append((_("Add"),1))
-		menu.append((_("Remove"),2))
+		menu.append((_("Add record"),1))
+		menu.append((_("Remove record:  %s%s%s" % (yC,recordname,fC)),2))
 		buttons += ["1", "8"]
 		if sel:
 			menu.append((_("Edit - %s%s%s" % (yC,autoname,fC)),10))
-			buttons += ["yellow"]
+			menu.append((_("Remove - %s%s%s" % (yC,autoname,fC)),11))
+			buttons += ["yellow", ""]
 		menu.append((_("Reload autofs"),13))
 		menu.append((_("Reload autofs with restart GUI"),14))
 		buttons += ["green", "red"]
@@ -206,6 +211,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.removeMasterRecord()
 		elif choice[1] == 10:
 			self.editAutofile()
+		elif choice[1] == 11:
+			self.removeAutofile()
 		elif choice[1] == 13:
 			self.restartAutofs()
 		elif choice[1] == 14:
@@ -269,8 +276,13 @@ class ManagerAutofsMasterSelection(Screen):
 		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, sel)
 
 	def removeMasterRecord(self):
-		def callback(change=False):
-			if change:
+		def callback(retval):
+			if retval > 1:	# remove auto file - must be removed before remove record due valid "sel"!!!
+				autofile = sel[0][2]
+				if os.path.exists(autofile):
+					bakName = autofile + "_del"
+					os.rename(autofile, bakName)
+			if retval:	# remove record
 				rm = ""
 				mountpoint = sel[0][1]
 				autofile = sel[0][2]
@@ -279,11 +291,14 @@ class ManagerAutofsMasterSelection(Screen):
 				rm = (enabled, mountpoint, autofile, ghost)
 				self.readMasterFile(edit=rm, action="remove")
 				self.saveMasterFile()
+
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
-		#TODO ... question, if remove autofile too, then delete it too
-		self.session.openWithCallback(callback, MessageBox, _("Remove record for %s?") % sel[0][1] , type=MessageBox.TYPE_YESNO, default=False, simple=True)
+		record = sel[0][1]
+		autofile = sel[0][2]
+		removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and autofile %s") % (record, autofile), 2) ]
+		self.session.openWithCallback(callback, MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, simple=True, list=removing)
 
 	def editAutofile(self):
 		def callBack():
@@ -297,14 +312,12 @@ class ManagerAutofsMasterSelection(Screen):
 			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
 		elif lines > 1:
 			self.MessageBoxNM(True, _("File %s with %d lines. Not supported yet") % (name, lines), 5)
-			#TODO: nejak vyresit jak na viceradkovy soubor
+			#TODO: multiline autofile
 			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name) # dodelat
 		elif lines == -1:
-			self.MessageBoxNM(True, _("File %s is missing!") % name, 5)
-			#TODO: create
+			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name, True)
 		else:
-			self.MessageBoxNM(True, _("File %s is empty!") % name, 5)
-			#TODO: add line
+			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name, True)
 
 	def getAutoLines(self, name):
 		nr = 0
@@ -317,6 +330,16 @@ class ManagerAutofsMasterSelection(Screen):
 				nr += 1
 		fi.close()
 		return nr
+
+	def removeAutofile(self):
+		#TODO: add message with confirmation
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+		name = sel[0][2]
+		if os.path.exists(name):
+			bakName = name + "_del"
+			os.rename(name, bakName)
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:
@@ -444,9 +467,6 @@ config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choice
 config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", _("4096")),("8192", _("8192")),("16384", _("16384")),("32768", _("32768")) ]))
 config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", _("4096")),("8192", _("8192")),("16384", _("16384")),("32768", _("32768")) ]))
 
-#movie -fstype=cifs,rw,noperm,domain=sps.local,user=render,password=render21,iocharset=utf8 ://192.168.1.230/movie
-#hdd -fstype=cifs,username=root,password=dreambox,rsize=8192,wsize=32768,noatime,noserverino,iocharset=utf8,sec=ntlm, ://192.168.1.219/hdd
-
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
 		<screen position="center,center" size="560,520">
@@ -462,10 +482,11 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			<widget name="config" position="5,70" size="550,400" scrollbarMode="showOnDemand"/>
 		</screen>"""
 
-	def __init__(self, session, filename):
+	def __init__(self, session, filename, new=False):
 		Screen.__init__(self, session)
 		self.setTitle(_("ManagerAutofs - edited autofile: %s") % filename)
 		self.session = session
+		self.new = new
 		self["text"] = Label("")
 		self.autoName = filename
 		
@@ -486,7 +507,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 #			"blue": 	self.keyAdd,
 			 }, -1)
 
-		self.parseParams()
+		if self.new:
+			self.setDefaultPars()
+		else:
+			self.parseParams()
 		self.createConfig()
 
 	def createConfig(self):
@@ -514,9 +538,14 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 
+		self.fillString()
+
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.useddomain:
 			self.createConfig()
+		self.fillString()
+
+	def fillString(self):
 		self["text"].setText(self.actualizeString())
 
 	def actualizeString(self):
@@ -540,9 +569,9 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		return string
 
 	def writeFile(self):
-		bakName = self.autoName + "_bak"
-		os.rename(self.autoName, bakName)
-
+		if not self.new:
+			bakName = self.autoName + "_bak"
+			os.rename(self.autoName, bakName)
 		fo = open(self.autoName, "w")
 		fo.write("%s\n" % self["text"].getText())
 		fo.close()
