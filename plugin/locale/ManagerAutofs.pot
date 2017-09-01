@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-01 18:18+0200\n"
+"POT-Creation-Date: 2017-09-02 01:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,47 +24,43 @@ msgid "Manage autofs files"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs v.%s - use %sMenu%s or %sOK%s on record"
+msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
 msgstr ""
 
-msgid "Cancel"
-msgstr ""
-
-msgid "Edit master record"
+msgid "Close"
 msgstr ""
 
 msgid "Edit auto file"
 msgstr ""
 
-msgid "Reading auto.master file - Please wait..."
+msgid "Disable"
+msgstr ""
+
+msgid "Enable"
 msgstr ""
 
 msgid "Select operation:"
 msgstr ""
 
-#, python-format
-msgid "Edit record:  %s%s%s"
+msgid "Edit record:"
 msgstr ""
 
 msgid "Add record"
 msgstr ""
 
-#, python-format
-msgid "Remove record:  %s%s%s"
+msgid "Remove record:"
 msgstr ""
 
-#, python-format
-msgid "Edit - %s%s%s"
+msgid "Edit -"
 msgstr ""
 
-#, python-format
-msgid "Remove - %s%s%s"
+msgid "Remove -"
 msgstr ""
 
-msgid "Reload autofs"
+msgid "Reload autofs with GUI restart"
 msgstr ""
 
-msgid "Reload autofs with restart GUI"
+msgid "Autofs is not installed!"
 msgstr ""
 
 msgid "Failed"
@@ -88,17 +84,16 @@ msgid "What all do You want to remove?"
 msgstr ""
 
 #, python-format
-msgid "File %s with %d lines. Not supported yet"
+msgid ""
+"File %s with %d lines.\n"
+"Not supported yet"
 msgstr ""
 
 #, python-format
-msgid "ManagerAutofs - edited record: %s"
+msgid "Manager Autofs - edited record: %s"
 msgstr ""
 
-msgid "ManagerAutofs - create new record"
-msgstr ""
-
-msgid "Close"
+msgid "Manager Autofs - create new record"
 msgstr ""
 
 msgid "Ok"
@@ -116,41 +111,11 @@ msgstr ""
 msgid "ghost"
 msgstr ""
 
-msgid "cifs"
-msgstr ""
-
-msgid "nfs"
-msgstr ""
-
 msgid "no"
 msgstr ""
 
-msgid "ntlm"
-msgstr ""
-
-msgid "ntlm2"
-msgstr ""
-
-msgid "utf8"
-msgstr ""
-
-msgid "1250"
-msgstr ""
-
-msgid "4096"
-msgstr ""
-
-msgid "8192"
-msgstr ""
-
-msgid "16384"
-msgstr ""
-
-msgid "32768"
-msgstr ""
-
 #, python-format
-msgid "ManagerAutofs - edited autofile: %s"
+msgid "Manager Autofs - edited autofile: %s"
 msgstr ""
 
 msgid "local directory"

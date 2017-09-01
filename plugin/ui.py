@@ -73,7 +73,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def __init__(self, session, *args):
 		Screen.__init__(self, session)
 		self.session = session
-		self.setTitle(_("ManagerAutofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
+		self.setTitle(_("Manager Autofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
 
 		self.data = ''
 		self.container = enigma.eConsoleAppContainer()
@@ -197,18 +197,18 @@ class ManagerAutofsMasterSelection(Screen):
 		if sel:
 			recordname = "%s" % (sel[0][1].split('/')[2])
 			autoname = "%s" % sel[0][2].split('/')[2]
-			menu.append((_("Edit record:  %s%s%s" % (yC,recordname,fC)),0))
+			menu.append(((_("Edit record:") + "  %s%s%s" % (yC,recordname,fC)),0))
 			buttons = ["4"]
 		menu.append((_("Add record"),1))
-		menu.append((_("Remove record:  %s%s%s" % (yC,recordname,fC)),2))
+		menu.append(((_("Remove record:") + "  %s%s%s" % (yC,recordname,fC)),2))
 		buttons += ["1", "8"]
 		if sel:
-			menu.append((_("Edit - %s%s%s" % (yC,autoname,fC)),10))
-			menu.append((_("Remove - %s%s%s" % (yC,autoname,fC)),11))
+			menu.append(((_("Edit -") + " %s%s%s" % (yC,autoname,fC)),10))
+			menu.append(((_("Remove -") + " %s%s%s" % (yC,autoname,fC)),11))
 			buttons += ["yellow", ""]
 #		menu.append((_("Reload autofs"),13))
 #		buttons += ["green"]
-		menu.append((_("Reload autofs with restart GUI"),14))
+		menu.append((_("Reload autofs with GUI restart"),14))
 		buttons += ["red"]
 
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
@@ -343,7 +343,7 @@ class ManagerAutofsMasterSelection(Screen):
 		if lines == 1:
 			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
 		elif lines > 1:
-			self.MessageBoxNM(True, _("File %s with %d lines. Not supported yet") % (name, lines), 5)
+			self.MessageBoxNM(True, _("File %s with %d lines.\nNot supported yet") % (name, lines), 5)
 			#TODO: multiline autofile
 			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name) # dodelat
 		elif lines == -1:
@@ -400,9 +400,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def __init__(self, session, pars):
 		Screen.__init__(self, session)
 		if pars:
-			text = _("ManagerAutofs - edited record: %s") % pars[0][1].split('/')[2]
+			text = _("Manager Autofs - edited record: %s") % pars[0][1].split('/')[2]
 		else:
-			text = _("ManagerAutofs - create new record")
+			text = _("Manager Autofs - create new record")
 
 		self.setTitle(text)
 		self.pars = pars
@@ -481,7 +481,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("cifs",_("cifs")),("nfs",_("nfs")) ]))
+config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("cifs","cifs"),("nfs","nfs") ]))
 config.plugins.mautofs.rw = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.user = NoSave(ConfigText(default="root", fixed_size=False))
 config.plugins.mautofs.passwd = NoSave(ConfigPassword(default="password", fixed_size=False))
@@ -494,10 +494,10 @@ config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.noatime = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", _("ntlm")),("ntlm2", _("ntlm2")) ]))
-config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", _("utf8")),("1250", _("1250")) ]))
-config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", _("4096")),("8192", _("8192")),("16384", _("16384")),("32768", _("32768")) ]))
-config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", _("4096")),("8192", _("8192")),("16384", _("16384")),("32768", _("32768")) ]))
+config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
+config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8"),("1250", "1250") ]))
+config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
+config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -516,7 +516,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, filename, new=False):
 		Screen.__init__(self, session)
-		self.setTitle(_("ManagerAutofs - edited autofile: %s") % filename)
+		self.setTitle(_("Manager Autofs - edited autofile: %s") % filename)
 		self.session = session
 		self.new = new
 		self["text"] = Label("")
