@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.16"
+VERSION = "1.17"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -82,18 +82,19 @@ class ManagerAutofsMasterSelection(Screen):
 		self["status"] = Label()
 		self["statusbar"] = Label()
 
-		self["key_red"] = Button(_("Cancel"))
-		self["key_green"] = Button(_("Edit master record"))
+		self["key_red"] = Button(_("Close"))
+		self["key_green"] = Button("")
 		self["key_yellow"] = Button(_("Edit auto file"))
 
-		self["list"] = ChoiceList(list=[ChoiceEntryComponent('',((_("Reading auto.master file - Please wait...")), "Waiter"))])
+		self["list"] = ChoiceList(list)
+		self["list"].onSelectionChanged.append(self.selectionChanged)
 
 		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions", "KeyboardInputActions", "MenuActions"],
 		{
 			"ok": self.menu,
 			"cancel": self.keyClose,
 			"red": self.keyClose,
-			"green": self.editMasterRecord,
+			"green": self.changeMasterRecordStatus,
 			"yellow": self.editAutofile,
 			"up": self.keyUp,
 			"down": self.keyDown,
@@ -115,6 +116,16 @@ class ManagerAutofsMasterSelection(Screen):
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
+
+	def selectionChanged(self):
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+		if sel[0][4] == "enabled":
+			text = _("Disable")
+		else:
+			text = _("Enable")
+		self["key_green"].setText(text)
 
 	def keyClose(self):
 		self.restartAutofs()
@@ -250,6 +261,19 @@ class ManagerAutofsMasterSelection(Screen):
 
 	def showOutput(self):
 		self["status"].setText(self.data)
+
+	def changeMasterRecordStatus(self):
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+		edit = ""
+		mountpoint = sel[0][1]
+		autofile = sel[0][2]
+		enabled =  "disabled" if sel[0][4] == "enabled" else "enabled"
+		ghost = sel[0][3]
+		edit = (enabled, mountpoint, autofile, ghost)
+		self.readMasterFile(edit=edit)
+		self.saveMasterFile()
 
 	def addMasterRecord(self):
 		def callback(change=False):

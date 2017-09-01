@@ -3,7 +3,7 @@ import setup_translate
 
 pkg = 'Extensions.ManagerAutofs'
 setup (name = 'enigma2-plugin-extensions-managerautofs',
-       version = '1.16',
+       version = '1.17',
        description = 'manage autofs files',
        packages = [pkg],
        package_dir = {pkg: 'plugin'},
