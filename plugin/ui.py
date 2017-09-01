@@ -237,12 +237,15 @@ class ManagerAutofsMasterSelection(Screen):
 			return
 
 	def restartAutofs(self, restartGui=False):
-		cmd = '/etc/init.d/autofs reload'
-		if restartGui:
-			cmd += '; killall enigma2'
-		if self.container.execute(cmd):
-			print "[ManagerAutofs] failed to execute"
-			self.showOutput()
+		if os.path.exists('/etc/init.d/autofs'):
+			cmd = '/etc/init.d/autofs reload'
+			if restartGui:
+				cmd += '; killall enigma2'
+			if self.container.execute(cmd):
+				print "[ManagerAutofs] failed to execute"
+				self.showOutput()
+		else:
+			self.MessageBoxNM(True, _("Autofs is not installed!"), 5)
 
 	def appClosed(self, retval):
 		print "[ManagerAutofs] done:", retval
