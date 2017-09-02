@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.20"
+VERSION = "1.25"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -208,8 +208,9 @@ class ManagerAutofsMasterSelection(Screen):
 		buttons += ["1", "8"]
 		if sel:
 			menu.append(((_("Edit -") + " %s%s%s" % (yC,autoname,fC)),10))
-			menu.append(((_("Remove -") + " %s%s%s" % (yC,autoname,fC)),11))
-			buttons += ["yellow", ""]
+			menu.append(((_("Add line - ") + " %s%s%s" % (yC,autoname,fC)),11))
+			menu.append(((_("Remove -") + " %s%s%s" % (yC,autoname,fC)),12))
+			buttons += ["yellow", "", ""]
 #		menu.append((_("Reload autofs"),13))
 #		buttons += ["green"]
 		menu.append((_("Reload autofs with GUI restart"),14))
@@ -232,6 +233,8 @@ class ManagerAutofsMasterSelection(Screen):
 		elif choice[1] == 10:
 			self.editAutofile()
 		elif choice[1] == 11:
+			self.addAutofileLine()
+		elif choice[1] == 12:
 			self.removeAutofile()
 #		elif choice[1] == 13:
 #			self.restartAutofs()
@@ -239,7 +242,7 @@ class ManagerAutofsMasterSelection(Screen):
 			def callback(value=False):
 				if value:
 					self.restartAutofs(restartGui=True)
-			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False, simple=True)
+			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
 		else:
 			return
 
@@ -335,26 +338,48 @@ class ManagerAutofsMasterSelection(Screen):
 		record = sel[0][1]
 		autofile = sel[0][2]
 		removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and its file %s") % (record, autofile), 2) ]
-		self.session.openWithCallback(callback, MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, simple=True, list=removing)
+		self.session.openWithCallback(callback, MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
-	def editAutofile(self):
-		def callBack():
-			pass
+	def addAutofileLine(self):
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
 		name = sel[0][2]
+		self.session.open(ManagerMultiAutofsAutoEdit, name)
+
+	def editAutofile(self):
+		def callBackSingle(name,text=""):
+			if text:
+				self.backupFile(name,"bak")
+				self.saveFile(name, text)
+
+		data = ""
+		sel = self["list"].l.getCurrentSelection()
+		if sel is None:
+			return
+
+		name = sel[0][2]
 		lines = self.getAutoLines(name)
-		if lines == 1:
-			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
-		elif lines > 1:
-			self.MessageBoxNM(True, _("File %s with %d lines.\nNot supported yet") % (name, lines), 5)
-			#TODO: multiline autofile
-			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
-		elif lines == -1:
-			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name, True)
-		else:
-			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name, True)
+
+		if lines == 1:		# single line
+			line = open(name, "r").readline()
+			data = line.replace('\n','').strip()
+			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
+		elif lines > 1:		# multi
+			self.session.open(ManagerMultiAutofsAutoEdit, name)
+		elif lines == -1:	# missing
+			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+		else:			# empty
+			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+
+	def backupFile(self, name, ext):
+		if os.path.exists(name):
+			os.rename(name, "%s_%s" % (name,ext))
+
+	def saveFile(self, name, data):
+		fo = open(name, "w")
+		fo.write("%s\n" % data)
+		fo.close()
 
 	def getAutoLines(self, name):
 		nr = 0
@@ -517,7 +542,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			<widget name="config" position="5,70" size="550,400" scrollbarMode="showOnDemand"/>
 		</screen>"""
 
-	def __init__(self, session, filename, new=False):
+	def __init__(self, session, filename, line, new=False):
 		Screen.__init__(self, session)
 		self.setTitle(_("Manager Autofs - edited autofile: %s") % filename)
 		self.session = session
@@ -545,7 +570,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		if self.new:
 			self.setDefaultPars()
 		else:
-			self.parseParams()
+			self.parseParams(line)
 		self.createConfig()
 
 	def createConfig(self):
@@ -612,21 +637,25 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		fo.close()
 
 	def keyOk(self):
-		self.writeFile()
-		self.close()
+#		self.writeFile()
+		self.close(self["text"].getText())
 
 	def keyClose(self):
 		self.close()
 
-	def parseParams(self):
-		mount = open(self.autoName, "r")
-		for mline in mount:
-			line = mline.replace('\n','').strip()
-			if line:
-				self["text"] = Label("%s" % line)
-				parts = line.split()
-				self.parse(parts)
-		mount.close()
+	def parseParams(self, line):
+		if line:
+			self["text"] = Label("%s" % line)
+			parts = line.split()
+			self.parse(parts)
+
+#	def parseParams(self):
+#		for mline in open(self.autoName, "r"):
+#			line = mline.replace('\n','').strip()
+#			if line:
+#				self["text"] = Label("%s" % line)
+#				parts = line.split()
+#				self.parse(parts)
 
 	def setDefaultPars(self):
 		# set default pars before parsing line
@@ -650,7 +679,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.setDefaultPars()
 		# parse line
 		for x in parts[1].split(','):
-			print x
+#			print x
 			if "-fstype" in x:
 				cfg.fstype.value=x.split('=')[1]
 			elif "user" in x:
@@ -691,6 +720,153 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		for x in strIP:
 			ip.append(int(x))
 		return ip
+
+from Components.Sources.List import List
+class ManagerMultiAutofsAutoEdit(Screen):
+	skin = """
+		<screen name="ManagerMultiAutofsAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
+			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
+			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
+			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
+			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
+			<widget source="list" render="Listbox" position="5,40" size="670,320" backgroundColor="#00000000" scrollbarMode="showOnDemand">
+				<convert type="TemplatedMultiContent">
+				{"templates":
+					{"default": (40,[
+							MultiContentEntryText(pos = (5, 0), size = (660, 22), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the name
+							MultiContentEntryText(pos = (5, 22), size = (660, 16), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the description
+						])
+					},
+					"fonts": [gFont("Regular", 22),gFont("Regular", 16)],
+					"itemHeight": 40
+				}
+				</convert>
+			</widget>
+			<widget name="info" position="5,360" zPosition="10" size="660,30" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center"/>
+		</screen>"""
+
+	def __init__(self, session, name = None):
+		Screen.__init__(self, session)
+		self.session = session
+		self.name = name
+
+		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
+		{
+			"ok": self.keyEdit,
+			"cancel": self.keyCancel,
+			"red": self.keyCancel,
+			"green": self.keyOk,
+			"yellow": self.keyAdd,
+			"blue": self.keyErase,
+		}, -1)
+
+		self.list = []
+		self["list"] = List(self.list)
+		if not self.selectionChanged in self["list"].onSelectionChanged:
+			self["list"].onSelectionChanged.append(self.selectionChanged)
+
+		self["key_red"] = Label(_("Close"))
+		self["key_green"] = Label("Ok")
+		self["key_yellow"] = Label(_("Add"))
+		self["key_blue"] = Label(_("Erase"))
+
+		self["info"] = Label("")
+
+		self.onShown.append(self.setWindowTitle)
+		self.onLayoutFinish.append(self.readFile)
+
+	def setWindowTitle(self):
+		self.setTitle(_("Autofs file: %s") % self.name)
+
+	def readFile(self):
+		if self.name:
+			self.list = []
+			for x in open(self.name, "r"):
+				line = x.replace('\n','').strip()
+				if line:
+					p = line.split()
+					name = p[0]
+					self.list.append((name, line))
+
+			self['list'].setList(self.list)
+
+	def selectionChanged(self):
+		current = self["list"].getCurrent()
+		if current:
+			self["info"].setText("%s" % current[1])
+
+	def keyEdit(self):
+		current = self["list"].getCurrent()
+		index = self["list"].getIndex()
+		def callBackWriteLine(index, text=""):
+			if text:
+				name = text.split()[0]
+				self.changeItem(index, (name, text))
+		self.session.openWithCallback(boundFunction(callBackWriteLine, index), ManagerAutofsAutoEdit, current[0], current[1], False)
+
+	def keyOk(self):
+		self.backupFile(self.name,"bak")
+		self.saveFile(self.name)
+		self.close()
+
+	def keyAdd(self):
+		def callBackAdd(text=""):
+			if text:
+				name = text.split()[0]
+				self.addItem((name, text))
+		self.session.openWithCallback(boundFunction(callBackAdd), ManagerAutofsAutoEdit, _("New"), "", True)
+
+	def keyErase(self):
+		def callbackErase(value=False):
+			if value:
+				index = self["list"].getIndex()
+				self.removeItem(index)
+		name = self["list"].getCurrent()[0]
+		self.session.openWithCallback(callbackErase, MessageBox, _("Really erase record: '%s'?") % name, type=MessageBox.TYPE_YESNO, default=False)
+
+	def backupFile(self, name, ext):
+		os.rename(name, "%s_%s" % (name,ext))
+
+	def saveFile(self, name):
+		fo = open(name, "w")
+		for data in self.list:
+			fo.write("%s\n" % data[1])
+		fo.close()
+
+# has no effect for autofs if is record commented
+	def disableItem(self, index, data):
+		if data[1][0] != "#":
+			line = "#" + data[1]
+			self.changeItem(index, (data[0], line))
+
+	def enableItem(self, index, data):
+		if data[1][0] == "#":
+			line = data[1][1:]
+			self.changeItem(index, (data[0], line))
+
+	def changeItemStatus(self, index, data):
+		if data[1][0] == "#":
+			line = data[1][1:]
+		else:
+			line = "#" + data[1]
+		self.changeItem(index, (data[0], line))
+#
+	def changeItem(self, index, new):
+		self["list"].modifyEntry(index,(new[0], new[1]))
+
+	def addItem(self, new):
+		self.list.append((new[0], new[1]))
+
+	def removeItem(self, index):
+		self.list.pop(index)
+		self["list"].updateList(self.list)
+
+	def keyCancel(self):
+		self.close()
 
 class NonModalMessageBoxDialog(Screen):
 	skin="""

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 14:12+0200\n"
-"PO-Revision-Date: 2017-09-02 14:14+0100\n"
+"POT-Creation-Date: 2017-09-02 19:17+0200\n"
+"PO-Revision-Date: 2017-09-02 19:18+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -50,6 +50,9 @@ msgstr "Odstranit záznam:"
 msgid "Edit -"
 msgstr "Upravit -"
 
+msgid "Add line - "
+msgstr "Přidat rádek -"
+
 msgid "Remove -"
 msgstr "Odstranit -"
 
@@ -81,14 +84,6 @@ msgstr "Záznam %s a jeho soubor %s"
 
 msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"
-
-#, python-format
-msgid ""
-"File %s with %d lines.\n"
-"Not supported yet"
-msgstr ""
-"Soubor %s s %d řádky.\n"
-"Zatím není podporováno."
 
 #, python-format
 msgid "Manager Autofs - edited record: %s"
@@ -166,3 +161,27 @@ msgstr ""
 
 msgid "wsize"
 msgstr ""
+
+msgid "Add"
+msgstr "Přidat"
+
+msgid "Erase"
+msgstr "Odstranit"
+
+#, python-format
+msgid "Autofs file: %s"
+msgstr "Autofs soubor: %s"
+
+msgid "New"
+msgstr "Nový"
+
+#, python-format
+msgid "Really erase record: '%s'?"
+msgstr "Opravdu smazat řádek: '%s'?"
+
+#~ msgid ""
+#~ "File %s with %d lines.\n"
+#~ "Not supported yet"
+#~ msgstr ""
+#~ "Soubor %s s %d řádky.\n"
+#~ "Zatím není podporováno."
