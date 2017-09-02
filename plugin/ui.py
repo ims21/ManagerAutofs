@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.17"
+VERSION = "1.19"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -169,8 +169,8 @@ class ManagerAutofsMasterSelection(Screen):
 			line = status + ' ' + line
 			m = line.split(' ')
 			if not action and edit: 	# change record's parameters
-				if m[1] == edit[1] and m[2] == edit[2]:
-					m = edit
+				if m[1] == edit[1][1] and m[2] == edit[2][1]:
+					m[0], m[1], m[2], m[3] = edit[0],edit[1][0],edit[2][0],edit[3]
 			if action == "remove" and edit: # remove record
 				if m[1] == edit[1] and m[2] == edit[2]:
 					continue
@@ -232,7 +232,10 @@ class ManagerAutofsMasterSelection(Screen):
 #		elif choice[1] == 13:
 #			self.restartAutofs()
 		elif choice[1] == 14:
-			self.restartAutofs(restartGui=True)
+			def callback(value=False):
+				if value:
+					self.restartAutofs(restartGui=True)
+			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False, simple=True)
 		else:
 			return
 
@@ -292,20 +295,21 @@ class ManagerAutofsMasterSelection(Screen):
 		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, None)
 
 	def editMasterRecord(self):
-		def callback(change=False):
+		def callback( old_mountpoint, old_autofile, change = False):
 			if change:
 				edit = ""
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and "enabled" or "disabled"
 				ghost = cfg.ghost.value and "--ghost" or ""
-				edit = (enabled, mountpoint, autofile, ghost)
+				edit = (enabled, (mountpoint, old_mountpoint), (autofile, old_autofile), ghost )
 				self.readMasterFile(edit=edit)
 				self.saveMasterFile()
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
-		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, sel)
+		# note: in masterfile must be looked for old pars => send they into callback
+		self.session.openWithCallback(boundFunction(callback, sel[0][1], sel[0][2]), ManagerAutofsMasterEdit, sel)
 
 	def removeMasterRecord(self):
 		def callback(retval):
