@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.27"
+VERSION = "1.28"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -63,7 +63,7 @@ fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
-		<screen name="ManagerAutofsMasterSelection" position="center,center" size="680,600" backgroundColor="#00000000">
+		<screen name="ManagerAutofsMasterSelection" position="center,center" size="680,605" backgroundColor="#00000000">
 			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
 			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
 			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
@@ -72,22 +72,22 @@ class ManagerAutofsMasterSelection(Screen):
 			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
 			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
-			<widget source="list" render="Listbox" position="5,40" size="670,500" backgroundColor="#00000000" scrollbarMode="showOnDemand">
+			<widget source="list" render="Listbox" position="5,60" size="670,500" backgroundColor="#00000000" scrollbarMode="showOnDemand">
 				<convert type="TemplatedMultiContent">
 				{"templates":
 					{"default": (25,[
-							MultiContentEntryText(pos = (5, 0), size = (10, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the status
-							MultiContentEntryText(pos = (25, 0), size = (200, 25), font=0, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the name
-							MultiContentEntryText(pos = (235, 0), size = (200, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 1 is the autofile
+							MultiContentEntryText(pos = (5, 6), size = (10, 25), font=1, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the status
+							MultiContentEntryText(pos = (50, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the name
+							MultiContentEntryText(pos = (300, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 1 is the autofile
 						])
 					},
-					"fonts": [gFont("Regular", 22),gFont("Regular", 16)],
+					"fonts": [gFont("Regular", 18),gFont("Regular", 12)],
 					"itemHeight": 25
 				}
 				</convert>
 			</widget>
-			<widget name="status" position="5,360" zPosition="10" size="660,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
-			widget name="statusbar" position="5,360" zPosition="10" size="660,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="status" position="50,560" zPosition="10" size="660,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
+			widget name="statusbar" position="50,580" zPosition="10" size="660,20" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session):
@@ -171,6 +171,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self.close()
 
 	def keyOk(self):
+		self.saveMasterFile()
 		self.restartAutofs()
 		self.close()
 
@@ -181,7 +182,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def saveMasterFile(self):
 		fo = open( MASTERFILE, "w")
 		for x in self.list:
-			fo.write("%s%s %s %s\n" % ("" if x[0]=="enabled" else "#", x[1], x[2], x[3]))
+			fo.write("%s%s %s %s\n" % ("" if x[0] == "x" else "#", x[1], x[2], x[3]))
 		fo.close()
 
 	def menu(self):
@@ -268,7 +269,6 @@ class ManagerAutofsMasterSelection(Screen):
 		if curr:
 			index = self["list"].getIndex()
 			self.changeItemStatus(index, curr)
-			self.saveMasterFile()
 
 	def addMasterRecord(self):
 		def callbackAdd(change=False):
@@ -279,7 +279,6 @@ class ManagerAutofsMasterSelection(Screen):
 				ghost = cfg.ghost.value and "--ghost" or ""
 				add = (enabled, mountpoint, autofile, ghost)
 				self.addItem(add)
-				self.saveMasterFile()
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None)
 
 	def editMasterRecord(self):
@@ -291,7 +290,6 @@ class ManagerAutofsMasterSelection(Screen):
 				ghost = cfg.ghost.value and "--ghost" or ""
 				edit = (enabled, mountpoint, autofile, ghost )
 				self.changeItem(index, edit)
-				self.saveMasterFile()
 		sel = self["list"].getCurrent()
 		if sel:
 			index = self["list"].getIndex()
@@ -305,7 +303,6 @@ class ManagerAutofsMasterSelection(Screen):
 					os.rename(autofile, bakName)
 			if retval:	# remove record
 				self.removeItem(index)
-				self.saveMasterFile()
 
 		sel = self["list"].getCurrent()
 		if sel:
@@ -401,7 +398,7 @@ class ManagerAutofsMasterSelection(Screen):
 
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	skin = """
-		<screen position="center,center" size="560,320">
+		<screen position="center,center" size="560,220">
 			<ePixmap name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
 			<ePixmap name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
 			<ePixmap name="yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
@@ -410,8 +407,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
 			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
-			<widget name="text" position="5,40" size="550,25" font="Regular;22" halign="left"/>
-			<widget name="config" position="5,70" size="550,200" scrollbarMode="showOnDemand"/>
+			<widget name="text" position="5,40" size="550,20" font="Regular;16" halign="left" valign="center"/>
+			<widget name="config" position="5,65" size="550,150" scrollbarMode="showOnDemand"/>
 		</screen>"""
 
 	def __init__(self, session, pars):
@@ -527,8 +524,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
 			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
-			<widget name="text" position="5,40" size="550,25" font="Regular;22" halign="left"/>
-			<widget name="config" position="5,70" size="550,400" scrollbarMode="showOnDemand"/>
+			<widget name="text" position="5,42" size="550,56" font="Regular;14" halign="left" valign="center"/>
+			<widget name="config" position="5,100" size="550,400" scrollbarMode="showOnDemand"/>
 		</screen>"""
 
 	def __init__(self, session, filename, line, new=False):
@@ -717,16 +714,16 @@ class ManagerMultiAutofsAutoEdit(Screen):
 				<convert type="TemplatedMultiContent">
 				{"templates":
 					{"default": (40,[
-							MultiContentEntryText(pos = (5, 0), size = (660, 22), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the name
-							MultiContentEntryText(pos = (5, 22), size = (660, 16), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the description
+							MultiContentEntryText(pos = (5, 0), size = (660, 24), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the name
+							MultiContentEntryText(pos = (5, 24), size = (660, 15), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the description
 						])
 					},
-					"fonts": [gFont("Regular", 22),gFont("Regular", 16)],
+					"fonts": [gFont("Regular", 22),gFont("Regular", 12)],
 					"itemHeight": 40
 				}
 				</convert>
 			</widget>
-			<widget name="info" position="5,360" zPosition="10" size="660,30" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="info" position="5,380" zPosition="10" size="660,15" font="Regular;11" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session, name = None):
