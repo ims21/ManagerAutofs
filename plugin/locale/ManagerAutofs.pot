@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 19:17+0200\n"
+"POT-Creation-Date: 2017-09-02 22:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,14 +23,17 @@ msgstr ""
 msgid "Manage autofs files and conection"
 msgstr ""
 
-#, python-format
-msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
-msgstr ""
-
 msgid "Close"
 msgstr ""
 
+msgid "Ok"
+msgstr ""
+
 msgid "Edit auto file"
+msgstr ""
+
+#, python-format
+msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
 msgstr ""
 
 msgid "Disable"
@@ -90,13 +93,14 @@ msgid "What all do You want to remove?"
 msgstr ""
 
 #, python-format
+msgid "Really remove autofile '%s'?"
+msgstr ""
+
+#, python-format
 msgid "Manager Autofs - edited record: %s"
 msgstr ""
 
 msgid "Manager Autofs - create new record"
-msgstr ""
-
-msgid "Ok"
 msgstr ""
 
 msgid "enabled"

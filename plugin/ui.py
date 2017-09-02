@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.25"
+VERSION = "1.27"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -27,9 +27,9 @@ from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.config import config, ConfigSubsection, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
-from Components.ChoiceList import ChoiceList, ChoiceEntryComponent
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
+from Components.Sources.List import List
 from shutil import copyfile
 import enigma
 import skin
@@ -63,17 +63,36 @@ fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
-		<screen name="ManagerAutofsMasterSelection" title="Select auto mount file with OK" position="fill" flags="wfNoBorder">
-			<panel name="PigTemplate"/>
-			<panel name="ButtonTemplate_RGYB"/>
-			<panel name="TextTemplate"/>
-			<widget name="list" position="780,100" size="1110,912" scrollbarMode="showOnDemand"/>
-		</screen>
-	"""
-	def __init__(self, session, *args):
+		<screen name="ManagerAutofsMasterSelection" position="center,center" size="680,600" backgroundColor="#00000000">
+			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
+			<ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
+			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
+			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
+			<widget source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
+			<widget source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
+			<widget source="list" render="Listbox" position="5,40" size="670,500" backgroundColor="#00000000" scrollbarMode="showOnDemand">
+				<convert type="TemplatedMultiContent">
+				{"templates":
+					{"default": (25,[
+							MultiContentEntryText(pos = (5, 0), size = (10, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the status
+							MultiContentEntryText(pos = (25, 0), size = (200, 25), font=0, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the name
+							MultiContentEntryText(pos = (235, 0), size = (200, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 1 is the autofile
+						])
+					},
+					"fonts": [gFont("Regular", 22),gFont("Regular", 16)],
+					"itemHeight": 25
+				}
+				</convert>
+			</widget>
+			<widget name="status" position="5,360" zPosition="10" size="660,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+			widget name="statusbar" position="5,360" zPosition="10" size="660,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+		</screen>"""
+
+	def __init__(self, session):
 		Screen.__init__(self, session)
 		self.session = session
-		self.setTitle(_("Manager Autofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
 
 		self.data = ''
 		self.container = enigma.eConsoleAppContainer()
@@ -82,31 +101,29 @@ class ManagerAutofsMasterSelection(Screen):
 		self["status"] = Label()
 		self["statusbar"] = Label()
 
-		self["key_red"] = Button(_("Close"))
-		self["key_blue"] = Button("")
-		self["key_yellow"] = Button(_("Edit auto file"))
-
-		self["list"] = ChoiceList(list)
-		self["list"].onSelectionChanged.append(self.selectionChanged)
-
-		self["actions"] = ActionMap(["OkCancelActions", "ColorActions", "DirectionActions", "KeyboardInputActions", "MenuActions"],
+		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions"],
 		{
 			"ok": self.menu,
 			"cancel": self.keyClose,
 			"red": self.keyClose,
+			"green": self.keyOk,
 			"blue": self.changeMasterRecordStatus,
 			"yellow": self.editAutofile,
-			"up": self.keyUp,
-			"down": self.keyDown,
-			"left": self.keyLeft,
-			"right": self.keyRight,
-			"upRepeated": self.keyUp,
-			"downRepeated": self.keyDown,
-			"leftRepeated": self.keyLeft,
-			"rightRepeated": self.keyRight,
 			"menu": self.menu,
 		}, -1)
+
+		self.list = []
+		self["list"] = List(self.list)
+		if not self.selectionChanged in self["list"].onSelectionChanged:
+			self["list"].onSelectionChanged.append(self.selectionChanged)
+
+		self["key_red"] = Button(_("Close"))
+		self["key_green"] = Button(_("Ok"))
+		self["key_blue"] = Button("")
+		self["key_yellow"] = Button(_("Edit auto file"))
+
 		self.msgNM=None
+		self.onShown.append(self.setWindowTitle)
 
 		if os.path.exists(MASTERFILE):
 			copyfile(MASTERFILE, MASTERFILE+"_bak")
@@ -117,45 +134,12 @@ class ManagerAutofsMasterSelection(Screen):
 
 		self.onLayoutFinish.append(self.readMasterFile)
 
-	def selectionChanged(self):
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		if sel[0][4] == "enabled":
-			text = _("Disable")
-		else:
-			text = _("Enable")
-		self["key_blue"].setText(text)
+	def setWindowTitle(self):
+		self.setTitle(_("Manager Autofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
 
-	def keyClose(self):
-		self.restartAutofs()
-		self.close()
-
-	def keyLeft(self):
-		self.clearTexts()
-		self["list"].instance.moveSelection(self["list"].instance.pageUp)
-
-	def keyRight(self):
-		self.clearTexts()
-		self["list"].instance.moveSelection(self["list"].instance.pageDown)
-
-	def keyUp(self):
-		self.clearTexts()
-		self["list"].instance.moveSelection(self["list"].instance.moveUp)
-
-	def keyDown(self):
-		self.clearTexts()
-		self["list"].instance.moveSelection(self["list"].instance.moveDown)
-
-	def clearTexts(self):
-		self.MessageBoxNM()
-		self["status"].setText("")
-		self["statusbar"].setText("")
-
-	def readMasterFile(self, edit=None, action=None):
+	def readMasterFile(self):
 		# 0 - status 1 - mountpoint 2 - autofile 3 - ghost
-		list = []
-		self.masterList = []
+		self.list = []
 
 		for line in open( MASTERFILE, "r"):
 			line = line.replace('\n','')
@@ -166,30 +150,37 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("enabled")
 			line = status + ' ' + line
 			m = line.split(' ')
-			if edit:
-				if action == "remove":	# remove record
-					if m[1] == edit[1] and m[2] == edit[2]:
-						continue
-				if action == "status":	# change record's status
-					if m[1] == edit[1] and m[2] == edit[2]:
-						m = edit
-				if not action:		# change record's parameters
-					if m[1] == edit[1][1] and m[2] == edit[2][1]:
-						m[0], m[1], m[2], m[3] = edit[0],edit[1][0],edit[2][0],edit[3]
 
-			s = "\t\t" #if len(m[1]) > 8 else "\t\t"
-			list.append(ChoiceEntryComponent('bullet' if m[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(m[1],m[2],s), m[1],m[2],m[3],m[0])))
-			self.masterList.append((m[0], m[1], m[2], m[3]))
+			self.list.append(('x' if m[0] == "enabled" else '', m[1], m[2], m[3]))
 
-		if edit and action == "new":		# add new record
-			list.append(ChoiceEntryComponent('bullet' if edit[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(edit[1],edit[2],s), edit[1],edit[2],edit[3],edit[0])))
-			self.masterList.append((edit[0], edit[1], edit[2], edit[3]))
+		self['list'].setList(self.list)
 
-		self["list"].setList(list)
+	def selectionChanged(self):
+		self.clearTexts()
+		sel = self["list"].getCurrent()
+		if sel:
+			if sel[0] == "x":
+				text = _("Disable")
+			else:
+				text = _("Enable")
+			self["key_blue"].setText(text)
+			self["status"].setText("%s%s %s %s" % ("" if sel[0] == "x" else "#",sel[1],sel[2],sel[3]))
+
+	def keyClose(self):
+		self.restartAutofs()
+		self.close()
+
+	def keyOk(self):
+		self.restartAutofs()
+		self.close()
+
+	def clearTexts(self):
+		self.MessageBoxNM()
+		self["statusbar"].setText("")
 
 	def saveMasterFile(self):
 		fo = open( MASTERFILE, "w")
-		for x in self.masterList:
+		for x in self.list:
 			fo.write("%s%s %s %s\n" % ("" if x[0]=="enabled" else "#", x[1], x[2], x[3]))
 		fo.close()
 
@@ -197,10 +188,10 @@ class ManagerAutofsMasterSelection(Screen):
 		menu = []
 		buttons = []
 		text = _("Select operation:")
-		sel = self["list"].l.getCurrentSelection()
+		sel = self["list"].getCurrent()
 		if sel:
-			recordname = "%s" % (sel[0][1].split('/')[2])
-			autoname = "%s" % sel[0][2].split('/')[2]
+			recordname = "%s" % (sel[1].split('/')[2])
+			autoname = "%s" % sel[2].split('/')[2]
 			menu.append(((_("Edit record:") + "  %s%s%s" % (yC,recordname,fC)),0))
 			buttons = ["4"]
 		menu.append((_("Add record"),1))
@@ -221,30 +212,29 @@ class ManagerAutofsMasterSelection(Screen):
 	def menuCallback(self, choice):
 		if choice is None:
 			return
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		if choice[1] == 0:
-			self.editMasterRecord()
-		elif choice[1] == 1:
-			self.addMasterRecord()
-		elif choice[1] == 2:
-			self.removeMasterRecord()
-		elif choice[1] == 10:
-			self.editAutofile()
-		elif choice[1] == 11:
-			self.addAutofileLine()
-		elif choice[1] == 12:
-			self.removeAutofile()
-#		elif choice[1] == 13:
-#			self.restartAutofs()
-		elif choice[1] == 14:
-			def callback(value=False):
-				if value:
-					self.restartAutofs(restartGui=True)
-			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
-		else:
-			return
+		sel = self["list"].getCurrent()
+		if sel:
+			if choice[1] == 0:
+				self.editMasterRecord()
+			elif choice[1] == 1:
+				self.addMasterRecord()
+			elif choice[1] == 2:
+				self.removeMasterRecord()
+			elif choice[1] == 10:
+				self.editAutofile()
+			elif choice[1] == 11:
+				self.addAutofileLine()
+			elif choice[1] == 12:
+				self.removeAutofile()
+#			elif choice[1] == 13:
+#				self.restartAutofs()
+			elif choice[1] == 14:
+				def callback(value=False):
+					if value:
+						self.restartAutofs(restartGui=True)
+				self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
+			else:
+				return
 
 	def restartAutofs(self, restartGui=False):
 		if os.path.exists('/etc/init.d/autofs'):
@@ -266,111 +256,108 @@ class ManagerAutofsMasterSelection(Screen):
 		self.showOutput()
 		self.data = ''
 		self["statusbar"].setText(txt)
-
 	def dataAvail(self, s):
 		self.data += s
 		print "[ManagerAutofs]", s.strip()
 		self.showOutput()
-
 	def showOutput(self):
 		self["status"].setText(self.data)
 
 	def changeMasterRecordStatus(self):
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		mountpoint = sel[0][1]
-		autofile = sel[0][2]
-		enabled =  "disabled" if sel[0][4] == "enabled" else "enabled"
-		ghost = sel[0][3]
-		edit = (enabled, mountpoint, autofile, ghost)
-		self.readMasterFile(edit=edit, action="status")
-		self.saveMasterFile()
+		curr = self["list"].getCurrent()
+		if curr:
+			index = self["list"].getIndex()
+			self.changeItemStatus(index, curr)
+			self.saveMasterFile()
 
 	def addMasterRecord(self):
-		def callback(change=False):
+		def callbackAdd(change=False):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and "enabled" or "disabled"
+				enabled =  cfg.enabled.value and "x" or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				add = (enabled, mountpoint, autofile, ghost)
-				self.readMasterFile(edit=add, action="new")
+				self.addItem(add)
 				self.saveMasterFile()
-		self.session.openWithCallback(boundFunction(callback), ManagerAutofsMasterEdit, None)
+		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None)
 
 	def editMasterRecord(self):
-		def callback( old_mountpoint, old_autofile, change = False):
+		def callbackEdit( index, change = False):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and "enabled" or "disabled"
+				enabled =  cfg.enabled.value and "x" or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
-				edit = (enabled, (mountpoint, old_mountpoint), (autofile, old_autofile), ghost )
-				self.readMasterFile(edit=edit)
+				edit = (enabled, mountpoint, autofile, ghost )
+				self.changeItem(index, edit)
 				self.saveMasterFile()
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		# note: in masterfile must be looked for old pars => must be sended into callback too
-		self.session.openWithCallback(boundFunction(callback, sel[0][1], sel[0][2]), ManagerAutofsMasterEdit, sel)
+		sel = self["list"].getCurrent()
+		if sel:
+			index = self["list"].getIndex()
+			self.session.openWithCallback(boundFunction(callbackEdit, index), ManagerAutofsMasterEdit, sel)
 
 	def removeMasterRecord(self):
-		def callback(retval):
+		def callbackRemove(index, autofile, retval=False):
 			if retval > 1:	# remove auto file - must be removed before than record due valid "sel" in list!!!
-				autofile = sel[0][2]
 				if os.path.exists(autofile):
 					bakName = autofile + "_del"
 					os.rename(autofile, bakName)
 			if retval:	# remove record
-				rm = ""
-				mountpoint = sel[0][1]
-				autofile = sel[0][2]
-				enabled = sel[0][4]
-				ghost = sel[0][3]
-				rm = (enabled, mountpoint, autofile, ghost)
-				self.readMasterFile(edit=rm, action="remove")
+				self.removeItem(index)
 				self.saveMasterFile()
 
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		record = sel[0][1]
-		autofile = sel[0][2]
-		removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and its file %s") % (record, autofile), 2) ]
-		self.session.openWithCallback(callback, MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
+		sel = self["list"].getCurrent()
+		if sel:
+			index = self["list"].getIndex()
+			record = sel[1]
+			autofile = sel[2]
+			removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and its file %s") % (record, autofile), 2) ]
+			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
+
+	def changeItemStatus(self, index, data):
+		if data[0] == "x":
+			status = ""
+		else:
+			status = "x"
+		self.changeItem(index, (status,data[1],data[2],data[3]))
+
+	def changeItem(self, index, new):
+		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3]))
+
+	def addItem(self, new):
+		self.list.append((new[0], new[1], new[2], new[3]))
+
+	def removeItem(self, index):
+		self.list.pop(index)
+		self["list"].updateList(self.list)
 
 	def addAutofileLine(self):
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		name = sel[0][2]
-		self.session.open(ManagerMultiAutofsAutoEdit, name)
+		sel = self["list"].getCurrent()
+		if sel:
+			name = sel[2]
+			self.session.open(ManagerMultiAutofsAutoEdit, name)
 
 	def editAutofile(self):
 		def callBackSingle(name,text=""):
 			if text:
 				self.backupFile(name,"bak")
 				self.saveFile(name, text)
-
-		data = ""
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-
-		name = sel[0][2]
-		lines = self.getAutoLines(name)
-
-		if lines == 1:		# single line
-			line = open(name, "r").readline()
-			data = line.replace('\n','').strip()
-			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
-		elif lines > 1:		# multi
-			self.session.open(ManagerMultiAutofsAutoEdit, name)
-		elif lines == -1:	# missing
-			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
-		else:			# empty
-			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+		sel = self["list"].getCurrent()
+		if sel:
+			name = sel[2]
+			lines = self.getAutoLines(name)
+			data = ""
+			if lines == 1:		# single line
+				line = open(name, "r").readline()
+				data = line.replace('\n','').strip()
+				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
+			elif lines > 1:		# multi
+				self.session.open(ManagerMultiAutofsAutoEdit, name)
+			elif lines == -1:	# missing
+				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+			else:			# empty
+				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
 
 	def backupFile(self, name, ext):
 		if os.path.exists(name):
@@ -392,14 +379,16 @@ class ManagerAutofsMasterSelection(Screen):
 		return nr
 
 	def removeAutofile(self):
-		#TODO: add message with confirmation
-		sel = self["list"].l.getCurrentSelection()
-		if sel is None:
-			return
-		name = sel[0][2]
-		if os.path.exists(name):
-			bakName = name + "_del"
-			os.rename(name, bakName)
+		def callBack(name, value=False):
+			if value:
+				if os.path.exists(name):
+					bakName = name + "_del"
+					os.rename(name, bakName)
+		sel = self["list"].getCurrent()
+		if sel:
+			name = sel[2]
+			self.session.openWithCallback(boundFunction(callBack, name), MessageBox, _("Really remove autofile '%s'?" % name), type=MessageBox.TYPE_YESNO, default=False)
+
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:
@@ -428,7 +417,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def __init__(self, session, pars):
 		Screen.__init__(self, session)
 		if pars:
-			text = _("Manager Autofs - edited record: %s") % pars[0][1].split('/')[2]
+			text = _("Manager Autofs - edited record: %s") % pars[1].split('/')[2]
 		else:
 			text = _("Manager Autofs - create new record")
 
@@ -460,13 +449,13 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.list = [ ]
 
 		if self.pars:
-			if self.pars[0][4] == "enabled":
+			if self.pars[0] == "x":
 				cfg.enabled.value = True
-			cfg.mountpoint.value = self.pars[0][1].split('/')[2]
-			cfg.autofile.value = self.pars[0][2].split('.')[1]
-			if self.pars[0][3] == "--ghost":
+			cfg.mountpoint.value = self.pars[1].split('/')[2]
+			cfg.autofile.value = self.pars[2].split('.')[1]
+			if self.pars[3] == "--ghost":
 				cfg.ghost.value = True
-#			if self.pars[0][4] == "--timeout":
+#			if self.pars[4] == "--timeout":
 #				cfg.timeout.value = True
 		else:
 			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
@@ -649,14 +638,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			parts = line.split()
 			self.parse(parts)
 
-#	def parseParams(self):
-#		for mline in open(self.autoName, "r"):
-#			line = mline.replace('\n','').strip()
-#			if line:
-#				self["text"] = Label("%s" % line)
-#				parts = line.split()
-#				self.parse(parts)
-
 	def setDefaultPars(self):
 		# set default pars before parsing line
 		cfg.localdir.value = cfg.localdir.default
@@ -721,7 +702,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			ip.append(int(x))
 		return ip
 
-from Components.Sources.List import List
 class ManagerMultiAutofsAutoEdit(Screen):
 	skin = """
 		<screen name="ManagerMultiAutofsAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
@@ -801,12 +781,13 @@ class ManagerMultiAutofsAutoEdit(Screen):
 
 	def keyEdit(self):
 		current = self["list"].getCurrent()
-		index = self["list"].getIndex()
-		def callBackWriteLine(index, text=""):
-			if text:
-				name = text.split()[0]
-				self.changeItem(index, (name, text))
-		self.session.openWithCallback(boundFunction(callBackWriteLine, index), ManagerAutofsAutoEdit, current[0], current[1], False)
+		if current:
+			index = self["list"].getIndex()
+			def callBackWriteLine(index, text=""):
+				if text:
+					name = text.split()[0]
+					self.changeItem(index, (name, text))
+			self.session.openWithCallback(boundFunction(callBackWriteLine, index), ManagerAutofsAutoEdit, current[0], current[1], False)
 
 	def keyOk(self):
 		self.backupFile(self.name,"bak")

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 19:17+0200\n"
-"PO-Revision-Date: 2017-09-02 19:18+0100\n"
+"POT-Creation-Date: 2017-09-02 22:08+0200\n"
+"PO-Revision-Date: 2017-09-02 22:09+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -19,15 +19,18 @@ msgstr ""
 msgid "Manage autofs files and conection"
 msgstr "Upravuje soubory Autofs a připojení"
 
-#, python-format
-msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
-msgstr "Manager Autofs v.%s - použijte %sMenu%s nebo %sOK%s na záznamu"
-
 msgid "Close"
 msgstr "Zavřít"
 
+msgid "Ok"
+msgstr "Ok"
+
 msgid "Edit auto file"
 msgstr "Upravit auto soubor"
+
+#, python-format
+msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
+msgstr "Manager Autofs v.%s - použijte %sMenu%s nebo %sOK%s na záznamu"
 
 msgid "Disable"
 msgstr "Zakázat"
@@ -86,14 +89,15 @@ msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"
 
 #, python-format
+msgid "Really remove autofile '%s'?"
+msgstr "Opravdu smazat soubor: '%s'?"
+
+#, python-format
 msgid "Manager Autofs - edited record: %s"
 msgstr "Manager Autofs - upravovaný záznam: %s"
 
 msgid "Manager Autofs - create new record"
 msgstr "Manager Autofs - založení nového záznamu"
-
-msgid "Ok"
-msgstr "Ok"
 
 msgid "enabled"
 msgstr "povolen"
