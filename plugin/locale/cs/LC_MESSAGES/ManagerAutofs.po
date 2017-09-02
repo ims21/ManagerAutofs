@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Enigma 2 ManagerAutofs Plugin\n"
+"Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 03:35+0200\n"
-"PO-Revision-Date: 2017-09-02 03:36+0100\n"
+"POT-Creation-Date: 2017-09-02 14:12+0200\n"
+"PO-Revision-Date: 2017-09-02 14:14+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -16,8 +16,8 @@ msgstr ""
 msgid "Manager Autofs"
 msgstr ""
 
-msgid "Manage autofs files"
-msgstr "Upravuje soubory pro Autofs"
+msgid "Manage autofs files and conection"
+msgstr "Upravuje soubory Autofs a připojení"
 
 #, python-format
 msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"

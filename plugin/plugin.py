@@ -29,5 +29,5 @@ def main(session, **kwargs):
 
 def Plugins(**kwargs):
 	name = _("Manager Autofs")
-	descr = _("Manage autofs files")
+	descr = _("Manage autofs files and conection")
 	return [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc = main)]
