@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.19"
+VERSION = "1.20"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -157,9 +157,7 @@ class ManagerAutofsMasterSelection(Screen):
 		list = []
 		self.masterList = []
 
-		m = None
-		fi = open( MASTERFILE, "r")
-		for line in fi:
+		for line in open( MASTERFILE, "r"):
 			line = line.replace('\n','')
 			if '#' in line:
 				status = ("disabled")
@@ -168,19 +166,25 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("enabled")
 			line = status + ' ' + line
 			m = line.split(' ')
-			if not action and edit: 	# change record's parameters
-				if m[1] == edit[1][1] and m[2] == edit[2][1]:
-					m[0], m[1], m[2], m[3] = edit[0],edit[1][0],edit[2][0],edit[3]
-			if action == "remove" and edit: # remove record
-				if m[1] == edit[1] and m[2] == edit[2]:
-					continue
+			if edit:
+				if action == "remove":	# remove record
+					if m[1] == edit[1] and m[2] == edit[2]:
+						continue
+				if action == "status":	# change record's status
+					if m[1] == edit[1] and m[2] == edit[2]:
+						m = edit
+				if not action:		# change record's parameters
+					if m[1] == edit[1][1] and m[2] == edit[2][1]:
+						m[0], m[1], m[2], m[3] = edit[0],edit[1][0],edit[2][0],edit[3]
+
 			s = "\t\t" #if len(m[1]) > 8 else "\t\t"
 			list.append(ChoiceEntryComponent('bullet' if m[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(m[1],m[2],s), m[1],m[2],m[3],m[0])))
 			self.masterList.append((m[0], m[1], m[2], m[3]))
-		fi.close()
-		if edit and action == "new": 		# add new record
+
+		if edit and action == "new":		# add new record
 			list.append(ChoiceEntryComponent('bullet' if edit[0] == "enabled" else '',('{0:32}{2:}{1:40}'.format(edit[1],edit[2],s), edit[1],edit[2],edit[3],edit[0])))
 			self.masterList.append((edit[0], edit[1], edit[2], edit[3]))
+
 		self["list"].setList(list)
 
 	def saveMasterFile(self):
@@ -272,19 +276,17 @@ class ManagerAutofsMasterSelection(Screen):
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
-		edit = ""
 		mountpoint = sel[0][1]
 		autofile = sel[0][2]
 		enabled =  "disabled" if sel[0][4] == "enabled" else "enabled"
 		ghost = sel[0][3]
 		edit = (enabled, mountpoint, autofile, ghost)
-		self.readMasterFile(edit=edit)
+		self.readMasterFile(edit=edit, action="status")
 		self.saveMasterFile()
 
 	def addMasterRecord(self):
 		def callback(change=False):
 			if change:
-				add = ""
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and "enabled" or "disabled"
@@ -297,7 +299,6 @@ class ManagerAutofsMasterSelection(Screen):
 	def editMasterRecord(self):
 		def callback( old_mountpoint, old_autofile, change = False):
 			if change:
-				edit = ""
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and "enabled" or "disabled"
@@ -308,12 +309,12 @@ class ManagerAutofsMasterSelection(Screen):
 		sel = self["list"].l.getCurrentSelection()
 		if sel is None:
 			return
-		# note: in masterfile must be looked for old pars => send they into callback
+		# note: in masterfile must be looked for old pars => must be sended into callback too
 		self.session.openWithCallback(boundFunction(callback, sel[0][1], sel[0][2]), ManagerAutofsMasterEdit, sel)
 
 	def removeMasterRecord(self):
 		def callback(retval):
-			if retval > 1:	# remove auto file - must be removed before remove record due valid "sel"!!!
+			if retval > 1:	# remove auto file - must be removed before than record due valid "sel" in list!!!
 				autofile = sel[0][2]
 				if os.path.exists(autofile):
 					bakName = autofile + "_del"
@@ -349,7 +350,7 @@ class ManagerAutofsMasterSelection(Screen):
 		elif lines > 1:
 			self.MessageBoxNM(True, _("File %s with %d lines.\nNot supported yet") % (name, lines), 5)
 			#TODO: multiline autofile
-			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name) # dodelat
+			#self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name)
 		elif lines == -1:
 			self.session.openWithCallback(callBack, ManagerAutofsAutoEdit, name, True)
 		else:
@@ -359,12 +360,10 @@ class ManagerAutofsMasterSelection(Screen):
 		nr = 0
 		if not os.path.exists(name):
 			return -1
-		fi = open(name, "r")
-		for mline in fi:
+		for mline in open(name, "r"):
 			mline = mline.replace('\n','')
 			if mline:
 				nr += 1
-		fi.close()
 		return nr
 
 	def removeAutofile(self):
