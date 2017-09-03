@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.28"
+VERSION = "1.32"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -40,12 +40,10 @@ config.plugins.mautofs = ConfigSubsection()
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.mountpoint = NoSave(ConfigText(default = "/mnt/remote", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_width = 30, fixed_size = False ))
-config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = False))
-#config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
-#choicelist = [("", _("no"))]
-#for i in range(0, 1000, 10):
-#	choicelist.append(("%d" % i, "%d" % i))
-#config.plugins.mautofs.delay = NoSave(ConfigSelection(default="", choices=choicelist))
+config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
+config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
+config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
+
 cfg = config.plugins.mautofs
 
 MASTERFILE="/etc/auto.master"
@@ -58,7 +56,7 @@ def hex2strColor(argb):
 
 dC = "\c%s" % hex2strColor(int(skin.parseColor("#00999999").argb()))
 eC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
-yC = "\c%s" % hex2strColor(int(skin.parseColor("yellow").argb()))
+yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
 fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 
 class ManagerAutofsMasterSelection(Screen):
@@ -138,7 +136,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self.setTitle(_("Manager Autofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
 
 	def readMasterFile(self):
-		# 0 - status 1 - mountpoint 2 - autofile 3 - ghost
+		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3
 		self.list = []
 
 		for line in open( MASTERFILE, "r"):
@@ -150,12 +148,21 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("enabled")
 			line = status + ' ' + line
 			m = line.split(' ')
-
-			self.list.append(('x' if m[0] == "enabled" else '', m[1], m[2], m[3]))
-
+			self.list.append(('x' if m[0] == "enabled" else '', m[1], m[2], self.getOptional(m)))
 		self['list'].setList(self.list)
 
+	def getOptional(self, m):
+		n = len(m)
+		optional = ""
+		for i in range(3, n):
+			optional += m[i]
+			optional += " "
+		return optional.strip()
+
 	def selectionChanged(self):
+		self.refreshText()
+
+	def refreshText(self):
 		self.clearTexts()
 		sel = self["list"].getCurrent()
 		if sel:
@@ -164,7 +171,7 @@ class ManagerAutofsMasterSelection(Screen):
 			else:
 				text = _("Enable")
 			self["key_blue"].setText(text)
-			self["status"].setText("%s%s %s %s" % ("" if sel[0] == "x" else "#",sel[1],sel[2],sel[3]))
+			self["status"].setText(self.formatString(sel))
 
 	def keyClose(self):
 		self.restartAutofs()
@@ -182,8 +189,14 @@ class ManagerAutofsMasterSelection(Screen):
 	def saveMasterFile(self):
 		fo = open( MASTERFILE, "w")
 		for x in self.list:
-			fo.write("%s%s %s %s\n" % ("" if x[0] == "x" else "#", x[1], x[2], x[3]))
+			fo.write(self.formatString(x) + '\n')
 		fo.close()
+
+	def formatString(self, x):
+		string = "%s%s %s" % ("" if x[0] == "x" else "#", x[1], x[2])
+		if len(x) > 3:
+			string += " " + x[3]
+		return string
 
 	def menu(self):
 		menu = []
@@ -277,7 +290,8 @@ class ManagerAutofsMasterSelection(Screen):
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and "x" or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
-				add = (enabled, mountpoint, autofile, ghost)
+				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
+				add = (enabled, mountpoint, autofile, optional )
 				self.addItem(add)
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None)
 
@@ -288,7 +302,8 @@ class ManagerAutofsMasterSelection(Screen):
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and "x" or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
-				edit = (enabled, mountpoint, autofile, ghost )
+				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
+				edit = (enabled, mountpoint, autofile, optional )
 				self.changeItem(index, edit)
 		sel = self["list"].getCurrent()
 		if sel:
@@ -317,17 +332,20 @@ class ManagerAutofsMasterSelection(Screen):
 			status = ""
 		else:
 			status = "x"
-		self.changeItem(index, (status,data[1],data[2],data[3]))
+		self.changeItem(index, (status ,data[1], data[2], data[3] if len(data) > 3 else ''))
 
 	def changeItem(self, index, new):
-		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3]))
+		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3] if len(new) > 3 else ''))
+		self.refreshText()
 
 	def addItem(self, new):
-		self.list.append((new[0], new[1], new[2], new[3]))
+		self.list.append((new[0], new[1], new[2], new[3] if len(new) > 3 else ''))
+		self.refreshText()
 
 	def removeItem(self, index):
 		self.list.pop(index)
 		self["list"].updateList(self.list)
+		self.refreshText()
 
 	def addAutofileLine(self):
 		sel = self["list"].getCurrent()
@@ -386,7 +404,6 @@ class ManagerAutofsMasterSelection(Screen):
 			name = sel[2]
 			self.session.openWithCallback(boundFunction(callBack, name), MessageBox, _("Really remove autofile '%s'?" % name), type=MessageBox.TYPE_YESNO, default=False)
 
-
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:
 			self.session.deleteDialog(self.msgNM)
@@ -437,44 +454,52 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"red":		self.keyClose,
 			 }, -1)
 
+		self.setDefault()
+		self.parsePars()
 		self.createConfig()
 		self.actualizeString()
 
 	def createConfig(self):
-		self.setDefault()
-
 		self.list = [ ]
+		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
+		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
+		self.list.append(getConfigListEntry(_("auto.name"), cfg.autofile))
+		self.list.append(getConfigListEntry(_("ghost"), cfg.ghost))
+		self.timeout = _("timeout")
+		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
+		if cfg.timeout.value:
+			self.list.append(getConfigListEntry(_("time"), cfg.timeouttime))
+		self["config"].list = self.list
+		self["config"].setList(self.list)
 
+	def parsePars(self):
 		if self.pars:
 			if self.pars[0] == "x":
 				cfg.enabled.value = True
 			cfg.mountpoint.value = self.pars[1].split('/')[2]
 			cfg.autofile.value = self.pars[2].split('.')[1]
-			if self.pars[3] == "--ghost":
-				cfg.ghost.value = True
-#			if self.pars[4] == "--timeout":
-#				cfg.timeout.value = True
+			if len(self.pars) > 3:
+				optional = self.pars[3].split()
+				for x in optional:
+					if "--ghost" in x:
+						cfg.ghost.value = True
+					if "--timeout" in x:
+						cfg.timeout.value = True
+						cfg.timeouttime.value = int(x.split('=')[1])
 		else:
 			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
-
-		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
-		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
-		self.list.append(getConfigListEntry(_("auto.name"), cfg.autofile))
-		self.list.append(getConfigListEntry(_("ghost"), cfg.ghost))
-#		self.list.append(getConfigListEntry(_("timeout"), cfg.ghost))
-#		if cfg.timeout.value:
-#			self.list.append(getConfigListEntry(_("delay"), cfg.delay))
-
-		self["config"].list = self.list
-		self["config"].setList(self.list)
 
 	def setDefault(self):
 		cfg.enabled.value = cfg.enabled.default
 		cfg.mountpoint.value = cfg.mountpoint.default
 		cfg.autofile.value = cfg.autofile.default
-		cfg.ghost.value == cfg.ghost.default
+		cfg.ghost.value = cfg.ghost.default
+		cfg.timeout.value = cfg.timeout.default
+		cfg.timeouttime.value = cfg.timeouttime.default
 
 	def changedEntry(self):
+		if self["config"].getCurrent()[0] == self.timeout:
+			self.createConfig()
 		self.actualizeString()
 	
 	def actualizeString(self):
@@ -482,8 +507,13 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		string += "/mnt/%s" % cfg.mountpoint.value
 		string += " "
 		string += "auto.%s" % cfg.autofile.value
-		string += " "
-		string += "--ghost" if cfg.ghost.value else ""
+		if cfg.ghost.value:
+			string += " "
+			string += "--ghost"
+		if cfg.timeout.value:
+			string += " "
+			string += "--timeout"
+			string += "=%d" % cfg.timeouttime.value
 		self["text"].setText(string)
 
 	def keyOk(self):
@@ -495,8 +525,10 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("cifs","cifs"),("nfs","nfs") ]))
-config.plugins.mautofs.rw = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660") ]))
+config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
+
+config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="root", fixed_size=False))
 config.plugins.mautofs.passwd = NoSave(ConfigPassword(default="password", fixed_size=False))
 
@@ -504,14 +536,20 @@ config.plugins.mautofs.useddomain = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.domain = NoSave(ConfigText(default="domain.local", fixed_size=False))
 config.plugins.mautofs.noperm = NoSave(ConfigYesNo(default=False))
 
-config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
-config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.noatime = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
-config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8"),("1250", "1250") ]))
+config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
 config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
+config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8"),("1250", "1250") ]))
+config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
+
+config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
+config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("","no"),("dev","dev") ]))
+
+config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -559,27 +597,52 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self.parseParams(line)
 		self.createConfig()
 
+	def keyOk(self):
+#		self.writeFile()
+		self.close(self["text"].getText())
+
+	def keyClose(self):
+		self.close()
+
+	def writeFile(self):
+		if not self.new:
+			bakName = self.autoName + "_bak"
+			os.rename(self.autoName, bakName)
+		fo = open(self.autoName, "w")
+		fo.write("%s\n" % self["text"].getText())
+		fo.close()
+
 	def createConfig(self):
 		self.list = [ ]
-
+		dx = 4*' '
 		self.list.append(getConfigListEntry(_("local directory"), cfg.localdir))
 		self.list.append(getConfigListEntry(_("fstype"), cfg.fstype))
-		self.list.append(getConfigListEntry(_("rw"), cfg.rw))
-		self.list.append(getConfigListEntry(_("user"), cfg.user))
-		self.list.append(getConfigListEntry(_("password"), cfg.passwd))
+		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
+		self.useduserpass = _("use user/pass")
+		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
+		if cfg.useduserpass.value:
+			self.list.append(getConfigListEntry(dx + _("user"), cfg.user))
+			self.list.append(getConfigListEntry(dx + _("password"), cfg.passwd))
 		self.useddomain = _("domain")
 		self.list.append(getConfigListEntry(self.useddomain, cfg.useddomain))
 		if cfg.useddomain.value:
-			self.list.append(getConfigListEntry(_("domain name"), cfg.domain))
-			self.list.append(getConfigListEntry(_("noperm"), cfg.noperm))
+			self.list.append(getConfigListEntry(dx + _("domain name"), cfg.domain))
+			self.list.append(getConfigListEntry(dx + _("noperm"), cfg.noperm))
 		self.list.append(getConfigListEntry(_("noatime"), cfg.noatime))
 		self.list.append(getConfigListEntry(_("noserverino"), cfg.noserverino))
-		self.list.append(getConfigListEntry(_("ip"), cfg.ip))
-		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
-		self.list.append(getConfigListEntry(_("security"), cfg.sec))
-		self.list.append(getConfigListEntry(_("iocharset"), cfg.iocharset))
+		self.list.append(getConfigListEntry(_("nosuid"), cfg.nosuid))
+		self.list.append(getConfigListEntry(_("nodev"), cfg.nodev))
 		self.list.append(getConfigListEntry(_("rsize"), cfg.rsize))
 		self.list.append(getConfigListEntry(_("wsize"), cfg.wsize))
+		self.list.append(getConfigListEntry(_("iocharset"), cfg.iocharset))
+		self.list.append(getConfigListEntry(_("security"), cfg.sec))
+		self.usedip = _("used ip")
+		self.list.append(getConfigListEntry(self.usedip, cfg.usedip))
+		if cfg.usedip.value:
+			self.list.append(getConfigListEntry(dx + _("ip"), cfg.ip))
+		else:
+			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
+		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
@@ -588,6 +651,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.useddomain:
+			self.createConfig()
+		elif self["config"].getCurrent()[0] == self.useduserpass:
+			self.createConfig()
+		elif self["config"].getCurrent()[0] == self.usedip:
 			self.createConfig()
 		self.fillString()
 
@@ -598,36 +665,24 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string = cfg.localdir.value
 		string += " "
 		string += "-fstype=%s," % cfg.fstype.value
-		string += "rw," if cfg.rw.value else ""
-		string += "user=%s," % cfg.user.value
-		string += "password=%s," % cfg.passwd.value
+		string += "%s," % cfg.rw.value if cfg.rw.value else ""
+		string += ("user=%s," % cfg.user.value) if cfg.useduserpass.value else ""
+		string += ("password=%s," % cfg.passwd.value)if cfg.useduserpass.value else ""
 		string += ("domain=%s," % cfg.domain.value) if cfg.useddomain.value else ""
 		string += "noperm," if cfg.noperm.value else ""
 		string += "noatime," if cfg.noatime.value else ""
 		string += "noserverino," if cfg.noserverino.value else ""
-		string += ("iocharset=%s," % cfg.iocharset.value) if cfg.iocharset.value else ""
+		string += "nosuid," if cfg.nosuid.value else ""
+		string += "nodev," if cfg.nodev.value else ""
 		string += ("rsize=%s," % cfg.rsize.value) if cfg.rsize.value else ""
 		string += ("wsize=%s," % cfg.wsize.value) if cfg.wsize.value else ""
+		string += ("iocharset=%s," % cfg.iocharset.value) if cfg.iocharset.value else ""
 		string += ("sec=%s," % cfg.sec.value) if cfg.sec.value else ""
+		string = string.rstrip(',')
 		string += " "
 		ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
-		string += "://%s/%s" % (ip, cfg.remotedir.value)
+		string += ("://%s/%s" % (ip, cfg.remotedir.value)) if cfg.usedip.value else (":/%s/%s" % (cfg.dev.value, cfg.remotedir.value))
 		return string
-
-	def writeFile(self):
-		if not self.new:
-			bakName = self.autoName + "_bak"
-			os.rename(self.autoName, bakName)
-		fo = open(self.autoName, "w")
-		fo.write("%s\n" % self["text"].getText())
-		fo.close()
-
-	def keyOk(self):
-#		self.writeFile()
-		self.close(self["text"].getText())
-
-	def keyClose(self):
-		self.close()
 
 	def parseParams(self, line):
 		if line:
@@ -638,31 +693,50 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def setDefaultPars(self):
 		# set default pars before parsing line
 		cfg.localdir.value = cfg.localdir.default
-		cfg.ip.value = cfg.ip.default
-		cfg.remotedir.value = cfg.remotedir.default
 		cfg.fstype.value = cfg.fstype.default
+		cfg.rw.value = cfg.rw.default
+		cfg.useduserpass.value = cfg.useduserpass.default
 		cfg.user.value = cfg.user.default
 		cfg.passwd.value = cfg.passwd.default
-		cfg.sec.value = cfg.sec.default
-		cfg.iocharset.value = cfg.iocharset.default
-		cfg.rsize.value = cfg.rsize.default
-		cfg.wsize.value = cfg.wsize.default
 		cfg.useddomain.value = cfg.useddomain.default
 		cfg.domain.value = cfg.domain.default
 		cfg.noperm.value = cfg.noperm.default
 		cfg.noatime.value = cfg.noatime.default
 		cfg.noserverino.value = cfg.noserverino.default
+		cfg.nosuid.value = cfg.nosuid.default
+		cfg.nodev.value = cfg.nodev.default
+		cfg.rsize.value = cfg.rsize.default
+		cfg.wsize.value = cfg.wsize.default
+		cfg.iocharset.value = cfg.iocharset.default
+		cfg.sec.value = cfg.sec.default
+		cfg.usedip.value = cfg.usedip.default
+		cfg.ip.value = cfg.ip.default
+		cfg.dev.value = cfg.dev.default
+		cfg.remotedir.value = cfg.remotedir.default
+
+	def prepareOff(self):
+		# set (all what has sence) as off or empty before parsing existing line
+		cfg.rw.value = ""
+		cfg.useduserpass.value = False
+		cfg.useddomain.value = False
+		cfg.noatime.value = False
+		cfg.noserverino.value = False
+		cfg.nosuid.value = False
+		cfg.nodev.value = False
+		cfg.iocharset.value = ""
 
 	def parse(self, parts):
 		self.setDefaultPars()
+		self.prepareOff()
 		# parse line
 		for x in parts[1].split(','):
-#			print x
 			if "-fstype" in x:
 				cfg.fstype.value=x.split('=')[1]
 			elif "user" in x:
+				cfg.useduserpass.value = True # rozmyslet!
 				cfg.user.value=x.split('=')[1]
 			elif "password" in x:
+				cfg.useduserpass.value = True
 				cfg.passwd.value=x.split('=')[1]
 			elif "sec" in x:
 				cfg.sec.value=x.split('=')[1]
@@ -675,22 +749,34 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			elif "domain" in x:
 				cfg.useddomain.value = True
 				cfg.domain.value=x.split('=')[1]
-			elif hasattr(x, "rw"):
-				cfg.fstype.value=True
-			elif hasattr(x, "noperm"):
+			elif x == "rw" or x == "ro":
+				cfg.rw.value=x
+			elif x == "noperm":
 				cfg.noperm.value=True
-			elif hasattr(x, "noatime"):
+			elif x == "noatime":
 				cfg.noatime.value=True
-			elif hasattr(x, "noserverino"):
+			elif x == "noserverino":
 				cfg.noserverino.value=True
+			elif x == "nosuid":
+				cfg.nosuid.value=True
+			elif x == "nodev":
+				cfg.nodev.value=True
 			else:
 				pass
 		# dir name
 		cfg.localdir.value = parts[0].strip()
-		# ip and shared remote dir
-		remote = parts[2].split('/')
-		cfg.ip.value = self.convertIP(remote[2])
-		cfg.remotedir.value = remote[3]
+
+		# ip and shared remote dir or dev and remote dir
+		if parts[2].startswith('://'): 		# ://10.0.0.10/video
+			cfg.usedip.value = True
+			remote = parts[2].split('/')
+			cfg.ip.value = self.convertIP(remote[2])
+			cfg.remotedir.value = remote[3]
+		else:					# DVD, CD  :/dev/sr0
+			cfg.usedip.value = False
+			remote = parts[2].split('/')
+			cfg.dev.value = remote[1]
+			cfg.remotedir.value = remote[2]
 
 	def convertIP(self, ip):
 		strIP = ip.split('.')
@@ -772,6 +858,9 @@ class ManagerMultiAutofsAutoEdit(Screen):
 			self['list'].setList(self.list)
 
 	def selectionChanged(self):
+		self.refreshText()
+
+	def refreshText(self):
 		current = self["list"].getCurrent()
 		if current:
 			self["info"].setText("%s" % current[1])
@@ -835,13 +924,16 @@ class ManagerMultiAutofsAutoEdit(Screen):
 #
 	def changeItem(self, index, new):
 		self["list"].modifyEntry(index,(new[0], new[1]))
+		self.refreshText()
 
 	def addItem(self, new):
 		self.list.append((new[0], new[1]))
+		self.refreshText()
 
 	def removeItem(self, index):
 		self.list.pop(index)
 		self["list"].updateList(self.list)
+		self.refreshText()
 
 	def keyCancel(self):
 		self.close()
