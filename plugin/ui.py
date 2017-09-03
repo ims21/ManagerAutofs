@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.32"
+VERSION = "1.33"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -86,6 +86,8 @@ class ManagerAutofsMasterSelection(Screen):
 				}
 				</convert>
 			</widget>
+			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
+			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
 			<widget name="status" position="50,560" zPosition="10" size="660,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
 			widget name="statusbar" position="50,580" zPosition="10" size="660,20" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
@@ -98,6 +100,8 @@ class ManagerAutofsMasterSelection(Screen):
 		self.container = enigma.eConsoleAppContainer()
 		self.container.appClosed.append(self.appClosed)
 		self.container.dataAvail.append(self.dataAvail)
+		self["mntpoint"] = Label(_("Mountpoint"))
+		self["autofile"] = Label(_("auto.file"))
 		self["status"] = Label()
 		self["statusbar"] = Label()
 
@@ -211,7 +215,7 @@ class ManagerAutofsMasterSelection(Screen):
 			autoname = "%s" % sel[2].split('/')[2]
 			menu.append(((_("Edit record:") + "  %s%s%s" % (gC,recordname,fC)),0))
 			buttons = ["4"]
-		menu.append((_("Add record"),1))
+		menu.append((_("New record"),1))
 		menu.append(((_("Remove record:") + "  %s%s%s" % (gC,recordname,fC)),2))
 		buttons += ["1", "8"]
 		if sel:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 22:08+0200\n"
+"POT-Creation-Date: 2017-09-03 23:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,12 @@ msgid "Manager Autofs"
 msgstr ""
 
 msgid "Manage autofs files and conection"
+msgstr ""
+
+msgid "Mountpoint"
+msgstr ""
+
+msgid "auto.file"
 msgstr ""
 
 msgid "Close"
@@ -115,6 +121,12 @@ msgstr ""
 msgid "ghost"
 msgstr ""
 
+msgid "timeout"
+msgstr ""
+
+msgid "time"
+msgstr ""
+
 msgid "no"
 msgstr ""
 
@@ -128,7 +140,10 @@ msgstr ""
 msgid "fstype"
 msgstr ""
 
-msgid "rw"
+msgid "rw/ro"
+msgstr ""
+
+msgid "use user/pass"
 msgstr ""
 
 msgid "user"
@@ -152,22 +167,34 @@ msgstr ""
 msgid "noserverino"
 msgstr ""
 
-msgid "ip"
+msgid "nosuid"
 msgstr ""
 
-msgid "remote directory"
-msgstr ""
-
-msgid "security"
-msgstr ""
-
-msgid "iocharset"
+msgid "nodev"
 msgstr ""
 
 msgid "rsize"
 msgstr ""
 
 msgid "wsize"
+msgstr ""
+
+msgid "iocharset"
+msgstr ""
+
+msgid "security"
+msgstr ""
+
+msgid "used ip"
+msgstr ""
+
+msgid "ip"
+msgstr ""
+
+msgid "dev"
+msgstr ""
+
+msgid "remote directory"
 msgstr ""
 
 msgid "Add"
