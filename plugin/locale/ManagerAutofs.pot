@@ -48,7 +48,7 @@ msgstr ""
 msgid "Edit record:"
 msgstr ""
 
-msgid "Add record"
+msgid "New record"
 msgstr ""
 
 msgid "Remove record:"

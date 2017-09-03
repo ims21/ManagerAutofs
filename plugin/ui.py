@@ -57,6 +57,8 @@ def hex2strColor(argb):
 dC = "\c%s" % hex2strColor(int(skin.parseColor("#00999999").argb()))
 eC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
+gC = "\c%s" % hex2strColor(int(skin.parseColor("#0040ff40").argb()))
+bC = "\c%s" % hex2strColor(int(skin.parseColor("#004040ff").argb()))
 fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 
 class ManagerAutofsMasterSelection(Screen):
@@ -207,15 +209,15 @@ class ManagerAutofsMasterSelection(Screen):
 		if sel:
 			recordname = "%s" % (sel[1].split('/')[2])
 			autoname = "%s" % sel[2].split('/')[2]
-			menu.append(((_("Edit record:") + "  %s%s%s" % (yC,recordname,fC)),0))
+			menu.append(((_("Edit record:") + "  %s%s%s" % (gC,recordname,fC)),0))
 			buttons = ["4"]
 		menu.append((_("Add record"),1))
-		menu.append(((_("Remove record:") + "  %s%s%s" % (yC,recordname,fC)),2))
+		menu.append(((_("Remove record:") + "  %s%s%s" % (gC,recordname,fC)),2))
 		buttons += ["1", "8"]
 		if sel:
-			menu.append(((_("Edit -") + " %s%s%s" % (yC,autoname,fC)),10))
-			menu.append(((_("Add line - ") + " %s%s%s" % (yC,autoname,fC)),11))
-			menu.append(((_("Remove -") + " %s%s%s" % (yC,autoname,fC)),12))
+			menu.append(((_("Edit -") + " %s%s%s" % (bC,autoname,fC)),10))
+			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
+			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["yellow", "", ""]
 #		menu.append((_("Reload autofs"),13))
 #		buttons += ["green"]
@@ -461,6 +463,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.actualizeString()
 
 	def createConfig(self):
+		dx = 4*' '
 		self.list = [ ]
 		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
 		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
@@ -469,7 +472,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.timeout = _("timeout")
 		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
 		if cfg.timeout.value:
-			self.list.append(getConfigListEntry(_("time"), cfg.timeouttime))
+			self.list.append(getConfigListEntry(dx + _("time"), cfg.timeouttime))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 

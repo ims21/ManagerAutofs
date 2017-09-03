@@ -44,8 +44,8 @@ msgstr "Zvolte operaci:"
 msgid "Edit record:"
 msgstr "Upravit záznam:"
 
-msgid "Add record"
-msgstr "Přidat záznam"
+msgid "New record"
+msgstr "Nový záznam"
 
 msgid "Remove record:"
 msgstr "Odstranit záznam:"
@@ -54,7 +54,7 @@ msgid "Edit -"
 msgstr "Upravit -"
 
 msgid "Add line - "
-msgstr "Přidat rádek -"
+msgstr "Přidat řádek -"
 
 msgid "Remove -"
 msgstr "Odstranit -"
