@@ -180,6 +180,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def keyOk(self):
 		self.saveMasterFile()
 		self.restartAutofs()
+		config.movielist.videodirs.load()
 		self.close()
 
 	def clearTexts(self):
