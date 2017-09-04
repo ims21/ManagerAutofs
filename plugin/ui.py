@@ -483,6 +483,8 @@ class ManagerAutofsMasterSelection(Screen):
 					lines = []		# other lines
 					for l in fi:
 						l = l.replace('\n','')
+						if not l:
+							continue
 						if l.startswith('/etc/auto.'):
 							for rec in self.list:
 								if rec[2] == l:
