@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 23:37+0200\n"
+"POT-Creation-Date: 2017-09-04 12:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,13 @@ msgstr ""
 msgid "Remove -"
 msgstr ""
 
-msgid "Reload autofs with GUI restart"
+msgid "Restart autofs with GUI restart"
+msgstr ""
+
+msgid "Update AutoBackup's file"
+msgstr ""
+
+msgid "Remove unused lines from AutoBackup"
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"
@@ -84,15 +90,24 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
+msgid "File '/etc/backup.cfg' was created!"
+msgstr ""
+
+msgid "Update AutoBackup's '/etc/backup.cfg'?"
+msgstr ""
+
+msgid "Remove unused lines from AutoBackup's '/etc/backup.cfg'?"
+msgstr ""
+
 msgid "Nothing"
 msgstr ""
 
 #, python-format
-msgid "Record %s only"
+msgid "Record '%s' only"
 msgstr ""
 
 #, python-format
-msgid "Record %s and its file %s"
+msgid "Record '%s' and its file '%s'"
 msgstr ""
 
 msgid "What all do You want to remove?"

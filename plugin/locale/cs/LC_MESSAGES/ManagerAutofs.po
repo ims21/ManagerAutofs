@@ -2,15 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 23:37+0200\n"
-"PO-Revision-Date: 2017-09-03 23:42+0100\n"
+"POT-Creation-Date: 2017-09-04 12:10+0200\n"
+"PO-Revision-Date: 2017-09-04 12:13+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Poedit 1.5.4\n"
 
 msgid "Manager Autofs"
@@ -65,8 +66,14 @@ msgstr "Přidat řádek -"
 msgid "Remove -"
 msgstr "Odstranit -"
 
-msgid "Reload autofs with GUI restart"
-msgstr "Reload autofs a restart enigma"
+msgid "Restart autofs with GUI restart"
+msgstr "Restartovat autofs a enigma"
+
+msgid "Update AutoBackup's file"
+msgstr "Aktualizovat AutoBackup soubor"
+
+msgid "Remove unused lines from AutoBackup"
+msgstr "Odstranit nepoužívané soubory z AutoBackup"
 
 msgid "Really reload autofs and restart GUI?"
 msgstr "Skutečně reload autofs a restartovat enigma?"
@@ -80,16 +87,25 @@ msgstr "Chyba"
 msgid "Done"
 msgstr "Dokončeno"
 
+msgid "File '/etc/backup.cfg' was created!"
+msgstr "Soubor '/etc/backup.cfg' byl založen!"
+
+msgid "Update AutoBackup's '/etc/backup.cfg'?"
+msgstr "Aktualizovat AutoBackup soubor?"
+
+msgid "Remove unused lines from AutoBackup's '/etc/backup.cfg'?"
+msgstr "Odstranit nepoužívané soubory z AutoBackup?"
+
 msgid "Nothing"
 msgstr "Nic"
 
 #, python-format
-msgid "Record %s only"
-msgstr "Pouze záznam %s"
+msgid "Record '%s' only"
+msgstr "Pouze řádek '%s'"
 
 #, python-format
-msgid "Record %s and its file %s"
-msgstr "Záznam %s a jeho soubor %s"
+msgid "Record '%s' and its file '%s'"
+msgstr "Řádek '%s' a soubor '%s'"
 
 msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"

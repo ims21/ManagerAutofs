@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.33"
+VERSION = "1.35"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -47,6 +47,7 @@ config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits =
 cfg = config.plugins.mautofs
 
 MASTERFILE="/etc/auto.master"
+AUTOBACKUPCFG="/etc/backup.cfg"
 
 def hex2strColor(argb):
 	out = ""
@@ -54,12 +55,12 @@ def hex2strColor(argb):
 		out += "%s" % chr(0x30 + (argb>>i & 0xf))
 	return out
 
-dC = "\c%s" % hex2strColor(int(skin.parseColor("#00999999").argb()))
-eC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
-gC = "\c%s" % hex2strColor(int(skin.parseColor("#0040ff40").argb()))
-bC = "\c%s" % hex2strColor(int(skin.parseColor("#004040ff").argb()))
+gC = "\c%s" % hex2strColor(int(skin.parseColor("#0000ff80").argb()))
+bC = "\c%s" % hex2strColor(int(skin.parseColor("#000080ff").argb()))
 fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
+
+_X_ = "%sx%s" % (gC,fC)
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
@@ -133,7 +134,7 @@ class ManagerAutofsMasterSelection(Screen):
 			copyfile(MASTERFILE, MASTERFILE+"_bak")
 		else:
 			f = open(MASTERFILE, "w")
-			f.write("%s%s /etc/auto.%s %s\n" % ("" if cfg.enabled.value else "#", cfg.mountpoint.value, cfg.autofile.value, "--ghost" if cfg.ghost.value else ""))
+			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.value, cfg.autofile.value, "--ghost" if cfg.ghost.value else ""))
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -154,7 +155,7 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("enabled")
 			line = status + ' ' + line
 			m = line.split(' ')
-			self.list.append(('x' if m[0] == "enabled" else '', m[1], m[2], self.getOptional(m)))
+			self.list.append((_X_ if m[0] == "enabled" else '', m[1], m[2], self.getOptional(m)))
 		self['list'].setList(self.list)
 
 	def getOptional(self, m):
@@ -172,7 +173,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self.clearTexts()
 		sel = self["list"].getCurrent()
 		if sel:
-			if sel[0] == "x":
+			if sel[0] == _X_:
 				text = _("Disable")
 			else:
 				text = _("Enable")
@@ -180,12 +181,12 @@ class ManagerAutofsMasterSelection(Screen):
 			self["status"].setText(self.formatString(sel))
 
 	def keyClose(self):
-		self.restartAutofs()
+		self.reloadAutofs()
 		self.close()
 
 	def keyOk(self):
 		self.saveMasterFile()
-		self.restartAutofs()
+		self.reloadAutofs()
 		config.movielist.videodirs.load()
 		self.close()
 
@@ -200,7 +201,7 @@ class ManagerAutofsMasterSelection(Screen):
 		fo.close()
 
 	def formatString(self, x):
-		string = "%s%s %s" % ("" if x[0] == "x" else "#", x[1], x[2])
+		string = "%s%s %s" % ("" if x[0] == _X_ else "#", x[1], x[2])
 		if len(x) > 3:
 			string += " " + x[3]
 		return string
@@ -223,10 +224,13 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["yellow", "", ""]
-#		menu.append((_("Reload autofs"),13))
-#		buttons += ["green"]
-		menu.append((_("Reload autofs with GUI restart"),14))
+		menu.append((_("Restart autofs with GUI restart"),14))
 		buttons += ["red"]
+		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
+			menu.append((_("Update AutoBackup's file"),15))
+			buttons += [""]
+			menu.append((_("Remove unused lines from AutoBackup"),16))
+			buttons += [""]
 
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
@@ -247,21 +251,32 @@ class ManagerAutofsMasterSelection(Screen):
 				self.addAutofileLine()
 			elif choice[1] == 12:
 				self.removeAutofile()
-#			elif choice[1] == 13:
-#				self.restartAutofs()
 			elif choice[1] == 14:
 				def callback(value=False):
 					if value:
 						self.restartAutofs(restartGui=True)
 				self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
+			elif choice[1] == 15:
+				self.updateAutoBackup()
+			elif choice[1] == 16:
+				self.refreshAutoBackup()
 			else:
 				return
 
 	def restartAutofs(self, restartGui=False):
 		if os.path.exists('/etc/init.d/autofs'):
-			cmd = '/etc/init.d/autofs reload'
+			cmd = '/etc/init.d/autofs restart'
 			if restartGui:
 				cmd += '; killall enigma2'
+			if self.container.execute(cmd):
+				print "[ManagerAutofs] failed to execute"
+				self.showOutput()
+		else:
+			self.MessageBoxNM(True, _("Autofs is not installed!"), 5)
+
+	def reloadAutofs(self, restartGui=False):
+		if os.path.exists('/etc/init.d/autofs'):
+			cmd = '/etc/init.d/autofs reload'
 			if self.container.execute(cmd):
 				print "[ManagerAutofs] failed to execute"
 				self.showOutput()
@@ -290,12 +305,50 @@ class ManagerAutofsMasterSelection(Screen):
 			index = self["list"].getIndex()
 			self.changeItemStatus(index, curr)
 
+	def updateAutoBackup(self):	# add missing /etc/auto. lines
+		def callbackBackup(value=False):
+			def readBackup():
+				if os.path.exists(AUTOBACKUPCFG):
+					return open(AUTOBACKUPCFG,"r").read()
+				self.MessageBoxNM(True, _("File '/etc/backup.cfg' was created!"), 3)
+				return ""
+			if value:
+				backup = readBackup()
+				bck = open(AUTOBACKUPCFG,"a")
+				if MASTERFILE not in backup:
+					bck.write(MASTERFILE+'\n')
+				for rec in self.list:
+					if rec[2] not in backup:
+						bck.write(rec[2]+'\n')
+				bck.close()
+		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '/etc/backup.cfg'?"), type=MessageBox.TYPE_YESNO, default=False)
+
+	def refreshAutoBackup(self):	# remove unused /etc/auto. lines
+		def callbackBackup(value=False):
+			if value:
+				if os.path.exists(AUTOBACKUPCFG):
+					copyfile(AUTOBACKUPCFG, AUTOBACKUPCFG+'_bak')
+					fi = open(AUTOBACKUPCFG+'_bak',"r")
+					fo = open(AUTOBACKUPCFG,"w")
+					fo.write(MASTERFILE+'\n')
+					for line in fi:
+						line = line.replace('\n','')
+						if line.startswith('/etc/auto.'):
+							for rec in self.list:
+								if rec[2] == line:
+									fo.write(line+'\n')
+						else:
+							fo.write(line+'\n')
+					fo.close()
+					fi.close()
+		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from AutoBackup's '/etc/backup.cfg'?"), type=MessageBox.TYPE_YESNO, default=False)
+
 	def addMasterRecord(self):
 		def callbackAdd(change=False):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and "x" or ""
+				enabled =  cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
 				add = (enabled, mountpoint, autofile, optional )
@@ -307,7 +360,7 @@ class ManagerAutofsMasterSelection(Screen):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and "x" or ""
+				enabled =  cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
 				edit = (enabled, mountpoint, autofile, optional )
@@ -331,14 +384,14 @@ class ManagerAutofsMasterSelection(Screen):
 			index = self["list"].getIndex()
 			record = sel[1]
 			autofile = sel[2]
-			removing = [(_("Nothing"), False), (_("Record %s only") % record, 1), (_("Record %s and its file %s") % (record, autofile), 2) ]
+			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("Record '%s' and its file '%s'") % (record, autofile), 2) ]
 			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
 	def changeItemStatus(self, index, data):
-		if data[0] == "x":
+		if data[0] == _X_:
 			status = ""
 		else:
-			status = "x"
+			status = _X_
 		self.changeItem(index, (status ,data[1], data[2], data[3] if len(data) > 3 else ''))
 
 	def changeItem(self, index, new):
@@ -482,7 +535,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def parsePars(self):
 		if self.pars:
-			if self.pars[0] == "x":
+			if self.pars[0] == _X_:
 				cfg.enabled.value = True
 			cfg.mountpoint.value = self.pars[1].split('/')[2]
 			cfg.autofile.value = self.pars[2].split('.')[1]
@@ -948,7 +1001,7 @@ class ManagerMultiAutofsAutoEdit(Screen):
 
 class NonModalMessageBoxDialog(Screen):
 	skin="""
-		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00404040" zPosition="2" flags="wfNoBorder">
+		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00808080" zPosition="2" flags="wfNoBorder">
 			<widget name="message" position="center,center" size="460,110" font="Regular;20" valign="center" halign="center"/>
 		</screen>
 	"""
