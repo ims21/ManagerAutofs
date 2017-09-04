@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 12:10+0200\n"
+"POT-Creation-Date: 2017-09-04 13:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,9 +48,6 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-msgid "Select operation:"
-msgstr ""
-
 msgid "Edit record:"
 msgstr ""
 
@@ -69,19 +66,10 @@ msgstr ""
 msgid "Remove -"
 msgstr ""
 
-msgid "Restart autofs with GUI restart"
+msgid "Utility"
 msgstr ""
 
-msgid "Update AutoBackup's file"
-msgstr ""
-
-msgid "Remove unused lines from AutoBackup"
-msgstr ""
-
-msgid "Really reload autofs and restart GUI?"
-msgstr ""
-
-msgid "Autofs is not installed!"
+msgid "Select operation:"
 msgstr ""
 
 msgid "Failed"
@@ -90,10 +78,34 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
+msgid "Update auto.files in AutoBackup"
+msgstr ""
+
+msgid "Remove unused auto.files in AutoBackup"
+msgstr ""
+
+msgid "Reload autofs"
+msgstr ""
+
+msgid "Restart autofs with GUI restart"
+msgstr ""
+
+msgid "Reload Bookmarks"
+msgstr ""
+
+msgid "Really reload autofs and restart GUI?"
+msgstr ""
+
+msgid "Autofs is not installed!"
+msgstr ""
+
 msgid "File '/etc/backup.cfg' was created!"
 msgstr ""
 
 msgid "Update AutoBackup's '/etc/backup.cfg'?"
+msgstr ""
+
+msgid "Missing '/etc/backup.cfg'"
 msgstr ""
 
 msgid "Remove unused lines from AutoBackup's '/etc/backup.cfg'?"

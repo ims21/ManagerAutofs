@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.35"
+VERSION = "1.37"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -187,7 +187,6 @@ class ManagerAutofsMasterSelection(Screen):
 	def keyOk(self):
 		self.saveMasterFile()
 		self.reloadAutofs()
-		config.movielist.videodirs.load()
 		self.close()
 
 	def clearTexts(self):
@@ -209,7 +208,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def menu(self):
 		menu = []
 		buttons = []
-		text = _("Select operation:")
+
 		sel = self["list"].getCurrent()
 		if sel:
 			recordname = "%s" % (sel[1].split('/')[2])
@@ -223,15 +222,11 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append(((_("Edit -") + " %s%s%s" % (bC,autoname,fC)),10))
 			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
-			buttons += ["yellow", "", ""]
-		menu.append((_("Restart autofs with GUI restart"),14))
-		buttons += ["red"]
-		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
-			menu.append((_("Update AutoBackup's file"),15))
-			buttons += [""]
-			menu.append((_("Remove unused lines from AutoBackup"),16))
-			buttons += [""]
+			buttons += ["yellow", "", "red"]
+		menu.append((_("Utility"),15))
+		buttons += ["menu"]
 
+		text = _("Select operation:")
 		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
 
 	def menuCallback(self, choice):
@@ -251,37 +246,10 @@ class ManagerAutofsMasterSelection(Screen):
 				self.addAutofileLine()
 			elif choice[1] == 12:
 				self.removeAutofile()
-			elif choice[1] == 14:
-				def callback(value=False):
-					if value:
-						self.restartAutofs(restartGui=True)
-				self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
 			elif choice[1] == 15:
-				self.updateAutoBackup()
-			elif choice[1] == 16:
-				self.refreshAutoBackup()
+				self.utilitySubmenu()
 			else:
 				return
-
-	def restartAutofs(self, restartGui=False):
-		if os.path.exists('/etc/init.d/autofs'):
-			cmd = '/etc/init.d/autofs restart'
-			if restartGui:
-				cmd += '; killall enigma2'
-			if self.container.execute(cmd):
-				print "[ManagerAutofs] failed to execute"
-				self.showOutput()
-		else:
-			self.MessageBoxNM(True, _("Autofs is not installed!"), 5)
-
-	def reloadAutofs(self, restartGui=False):
-		if os.path.exists('/etc/init.d/autofs'):
-			cmd = '/etc/init.d/autofs reload'
-			if self.container.execute(cmd):
-				print "[ManagerAutofs] failed to execute"
-				self.showOutput()
-		else:
-			self.MessageBoxNM(True, _("Autofs is not installed!"), 5)
 
 	def appClosed(self, retval):
 		print "[ManagerAutofs] done:", retval
@@ -304,6 +272,63 @@ class ManagerAutofsMasterSelection(Screen):
 		if curr:
 			index = self["list"].getIndex()
 			self.changeItemStatus(index, curr)
+
+	def utilitySubmenu(self):
+		menu = []
+		buttons = []
+
+		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
+			menu.append((_("Update auto.files in AutoBackup"),0))
+			menu.append((_("Remove unused auto.files in AutoBackup"),1))
+			buttons += ["1","2"]
+		menu.append((_("Reload autofs"),4))
+		menu.append((_("Restart autofs with GUI restart"),5))
+		buttons += ["",""]
+		menu.append((_("Reload Bookmarks"),10))
+		buttons += [""]
+
+		text = _("Select operation:")
+		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons)
+
+	def utilityCallback(self, choice):
+		if choice is None:
+			return
+		if choice[1] == 0:
+			self.self.updateAutoBackup()
+		elif choice[1] == 1:
+			self.self.refreshAutoBackup()
+		elif choice[1] == 3:
+			self.reloadAutofs()
+		elif choice[1] == 4:
+			def callback(value=False):
+				if value:
+					self.restartAutofs(restartGui=True)
+			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
+		elif choice[1] == 10:
+			config.movielist.videodirs.load()
+			self.MessageBoxNM(True, _("Done"), 2)
+		else:
+			return
+
+	def restartAutofs(self, restartGui=False):
+		if os.path.exists('/etc/init.d/autofs'):
+			cmd = '/etc/init.d/autofs restart'
+			if restartGui:
+				cmd += '; killall enigma2'
+			if self.container.execute(cmd):
+				print "[ManagerAutofs] failed to execute"
+				self.showOutput()
+		else:
+			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
+
+	def reloadAutofs(self, restartGui=False):
+		if os.path.exists('/etc/init.d/autofs'):
+			cmd = '/etc/init.d/autofs reload'
+			if self.container.execute(cmd):
+				print "[ManagerAutofs] failed to execute"
+				self.showOutput()
+		else:
+			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines
 		def callbackBackup(value=False):
@@ -341,6 +366,8 @@ class ManagerAutofsMasterSelection(Screen):
 							fo.write(line+'\n')
 					fo.close()
 					fi.close()
+				else:
+					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 5)
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from AutoBackup's '/etc/backup.cfg'?"), type=MessageBox.TYPE_YESNO, default=False)
 
 	def addMasterRecord(self):
