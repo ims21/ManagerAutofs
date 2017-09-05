@@ -947,7 +947,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs - press %sOK%s for edit or use %sMenu%s") % (yC, fC, self.name, yC, fC,))
+		self.setTitle(_("Manager Autofs - press %sOK%s for edit or use %sMenu%s") % (yC, fC, yC, fC,))
 
 	def readFile(self):
 		if self.name:
