@@ -351,7 +351,7 @@ class ManagerAutofsMasterSelection(Screen):
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
-			self.session.open(ManagerMultiAutofsAutoEdit, name)
+			self.session.open(ManagerAutofsMultiAutoEdit, name)
 
 	def editAutofile(self):
 		def callBackSingle(name,text=""):
@@ -368,7 +368,7 @@ class ManagerAutofsMasterSelection(Screen):
 				data = line.replace('\n','').strip()
 				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
 			elif lines > 1:		# multi
-				self.session.open(ManagerMultiAutofsAutoEdit, name)
+				self.session.open(ManagerAutofsMultiAutoEdit, name)
 			elif lines == -1:	# missing
 				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
 			else:			# empty
@@ -888,9 +888,9 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			ip.append(int(x))
 		return ip
 
-class ManagerMultiAutofsAutoEdit(Screen):
+class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
-		<screen name="ManagerMultiAutofsAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
+		<screen name="ManagerAutofsMultiAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
 			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
 			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
 			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
@@ -946,7 +946,7 @@ class ManagerMultiAutofsAutoEdit(Screen):
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Autofs file: %s") % self.name)
+		self.setTitle(_("Press %sOk%s for edit file: %s") % (yC, fC, self.name))
 
 	def readFile(self):
 		if self.name:
