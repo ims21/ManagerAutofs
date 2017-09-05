@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 21:36+0200\n"
-"PO-Revision-Date: 2017-09-04 21:39+0100\n"
+"POT-Creation-Date: 2017-09-05 14:08+0200\n"
+"PO-Revision-Date: 2017-09-05 14:11+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -35,8 +35,8 @@ msgid "Edit auto file"
 msgstr "Upravit auto soubor"
 
 #, python-format
-msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
-msgstr "Manager Autofs v.%s - použijte %sMenu%s nebo %sOK%s na záznamu"
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
+msgstr "Manager Autofs v.%s - stiskněte %sOK%s na řádku nebo použijte %sMenu%s"
 
 msgid "Disable"
 msgstr "Zakázat"
@@ -160,8 +160,8 @@ msgid "no"
 msgstr "ne"
 
 #, python-format
-msgid "Manager Autofs - edited autofile: %s"
-msgstr "Manager Autofs - upravovaný soubor: %s"
+msgid "Manager Autofs - edited autofile/record: %s"
+msgstr "Manager Autofs - upravovaný soubor/řádek: %s"
 
 msgid "local directory"
 msgstr ""
@@ -236,8 +236,20 @@ msgid "Erase"
 msgstr "Odstranit"
 
 #, python-format
-msgid "Autofs file: %s"
-msgstr "Autofs soubor: %s"
+msgid "Manager Autofs - press %sOk%s for edit or use %sMenu%s"
+msgstr "Manager Autofs - stiskněte %sOK%s pro úpravu nebo použijte %sMenu%s"
+
+msgid "Edit line"
+msgstr "Upravit řádek"
+
+msgid "Add line"
+msgstr "Přidat řádek"
+
+msgid "Remove line"
+msgstr "Odstranit řádek"
+
+msgid "No valid item"
+msgstr "Neplatná položka"
 
 msgid "New"
 msgstr "Nový"
@@ -254,6 +266,9 @@ msgstr "Mód II"
 
 msgid "Mode III"
 msgstr "Mód III"
+
+#~ msgid "Autofs file: %s"
+#~ msgstr "Autofs soubor: %s"
 
 #~ msgid ""
 #~ "File %s with %d lines.\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 21:36+0200\n"
+"POT-Creation-Date: 2017-09-05 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Edit auto file"
 msgstr ""
 
 #, python-format
-msgid "Manager Autofs v.%s - use %sMenu%s or %sOK%s on record"
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
 msgstr ""
 
 msgid "Disable"
@@ -164,7 +164,7 @@ msgid "no"
 msgstr ""
 
 #, python-format
-msgid "Manager Autofs - edited autofile: %s"
+msgid "Manager Autofs - edited autofile/record: %s"
 msgstr ""
 
 msgid "local directory"
@@ -240,7 +240,19 @@ msgid "Erase"
 msgstr ""
 
 #, python-format
-msgid "Autofs file: %s"
+msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
+msgstr ""
+
+msgid "Edit line"
+msgstr ""
+
+msgid "Add line"
+msgstr ""
+
+msgid "Remove line"
+msgstr ""
+
+msgid "No valid item"
 msgstr ""
 
 msgid "New"

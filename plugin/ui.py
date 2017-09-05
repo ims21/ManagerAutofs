@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.40"
+VERSION = "1.41"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -111,7 +111,7 @@ class ManagerAutofsMasterSelection(Screen):
 
 		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions","HelpActions"],
 		{
-			"ok": self.menu,
+			"ok": self.editMasterRecord,
 			"cancel": self.keyClose,
 			"red": self.keyClose,
 			"green": self.keyOk,
@@ -144,7 +144,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs v.%s - use %sMenu%s or %sOK%s on record") % (VERSION, yC,fC,yC,fC))
+		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC,fC,yC,fC))
 
 	def readMasterFile(self):
 		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3
@@ -668,7 +668,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, filename, line, new=False):
 		Screen.__init__(self, session)
-		self.setTitle(_("Manager Autofs - edited autofile: %s") % filename)
+		self.setTitle(_("Manager Autofs - edited autofile/record: %s") % filename)
 		self.session = session
 		self.new = new
 		self["text"] = Label("")
@@ -920,7 +920,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.session = session
 		self.name = name
 
-		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
+		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions"],
 		{
 			"ok": self.keyEdit,
 			"cancel": self.keyCancel,
@@ -928,6 +928,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			"green": self.keyOk,
 			"yellow": self.keyAdd,
 			"blue": self.keyErase,
+			"menu": self.menu,
 		}, -1)
 
 		self.list = []
@@ -946,7 +947,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Press %sOk%s for edit file: %s") % (yC, fC, self.name))
+		self.setTitle(_("Manager Autofs - press %sOK%s for edit or use %sMenu%s") % (yC, fC, self.name, yC, fC,))
 
 	def readFile(self):
 		if self.name:
@@ -967,6 +968,37 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		current = self["list"].getCurrent()
 		if current:
 			self["info"].setText("%s" % current[1])
+
+	def menu(self):
+		menu = []
+		buttons = []
+
+		sel = self["list"].getCurrent()
+		if sel:
+			menu.append((_("Edit line"),0))
+			menu.append((_("Add line"),1))
+			menu.append((_("Remove line"),2))
+			buttons += ["", "", ""]
+		else:
+			self.MessageBoxNM(True, _("No valid item"), 5)
+			return
+
+		text = _("Select operation:")
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
+
+	def menuCallback(self, choice):
+		if choice is None:
+			return
+		sel = self["list"].getCurrent()
+		if sel:
+			if choice[1] == 0:
+				self.keyEdit()
+			elif choice[1] == 1:
+				self.keyAdd()
+			elif choice[1] == 2:
+				self.keyErase()
+			else:
+				return
 
 	def keyEdit(self):
 		current = self["list"].getCurrent()
