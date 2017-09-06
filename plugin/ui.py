@@ -418,9 +418,11 @@ class ManagerAutofsMasterSelection(Screen):
 		menu.append((_("Reload autofs"),4))
 		menu.append((_("Restart autofs with GUI restart"),5))
 		buttons += ["",""]
-		menu.append((_("Install autofs"),6))
+		if not os.path.exists('/etc/init.d/autofs'):
+			menu.append((_("Install autofs"),6))
+			buttons += [""]
 		menu.append((_("Reload Bookmarks"),10))
-		buttons += ["",""]
+		buttons += [""]
 
 		text = _("Select operation:")
 		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons)
