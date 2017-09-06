@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.41"
+VERSION = "1.42"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -138,7 +138,7 @@ class ManagerAutofsMasterSelection(Screen):
 			copyfile(AUTOMASTER, AUTOMASTER+".bak")
 		else:
 			f = open(AUTOMASTER, "w")
-			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.value, cfg.autofile.value, "--ghost" if cfg.ghost.value else ""))
+			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, "--ghost" if cfg.ghost.default else ""))
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -159,6 +159,9 @@ class ManagerAutofsMasterSelection(Screen):
 				status = ("enabled")
 			line = status + ' ' + line
 			m = line.split(' ')
+			if len(m) < 3: # wrong line
+				continue
+
 			self.list.append((_X_ if m[0] == "enabled" else '', m[1], m[2], self.parseOptional(m)))
 		self['list'].setList(self.list)
 
@@ -650,6 +653,8 @@ config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
 config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("","no"),("dev","dev") ]))
 
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
+#user defined string
+config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -743,6 +748,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
 		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
+		self.list.append(getConfigListEntry(_("user string"), cfg.rest))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
@@ -778,6 +784,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("wsize=%s," % cfg.wsize.value) if cfg.wsize.value else ""
 		string += ("iocharset=%s," % cfg.iocharset.value) if cfg.iocharset.value else ""
 		string += ("sec=%s," % cfg.sec.value) if cfg.sec.value else ""
+		string += ("%s,") % cfg.rest.value if cfg.rest.value else ""
 		string = string.rstrip(',')
 		string += " "
 		ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
@@ -813,6 +820,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.ip.value = cfg.ip.default
 		cfg.dev.value = cfg.dev.default
 		cfg.remotedir.value = cfg.remotedir.default
+		cfg.rest.value = cfg.rest.default
 
 	def prepareOff(self):
 		# set (all what has sence) as off or empty before parsing existing line
@@ -824,10 +832,12 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.nosuid.value = False
 		cfg.nodev.value = False
 		cfg.iocharset.value = ""
+		cfg.rest.value = ""
 
 	def parse(self, parts):
 		self.setDefaultPars()
 		self.prepareOff()
+		rest = ""
 		try:
 			# parse line
 			for x in parts[1].split(','):
@@ -863,7 +873,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				elif x == "nodev":
 					cfg.nodev.value=True
 				else:
-					pass
+					rest +=x
+
 			# dir name
 			cfg.localdir.value = parts[0].strip()
 
@@ -878,6 +889,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				remote = parts[2].split('/')
 				cfg.dev.value = remote[1]
 				cfg.remotedir.value = remote[2]
+			cfg.rest.value = rest
 		except:
 			self.MessageBoxNM(True, _("Wrong file format!"), 5)
 
