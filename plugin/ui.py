@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.42"
+VERSION = "1.43"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -418,8 +418,9 @@ class ManagerAutofsMasterSelection(Screen):
 		menu.append((_("Reload autofs"),4))
 		menu.append((_("Restart autofs with GUI restart"),5))
 		buttons += ["",""]
+		menu.append((_("Install autofs"),6))
 		menu.append((_("Reload Bookmarks"),10))
-		buttons += [""]
+		buttons += ["",""]
 
 		text = _("Select operation:")
 		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons)
@@ -431,29 +432,20 @@ class ManagerAutofsMasterSelection(Screen):
 			self.updateAutoBackup()
 		elif choice[1] == 1:
 			self.refreshAutoBackup()
-		elif choice[1] == 3:
-			self.updateAutofs()
 		elif choice[1] == 4:
+			self.updateAutofs()
+		elif choice[1] == 5:
 			def callback(value=False):
 				if value:
 					self.updateAutofs(option="restart", restartGui=True)
 			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
+		elif choice[1] == 6:
+			self.installAutofs()
 		elif choice[1] == 10:
 			config.movielist.videodirs.load()
 			self.MessageBoxNM(True, _("Done"), 2)
 		else:
 			return
-
-	def updateAutofs(self, option="reload", restartGui=False):
-		if os.path.exists('/etc/init.d/autofs'):
-			cmd = '/etc/init.d/autofs %s' % option
-			if restartGui:
-				cmd += '; killall enigma2'
-			if self.container.execute(cmd):
-				print "[ManagerAutofs] failed to execute"
-				self.showOutput()
-		else:
-			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
@@ -505,6 +497,23 @@ class ManagerAutofsMasterSelection(Screen):
 				else:
 					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 3)
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
+
+	def installAutofs(self):
+		cmd = 'opkg install autofs'
+		if self.container.execute(cmd):
+			print "[ManagerAutofs] failed to execute"
+			self.showOutput()
+
+	def updateAutofs(self, option="reload", restartGui=False):
+		if os.path.exists('/etc/init.d/autofs'):
+			cmd = '/etc/init.d/autofs %s' % option
+			if restartGui:
+				cmd += '; killall enigma2'
+			if self.container.execute(cmd):
+				print "[ManagerAutofs] failed to execute"
+				self.showOutput()
+		else:
+			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:

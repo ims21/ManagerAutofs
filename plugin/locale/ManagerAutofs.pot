@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 14:08+0200\n"
+"POT-Creation-Date: 2017-09-06 23:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,13 +111,13 @@ msgstr ""
 msgid "Restart autofs with GUI restart"
 msgstr ""
 
+msgid "Install autofs"
+msgstr ""
+
 msgid "Reload Bookmarks"
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"
-msgstr ""
-
-msgid "Autofs is not installed!"
 msgstr ""
 
 #, python-format
@@ -133,6 +133,9 @@ msgstr ""
 
 #, python-format
 msgid "Remove unused lines from '%s'?"
+msgstr ""
+
+msgid "Autofs is not installed!"
 msgstr ""
 
 #, python-format
@@ -228,6 +231,9 @@ msgid "dev"
 msgstr ""
 
 msgid "remote directory"
+msgstr ""
+
+msgid "user string"
 msgstr ""
 
 msgid "Wrong file format!"
