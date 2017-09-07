@@ -153,16 +153,16 @@ class ManagerAutofsMasterSelection(Screen):
 		for line in open(AUTOMASTER, "r"):
 			line = line.replace('\n','')
 			if '#' in line:
-				status = ("disabled")
+				status = ""
 				line = line[1:]
 			else:
-				status = ("enabled")
+				status = "x"
 			line = status + ' ' + line
 			m = line.split(' ')
 			if len(m) < 3: # wrong line
 				continue
 
-			self.list.append((_X_ if m[0] == "enabled" else '', m[1], m[2], self.parseOptional(m)))
+			self.list.append((_X_ if m[0] == "x" else '', m[1], m[2], self.parseOptional(m)))
 		self['list'].setList(self.list)
 
 	def parseOptional(self, m):
