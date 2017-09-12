@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.44"
+VERSION = "1.45"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -50,6 +50,7 @@ cfg = config.plugins.mautofs
 
 AUTOMASTER="/etc/auto.master"
 AUTOBACKUP="/etc/backup.cfg"
+AUTOFS="/etc/init.d/autofs"
 
 def hex2strColor(argb):
 	out = ""
@@ -301,7 +302,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, change = False):
+		def callbackEdit( index, old_autofile, change = False):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
@@ -310,10 +311,26 @@ class ManagerAutofsMasterSelection(Screen):
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
 				edit = (enabled, mountpoint, autofile, optional )
 				self.changeItem(index, edit)
+				if old_autofile != autofile:
+					if os.path.exists(old_autofile):
+						if os.path.exists(autofile):
+							def callBackRemove(old_autofile, change=False):
+								if change:
+									os.rename(old_autofile, old_autofile + '.del')
+									self.MessageBoxNM(True, _("'%s' was removed" % old_autofile), 2)
+							self.session.openWithCallback(boundFunction(callBackRemove, old_autofile), MessageBox, _("Auto.name '%s' was attached to this record.\nRemove original '%s'?") % (autofile, old_autofile), type=MessageBox.TYPE_YESNO, default=False)
+						else:
+							def callBackRename(old_autofile, autofile, change=False):
+								if change:
+									copyfile(old_autofile, old_autofile + '.$$$')
+									os.rename(old_autofile, autofile)
+									self.MessageBoxNM(True, _("'%s' was renamed to '%s'") % (old_autofile, autofile), 2)
+							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile) , MessageBox, _("Auto.name in record was renamed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
 		sel = self["list"].getCurrent()
 		if sel:
 			index = self["list"].getIndex()
-			self.session.openWithCallback(boundFunction(callbackEdit, index), ManagerAutofsMasterEdit, sel)
+			old_autofile = sel[2]
+			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile), ManagerAutofsMasterEdit, sel)
 
 	def removeMasterRecord(self):
 		def callbackRemove(index, autofile, retval=False):
@@ -421,7 +438,7 @@ class ManagerAutofsMasterSelection(Screen):
 		menu.append((_("Reload autofs"),10))
 		menu.append((_("Restart autofs with GUI restart"),11))
 		buttons += ["",""]
-		if not os.path.exists('/etc/init.d/autofs'):
+		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"),12))
 			buttons += [""]
 		menu.append((_("Reload Bookmarks"),100))
@@ -467,12 +484,12 @@ class ManagerAutofsMasterSelection(Screen):
 				return ""
 			if value:
 				backup = readBackup()
-				fo = open(AUTOBACKUP,"a")
+				fo = open(AUTOBACKUP, "a")
 				if AUTOMASTER not in backup:
-					fo.write(AUTOMASTER+'\n')
+					fo.write(AUTOMASTER + '\n')
 				for rec in self.list:
 					if rec[2] not in backup:
-						fo.write(rec[2]+'\n')
+						fo.write(rec[2] + '\n')
 				fo.close()
 				self.MessageBoxNM(True, _("Done"), 1)
 				self.utilitySubmenu()
@@ -496,11 +513,11 @@ class ManagerAutofsMasterSelection(Screen):
 						if l.startswith('/etc/auto.'):
 							for rec in self.list:
 								if rec[2] == l:
-									autofslines.append(l+'\n')
+									autofslines.append(l + '\n')
 						else:
-							lines.append(l+'\n')
+							lines.append(l + '\n')
 					autofslines.sort()
-					fo.write(AUTOMASTER+'\n')
+					fo.write(AUTOMASTER + '\n')
 					for auto in autofslines:
 						fo.write(auto)
 					for f in lines:
@@ -521,8 +538,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.showOutput()
 
 	def updateAutofs(self, option="reload", restartGui=False):
-		if os.path.exists('/etc/init.d/autofs'):
-			cmd = '/etc/init.d/autofs %s' % option
+		if os.path.exists(AUTOFS):
+			cmd = '%s %s' % (AUTOFS, option)
 			if restartGui:
 				cmd += '; killall enigma2'
 			if self.container.execute(cmd):
@@ -581,7 +598,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"green":	self.keyOk,
 			"red":		self.keyClose,
 			"blue":		self.keyBlue,
-			 }, -1)
+			}, -1)
 
 		self["config"].onSelectionChanged.append(self.moveOverItem)
 
@@ -682,8 +699,10 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660") ]))
+config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660") ]))
 config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
+config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="root", fixed_size=False))
@@ -699,7 +718,7 @@ config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
 config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
-config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8"),("1250", "1250") ]))
+config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8") ]))
 config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
 
 config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
@@ -775,8 +794,12 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.list = [ ]
 		dx = 4*' '
 		self.list.append(getConfigListEntry(_("local directory"), cfg.localdir))
-		self.list.append(getConfigListEntry(_("fstype"), cfg.fstype))
+		self.fstype = _("fstype")
+		self.list.append(getConfigListEntry(self.fstype, cfg.fstype))
 		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
+		if cfg.fstype.value == "nfs":
+			self.list.append(getConfigListEntry(dx + _("soft"), cfg.soft))
+			self.list.append(getConfigListEntry(dx + _("intr"), cfg.intr))
 		self.useduserpass = _("use user/pass")
 		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
 		if cfg.useduserpass.value:
@@ -810,11 +833,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.fillString()
 
 	def changedEntry(self):
-		if self["config"].getCurrent()[0] == self.useddomain:
-			self.createConfig()
-		elif self["config"].getCurrent()[0] == self.useduserpass:
-			self.createConfig()
-		elif self["config"].getCurrent()[0] == self.usedip:
+		if self["config"].getCurrent()[0] in (self.useddomain, self.useduserpass, self.usedip, self.fstype):
 			self.createConfig()
 		self.fillString()
 
@@ -824,8 +843,11 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def actualizeString(self):
 		string = cfg.localdir.value
 		string += " "
-		string += "-fstype=%s," % cfg.fstype.value
+		string += "-"
+		string += "fstype=%s," % cfg.fstype.value if cfg.fstype.value != "" else ""
 		string += "%s," % cfg.rw.value if cfg.rw.value else ""
+		string += "soft," if cfg.soft.value else ""
+		string += "intr," if cfg.intr.value else ""
 		string += ("user=%s," % cfg.user.value) if cfg.useduserpass.value else ""
 		string += ("password=%s," % cfg.passwd.value)if cfg.useduserpass.value else ""
 		string += ("domain=%s," % cfg.domain.value) if cfg.useddomain.value else ""
@@ -842,7 +864,13 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string = string.rstrip(',')
 		string += " "
 		ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
-		string += ("://%s/%s" % (ip, cfg.remotedir.value)) if cfg.usedip.value else (":/%s/%s" % (cfg.dev.value, cfg.remotedir.value))
+		if cfg.usedip.value:
+			if cfg.fstype.value == "nfs":
+				string += ("%s:/%s" % (ip, cfg.remotedir.value))
+			else:
+				string += ("://%s/%s" % (ip, cfg.remotedir.value))
+		else:
+			string += (":/%s/%s" % (cfg.dev.value, cfg.remotedir.value))
 		return string
 
 	def parseParams(self, line):
@@ -856,6 +884,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.localdir.value = cfg.localdir.default
 		cfg.fstype.value = cfg.fstype.default
 		cfg.rw.value = cfg.rw.default
+		cfg.soft.value = cfg.soft.default
+		cfg.intr.value = cfg.intr.default
 		cfg.useduserpass.value = cfg.useduserpass.default
 		cfg.user.value = cfg.user.default
 		cfg.passwd.value = cfg.passwd.default
@@ -879,6 +909,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def prepareOff(self):
 		# set (all what has sence) as off or empty before parsing existing line
 		cfg.rw.value = ""
+		cfg.soft.value = False
+		cfg.intr.value = False
 		cfg.useduserpass.value = False
 		cfg.useddomain.value = False
 		cfg.noatime.value = False
@@ -895,7 +927,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		try:
 			# parse line
 			for x in parts[1].split(','):
-				if "-fstype" in x:
+				if "fstype" in x:
 					cfg.fstype.value=x.split('=')[1]
 				elif "user" in x:
 					cfg.useduserpass.value = True # rozmyslet!
@@ -926,6 +958,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 					cfg.nosuid.value=True
 				elif x == "nodev":
 					cfg.nodev.value=True
+				elif x == "soft":
+					cfg.nodev.value=True
+				elif x == "intr":
+					cfg.nodev.value=True
 				else:
 					rest +=x
 
@@ -933,12 +969,17 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			cfg.localdir.value = parts[0].strip()
 
 			# ip and shared remote dir or dev and remote dir
-			if parts[2].startswith('://'): 		# ://10.0.0.10/video
+			if parts[2].startswith('://'): 		# cifs	://10.0.0.10/video
 				cfg.usedip.value = True
 				remote = parts[2].split('/')
 				cfg.ip.value = self.convertIP(remote[2])
 				cfg.remotedir.value = remote[3]
-			else:					# DVD, CD  :/dev/sr0
+			elif parts[2].find(':/'):		# nfs	10.0.0.10:/video
+				cfg.usedip.value = True
+				remote = parts[2].split(':/')
+				cfg.ip.value = self.convertIP(remote[0])
+				cfg.remotedir.value = remote[1]
+			else:					# DVD,CD	:/dev/sr0
 				cfg.usedip.value = False
 				remote = parts[2].split('/')
 				cfg.dev.value = remote[1]
