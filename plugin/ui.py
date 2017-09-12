@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.43"
+VERSION = "1.44"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -413,15 +413,16 @@ class ManagerAutofsMasterSelection(Screen):
 
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
 			menu.append((_("Update autofs files in AutoBackup"),0))
-			menu.append((_("Remove unused autofs files in AutoBackup"),1))
-			buttons += ["1","2"]
-		menu.append((_("Reload autofs"),4))
-		menu.append((_("Restart autofs with GUI restart"),5))
+			menu.append((_("Open AutoBackup plugin"),1))
+			menu.append((_("Remove unused autofs files in AutoBackup"),2))
+			buttons += ["","2",""]
+		menu.append((_("Reload autofs"),10))
+		menu.append((_("Restart autofs with GUI restart"),11))
 		buttons += ["",""]
 		if not os.path.exists('/etc/init.d/autofs'):
-			menu.append((_("Install autofs"),6))
+			menu.append((_("Install autofs"),12))
 			buttons += [""]
-		menu.append((_("Reload Bookmarks"),10))
+		menu.append((_("Reload Bookmarks"),100))
 		buttons += [""]
 
 		text = _("Select operation:")
@@ -433,17 +434,21 @@ class ManagerAutofsMasterSelection(Screen):
 		if choice[1] == 0:
 			self.updateAutoBackup()
 		elif choice[1] == 1:
+			from Plugins.Extensions.AutoBackup.ui import Config
+			self.session.open(Config)
+		elif choice[1] == 2:
 			self.refreshAutoBackup()
-		elif choice[1] == 4:
+
+		elif choice[1] == 10:
 			self.updateAutofs()
-		elif choice[1] == 5:
+		elif choice[1] == 11:
 			def callback(value=False):
 				if value:
 					self.updateAutofs(option="restart", restartGui=True)
 			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
-		elif choice[1] == 6:
+		elif choice[1] == 12:
 			self.installAutofs()
-		elif choice[1] == 10:
+		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 			self.MessageBoxNM(True, _("Done"), 2)
 		else:
