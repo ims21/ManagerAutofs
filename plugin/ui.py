@@ -132,6 +132,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self["key_yellow"] = Button(_("Edit auto file"))
 
 		self.msgNM=None
+		self.selectionUtilitySubmenu = 0
 		self.onShown.append(self.setWindowTitle)
 
 		if os.path.exists(AUTOMASTER):
@@ -260,6 +261,7 @@ class ManagerAutofsMasterSelection(Screen):
 			elif choice[1] == 14:
 				self.help()
 			elif choice[1] == 15:
+				self.selectionUtilitySubmenu = 0
 				self.utilitySubmenu()
 			else:
 				return
@@ -426,7 +428,7 @@ class ManagerAutofsMasterSelection(Screen):
 		buttons += [""]
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons)
+		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
 
 	def utilityCallback(self, choice):
 		if choice is None:
@@ -434,6 +436,7 @@ class ManagerAutofsMasterSelection(Screen):
 		if choice[1] == 0:
 			self.updateAutoBackup()
 		elif choice[1] == 1:
+			self.saveMasterFile()
 			from Plugins.Extensions.AutoBackup.ui import Config
 			self.session.open(Config)
 		elif choice[1] == 2:
@@ -450,9 +453,10 @@ class ManagerAutofsMasterSelection(Screen):
 			self.installAutofs()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
-			self.MessageBoxNM(True, _("Done"), 2)
+			self.MessageBoxNM(True, _("Done"), 1)
 		else:
 			return
+		self.selectionUtilitySubmenu = int(choice[1])
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
@@ -470,6 +474,8 @@ class ManagerAutofsMasterSelection(Screen):
 					if rec[2] not in backup:
 						fo.write(rec[2]+'\n')
 				fo.close()
+				self.MessageBoxNM(True, _("Done"), 1)
+				self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
 
 	def refreshAutoBackup(self):	# remove unused /etc/auto. lines from /etc/backup.cfg
@@ -501,8 +507,11 @@ class ManagerAutofsMasterSelection(Screen):
 						fo.write(f)
 					fo.close()
 					fi.close()
+					self.MessageBoxNM(True, _("Done"), 1)
+					self.utilitySubmenu()
 				else:
 					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 3)
+					self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
 
 	def installAutofs(self):
@@ -559,6 +568,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
+		self["key_blue"] = Button()
 
 		self.list = [ ]
 		self.onChangedEntry = [ ]
@@ -570,19 +580,23 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"cancel":	self.keyClose,
 			"green":	self.keyOk,
 			"red":		self.keyClose,
+			"blue":		self.keyBlue,
 			 }, -1)
+
+		self["config"].onSelectionChanged.append(self.moveOverItem)
 
 		self.setDefault()
 		self.parsePars()
 		self.createConfig()
-		self.actualizeString()
 
 	def createConfig(self):
 		dx = 4*' '
 		self.list = [ ]
 		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
-		self.list.append(getConfigListEntry(_("mountpoint name"), cfg.mountpoint))
-		self.list.append(getConfigListEntry(_("auto.name"), cfg.autofile))
+		self.mountpoint = _("mountpoint name")
+		self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
+		self.autofile = _("auto.name")
+		self.list.append(getConfigListEntry(self.autofile, cfg.autofile))
 		self.list.append(getConfigListEntry(_("ghost"), cfg.ghost))
 		self.timeout = _("timeout")
 		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
@@ -590,6 +604,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(dx + _("time"), cfg.timeouttime))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
+		self.actualizeString()
 
 	def parsePars(self):
 		if self.pars:
@@ -619,6 +634,10 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.timeout:
 			self.createConfig()
+		if self["config"].getCurrent()[0] == self.mountpoint:
+			self.blueText(_("Put autoname"))
+		elif self["config"].getCurrent()[0] == self.autofile:
+			self.blueText(_("Put mountpoint name"))
 		self.actualizeString()
 	
 	def actualizeString(self):
@@ -634,6 +653,25 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			string += "--timeout"
 			string += "=%d" % cfg.timeouttime.value
 		self["text"].setText(string)
+
+	def moveOverItem(self):
+		self.blueText("")
+		if cfg.mountpoint.value != cfg.autofile.value:
+			if self["config"].getCurrent()[0] == self.mountpoint:
+				self.blueText(_("Put autoname"))
+			elif self["config"].getCurrent()[0] == self.autofile:
+				self.blueText(_("Put mountpoint name"))
+
+	def keyBlue(self): # use same text as in mounpoint or autofile
+		if self["config"].getCurrent()[0] == self.mountpoint:
+			cfg.mountpoint.value = cfg.autofile.value
+			self.createConfig()
+		elif self["config"].getCurrent()[0] == self.autofile:
+			cfg.autofile.value = cfg.mountpoint.value
+			self.createConfig()
+
+	def blueText(self, text):
+		self["key_blue"].setText(text)
 
 	def keyOk(self):
 		#save file
