@@ -325,7 +325,7 @@ class ManagerAutofsMasterSelection(Screen):
 									copyfile(old_autofile, old_autofile + '.$$$')
 									os.rename(old_autofile, autofile)
 									self.MessageBoxNM(True, _("'%s' was renamed to '%s'") % (old_autofile, autofile), 2)
-							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile) , MessageBox, _("Auto.name in record was renamed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
+							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile) , MessageBox, _("Auto.name in record was changed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
 		sel = self["list"].getCurrent()
 		if sel:
 			index = self["list"].getIndex()
