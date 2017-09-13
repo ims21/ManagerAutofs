@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.45"
+VERSION = "1.46"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -454,6 +454,7 @@ class ManagerAutofsMasterSelection(Screen):
 			self.updateAutoBackup()
 		elif choice[1] == 1:
 			self.saveMasterFile()
+			self.updateAutofs()
 			from Plugins.Extensions.AutoBackup.ui import Config
 			self.session.open(Config)
 		elif choice[1] == 2:
@@ -625,6 +626,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def parsePars(self):
 		if self.pars:
+			self.prepareOff()
 			if self.pars[0] == _X_:
 				cfg.enabled.value = True
 			cfg.mountpoint.value = self.pars[1].split('/')[2]
@@ -647,6 +649,10 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.ghost.value = cfg.ghost.default
 		cfg.timeout.value = cfg.timeout.default
 		cfg.timeouttime.value = cfg.timeouttime.default
+
+	def prepareOff(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
+		cfg.ghost.value = False
+		cfg.timeout.value = False
 
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.timeout:
@@ -700,9 +706,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660") ]))
-config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="root", fixed_size=False))
@@ -796,10 +802,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("local directory"), cfg.localdir))
 		self.fstype = _("fstype")
 		self.list.append(getConfigListEntry(self.fstype, cfg.fstype))
-		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
 		if cfg.fstype.value == "nfs":
 			self.list.append(getConfigListEntry(dx + _("soft"), cfg.soft))
 			self.list.append(getConfigListEntry(dx + _("intr"), cfg.intr))
+		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
 		self.useduserpass = _("use user/pass")
 		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
 		if cfg.useduserpass.value:
@@ -907,7 +913,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.rest.value = cfg.rest.default
 
 	def prepareOff(self):
-		# set (all what has sence) as off or empty before parsing existing line
+		# set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
 		cfg.rw.value = ""
 		cfg.soft.value = False
 		cfg.intr.value = False
