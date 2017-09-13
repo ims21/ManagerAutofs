@@ -576,7 +576,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def __init__(self, session, pars):
 		Screen.__init__(self, session)
 		if pars:
-			text = _("Manager Autofs - edited record: %s") % pars[1].split('/')[2]
+			record = "%s%s%s" % (gC, pars[1].split('/')[2], fC)
+			text = _("Manager Autofs - edited record: %s") % record
 		else:
 			text = _("Manager Autofs - create new record")
 
@@ -752,7 +753,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, filename, line, new=False):
 		Screen.__init__(self, session)
-		self.setTitle(_("Manager Autofs - edited autofile/record: %s") % filename)
+		name = "%s%s%s" % (bC, filename, fC)
+		self.setTitle(_("Manager Autofs - edited autofile/record: %s") % name)
 		self.session = session
 		self.new = new
 		self["text"] = Label("")
