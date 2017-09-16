@@ -1,4 +1,4 @@
-#from . import _
+from . import _
 
 from Screens.Screen import Screen
 from Components.ActionMap import ActionMap
@@ -63,78 +63,59 @@ class ManagerAutofsHelp(Screen):
 		self["HelpText"].setText(self.mode1txt() + self.mode2txt() + self.mode3txt())
 
 	def mode1txt(self):
-		text = ("Install autofs as: opkg install autofs\n")
-		text += "\n"
-		text += "\n"
-		text += ("Then edit:\n")
-		text += ("    /etc/auto.master file (for this plugin use lines with parameters only!)\n")
-		text += ("    /etc/auto.xxxx - as 'xxxx' use any name\n")
-		text += "\n"
-		text += ("%sMode I:%s  (auto.master + one auto.xxxx only)\n") % (ui.yC,ui.fC)
-		text += "\n"
-		text += ("/etc/auto.master -one record only, mountpoint must be '/mnt/net':\n")
-		text += ("/mnt/net /etc/auto.test --ghost\n")
-		text += "\n"
-		text += ("/etc/auto.test - 'test' used as example:\n")
-		text += "\n"
-		text += ("video -fstype=cifs,user=root,...,sec=ntlm ://10.0.0.10/hdd\n")
-		text +=	("hdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://10.0.0.20/hdd\n")
-		text +=	("hdd2 -fstype=cifs,...,sec=ntlm ://10.0.0.17/hdd\n")
-		text += "\n"
-		text += ("All remote directories from all devices will be mounted under '/media/net':\n")
-		text += ("  /media/net/video\n")
-		text += ("  /media/net/hdd\n")
-		text += ("  /media/net/hdd2\n")
-		text += "\n"
-		text += ("+ only 2 files for whole work\n")
-		text += ("- mount/umount all together\n")
-		text += ("- it is not very clear what is what\n")
-		text += ("(It has not sense using this mode with this plugin)\n")
-		text += "\n"
+		text = _("Install autofs with:  opkg install autofs") + "\n\n"
+		text += _("- then edit:") + "\n\n"
+		text += _("    /etc/auto.master file (for this plugin use lines with parameters only!)") + "\n"
+		text += _("    /etc/auto.xxxx - as 'xxxx' use any name") + "\n\n"
+		text += _("%sMode I:%s  (auto.master + one auto.xxxx only)") % (ui.yC,ui.fC) + "\n\n"
+		text += _("/etc/auto.master -one record only, mountpoint must be '/mnt/net':") + "\n"
+		text += ("%s/mnt/net /etc/auto.test --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("/etc/auto.test - 'test' used as example:") + "\n"
+		text += ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://10.0.0.10/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text +=	("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://10.0.0.20/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text +=	("%shdd2 -fstype=cifs,...,sec=ntlm ://10.0.0.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("All remote directories from all devices will be mounted under '/media/net':") + "\n"
+		text += ("%s  /media/net/video%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s  /media/net/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s  /media/net/hdd2%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("+ only 2 files for whole work") + "\n"
+		text += _("- mount/umount all together") + "\n"
+		text += _("- it is not very clear what is what") + "\n"
+		text += _("(It has not sense using this mode with this plugin)") + "\n\n"
 		return text
 
 	def mode2txt(self):
-		text = ("%sMode II:%s  (auto.master + more auto.xxxx files)\n") % (ui.yC,ui.fC)
-		text += "\n"
-		text += ("auto.master with more records (no mountpoint as '/mnt/net'):\n")
-		text += ("/mnt/f1 /etc/auto.formuler --ghost\n")
-		text += ("/mnt/render /etc/auto.render --ghost\n")
-		text += ("/mnt/wd /etc/auto.wd --ghost\n")
-		text += "\n"
-		text += ("more auto.xxxx files - each file for one shared directory:\n")
-		text += ("auto.formuler:\n")
-		text += ("hdd -fstype=cifs,...,sec=ntlm ://192.168.0.20/hdd\n")
-		text += "\n"
-		text += ("auto.render:\n")
-		text += ("video -fstype=cifs,...,sec=ntlm, ://192.168.0.219/hdd\n")
-		text += "\n"
-		text += ("auto.wd:\n")
-		text += ("hdd -fstype=cifs,...,sec=ntlm ://192.168.0.17/hdd\n")
-		text += "\n"
-		text += ("Each shared directory has own mounpoint under /media:\n")
-		text += ("/media/f1/hdd\n")
-		text += ("/media/render/video\n")
-		text += ("/media/wd/hdd\n")
-		text += "\n"
-		text += ("- more auto.xxxx files\n")
-		text += ("+ can be mounted/umounted independently with uncomment/comment line(s) in auto.master\n")
-		text += ("+ very clear what is what\n")
-		text += "\n"
+		text = _("%sMode II:%s  (auto.master + more auto.xxxx files)") % (ui.yC,ui.fC) + "\n\n"
+		text += _("auto.master with more records (no mountpoint as '/mnt/net'):") + "\n"
+		text += ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s/mnt/render /etc/auto.render --ghost%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s/mnt/wd /etc/auto.wd --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("more auto.xxxx files - each file for one shared directory:") + "\n"
+		text += ("auto.formuler:") + "\n"
+		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.0.20/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("auto.render:") + "\n"
+		text += ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.0.219/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("auto.wd:") + "\n"
+		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.0.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("Each shared directory has own mounpoint under /media:") + "\n"
+		text += ("%s/media/f1/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s/media/render/video%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s/media/wd/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("- more auto.xxxx files") + "\n"
+		text += _("+ very clear what is what") + "\n"
+		text += _("+ can be mounted/umounted independently with uncomment/comment line(s) in auto.master") + "\n\n"
 		return text
 
 	def mode3txt(self):
-		text = ("%sMode III:%s  (similar as II)\n") % (ui.yC,ui.fC)
-		text += "\n"
-		text += ("-in auto.xxxx files can be used more lines\n")
-		text += ("-useful, if one device sharing more directories\n")
-		text += "\n"
-		text += ("example of auto.synology:\n")
-		text += ("video -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/video\n")
-		text += ("audio -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/music\n")
-		text += ("then will be mounted as:\n")
-		text += ("...\n")
-		text += ("/media/synology/video\n")
-		text += ("/media/synology/audio\n")
-		text += ("...\n")
-		text += "\n"
+		text = _("%sMode III:%s  (similar as II)") % (ui.yC,ui.fC) + "\n\n"
+		text += _("-in auto.xxxx files can be used more lines") + "\n"
+		text += _("-useful, if one device sharing more directories") + "\n\n"
+		text += _("example of auto.synology:") + "\n"
+		text += ("%svideo -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/video%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%saudio -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/music%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += _("then will be mounted as:") + "\n"
+		text += ("...") + "\n"
+		text += ("%s/media/synology/video%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%s/media/synology/audio%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("...") + "\n"
 		return text

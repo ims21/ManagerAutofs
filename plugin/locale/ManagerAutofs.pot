@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 01:24+0200\n"
+"POT-Creation-Date: 2017-09-16 22:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,13 +205,13 @@ msgstr ""
 msgid "fstype"
 msgstr ""
 
-msgid "rw/ro"
-msgstr ""
-
 msgid "soft"
 msgstr ""
 
 msgid "intr"
+msgstr ""
+
+msgid "rw/ro"
 msgstr ""
 
 msgid "use user/pass"
@@ -310,4 +310,83 @@ msgid "Mode II"
 msgstr ""
 
 msgid "Mode III"
+msgstr ""
+
+msgid "Install autofs with:  opkg install autofs"
+msgstr ""
+
+msgid "- then edit:"
+msgstr ""
+
+msgid ""
+"    /etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr ""
+
+msgid "    /etc/auto.xxxx - as 'xxxx' use any name"
+msgstr ""
+
+#, python-format
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr ""
+
+msgid "/etc/auto.master -one record only, mountpoint must be '/mnt/net':"
+msgstr ""
+
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr ""
+
+msgid ""
+"All remote directories from all devices will be mounted under '/media/net':"
+msgstr ""
+
+msgid "+ only 2 files for whole work"
+msgstr ""
+
+msgid "- mount/umount all together"
+msgstr ""
+
+msgid "- it is not very clear what is what"
+msgstr ""
+
+msgid "(It has not sense using this mode with this plugin)"
+msgstr ""
+
+#, python-format
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr ""
+
+msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
+msgstr ""
+
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr ""
+
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr ""
+
+msgid "- more auto.xxxx files"
+msgstr ""
+
+msgid "+ very clear what is what"
+msgstr ""
+
+msgid ""
+"+ can be mounted/umounted independently with uncomment/comment line(s) in "
+"auto.master"
+msgstr ""
+
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr ""
+
+msgid "-in auto.xxxx files can be used more lines"
+msgstr ""
+
+msgid "-useful, if one device sharing more directories"
+msgstr ""
+
+msgid "example of auto.synology:"
+msgstr ""
+
+msgid "then will be mounted as:"
 msgstr ""

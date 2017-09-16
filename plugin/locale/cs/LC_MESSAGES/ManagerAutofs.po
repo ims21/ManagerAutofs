@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 01:24+0200\n"
-"PO-Revision-Date: 2017-09-13 01:26+0100\n"
+"POT-Creation-Date: 2017-09-16 22:38+0200\n"
+"PO-Revision-Date: 2017-09-16 22:39+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -173,7 +173,7 @@ msgid "enabled"
 msgstr "povolen"
 
 msgid "mountpoint name"
-msgstr ""
+msgstr "bod připojení"
 
 msgid "auto.name"
 msgstr ""
@@ -201,12 +201,9 @@ msgid "Manager Autofs - edited autofile/record: %s"
 msgstr "Manager Autofs - upravovaný soubor/řádek: %s"
 
 msgid "local directory"
-msgstr ""
+msgstr "místní adresář"
 
 msgid "fstype"
-msgstr ""
-
-msgid "rw/ro"
 msgstr ""
 
 msgid "soft"
@@ -215,17 +212,20 @@ msgstr ""
 msgid "intr"
 msgstr ""
 
-msgid "use user/pass"
+msgid "rw/ro"
 msgstr ""
+
+msgid "use user/pass"
+msgstr "uživatel/heslo"
 
 msgid "user"
-msgstr ""
+msgstr "uživatel"
 
 msgid "password"
-msgstr ""
+msgstr "heslo"
 
 msgid "domain"
-msgstr ""
+msgstr "doména"
 
 msgid "domain name"
 msgstr ""
@@ -258,7 +258,7 @@ msgid "security"
 msgstr ""
 
 msgid "used ip"
-msgstr ""
+msgstr "použít IP"
 
 msgid "ip"
 msgstr ""
@@ -267,10 +267,10 @@ msgid "dev"
 msgstr ""
 
 msgid "remote directory"
-msgstr ""
+msgstr "sdílený adresář"
 
 msgid "user string"
-msgstr ""
+msgstr "uživatelský řetězec"
 
 msgid "Wrong file format!"
 msgstr "Chybný formát souboru!"
@@ -312,6 +312,89 @@ msgstr "Mód II"
 
 msgid "Mode III"
 msgstr "Mód III"
+
+msgid "Install autofs with:  opkg install autofs"
+msgstr "Nainstalujte autofs příkazem:  opkg install autofs"
+
+msgid "- then edit:"
+msgstr "- poté upravte:"
+
+msgid ""
+"    /etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr ""
+"    /etc/auto.master soubor (pro plugin používejte pouze řádky s parametry!)"
+
+msgid "    /etc/auto.xxxx - as 'xxxx' use any name"
+msgstr "    /etc/auto.xxxx - jako 'xxxx' použijte nějaké jméno"
+
+#, python-format
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr "%sMód I:%s  (auto.master + pouze jeden auto.xxxx soubor)"
+
+msgid "/etc/auto.master -one record only, mountpoint must be '/mnt/net':"
+msgstr "/etc/auto.master -pouze jeden řádek, mountpoint musí být '/mnt/net':"
+
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr "/etc/auto.test - 'test' použit jako příklad:"
+
+msgid ""
+"All remote directories from all devices will be mounted under '/media/net':"
+msgstr ""
+"Všechny vzdálené adresáře ze všech zařízení budou připojeny pod '/media/net':"
+
+msgid "+ only 2 files for whole work"
+msgstr "+ pouze 2 soubory pro práci"
+
+msgid "- mount/umount all together"
+msgstr "- připojení/odpojení pouze všeho najednou"
+
+msgid "- it is not very clear what is what"
+msgstr "- není moc přehledné, co je co"
+
+msgid "(It has not sense using this mode with this plugin)"
+msgstr "(tento mód nemá moc smysl používat s tímto pluginem)"
+
+#, python-format
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr "%sMód II:%s  (auto.master + více auto.xxxx souborů)"
+
+msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
+msgstr "auto.master s více řádky (žádný mountpoint nesmí být '/mnt/net'):"
+
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr "více souborů auto.xxxx - každý soubor pro jedno připojení:"
+
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr "Každý sdílený adresář má vlastní připojení pod /media:"
+
+msgid "- more auto.xxxx files"
+msgstr "- více souborů auto.xxxx"
+
+msgid "+ very clear what is what"
+msgstr "+ velice přehledné, co je co"
+
+msgid ""
+"+ can be mounted/umounted independently with uncomment/comment line(s) in "
+"auto.master"
+msgstr ""
+"+ může být připojeno/odpojeno každé připojení zvlášť povolením/zakázáním "
+"řádku v auto.master"
+
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr "%sMód III:%s  (podobný jako II)"
+
+msgid "-in auto.xxxx files can be used more lines"
+msgstr "-v souboru auto.xxxx může být použito více řádků"
+
+msgid "-useful, if one device sharing more directories"
+msgstr "-užitečné, jestliže jedno zařízení sdílí více adresářů"
+
+msgid "example of auto.synology:"
+msgstr "příklad pro auto.synology:"
+
+msgid "then will be mounted as:"
+msgstr "bude připojeno jako:"
 
 #~ msgid "Autofs file: %s"
 #~ msgstr "Autofs soubor: %s"

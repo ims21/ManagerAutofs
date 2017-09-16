@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.48"
+VERSION = "1.49"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -68,6 +68,8 @@ try:
 	fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 except:
 	fC = "\c%s" % hex2strColor(int(skin.parseColor("#00ffffff").argb()))
+
+greyC = "\c%s" % hex2strColor(int(skin.parseColor("#00a0a0a0").argb()))
 gC = "\c%s" % hex2strColor(int(skin.parseColor("#0000ff80").argb()))
 bC = "\c%s" % hex2strColor(int(skin.parseColor("#000080ff").argb()))
 
@@ -237,15 +239,15 @@ class ManagerAutofsMasterSelection(Screen):
 			recordname = "%s" % (sel[1].split('/')[2])
 			autoname = "%s" % sel[2].split('/')[2]
 			menu.append(((_("Edit record:") + "  %s%s%s" % (gC,recordname,fC)),0))
-			buttons = ["4"]
+			buttons = [""]
 		menu.append((_("New record"),1))
 		menu.append(((_("Remove record:") + "  %s%s%s" % (gC,recordname,fC)),2))
-		buttons += ["1", "8"]
+		buttons += ["",""]
 		if sel:
 			menu.append(((_("Edit -") + " %s%s%s" % (bC,autoname,fC)),10))
 			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
-			buttons += ["yellow", "", "red"]
+			buttons += ["", "", ""]
 		menu.append((_("Help"),14))
 		buttons += [""]
 		menu.append((_("Utility"),15))
@@ -449,7 +451,7 @@ class ManagerAutofsMasterSelection(Screen):
 			buttons += ["","2",""]
 		menu.append((_("Reload autofs"),10))
 		menu.append((_("Restart autofs with GUI restart"),11))
-		buttons += ["",""]
+		buttons += ["","4"]
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"),12))
 			buttons += [""]
