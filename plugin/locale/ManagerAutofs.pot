@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 10:45+0200\n"
+"POT-Creation-Date: 2017-09-17 22:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -318,18 +318,17 @@ msgstr ""
 msgid "- then edit:"
 msgstr ""
 
-msgid ""
-"    /etc/auto.master file (for this plugin use lines with parameters only!)"
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
 msgstr ""
 
-msgid "    /etc/auto.xxxx - as 'xxxx' use any name"
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
 msgstr ""
 
 #, python-format
 msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
 msgstr ""
 
-msgid "/etc/auto.master -one record only, mountpoint must be '/mnt/net':"
+msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
 msgstr ""
 
 msgid "/etc/auto.test - 'test' used as example:"
