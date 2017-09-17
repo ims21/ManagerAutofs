@@ -55,25 +55,26 @@ class ManagerAutofsHelp(Screen):
 
 	def mode2(self):
 		self["HelpText"].setText(self.mode2txt())
-
 	def mode3(self):
 		self["HelpText"].setText(self.mode3txt())
-
 	def all(self):
-		self["HelpText"].setText(self.mode1txt() + self.mode2txt() + self.mode3txt())
+		self["HelpText"].setText(self.prolog() + self.mode1txt() + self.mode2txt() + self.mode3txt())
 
-	def mode1txt(self):
+	def prolog(self):
 		text = _("Install autofs with:  opkg install autofs") + "\n\n"
 		text += _("- then edit:") + "\n\n"
 		text += _("    /etc/auto.master file (for this plugin use lines with parameters only!)") + "\n"
 		text += _("    /etc/auto.xxxx - as 'xxxx' use any name") + "\n\n"
-		text += _("%sMode I:%s  (auto.master + one auto.xxxx only)") % (ui.yC,ui.fC) + "\n\n"
+		return text
+
+	def mode1txt(self):
+		text = _("%sMode I:%s  (auto.master + one auto.xxxx only)") % (ui.yC,ui.fC) + "\n\n"
 		text += _("/etc/auto.master -one record only, mountpoint must be '/mnt/net':") + "\n"
 		text += ("%s/mnt/net /etc/auto.test --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += _("/etc/auto.test - 'test' used as example:") + "\n"
-		text += ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://10.0.0.10/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text +=	("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://10.0.0.20/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text +=	("%shdd2 -fstype=cifs,...,sec=ntlm ://10.0.0.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text +=	("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % (ui.greyC,ui.fC) + "\n"
+		text +=	("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += _("All remote directories from all devices will be mounted under '/media/net':") + "\n"
 		text += ("%s  /media/net/video%s") % (ui.greyC,ui.fC) + "\n"
 		text += ("%s  /media/net/hdd%s") % (ui.greyC,ui.fC) + "\n"
@@ -92,11 +93,11 @@ class ManagerAutofsHelp(Screen):
 		text += ("%s/mnt/wd /etc/auto.wd --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += _("more auto.xxxx files - each file for one shared directory:") + "\n"
 		text += ("auto.formuler:") + "\n"
-		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.0.20/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.20/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += ("auto.render:") + "\n"
-		text += ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.0.219/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.1.219/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += ("auto.wd:") + "\n"
-		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.0.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += _("Each shared directory has own mounpoint under /media:") + "\n"
 		text += ("%s/media/f1/hdd%s") % (ui.greyC,ui.fC) + "\n"
 		text += ("%s/media/render/video%s") % (ui.greyC,ui.fC) + "\n"
@@ -109,10 +110,11 @@ class ManagerAutofsHelp(Screen):
 	def mode3txt(self):
 		text = _("%sMode III:%s  (similar as II)") % (ui.yC,ui.fC) + "\n\n"
 		text += _("-in auto.xxxx files can be used more lines") + "\n"
-		text += _("-useful, if one device sharing more directories") + "\n\n"
+		text += _("-useful, if one device sharing more directories") + "\n"
+		text += _("-everything else is the same as for II") + "\n\n"
 		text += _("example of auto.synology:") + "\n"
-		text += ("%svideo -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/video%s") % (ui.greyC,ui.fC) + "\n"
-		text += ("%saudio -fstype=cifs,...,iocharset=utf8 ://10.0.0.99/music%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += ("%svideo -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/video%s") % (ui.greyC,ui.fC) + "\n"
+		text += ("%saudio -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/music%s") % (ui.greyC,ui.fC) + "\n\n"
 		text += _("then will be mounted as:") + "\n"
 		text += ("...") + "\n"
 		text += ("%s/media/synology/video%s") % (ui.greyC,ui.fC) + "\n"
