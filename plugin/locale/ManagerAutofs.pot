@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 22:35+0200\n"
+"POT-Creation-Date: 2017-09-29 18:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,12 @@ msgid "Remove -"
 msgstr ""
 
 msgid "Help"
+msgstr ""
+
+msgid "Remove from extended menu"
+msgstr ""
+
+msgid "Add into extended menu"
 msgstr ""
 
 msgid "Utility"
@@ -128,13 +134,16 @@ msgstr ""
 msgid "Remove unused autofs files in AutoBackup"
 msgstr ""
 
+msgid "Install autofs"
+msgstr ""
+
+msgid "Next items are not needed standardly:"
+msgstr ""
+
 msgid "Reload autofs"
 msgstr ""
 
 msgid "Restart autofs with GUI restart"
-msgstr ""
-
-msgid "Install autofs"
 msgstr ""
 
 msgid "Reload Bookmarks"

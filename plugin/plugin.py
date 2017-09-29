@@ -21,7 +21,10 @@
 from . import _
 
 from Plugins.Plugin import PluginDescriptor
-from Components.config import config
+from Components.config import config, ConfigSubsection, ConfigYesNo
+
+config.plugins.mautofs = ConfigSubsection()
+config.plugins.mautofs.extended_menu = ConfigYesNo(default = False)
 
 def main(session, **kwargs):
 	import ui
@@ -30,4 +33,7 @@ def main(session, **kwargs):
 def Plugins(**kwargs):
 	name = _("Manager Autofs")
 	descr = _("Manage autofs files and conection")
-	return [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc = main)]
+	list = [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc = main)]
+	if config.plugins.mautofs.extended_menu.value:
+		list.append(PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_EXTENSIONSMENU, icon = 'plugin.png', fnc = main))
+	return list

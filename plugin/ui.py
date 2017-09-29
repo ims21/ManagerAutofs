@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.49"
+VERSION = "1.50"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -26,10 +26,12 @@ from Components.Button import Button
 from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
-from Components.config import config, ConfigSubsection, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
+from Components.config import config, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
+from Components.PluginComponent import plugins
+from Tools.Directories import SCOPE_PLUGINS, resolveFilename
 from shutil import copyfile
 import enigma
 import skin
@@ -39,7 +41,6 @@ from Components.Pixmap import Pixmap
 
 from helptexts import ManagerAutofsHelp
 
-config.plugins.mautofs = ConfigSubsection()
 # parameters for auto.master file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.mountpoint = NoSave(ConfigText(default = "/mnt/remote", visible_width = 30, fixed_size = False))
@@ -147,6 +148,7 @@ class ManagerAutofsMasterSelection(Screen):
 		self["h_blue"] = Pixmap()
 
 		self.msgNM=None
+		self.order = 0
 		self.selectionUtilitySubmenu = 0
 		self.onShown.append(self.setWindowTitle)
 
@@ -223,8 +225,10 @@ class ManagerAutofsMasterSelection(Screen):
 		self.close()
 
 	def keyOk(self):
+		cfg.extended_menu.save()
 		self.saveMasterFile()
 		self.updateAutofs()
+		self.refreshPlugins()
 		self.close()
 
 	def help(self):
@@ -248,7 +252,13 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["", "", ""]
-		menu.append((_("Help"),14))
+		menu.append((_("Help"),13))
+		buttons += [""]
+		if cfg.extended_menu.value:
+			txt = _("Remove from extended menu")
+		else:
+			txt = _("Add into extended menu")
+		menu.append((txt,14))
 		buttons += [""]
 		menu.append((_("Utility"),15))
 		buttons += ["menu"]
@@ -273,8 +283,10 @@ class ManagerAutofsMasterSelection(Screen):
 				self.addAutofileLine()
 			elif choice[1] == 12:
 				self.removeAutofile()
-			elif choice[1] == 14:
+			elif choice[1] == 13:
 				self.help()
+			elif choice[1] == 14:
+				cfg.extended_menu.value = not cfg.extended_menu.value
 			elif choice[1] == 15:
 				self.selectionUtilitySubmenu = 0
 				self.utilitySubmenu()
@@ -443,19 +455,25 @@ class ManagerAutofsMasterSelection(Screen):
 	def utilitySubmenu(self):
 		menu = []
 		buttons = []
-
+		self.order = 0 # "Next item ..." text position in list (choicebox use number of item, not number of function)
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
 			menu.append((_("Update autofs files in AutoBackup"),0))
 			menu.append((_("Open AutoBackup plugin"),1))
 			menu.append((_("Remove unused autofs files in AutoBackup"),2))
 			buttons += ["","2",""]
-		menu.append((_("Reload autofs"),10))
-		menu.append((_("Restart autofs with GUI restart"),11))
-		buttons += ["","4"]
+			self.order += 3
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"),12))
-			buttons += [""]
-		menu.append((_("Reload Bookmarks"),100))
+			buttons += ["green"]
+			self.order += 1
+		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
+		buttons += [""]
+		space = 4 * " "
+		if os.path.exists(AUTOFS):
+			menu.append((space + _("Reload autofs"),10))
+			menu.append((space + _("Restart autofs with GUI restart"),11))
+			buttons += ["","4"]
+		menu.append((space + _("Reload Bookmarks"),100))
 		buttons += [""]
 
 		text = _("Select operation:")
@@ -464,6 +482,7 @@ class ManagerAutofsMasterSelection(Screen):
 	def utilityCallback(self, choice):
 		if choice is None:
 			return
+		self.selectionUtilitySubmenu = int(choice[1])
 		if choice[1] == 0:
 			self.updateAutoBackup()
 		elif choice[1] == 1:
@@ -473,7 +492,6 @@ class ManagerAutofsMasterSelection(Screen):
 			self.session.open(Config)
 		elif choice[1] == 2:
 			self.refreshAutoBackup()
-
 		elif choice[1] == 10:
 			self.updateAutofs()
 		elif choice[1] == 11:
@@ -486,9 +504,11 @@ class ManagerAutofsMasterSelection(Screen):
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 			self.MessageBoxNM(True, _("Done"), 1)
+		elif choice[1] == 1000:
+			self.selectionUtilitySubmenu = self.order + 1
+			self.utilitySubmenu()
 		else:
 			return
-		self.selectionUtilitySubmenu = int(choice[1])
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
@@ -562,6 +582,10 @@ class ManagerAutofsMasterSelection(Screen):
 				self.showOutput()
 		else:
 			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
+
+	def refreshPlugins(self):
+		plugins.clearPluginList()
+		plugins.readPluginList(resolveFilename(SCOPE_PLUGINS))
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:
