@@ -103,7 +103,7 @@ class ManagerAutofsMasterSelection(Screen):
 			</widget>
 			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
 			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
-			<widget name="info" position="55,435" zPosition="10" size="560,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="text" position="55,435" zPosition="10" size="560,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
 			<widget name="status" position="55,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
 			<widget name="statusbar" position="355,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
@@ -121,7 +121,7 @@ class ManagerAutofsMasterSelection(Screen):
 
 		self["mntpoint"] = Label(_("Mountpoint"))
 		self["autofile"] = Label(_("auto.file"))
-		self["info"] = Label()
+		self["text"] = Label()
 
 		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions","HelpActions"],
 		{
@@ -215,13 +215,13 @@ class ManagerAutofsMasterSelection(Screen):
 			else:
 				text = _("Enable")
 			self["key_blue"].setText(text)
-			self["info"].setText(self.formatString(sel))
+			self["text"].setText(self.formatString(sel))
 
 	def clearTexts(self):
 		self.MessageBoxNM()
 		self["statusbar"].setText("")
 		self["status"].setText("")
-		self["info"].setText("")
+		self["text"].setText("")
 
 	def keyClose(self):
 		self.updateAutofs()
@@ -1074,7 +1074,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				}
 				</convert>
 			</widget>
-			<widget name="info" position="5,380" zPosition="10" size="660,15" font="Regular;11" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session, name = None):
@@ -1107,7 +1107,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self["h_yellow"] = Pixmap()
 		self["h_blue"] = Pixmap()
 
-		self["info"] = Label("")
+		self["text"] = Label("")
 
 		self.onShown.append(self.setWindowTitle)
 		self.onLayoutFinish.append(self.readFile)
@@ -1133,7 +1133,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 	def refreshText(self):
 		current = self["list"].getCurrent()
 		if current:
-			self["info"].setText("%s" % current[1])
+			self["text"].setText("%s" % current[1])
 
 	def menu(self):
 		menu = []
