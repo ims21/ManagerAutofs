@@ -78,7 +78,7 @@ _X_ = "%sx%s" % (gC,fC)
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
-		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,480" backgroundColor="#00000000">
+		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,485" backgroundColor="#00000000">
 			<widget name="h_red" pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
 			<widget name="h_green" pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
 			<widget name="h_yellow" pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
@@ -103,8 +103,9 @@ class ManagerAutofsMasterSelection(Screen):
 			</widget>
 			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
 			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
-			<widget name="status" position="55,435" zPosition="10" size="560,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
-			widget name="statusbar" position="55,455" zPosition="10" size="560,20" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="info" position="55,435" zPosition="10" size="560,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="status" position="55,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="statusbar" position="355,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session):
@@ -120,6 +121,7 @@ class ManagerAutofsMasterSelection(Screen):
 
 		self["mntpoint"] = Label(_("Mountpoint"))
 		self["autofile"] = Label(_("auto.file"))
+		self["info"] = Label()
 
 		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions","HelpActions"],
 		{
@@ -148,7 +150,6 @@ class ManagerAutofsMasterSelection(Screen):
 		self["h_blue"] = Pixmap()
 
 		self.msgNM=None
-		self.order = 0
 		self.selectionUtilitySubmenu = 0
 		self.onShown.append(self.setWindowTitle)
 
@@ -214,11 +215,13 @@ class ManagerAutofsMasterSelection(Screen):
 			else:
 				text = _("Enable")
 			self["key_blue"].setText(text)
-			self["status"].setText(self.formatString(sel))
+			self["info"].setText(self.formatString(sel))
 
 	def clearTexts(self):
 		self.MessageBoxNM()
 		self["statusbar"].setText("")
+		self["status"].setText("")
+		self["info"].setText("")
 
 	def keyClose(self):
 		self.updateAutofs()
@@ -455,17 +458,14 @@ class ManagerAutofsMasterSelection(Screen):
 	def utilitySubmenu(self):
 		menu = []
 		buttons = []
-		self.order = 0 # "Next item ..." text position in list (choicebox use number of item, not number of function)
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
 			menu.append((_("Update autofs files in AutoBackup"),0))
 			menu.append((_("Open AutoBackup plugin"),1))
 			menu.append((_("Remove unused autofs files in AutoBackup"),2))
 			buttons += ["","2",""]
-			self.order += 3
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"),12))
 			buttons += ["green"]
-			self.order += 1
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
 		space = 4 * " "
@@ -477,19 +477,21 @@ class ManagerAutofsMasterSelection(Screen):
 		buttons += [""]
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.utilityCallback, ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
+		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
 
-	def utilityCallback(self, choice):
+	def utilityCallback(self, menu, choice):
 		if choice is None:
 			return
-		self.selectionUtilitySubmenu = int(choice[1])
+		self.selectionUtilitySubmenu = menu.index(choice)
 		if choice[1] == 0:
 			self.updateAutoBackup()
 		elif choice[1] == 1:
+			def autobackupCallback(tmp1, tmp2):
+				self.utilitySubmenu()
 			self.saveMasterFile()
 			self.updateAutofs()
 			from Plugins.Extensions.AutoBackup.ui import Config
-			self.session.open(Config)
+			self.session.openWithCallback(autobackupCallback, Config)
 		elif choice[1] == 2:
 			self.refreshAutoBackup()
 		elif choice[1] == 10:
@@ -503,9 +505,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.installAutofs()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
-			self.MessageBoxNM(True, _("Done"), 1)
 		elif choice[1] == 1000:
-			self.selectionUtilitySubmenu = self.order + 1
+			self.selectionUtilitySubmenu += 1 # jump to next item
 			self.utilitySubmenu()
 		else:
 			return
@@ -527,7 +528,7 @@ class ManagerAutofsMasterSelection(Screen):
 						fo.write(rec[2] + '\n')
 				fo.close()
 				self.MessageBoxNM(True, _("Done"), 1)
-				self.utilitySubmenu()
+			self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
 
 	def refreshAutoBackup(self):	# remove unused /etc/auto. lines from /etc/backup.cfg
@@ -560,10 +561,9 @@ class ManagerAutofsMasterSelection(Screen):
 					fo.close()
 					fi.close()
 					self.MessageBoxNM(True, _("Done"), 1)
-					self.utilitySubmenu()
 				else:
 					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 3)
-					self.utilitySubmenu()
+			self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
 
 	def installAutofs(self):
