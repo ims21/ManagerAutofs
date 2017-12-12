@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.50"
+VERSION = "1.51"
 #
 #  Coded by ims (c) 2017
 #  Support: openpli.org
@@ -228,10 +228,8 @@ class ManagerAutofsMasterSelection(Screen):
 		self.close()
 
 	def keyOk(self):
-		cfg.extended_menu.save()
 		self.saveMasterFile()
 		self.updateAutofs()
-		self.refreshPlugins()
 		self.close()
 
 	def help(self):
@@ -262,7 +260,7 @@ class ManagerAutofsMasterSelection(Screen):
 		else:
 			txt = _("Add into extended menu")
 		menu.append((txt,14))
-		buttons += [""]
+		buttons += ["blue"]
 		menu.append((_("Utility"),15))
 		buttons += ["menu"]
 
@@ -290,6 +288,8 @@ class ManagerAutofsMasterSelection(Screen):
 				self.help()
 			elif choice[1] == 14:
 				cfg.extended_menu.value = not cfg.extended_menu.value
+				cfg.extended_menu.save()
+				self.refreshPlugins()
 			elif choice[1] == 15:
 				self.selectionUtilitySubmenu = 0
 				self.utilitySubmenu()
