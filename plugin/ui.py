@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.51"
+VERSION = "1.60"
 #
-#  Coded by ims (c) 2017
+#  Coded by ims (c) 2018
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -128,7 +128,7 @@ class ManagerAutofsMasterSelection(Screen):
 			"ok": self.editMasterRecord,
 			"cancel": self.keyClose,
 			"red": self.keyClose,
-			"green": self.keyOk,
+			"green": self.addMasterRecord,
 			"blue": self.changeMasterRecordStatus,
 			"yellow": self.editAutofile,
 			"menu": self.menu,
@@ -141,7 +141,7 @@ class ManagerAutofsMasterSelection(Screen):
 			self["list"].onSelectionChanged.append(self.selectionChanged)
 
 		self["key_red"] = Button(_("Close"))
-		self["key_green"] = Button(_("Ok"))
+		self["key_green"] = Button(_("Add mountpoint"))
 		self["key_yellow"] = Button(_("Edit auto file"))
 		self["key_blue"] = Button()
 		self["h_red"] = Pixmap()
@@ -224,10 +224,6 @@ class ManagerAutofsMasterSelection(Screen):
 		self["text"].setText("")
 
 	def keyClose(self):
-		self.updateAutofs()
-		self.close()
-
-	def keyOk(self):
 		self.saveMasterFile()
 		self.updateAutofs()
 		self.close()
@@ -247,10 +243,11 @@ class ManagerAutofsMasterSelection(Screen):
 			buttons = [""]
 		menu.append((_("New record"),1))
 		menu.append(((_("Remove record:") + "  %s%s%s" % (gC,recordname,fC)),2))
-		buttons += ["",""]
+		menu.append(((_("Create new record from:") + "  %s%s%s" % (gC,recordname,fC)),5))
+		buttons += ["","",""]
 		if sel:
 			menu.append(((_("Edit -") + " %s%s%s" % (bC,autoname,fC)),10))
-			menu.append(((_("Add line - ") + " %s%s%s" % (bC,autoname,fC)),11))
+			menu.append(((_("Add line to -") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["", "", ""]
 		menu.append((_("Help"),13))
@@ -278,6 +275,8 @@ class ManagerAutofsMasterSelection(Screen):
 				self.addMasterRecord()
 			elif choice[1] == 2:
 				self.removeMasterRecord()
+			elif choice[1] == 5:
+				self.duplicateMountPoint()
 			elif choice[1] == 10:
 				self.editAutofile()
 			elif choice[1] == 11:
@@ -327,8 +326,32 @@ class ManagerAutofsMasterSelection(Screen):
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
 				add = (enabled, mountpoint, autofile, optional )
+				self.createMountpointWithAutofile(add)
+		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None, self.list)
+
+	def duplicateMountPoint(self):
+		def callbackAdd(original_autofile, change=False):
+			if change:
+				mountpoint = "/mnt/%s" % cfg.mountpoint.value
+				autofile = "/etc/auto.%s" % cfg.autofile.value
+				enabled =  cfg.enabled.value and _X_ or ""
+				ghost = cfg.ghost.value and "--ghost" or ""
+				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
+				add = (enabled, mountpoint, autofile, optional )
 				self.addItem(add)
-		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None)
+				# autofile is created
+				copyfile(original_autofile, autofile)
+
+		sel = self["list"].getCurrent()
+		if sel:
+			suffix = "_new"
+			mountpoint = "%s" % sel[1] + suffix
+			original_autofile = sel[2]
+			autofile = "%s" % original_autofile + suffix
+			enabled =  ""
+			ghost = sel[3]
+			sel = [enabled, mountpoint, autofile, ghost]
+			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
 		def callbackEdit( index, old_autofile, change = False):
@@ -359,7 +382,7 @@ class ManagerAutofsMasterSelection(Screen):
 		if sel:
 			index = self["list"].getIndex()
 			old_autofile = sel[2]
-			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile), ManagerAutofsMasterEdit, sel)
+			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def removeMasterRecord(self):
 		def callbackRemove(index, autofile, retval=False):
@@ -399,10 +422,28 @@ class ManagerAutofsMasterSelection(Screen):
 		self.refreshText()
 
 	def addAutofileLine(self):
+		def callBackCreate(name,text=""):
+			if text:
+				self.backupFile(name,"bak")
+				self.saveFile(name, text)
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
-			self.session.open(ManagerAutofsMultiAutoEdit, name)
+			lines = self.getAutoLines(name)
+			if lines == -1 or lines == 0: # file not exist or is empty
+				data = ""
+				self.session.openWithCallback(boundFunction(callBackCreate, name), ManagerAutofsAutoEdit, name, data, True)
+			else:
+				self.session.open(ManagerAutofsMultiAutoEdit, name)
+
+	def createMountpointWithAutofile(self, add):
+		name = add[2]
+		def callBackSingle(name, text=""):
+			if text:
+				self.saveFile(name, text)
+				self.addItem(add)
+		data = ""
+		self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
 
 	def editAutofile(self):
 		def callBackSingle(name,text=""):
@@ -611,16 +652,22 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			<widget name="config" position="5,65" size="550,150" scrollbarMode="showOnDemand"/>
 		</screen>"""
 
-	def __init__(self, session, pars):
+	def __init__(self, session, pars, master):
 		Screen.__init__(self, session)
+		self.inputMountPoint = None
+		self.inputAutoFile = None
 		if pars:
 			record = "%s%s%s" % (gC, pars[1].split('/')[2], fC)
 			text = _("Manager Autofs - edited record: %s") % record
+			self.inputMountPoint = pars[1]
+			self.inputAutoFile = pars[2]
 		else:
 			text = _("Manager Autofs - create new record")
-
 		self.setTitle(text)
+
+		self.master = master # master file records
 		self.pars = pars
+
 		self["text"] = Label()
 
 		self["key_red"] = Button(_("Close"))
@@ -644,6 +691,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"red":		self.keyClose,
 			"blue":		self.keyBlue,
 			}, -1)
+
+		self.msgNM=None
 
 		self["config"].onSelectionChanged.append(self.moveOverItem)
 
@@ -744,12 +793,57 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			self["h_blue"].hide()
 		self["key_blue"].setText(text)
 
+	def existMountPoint(self, mountpoint):
+		for rec in self.master:
+			if rec[1] == mountpoint:
+				return True
+		return False
+
+	def existAutoFile(self, autofile):
+		for rec in self.master:
+			if rec[2] == autofile:
+				return True
+		return False
+
 	def keyOk(self):
-		#save file
-		self.close(True)
+		if cfg.autofile.value == "master":
+			self.MessageBoxNM(True, _("You cannot use 'master' in auto.file name"), 3)
+			return
+		af = "/etc/auto.%s" % cfg.autofile.value
+		if af != self.inputAutoFile:
+			if os.path.exists(af):
+				def callBackUse(old_autofile, change=False):
+					if not change: # set back original auto.name
+						cfg.autofile.value = self.inputAutoFile.split('.')[1]
+						return
+					self.mountPointTest()
+				self.session.openWithCallback(boundFunction(callBackUse, af), MessageBox, _("Do You want use existing '%s' file?\nIf not then change auto.name.") % (af), type=MessageBox.TYPE_YESNO, default=False)
+			else:
+				self.mountPointTest()
+		else:
+			self.mountPointTest()
+
+	def mountPointTest(self):
+		mnt = "/mnt/%s" % cfg.mountpoint.value
+		if mnt != self.inputMountPoint: # mountpoint name was changed, test if not exist record with same mountpoint
+			if not self.existMountPoint(mnt):
+				self.close(True)
+			else:
+				self.MessageBoxNM(True, _("Mountpoint name '%s' is used!" % mnt), 3)
+		else:	# mountpoint record was edited, but mountpoint name was not changed
+			self.close(True)
 
 	def keyClose(self):
 		self.close()
+
+	def MessageBoxNM(self, display=False, text="", delay=0):
+		if self.msgNM:
+			self.session.deleteDialog(self.msgNM)
+			self.msgNM = None
+		else:
+			if display and self.session is not None:
+				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
+				self.msgNM.show()
 
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))

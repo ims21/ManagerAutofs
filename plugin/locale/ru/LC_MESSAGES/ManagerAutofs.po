@@ -2,33 +2,406 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-28 19:54+0100\n"
-"PO-Revision-Date: 2017-09-21 20:58+0300\n"
+"POT-Creation-Date: 2018-02-03 17:33+0100\n"
+"PO-Revision-Date: 2018-02-03 17:33+0100\n"
+"Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE <Dima-73@inbox.lv>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Dimitrij <Dima-73@inbox.lv>\n"
-"Language: ru\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
-msgstr "%sРежим I:%s  (auto.master + один auto.xxxx только)"
+msgid "Manager Autofs"
+msgstr "Управление Autofs"
 
-msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
-msgstr "%sРежим II:%s  (auto.master + больше auto.xxxx файлов)"
+msgid "Manage autofs files and conection"
+msgstr "Управление файлами autofs и соединением"
 
-msgid "%sMode III:%s  (similar as II)"
-msgstr "%sРежим III:%s  (такой же как II)"
+msgid "Mountpoint"
+msgstr "Точка монтирования"
 
+msgid "auto.file"
+msgstr "auto.file"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Add mountpoint"
+msgstr ""
+
+msgid "Edit auto file"
+msgstr "Редактировать auto file"
+
+#, python-format
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
+msgstr ""
+"Управление Autofs в.%s - нажмите %sОК%s для редактирования или нажмите %sМеню"
+"%s"
+
+msgid "Disable"
+msgstr "Отключить"
+
+msgid "Enable"
+msgstr "Включить"
+
+msgid "Edit record:"
+msgstr "Редактировать запись:"
+
+msgid "New record"
+msgstr "Новая запись"
+
+msgid "Remove record:"
+msgstr "Удалить запись:"
+
+msgid "Create new record from:"
+msgstr ""
+
+msgid "Edit -"
+msgstr "Редактировать -"
+
+msgid "Add line to -"
+msgstr "Добавить строку в -"
+
+msgid "Remove -"
+msgstr "Удалить -"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Remove from extended menu"
+msgstr ""
+
+msgid "Add into extended menu"
+msgstr ""
+
+msgid "Utility"
+msgstr "Утилита"
+
+msgid "Select operation:"
+msgstr "Выбор операции:"
+
+msgid "Failed"
+msgstr "Неудачно"
+
+msgid "Done"
+msgstr "Готово"
+
+#, python-format
 msgid "'%s' was removed"
 msgstr "'%s' был удален"
 
+#, python-format
+msgid ""
+"Auto.name '%s' was attached to this record.\n"
+"Remove original '%s'?"
+msgstr ""
+"Auto.name '%s' был прикреплен к этой записи.\n"
+"Удалить оригинал '%s'?"
+
+#, python-format
 msgid "'%s' was renamed to '%s'"
 msgstr "'%s' был переименован в '%s'"
 
+#, python-format
+msgid ""
+"Auto.name in record was changed.\n"
+"Do You want rename original '%s' to '%s' too?"
+msgstr ""
+"Auto.name записи было изменено.\n"
+"Вы хотите переименовать оригинал '%s' в '%s' too?"
+
+msgid "Nothing"
+msgstr "Ничего"
+
+#, python-format
+msgid "Record '%s' only"
+msgstr "Запись '%s' только"
+
+#, python-format
+msgid "Record '%s' and its file '%s'"
+msgstr "Запись '%s' и его файл '%s'"
+
+msgid "What all do You want to remove?"
+msgstr "Что вы хотите удалить?"
+
+#, python-format
+msgid "Really remove autofile '%s'?"
+msgstr "Действительно удалить auto file '%s'?"
+
+msgid "Update autofs files in AutoBackup"
+msgstr "Обновление файлов autofs в AutoBackup"
+
+msgid "Open AutoBackup plugin"
+msgstr "Открыть плагин AutoBackup"
+
+msgid "Remove unused autofs files in AutoBackup"
+msgstr "Удалить неиспользуемые файлы autofs из AutoBackup"
+
+msgid "Install autofs"
+msgstr "Установить autofs"
+
+msgid "Next items are not needed standardly:"
+msgstr ""
+
+msgid "Reload autofs"
+msgstr "Перезагрузка autofs"
+
+msgid "Restart autofs with GUI restart"
+msgstr "Рестарт autofs вместе с рестартом GUI"
+
+msgid "Reload Bookmarks"
+msgstr "Перезагрузка autofs"
+
+msgid "Really reload autofs and restart GUI?"
+msgstr "Действительно перезагрузить autofs и выполнить рестарт GUI?"
+
+#, python-format
+msgid "File '%s' was created!"
+msgstr "Файл '%s' был создан!"
+
+#, python-format
+msgid "Update AutoBackup's '%s'?"
+msgstr "Обновить AutoBackup '%s'?"
+
+msgid "Missing '/etc/backup.cfg'"
+msgstr "Отсутствует '/etc/backup.cfg'"
+
+#, python-format
+msgid "Remove unused lines from '%s'?"
+msgstr "Удалить неиспользуемые строки из '%s'?"
+
+msgid "Autofs is not installed!"
+msgstr "Autofs не установлен!"
+
+#, python-format
+msgid "Manager Autofs - edited record: %s"
+msgstr "Управление Autofs - редактированная запись: %s"
+
+msgid "Manager Autofs - create new record"
+msgstr "Управление Autofs - создать новую запись"
+
+msgid "Ok"
+msgstr "Ол"
+
+msgid "enabled"
+msgstr "включено"
+
+msgid "mountpoint name"
+msgstr "название точки монтирования"
+
+msgid "auto.name"
+msgstr "auto.name"
+
+msgid "ghost"
+msgstr "ghost"
+
+msgid "timeout"
+msgstr "тайм-аут"
+
+msgid "time"
+msgstr "время"
+
+msgid "Put autoname"
+msgstr "Сделать autoname"
+
+msgid "Put mountpoint name"
+msgstr "Сделать название точки монтирования"
+
+msgid "You cannot use 'master' in auto.file name"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do You want use existing '%s' file?\n"
+"If not then change auto.name."
+msgstr ""
+
+#, python-format
+msgid "Mountpoint name '%s' is used!"
+msgstr ""
+
+msgid "no"
+msgstr "нет"
+
+#, python-format
+msgid "Manager Autofs - edited autofile/record: %s"
+msgstr "Управление Autofs - редактированная autofile/запись: %s"
+
+msgid "local directory"
+msgstr "локальная директория"
+
+msgid "fstype"
+msgstr "fstype"
+
+msgid "soft"
+msgstr "soft"
+
+msgid "intr"
+msgstr "intr"
+
+msgid "rw/ro"
+msgstr "rw/ro"
+
+msgid "use user/pass"
+msgstr "использовать логин/пароль"
+
+msgid "user"
+msgstr "логин"
+
+msgid "password"
+msgstr "пароль"
+
+msgid "domain"
+msgstr "домен"
+
+msgid "domain name"
+msgstr "имя домена"
+
+msgid "noperm"
+msgstr "noperm"
+
+msgid "noatime"
+msgstr "noatime"
+
+msgid "noserverino"
+msgstr "noserverino"
+
+msgid "nosuid"
+msgstr "nosuid"
+
+msgid "nodev"
+msgstr "nodev"
+
+msgid "rsize"
+msgstr "rsize"
+
+msgid "wsize"
+msgstr "wsize"
+
+msgid "iocharset"
+msgstr "iocharse"
+
+msgid "security"
+msgstr "security"
+
+msgid "used ip"
+msgstr "использовать ip"
+
+msgid "ip"
+msgstr "ip"
+
+msgid "dev"
+msgstr "dev"
+
+msgid "remote directory"
+msgstr "удалить директорию"
+
+msgid "user string"
+msgstr "пользовательская строка"
+
+msgid "Wrong file format!"
+msgstr "Неверный формат файла!"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Erase"
+msgstr "Очистка"
+
+#, python-format
+msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
+msgstr ""
+"Управление Autofs - нажмите %sОК%s для редактирования или нажмите %sМеню%s"
+
+msgid "Edit line"
+msgstr "Изменить строку"
+
+msgid "Add line"
+msgstr "Добавить строку"
+
+msgid "Remove line"
+msgstr "Удалить строку"
+
+msgid "No valid item"
+msgstr "Нет действительных элементов"
+
+msgid "New"
+msgstr "Новый"
+
+#, python-format
+msgid "Really erase record: '%s'?"
+msgstr "Действительно очистить запись: '%s'?"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Mode II"
+msgstr "Режим II"
+
+msgid "Mode III"
+msgstr "Режим III"
+
+msgid "Install autofs with:  opkg install autofs"
+msgstr "Установка autofs с помощью:  opkg install autofs"
+
+msgid "- then edit:"
+msgstr "- - затем отредактируйте:"
+
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr ""
+"/etc/auto.master файл (для этого плагина использовать линии с параметрами "
+"только!)"
+
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
+msgstr "/etc/auto.xxxx - 'xxxx' использовать любое имя"
+
+#, python-format
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr "%sРежим I:%s  (auto.master + один auto.xxxx только)"
+
+msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
+msgstr ""
+"/etc/auto.master - одна запись только, точка монтирования должна быть '/mnt/"
+"net':"
+
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr "/etc/auto.test - 'test' используется как пример:"
+
+msgid ""
+"All remote directories from all devices will be mounted under '/media/net':"
+msgstr "Все директории со всех устройств будут смотнированы в '/media/net':"
+
+msgid "+ only 2 files for whole work"
+msgstr "+ всего 2 файла для всей работы"
+
+msgid "- mount/umount all together"
+msgstr "- монтирование/отмонтирование все вместе"
+
+msgid "- it is not very clear what is what"
+msgstr "- не совсем понятно, что это такое"
+
 msgid "(It has not sense using this mode with this plugin)"
 msgstr "(Не имеет смысла использовать этот режим с этим плагином)"
+
+#, python-format
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr "%sРежим II:%s  (auto.master + больше auto.xxxx файлов)"
+
+msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
+msgstr "auto.master с несколькими записями (не монтировать как '/mnt/net'):"
+
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr "больше auto.xxxx файлов - каждый файл для одной общей директории:"
+
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr "Каждая общая директория имеет точку монтирования в /media:"
+
+msgid "- more auto.xxxx files"
+msgstr "- больше auto.xxxx файлов"
+
+msgid "+ very clear what is what"
+msgstr "+ очень ясно, что есть что"
 
 msgid ""
 "+ can be mounted/umounted independently with uncomment/comment line(s) in "
@@ -37,26 +410,9 @@ msgstr ""
 "+ могут монтироватся/отмонтироватся независимыми комментами строк в auto."
 "master"
 
-msgid "+ only 2 files for whole work"
-msgstr "+ всего 2 файла для всей работы"
-
-msgid "+ very clear what is what"
-msgstr "+ очень ясно, что есть что"
-
-msgid "- it is not very clear what is what"
-msgstr "- не совсем понятно, что это такое"
-
-msgid "- more auto.xxxx files"
-msgstr "- больше auto.xxxx файлов"
-
-msgid "- mount/umount all together"
-msgstr "- монтирование/отмонтирование все вместе"
-
-msgid "- then edit:"
-msgstr "- - затем отредактируйте:"
-
-msgid "-everything else is the same as for II"
-msgstr "-все остальное такое же, как для II"
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr "%sРежим III:%s  (такой же как II)"
 
 msgid "-in auto.xxxx files can be used more lines"
 msgstr "-в файлах auto.xxxx можно использовать больше строк"
@@ -64,321 +420,11 @@ msgstr "-в файлах auto.xxxx можно использовать боль�
 msgid "-useful, if one device sharing more directories"
 msgstr "-полезно, если одно устройство использует несколько директорий"
 
-msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
-msgstr ""
-"/etc/auto.master - одна запись только, точка монтирования должна быть '/mnt/"
-"net':"
-
-msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
-msgstr ""
-"/etc/auto.master файл (для этого плагина использовать линии с параметрами "
-"только!)"
-
-msgid "/etc/auto.test - 'test' used as example:"
-msgstr "/etc/auto.test - 'test' используется как пример:"
-
-msgid "/etc/auto.xxxx - as 'xxxx' use any name"
-msgstr "/etc/auto.xxxx - 'xxxx' использовать любое имя"
-
-msgid "Add"
-msgstr "Добавить"
-
-msgid "Add line"
-msgstr "Добавить строку"
-
-msgid "Add line - "
-msgstr "Добавить строку - "
-
-msgid "All"
-msgstr "Все"
-
-msgid ""
-"All remote directories from all devices will be mounted under '/media/net':"
-msgstr "Все директории со всех устройств будут смотнированы в '/media/net':"
-
-msgid ""
-"Auto.name '%s' was attached to this record.\n"
-"Remove original '%s'?"
-msgstr ""
-"Auto.name '%s' был прикреплен к этой записи.\n"
-"Удалить оригинал '%s'?"
-
-msgid ""
-"Auto.name in record was changed.\n"
-"Do You want rename original '%s' to '%s' too?"
-msgstr ""
-"Auto.name записи было изменено.\n"
-"Вы хотите переименовать оригинал '%s' в '%s' too?"
-
-msgid "Autofs is not installed!"
-msgstr "Autofs не установлен!"
-
-msgid "Close"
-msgstr "Закрыть"
-
-msgid "Disable"
-msgstr "Отключить"
-
-msgid "Done"
-msgstr "Готово"
-
-msgid "Each shared directory has own mounpoint under /media:"
-msgstr "Каждая общая директория имеет точку монтирования в /media:"
-
-msgid "Edit -"
-msgstr "Редактировать -"
-
-msgid "Edit auto file"
-msgstr "Редактировать auto file"
-
-msgid "Edit line"
-msgstr "Изменить строку"
-
-msgid "Edit record:"
-msgstr "Редактировать запись:"
-
-msgid "Enable"
-msgstr "Включить"
-
-msgid "Erase"
-msgstr "Очистка"
-
-msgid "Failed"
-msgstr "Неудачно"
-
-msgid "File '%s' was created!"
-msgstr "Файл '%s' был создан!"
-
-msgid "Help"
-msgstr "Помощь"
-
-msgid "Install autofs"
-msgstr "Установить autofs"
-
-msgid "Install autofs with:  opkg install autofs"
-msgstr "Установка autofs с помощью:  opkg install autofs"
-
-msgid "Manage autofs files and conection"
-msgstr "Управление файлами autofs и соединением"
-
-msgid "Manager Autofs"
-msgstr "Управление Autofs"
-
-msgid "Manager Autofs - create new record"
-msgstr "Управление Autofs - создать новую запись"
-
-msgid "Manager Autofs - edited autofile/record: %s"
-msgstr "Управление Autofs - редактированная autofile/запись: %s"
-
-msgid "Manager Autofs - edited record: %s"
-msgstr "Управление Autofs - редактированная запись: %s"
-
-msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
-msgstr ""
-"Управление Autofs - нажмите %sОК%s для редактирования или нажмите %sМеню%s"
-
-msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
-msgstr ""
-"Управление Autofs в.%s - нажмите %sОК%s для редактирования или нажмите %sМеню"
-"%s"
-
-msgid "Missing '/etc/backup.cfg'"
-msgstr "Отсутствует '/etc/backup.cfg'"
-
-msgid "Mode II"
-msgstr "Режим II"
-
-msgid "Mode III"
-msgstr "Режим III"
-
-msgid "Mountpoint"
-msgstr "Точка монтирования"
-
-msgid "New"
-msgstr "Новый"
-
-msgid "New record"
-msgstr "Новая запись"
-
-msgid "No valid item"
-msgstr "Нет действительных элементов"
-
-msgid "Nothing"
-msgstr "Ничего"
-
-msgid "Ok"
-msgstr "Ол"
-
-msgid "Open AutoBackup plugin"
-msgstr "Открыть плагин AutoBackup"
-
-msgid "Put autoname"
-msgstr "Сделать autoname"
-
-msgid "Put mountpoint name"
-msgstr "Сделать название точки монтирования"
-
-msgid "Really erase record: '%s'?"
-msgstr "Действительно очистить запись: '%s'?"
-
-msgid "Really reload autofs and restart GUI?"
-msgstr "Действительно перезагрузить autofs и выполнить рестарт GUI?"
-
-msgid "Really remove autofile '%s'?"
-msgstr "Действительно удалить auto file '%s'?"
-
-msgid "Record '%s' and its file '%s'"
-msgstr "Запись '%s' и его файл '%s'"
-
-msgid "Record '%s' only"
-msgstr "Запись '%s' только"
-
-msgid "Reload Bookmarks"
-msgstr "Перезагрузка autofs"
-
-msgid "Reload autofs"
-msgstr "Перезагрузка autofs"
-
-msgid "Remove -"
-msgstr "Удалить -"
-
-msgid "Remove line"
-msgstr "Удалить строку"
-
-msgid "Remove record:"
-msgstr "Удалить запись:"
-
-msgid "Remove unused autofs files in AutoBackup"
-msgstr "Удалить неиспользуемые файлы autofs из AutoBackup"
-
-msgid "Remove unused lines from '%s'?"
-msgstr "Удалить неиспользуемые строки из '%s'?"
-
-msgid "Restart autofs with GUI restart"
-msgstr "Рестарт autofs вместе с рестартом GUI"
-
-msgid "Select operation:"
-msgstr "Выбор операции:"
-
-msgid "Update AutoBackup's '%s'?"
-msgstr "Обновить AutoBackup '%s'?"
-
-msgid "Update autofs files in AutoBackup"
-msgstr "Обновление файлов autofs в AutoBackup"
-
-msgid "Utility"
-msgstr "Утилита"
-
-msgid "What all do You want to remove?"
-msgstr "Что вы хотите удалить?"
-
-msgid "Wrong file format!"
-msgstr "Неверный формат файла!"
-
-msgid "auto.file"
-msgstr "auto.file"
-
-msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
-msgstr "auto.master с несколькими записями (не монтировать как '/mnt/net'):"
-
-msgid "auto.name"
-msgstr "auto.name"
-
-msgid "dev"
-msgstr "dev"
-
-msgid "domain"
-msgstr "домен"
-
-msgid "domain name"
-msgstr "имя домена"
-
-msgid "enabled"
-msgstr "включено"
+msgid "-everything else is the same as for II"
+msgstr "-все остальное такое же, как для II"
 
 msgid "example of auto.synology:"
 msgstr "пример из auto.synology:"
 
-msgid "fstype"
-msgstr "fstype"
-
-msgid "ghost"
-msgstr "ghost"
-
-msgid "intr"
-msgstr "intr"
-
-msgid "iocharset"
-msgstr "iocharse"
-
-msgid "ip"
-msgstr "ip"
-
-msgid "local directory"
-msgstr "локальная директория"
-
-msgid "more auto.xxxx files - each file for one shared directory:"
-msgstr "больше auto.xxxx файлов - каждый файл для одной общей директории:"
-
-msgid "mountpoint name"
-msgstr "название точки монтирования"
-
-msgid "no"
-msgstr "нет"
-
-msgid "noatime"
-msgstr "noatime"
-
-msgid "nodev"
-msgstr "nodev"
-
-msgid "noperm"
-msgstr "noperm"
-
-msgid "noserverino"
-msgstr "noserverino"
-
-msgid "nosuid"
-msgstr "nosuid"
-
-msgid "password"
-msgstr "пароль"
-
-msgid "remote directory"
-msgstr "удалить директорию"
-
-msgid "rsize"
-msgstr "rsize"
-
-msgid "rw/ro"
-msgstr "rw/ro"
-
-msgid "security"
-msgstr "security"
-
-msgid "soft"
-msgstr "soft"
-
 msgid "then will be mounted as:"
 msgstr "затем будет смонтирован как:"
-
-msgid "time"
-msgstr "время"
-
-msgid "timeout"
-msgstr "тайм-аут"
-
-msgid "use user/pass"
-msgstr "использовать логин/пароль"
-
-msgid "used ip"
-msgstr "использовать ip"
-
-msgid "user"
-msgstr "логин"
-
-msgid "user string"
-msgstr "пользовательская строка"
-
-msgid "wsize"
-msgstr "wsize"

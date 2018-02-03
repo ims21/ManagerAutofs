@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-29 18:02+0200\n"
+"POT-Creation-Date: 2018-02-03 17:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Ok"
+msgid "Add mountpoint"
 msgstr ""
 
 msgid "Edit auto file"
@@ -57,10 +57,13 @@ msgstr ""
 msgid "Remove record:"
 msgstr ""
 
+msgid "Create new record from:"
+msgstr ""
+
 msgid "Edit -"
 msgstr ""
 
-msgid "Add line - "
+msgid "Add line to -"
 msgstr ""
 
 msgid "Remove -"
@@ -177,6 +180,9 @@ msgstr ""
 msgid "Manager Autofs - create new record"
 msgstr ""
 
+msgid "Ok"
+msgstr ""
+
 msgid "enabled"
 msgstr ""
 
@@ -199,6 +205,19 @@ msgid "Put autoname"
 msgstr ""
 
 msgid "Put mountpoint name"
+msgstr ""
+
+msgid "You cannot use 'master' in auto.file name"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do You want use existing '%s' file?\n"
+"If not then change auto.name."
+msgstr ""
+
+#, python-format
+msgid "Mountpoint name '%s' is used!"
 msgstr ""
 
 msgid "no"
