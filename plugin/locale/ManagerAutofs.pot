@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-03 17:17+0100\n"
+"POT-Creation-Date: 2018-02-09 16:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,6 +135,9 @@ msgid "Open AutoBackup plugin"
 msgstr ""
 
 msgid "Remove unused autofs files in AutoBackup"
+msgstr ""
+
+msgid "Remove backup files"
 msgstr ""
 
 msgid "Install autofs"
@@ -329,6 +332,25 @@ msgstr ""
 
 #, python-format
 msgid "Really erase record: '%s'?"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Inversion"
+msgstr ""
+
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr ""
+
+msgid "Are you sure to remove selected files?"
+msgstr ""
+
+#, python-format
+msgid "Are you sure to remove file '%s'?"
 msgstr ""
 
 msgid "All"

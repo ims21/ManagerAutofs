@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-03 17:31+0100\n"
-"PO-Revision-Date: 2018-02-03 17:32+0100\n"
+"POT-Creation-Date: 2018-02-09 16:46+0100\n"
+"PO-Revision-Date: 2018-02-09 16:49+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -137,6 +137,9 @@ msgstr "Otevřít AutoBackup plugin"
 
 msgid "Remove unused autofs files in AutoBackup"
 msgstr "Odstranit nepoužívané autofs soubory z AutoBackup"
+
+msgid "Remove backup files"
+msgstr "Odstranit záložní soubory"
 
 msgid "Install autofs"
 msgstr "Nainstalovat autofs"
@@ -333,6 +336,27 @@ msgstr "Nový"
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr "Opravdu smazat řádek: '%s'?"
+
+msgid "Cancel"
+msgstr "Zavřít"
+
+msgid "Remove"
+msgstr "Smazat"
+
+msgid "Inversion"
+msgstr "Inverze"
+
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr ""
+"Stiskněte 'Odstranit' na souboru nebo označte soubory pomocí 'OK' a poté "
+"použijte tlačítko 'Odstranit'"
+
+msgid "Are you sure to remove selected files?"
+msgstr "Chcete odstranit vybrané soubory?"
+
+#, python-format
+msgid "Are you sure to remove file '%s'?"
+msgstr "Opravdu smazat soubor: '%s'?"
 
 msgid "All"
 msgstr "Vše"

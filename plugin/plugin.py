@@ -3,7 +3,7 @@
 #
 #  $Id$
 #
-#  Coded by ims (c) 2017
+#  Coded by ims (c) 2017-2018
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -23,6 +23,8 @@ from . import _
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config, ConfigSubsection, ConfigYesNo
 
+plugin_path = None
+
 config.plugins.mautofs = ConfigSubsection()
 config.plugins.mautofs.extended_menu = ConfigYesNo(default = False)
 
@@ -30,7 +32,9 @@ def main(session, **kwargs):
 	import ui
 	session.open(ui.ManagerAutofsMasterSelection)
 
-def Plugins(**kwargs):
+def Plugins(path,**kwargs):
+	global plugin_path
+	plugin_path = path
 	name = _("Manager Autofs")
 	descr = _("Manage autofs files and conection")
 	list = [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc = main)]

@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.60"
+VERSION = "1.65"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -32,6 +32,7 @@ from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
 from Components.PluginComponent import plugins
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
+
 from shutil import copyfile
 import enigma
 import skin
@@ -250,15 +251,15 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append(((_("Add line to -") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["", "", ""]
-		menu.append((_("Help"),13))
+		menu.append((_("Help"),30))
 		buttons += [""]
 		if cfg.extended_menu.value:
 			txt = _("Remove from extended menu")
 		else:
 			txt = _("Add into extended menu")
-		menu.append((txt,14))
+		menu.append((txt,40))
 		buttons += ["blue"]
-		menu.append((_("Utility"),15))
+		menu.append((_("Utility"),50))
 		buttons += ["menu"]
 
 		text = _("Select operation:")
@@ -283,13 +284,13 @@ class ManagerAutofsMasterSelection(Screen):
 				self.addAutofileLine()
 			elif choice[1] == 12:
 				self.removeAutofile()
-			elif choice[1] == 13:
+			elif choice[1] == 30:
 				self.help()
-			elif choice[1] == 14:
+			elif choice[1] == 40:
 				cfg.extended_menu.value = not cfg.extended_menu.value
 				cfg.extended_menu.save()
 				self.refreshPlugins()
-			elif choice[1] == 15:
+			elif choice[1] == 50:
 				self.selectionUtilitySubmenu = 0
 				self.utilitySubmenu()
 			else:
@@ -504,6 +505,9 @@ class ManagerAutofsMasterSelection(Screen):
 			menu.append((_("Open AutoBackup plugin"),1))
 			menu.append((_("Remove unused autofs files in AutoBackup"),2))
 			buttons += ["","2",""]
+		if self.isBackupFile():
+			menu.append((_("Remove backup files"),3))
+			buttons += [""]
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"),12))
 			buttons += ["green"]
@@ -535,6 +539,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.session.openWithCallback(autobackupCallback, Config)
 		elif choice[1] == 2:
 			self.refreshAutoBackup()
+		elif choice[1] == 3:
+			self.removeBackupFiles()
 		elif choice[1] == 10:
 			self.updateAutofs()
 		elif choice[1] == 11:
@@ -551,6 +557,14 @@ class ManagerAutofsMasterSelection(Screen):
 			self.utilitySubmenu()
 		else:
 			return
+
+	def isBackupFile(self):
+		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
+		return len(files)
+
+	def removeBackupFiles(self):
+		from removebckp import ManagerAutofsRemoveBackupFiles
+		self.session.open( ManagerAutofsRemoveBackupFiles)
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):

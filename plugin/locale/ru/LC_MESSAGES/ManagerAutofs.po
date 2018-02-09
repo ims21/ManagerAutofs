@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-03 17:33+0100\n"
-"PO-Revision-Date: 2018-02-03 17:33+0100\n"
+"POT-Creation-Date: 2018-02-09 16:50+0100\n"
+"PO-Revision-Date: 2018-02-09 16:51+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE <Dima-73@inbox.lv>\n"
 "Language: ru\n"
@@ -137,6 +137,9 @@ msgstr "Открыть плагин AutoBackup"
 
 msgid "Remove unused autofs files in AutoBackup"
 msgstr "Удалить неиспользуемые файлы autofs из AutoBackup"
+
+msgid "Remove backup files"
+msgstr ""
 
 msgid "Install autofs"
 msgstr "Установить autofs"
@@ -332,6 +335,25 @@ msgstr "Новый"
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr "Действительно очистить запись: '%s'?"
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Inversion"
+msgstr ""
+
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr ""
+
+msgid "Are you sure to remove selected files?"
+msgstr ""
+
+#, python-format
+msgid "Are you sure to remove file '%s'?"
+msgstr ""
 
 msgid "All"
 msgstr "Все"
