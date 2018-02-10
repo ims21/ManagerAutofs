@@ -149,7 +149,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Remove"))
-		self["key_yellow"] = Button()
+#		self["key_yellow"] = Button()
 		self["key_blue"] = Button(_("Inversion"))
 
 		self["text"].setText(_("Press 'Remove' on file or mark files with OK and then use 'Remove'"))
