@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.66"
+VERSION = "1.68"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -32,6 +32,8 @@ from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
 from Components.PluginComponent import plugins
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
+from Components.Sources.Boolean import Boolean
+from Components.Sources.StaticText import StaticText
 
 from shutil import copyfile
 import enigma
@@ -80,10 +82,10 @@ _X_ = "%sx%s" % (gC,fC)
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
 		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,485" backgroundColor="#00000000">
-			<widget name="h_red" pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
-			<widget name="h_green" pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
-			<widget name="h_yellow" pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
-			<widget name="h_blue" pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
+			<widget name="red" pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
+			<widget name="green" pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
+			<widget name="yellow" pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
+			<widget name="blue" pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
 			<widget  name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
 			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
@@ -145,10 +147,10 @@ class ManagerAutofsMasterSelection(Screen):
 		self["key_green"] = Button(_("Add mountpoint"))
 		self["key_yellow"] = Button(_("Edit auto file"))
 		self["key_blue"] = Button()
-		self["h_red"] = Pixmap()
-		self["h_green"] = Pixmap()
-		self["h_yellow"] = Pixmap()
-		self["h_blue"] = Pixmap()
+		self["red"] = Pixmap()
+		self["green"] = Pixmap()
+		self["yellow"] = Pixmap()
+		self["blue"] = Pixmap()
 
 		self.msgNM=None
 		self.selectionUtilitySubmenu = 0
@@ -654,16 +656,21 @@ class ManagerAutofsMasterSelection(Screen):
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	skin = """
 		<screen position="center,center" size="560,220">
-			<widget name="h_red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-			<widget name="h_green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-			<widget name="h_yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
-			<widget name="h_blue" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<widget name="yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
+			<widget objectTypes="key_blue,StaticText" source="key_blue" render="Pixmap" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on">
+				<convert type="ConditionalShowHide"/>
+			</widget>
 			<widget  name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
 			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
-			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
+			<widget source="key_blue" render="Label" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
 			<widget name="text" position="5,40" size="550,20" font="Regular;16" halign="left" valign="center"/>
-			<widget name="config" position="5,65" size="550,150" scrollbarMode="showOnDemand"/>
+			<widget name="config" position="5,65" size="550,125" scrollbarMode="showOnDemand"/>
+			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,200" zPosition="10" size="35,25" transparent="1" alphatest="on">
+				<convert type="ConditionalShowHide"/>
+			</widget>
 		</screen>"""
 
 	def __init__(self, session, pars, master):
@@ -686,12 +693,12 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
-		self["key_blue"] = Button()
+		self["key_blue"] = StaticText()
 
-		self["h_red"] = Pixmap()
-		self["h_green"] = Pixmap()
-		self["h_blue"] = Pixmap()
-		self["h_blue"].hide()
+		self["red"] = Pixmap()
+		self["green"] = Pixmap()
+		self["blue"] = Pixmap()
+		self["VKeyIcon"] = Boolean(False)
 
 		self.list = [ ]
 		self.onChangedEntry = [ ]
@@ -801,10 +808,6 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			self.createConfig()
 
 	def blueText(self, text):
-		if text:
-			self["h_blue"].show()
-		else:
-			self["h_blue"].hide()
 		self["key_blue"].setText(text)
 
 	def existMountPoint(self, mountpoint):
@@ -893,17 +896,16 @@ config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
-		<screen position="center,center" size="560,520">
-			<widget name="h_red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-			<widget name="h_green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-			<widget name="h_yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
-			<widget name="h_blue" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
-			<widget  name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
-			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
-			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
-			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
+		<screen position="center,center" size="560,495">
+			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<widget name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
+			<widget name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget name="text" position="5,42" size="550,56" font="Regular;14" halign="left" valign="center"/>
-			<widget name="config" position="5,100" size="550,400" scrollbarMode="showOnDemand"/>
+			<widget name="config" position="5,100" size="550,375" scrollbarMode="showOnDemand"/>
+			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,475" zPosition="10" size="35,25" transparent="1" alphatest="on">
+				<convert type="ConditionalShowHide"/>
+			</widget>
 		</screen>"""
 
 	def __init__(self, session, filename, line, new=False):
@@ -917,8 +919,9 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
-		self["h_red"] = Pixmap()
-		self["h_green"] = Pixmap()
+		self["red"] = Pixmap()
+		self["green"] = Pixmap()
+		self["VKeyIcon"] = Boolean(False)
 		
 		self.list = [ ]
 		self.onChangedEntry = [ ]
@@ -1161,14 +1164,14 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
 		<screen name="ManagerAutofsMultiAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
-			<widget name="h_red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
-			<widget name="h_green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-			<widget name="h_yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
-			<widget name="h_blue" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
-			<widget  name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
-			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
-			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
-			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
+			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
+			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<widget name="yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
+			<widget name="blue" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on" />
+			<widget name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
+			<widget name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
+			<widget name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
+			<widget name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
 			<widget source="list" render="Listbox" position="5,40" size="670,320" backgroundColor="#00000000" scrollbarMode="showOnDemand">
 				<convert type="TemplatedMultiContent">
 				{"templates":
@@ -1210,10 +1213,10 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self["key_green"] = Label("Ok")
 		self["key_yellow"] = Label(_("Add"))
 		self["key_blue"] = Label(_("Erase"))
-		self["h_red"] = Pixmap()
-		self["h_green"] = Pixmap()
-		self["h_yellow"] = Pixmap()
-		self["h_blue"] = Pixmap()
+		self["red"] = Pixmap()
+		self["green"] = Pixmap()
+		self["yellow"] = Pixmap()
+		self["blue"] = Pixmap()
 
 		self["text"] = Label("")
 
