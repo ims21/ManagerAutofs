@@ -1013,8 +1013,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string = cfg.localdir.value
 		string += " "
 		string += "-"
-		string += "fstype=%s," % cfg.fstype.value if cfg.fstype.value != "" else ""
-		string += "%s," % cfg.rw.value if cfg.rw.value else ""
+		string += ("fstype=%s," % cfg.fstype.value) if cfg.fstype.value != "" else ""
+		string += ("%s," % cfg.rw.value) if cfg.rw.value else ""
 		string += "soft," if cfg.soft.value else ""
 		string += "intr," if cfg.intr.value else ""
 		string += ("user=%s," % cfg.user.value) if cfg.useduserpass.value else ""
@@ -1029,7 +1029,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("wsize=%s," % cfg.wsize.value) if cfg.wsize.value else ""
 		string += ("iocharset=%s," % cfg.iocharset.value) if cfg.iocharset.value else ""
 		string += ("sec=%s," % cfg.sec.value) if cfg.sec.value else ""
-		string += "vers=%s," % cfg.smb.value if cfg.smb.value != "" and cfg.fstype.value == "cifs" else ""
+		string += ("vers=%s," % cfg.smb.value) if cfg.smb.value != "" and cfg.fstype.value == "cifs" else ""
 		string += ("%s,") % cfg.rest.value if cfg.rest.value else ""
 		string = string.rstrip(',')
 		string += " "
