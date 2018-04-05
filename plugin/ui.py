@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.68"
+VERSION = "1.69"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -891,6 +891,7 @@ config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
 config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("","no"),("dev","dev") ]))
 
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
+config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("","1.0"),("2.0","2.0"),("3.0","3.0")]))
 #user defined string
 config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
 
@@ -991,6 +992,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
 		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
+		if cfg.fstype.value == "cifs":
+			self.list.append(getConfigListEntry(_("smb version"), cfg.smb))
 		self.list.append(getConfigListEntry(_("user string"), cfg.rest))
 
 		self["config"].list = self.list
@@ -1026,6 +1029,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("wsize=%s," % cfg.wsize.value) if cfg.wsize.value else ""
 		string += ("iocharset=%s," % cfg.iocharset.value) if cfg.iocharset.value else ""
 		string += ("sec=%s," % cfg.sec.value) if cfg.sec.value else ""
+		string += "vers=%s," % cfg.smb.value if cfg.smb.value != "" and cfg.fstype.value == "cifs" else ""
 		string += ("%s,") % cfg.rest.value if cfg.rest.value else ""
 		string = string.rstrip(',')
 		string += " "
@@ -1070,6 +1074,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.ip.value = cfg.ip.default
 		cfg.dev.value = cfg.dev.default
 		cfg.remotedir.value = cfg.remotedir.default
+		cfg.smb.value = cfg.smb.default
 		cfg.rest.value = cfg.rest.default
 
 	def prepareOff(self):
@@ -1095,6 +1100,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			for x in parts[1].split(','):
 				if "fstype" in x:
 					cfg.fstype.value=x.split('=')[1]
+				elif "vers" in x:
+					cfg.smb.value=x.split('=')[1]
 				elif "user" in x:
 					cfg.useduserpass.value = True # rozmyslet!
 					cfg.user.value=x.split('=')[1]
