@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.69"
+VERSION = "1.70"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -81,7 +81,7 @@ _X_ = "%sx%s" % (gC,fC)
 
 class ManagerAutofsMasterSelection(Screen):
 	skin = """
-		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,485" backgroundColor="#00000000">
+		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,485">
 			<widget name="red" pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
 			<widget name="green" pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on"/>
 			<widget name="yellow" pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on"/>
@@ -90,7 +90,7 @@ class ManagerAutofsMasterSelection(Screen):
 			<widget  name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget  name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
 			<widget  name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
-			<widget source="list" render="Listbox" position="5,60" size="650,375" backgroundColor="#00000000" scrollbarMode="showOnDemand">
+			<widget source="list" render="Listbox" position="5,60" size="650,375" scrollbarMode="showOnDemand">
 				<convert type="TemplatedMultiContent">
 				{"templates":
 					{"default": (25,[
@@ -104,11 +104,11 @@ class ManagerAutofsMasterSelection(Screen):
 				}
 				</convert>
 			</widget>
-			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
-			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" backgroundColor="#00000000" halign="left" valign="center" zPosition="1"/>
-			<widget name="text" position="55,435" zPosition="10" size="560,25" font="Regular;22" backgroundColor="#00000000" halign="left" valign="center"/>
-			<widget name="status" position="55,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
-			<widget name="statusbar" position="355,460" zPosition="10" size="300,20" font="Regular;18" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
+			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
+			<widget name="text" position="55,435" zPosition="10" size="560,25" font="Regular;22" halign="left" valign="center"/>
+			<widget name="status" position="55,460" zPosition="10" size="300,20" font="Regular;18" halign="left" valign="center"/>
+			<widget name="statusbar" position="355,460" zPosition="10" size="300,20" font="Regular;18" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session):
@@ -671,6 +671,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,200" zPosition="10" size="35,25" transparent="1" alphatest="on">
 				<convert type="ConditionalShowHide"/>
 			</widget>
+			<!--widget name="HelpWindow" position="160,400" size="0,0"/-->
 		</screen>"""
 
 	def __init__(self, session, pars, master):
@@ -698,6 +699,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
 		self["blue"] = Pixmap()
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
 
 		self.list = [ ]
@@ -907,6 +910,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,475" zPosition="10" size="35,25" transparent="1" alphatest="on">
 				<convert type="ConditionalShowHide"/>
 			</widget>
+			<!--widget name="HelpWindow" position="160,300" size="0,0"/-->
 		</screen>"""
 
 	def __init__(self, session, filename, line, new=False):
@@ -922,6 +926,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self["key_green"] = Button(_("Ok"))
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
 		
 		self.list = [ ]
@@ -1170,7 +1176,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
-		<screen name="ManagerAutofsMultiAutoEdit" position="center,center" size="680,400" backgroundColor="#00000000">
+		<screen name="ManagerAutofsMultiAutoEdit" position="center,center" size="680,400">
 			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
 			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
 			<widget name="yellow" position="280,0" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on" />
@@ -1179,7 +1185,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			<widget name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
 			<widget name="key_yellow" position="280,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="yellow" font="Regular;20" transparent="1"/>
 			<widget name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
-			<widget source="list" render="Listbox" position="5,40" size="670,320" backgroundColor="#00000000" scrollbarMode="showOnDemand">
+			<widget source="list" render="Listbox" position="5,40" size="670,320" scrollbarMode="showOnDemand">
 				<convert type="TemplatedMultiContent">
 				{"templates":
 					{"default": (40,[
@@ -1192,7 +1198,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				}
 				</convert>
 			</widget>
-			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" backgroundColor="#00000000" halign="left" valign="center"/>
+			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" halign="left" valign="center"/>
 		</screen>"""
 
 	def __init__(self, session, name = None):
