@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.70"
+VERSION = "1.71"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -24,14 +24,17 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.Button import Button
 from Components.Label import Label
-from Components.ActionMap import ActionMap
+from Components.ActionMap import ActionMap, HelpableActionMap
+from Screens.HelpMenu import HelpableScreen
+from Components.SelectionList import SelectionList
 from Components.ConfigList import ConfigListScreen
 from Components.config import config, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
 from Components.PluginComponent import plugins
-from Tools.Directories import SCOPE_PLUGINS, resolveFilename
+from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN
+from Tools.LoadPixmap import LoadPixmap
 from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
 
@@ -522,6 +525,8 @@ class ManagerAutofsMasterSelection(Screen):
 			buttons += ["","4"]
 		menu.append((space + _("Reload Bookmarks"),100))
 		buttons += [""]
+		menu.append((space + _("Clear bookmarks..."),110))
+		buttons += [""]
 
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
@@ -554,6 +559,8 @@ class ManagerAutofsMasterSelection(Screen):
 			self.installAutofs()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
+		elif choice[1] == 110:
+			self.session.open(ManagerAutofsClearBookmarks)
 		elif choice[1] == 1000:
 			self.selectionUtilitySubmenu += 1 # jump to next item
 			self.utilitySubmenu()
@@ -1361,6 +1368,123 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.refreshText()
 
 	def keyCancel(self):
+		self.close()
+
+class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
+	skin="""
+	<screen name="ManagerAutofs" position="center,center" size="600,390" title="List of bookmarks">
+		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
+		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
+		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
+		<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on"/>
+		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="config" position="5,50" zPosition="2" size="590,300" foregroundColor="white" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,355" zPosition="2" size="590,2"/>
+		<widget name="description" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
+	</screen>
+	"""
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		HelpableScreen.__init__(self)
+		self.skinName = ["ManagerAutofsAutoEdit", "Setup"]
+		self.session = session
+
+		self.setTitle(_("List of bookmarks"))
+		self.original_selectionpng = None
+		self.changePng()
+
+		self.list = SelectionList([])
+		index = 0
+		self.loadAllMovielistVideodirs()
+		for bookmark in eval(config.movielist.videodirs.saved_value):
+			self.list.addSelection(bookmark, bookmark, index, False)
+			index += 1
+		self["config"] = self.list
+
+		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
+			{
+			"cancel": (self.exit, _("Close")),
+			"ok": (self.list.toggleSelection, _("Add or remove item of selection")),
+			})
+		self["ManagerAutofsActions"] = HelpableActionMap(self, "ColorActions",
+			{
+			"red": (self.exit, _("Close")),
+			"green": (self.deleteSelected, _("Delete selected")),
+			"yellow": (self.sortList, _("Sort list")),
+			"blue": (self.list.toggleAllSelection, _("Invert selection")),
+			}, -2)
+
+		self["key_red"] = Button(_("Cancel"))
+		self["key_green"] = Button(_("Delete"))
+		self["key_yellow"] = Button(_("Sort"))
+		self["key_blue"] = Button(_("Inversion"))
+
+		self.sort = 0
+		self["description"] = Label(_("Select with 'OK' and then remove with 'Delete'."))
+		self["config"].onSelectionChanged.append(self.bookmark)
+
+	def loadAllMovielistVideodirs(self):
+		sv = config.movielist.videodirs.saved_value
+		tmp = eval(sv)
+		locations = [[x, None, False, False] for x in tmp]
+		for x in locations:
+			x[1] = x[0]
+			x[2] = True
+		config.movielist.videodirs.locations = locations
+
+	def bookmark(self):
+		item = self["config"].getCurrent()
+		if item:
+			text = "%s" % item[0][0]
+			self["description"].setText(text)
+
+	def sortList(self):
+		if self.sort == 0:	# z-a
+			self.list.sort(sortType=0, flag=True)
+			self.sort += 1
+		elif self.sort == 1 and len(self.list.getSelectionsList()):	# selected top
+			self.list.sort(sortType=3, flag=True)
+			self.sort += 1
+		else:			# a-z
+			self.list.sort(sortType=0)
+			self.sort = 0
+
+	def deleteSelected(self):
+		if self["config"].getCurrent():
+			selected = len(self.list.getSelectionsList())
+			if not selected:
+				selected = 1
+			self.session.openWithCallback(self.delete, MessageBox, _("Are You sure to delete %s selected bookmark(s)?") % selected, type=MessageBox.TYPE_YESNO, default=False)
+
+	def delete(self, choice):
+		if choice:
+			bookmarks = config.movielist.videodirs.value
+			data = self.list.getSelectionsList()
+			selected = len(data)
+			if not selected:
+				data = [self["config"].getCurrent()[0]]
+				selected = 1
+			for item in data:
+				# item ... (name, name, index, status)
+				self.list.removeSelection(item)
+				bookmarks.remove(item[0])
+			config.movielist.videodirs.value = bookmarks
+			config.movielist.videodirs.save()
+
+	def changePng(self):
+		path = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/mark_select.png")
+		if os.path.exists(path):
+			import Components.SelectionList
+			self.original_selectionpng = Components.SelectionList.selectionpng
+			Components.SelectionList.selectionpng = LoadPixmap(cached=True, path=path)
+
+	def exit(self):
+		if self.original_selectionpng:
+			import Components.SelectionList
+			Components.SelectionList.selectionpng = self.original_selectionpng
 		self.close()
 
 class NonModalMessageBoxDialog(Screen):
