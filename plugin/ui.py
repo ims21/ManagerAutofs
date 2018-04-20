@@ -1389,7 +1389,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
-		self.skinName = ["ManagerAutofsAutoEdit", "Setup"]
+		self.skinName = ["ManagerAutofsRemoveBackupFiles", "Setup"]
 		self.session = session
 
 		self.setTitle(_("List of bookmarks"))
