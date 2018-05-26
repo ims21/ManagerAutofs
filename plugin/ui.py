@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.71"
+VERSION = "1.72"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -1397,11 +1397,11 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		self.changePng()
 
 		self.list = SelectionList([])
-		index = 0
-		self.loadAllMovielistVideodirs()
-		for bookmark in eval(config.movielist.videodirs.saved_value):
-			self.list.addSelection(bookmark, bookmark, index, False)
-			index += 1
+		if self.loadAllMovielistVideodirs():
+			index = 0
+			for bookmark in eval(config.movielist.videodirs.saved_value):
+				self.list.addSelection(bookmark, bookmark, index, False)
+				index += 1
 		self["config"] = self.list
 
 		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
@@ -1427,13 +1427,16 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		self["config"].onSelectionChanged.append(self.bookmark)
 
 	def loadAllMovielistVideodirs(self):
-		sv = config.movielist.videodirs.saved_value
-		tmp = eval(sv)
-		locations = [[x, None, False, False] for x in tmp]
-		for x in locations:
-			x[1] = x[0]
-			x[2] = True
-		config.movielist.videodirs.locations = locations
+		if config.movielist.videodirs.saved_value:
+			sv = config.movielist.videodirs.saved_value
+			tmp = eval(sv)
+			locations = [[x, None, False, False] for x in tmp]
+			for x in locations:
+				x[1] = x[0]
+				x[2] = True
+			config.movielist.videodirs.locations = locations
+			return True
+		return False
 
 	def bookmark(self):
 		item = self["config"].getCurrent()
