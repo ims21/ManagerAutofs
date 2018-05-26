@@ -129,7 +129,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 		nr = 0
 		for x in os.listdir("/etc"):
 			if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$")):
-				data.addSelection(x, "/etc/%s" % x, nr, False)
+				data.list.append(MySelectionEntryComponent(x, "/etc/%s" % x, nr, False))
 				nr += 1
 
 		self.list = data
