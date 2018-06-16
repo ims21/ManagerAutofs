@@ -261,25 +261,20 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if self.edit:
 			if self.idx -1 < 0:
 				return
-			self["list"].setIndex(self.idx)
-			tmp = self["list"].getCurrent()
-			self["list"].setIndex(self.idx-1)
-			tmp2 = self["list"].getCurrent()
-			self["list"].modifyEntry(self.idx, tmp2)
-			self["list"].modifyEntry(self.idx-1, tmp)
-			self.idx-=1
-			self.changes = True
+			self.moveDirection(-1)
 	def moveDown(self):
 		if self.edit:
 			if self.idx +1 >= self["list"].count():
 				return
+			self.moveDirection(1)
+	def moveDirection(self, direction):
 			self["list"].setIndex(self.idx)
 			tmp = self["list"].getCurrent()
-			self["list"].setIndex(self.idx+1)
+			self["list"].setIndex(self.idx+direction)
 			tmp2 = self["list"].getCurrent()
 			self["list"].modifyEntry(self.idx, tmp2)
-			self["list"].modifyEntry(self.idx+1, tmp)
-			self.idx+=1
+			self["list"].modifyEntry(self.idx+direction, tmp)
+			self.idx+=direction
 			self.changes = True
 
 	def help(self):
