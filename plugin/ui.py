@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.72"
+VERSION = "1.73"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -82,7 +82,7 @@ bC = "\c%s" % hex2strColor(int(skin.parseColor("#000080ff").argb()))
 
 _X_ = "%sx%s" % (gC,fC)
 
-class ManagerAutofsMasterSelection(Screen):
+class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
 		<screen name="ManagerAutofsMasterSelection" position="center,center" size="660,485">
 			<widget name="red" pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on"/>
@@ -116,6 +116,7 @@ class ManagerAutofsMasterSelection(Screen):
 
 	def __init__(self, session):
 		Screen.__init__(self, session)
+		HelpableScreen.__init__(self)
 		self.session = session
 
 		self.data = ''
@@ -129,17 +130,28 @@ class ManagerAutofsMasterSelection(Screen):
 		self["autofile"] = Label(_("auto.file"))
 		self["text"] = Label()
 
-		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions","HelpActions"],
-		{
-			"ok": self.editMasterRecord,
-			"cancel": self.keyClose,
-			"red": self.keyClose,
-			"green": self.addMasterRecord,
-			"blue": self.changeMasterRecordStatus,
-			"yellow": self.editAutofile,
-			"menu": self.menu,
-			"displayHelp": self.help,
-		}, -1)
+		self["ManagerAutofsActions"] = HelpableActionMap(self, ["SetupActions","ColorActions","MenuActions"],
+			{
+			"ok":		(self.editMasterRecord,	_("Edit mountpoint")),
+			"cancel":	(self.keyClose, _("Close")),
+			"red":		(self.keyClose, _("Close")),
+			"green":	(self.addMasterRecord, _("Add mountpoint")),
+			"blue":		(self.changeMasterRecordStatus, _("Enable/disable mountpoint")),
+			"yellow":	(self.editAutofile, _("Edit auto file")),
+			"menu":		(self.menu, _("Menu")),
+			}, -1)
+		self["ManagerAutofsEditActions"] = HelpableActionMap(self, ["DirectionActions","NumberActions"],
+			{
+			"moveUp":	(self.moveUp, _("Move item up")),
+			"moveDown":	(self.moveDown, _("Move item down")),
+			"0": 		(self.startMoving, _("Enable/disable moving item")),
+			}, -1)
+		self.edit = 0
+		self.idx = 0
+		self.changes = False
+		self["h_prev"] = Pixmap()
+		self["h_next"] = Pixmap()
+		self.showPrevNext()
 
 		self.list = []
 		self["list"] = List(self.list)
@@ -233,6 +245,42 @@ class ManagerAutofsMasterSelection(Screen):
 		self.saveMasterFile()
 		self.updateAutofs()
 		self.close()
+
+	def startMoving(self):
+		self.edit = not self.edit
+		self.idx = self["list"].getIndex()
+		self.showPrevNext()
+	def showPrevNext(self):
+		if self.edit:
+			self["h_prev"].show()
+			self["h_next"].show()
+		else:
+			self["h_prev"].hide()
+			self["h_next"].hide()
+	def moveUp(self):
+		if self.edit:
+			if self.idx -1 < 0:
+				return
+			self["list"].setIndex(self.idx)
+			tmp = self["list"].getCurrent()
+			self["list"].setIndex(self.idx-1)
+			tmp2 = self["list"].getCurrent()
+			self["list"].modifyEntry(self.idx, tmp2)
+			self["list"].modifyEntry(self.idx-1, tmp)
+			self.idx-=1
+			self.changes = True
+	def moveDown(self):
+		if self.edit:
+			if self.idx +1 >= self["list"].count():
+				return
+			self["list"].setIndex(self.idx)
+			tmp = self["list"].getCurrent()
+			self["list"].setIndex(self.idx+1)
+			tmp2 = self["list"].getCurrent()
+			self["list"].modifyEntry(self.idx, tmp2)
+			self["list"].modifyEntry(self.idx+1, tmp)
+			self.idx+=1
+			self.changes = True
 
 	def help(self):
 		self.session.open(ManagerAutofsHelp)

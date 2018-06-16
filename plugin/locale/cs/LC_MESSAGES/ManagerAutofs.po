@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-20 11:27+0200\n"
-"PO-Revision-Date: 2018-04-20 11:27+0200\n"
+"POT-Creation-Date: 2018-06-16 10:08+0200\n"
+"PO-Revision-Date: 2018-06-16 10:10+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -26,14 +26,32 @@ msgstr "Bod připojení"
 msgid "auto.file"
 msgstr "Soubor auto"
 
+msgid "Edit mountpoint"
+msgstr "Upravit bod připojení"
+
 msgid "Close"
 msgstr "Zavřít"
 
 msgid "Add mountpoint"
 msgstr "Přidat bod připojení"
 
+msgid "Enable/disable mountpoint"
+msgstr "Povolit/zakázat bod připojení"
+
 msgid "Edit auto file"
 msgstr "Upravit auto soubor"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "Move item up"
+msgstr "Přesun položky nahoru"
+
+msgid "Move item down"
+msgstr "Přesun položky dolů"
+
+msgid "Enable/disable moving item"
+msgstr "Povolit/zakázat přesun položky"
 
 #, python-format
 msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
