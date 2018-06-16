@@ -258,14 +258,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self["h_prev"].hide()
 			self["h_next"].hide()
 	def moveUp(self):
-		if self.edit:
-			if self.idx -1 < 0:
-				return
+		if self.edit and self.idx -1 >= 0:
 			self.moveDirection(-1)
 	def moveDown(self):
-		if self.edit:
-			if self.idx +1 >= self["list"].count():
-				return
+		if self.edit and self.idx +1 < self["list"].count():
 			self.moveDirection(1)
 	def moveDirection(self, direction):
 			self["list"].setIndex(self.idx)
