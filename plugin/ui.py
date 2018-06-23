@@ -74,7 +74,7 @@ except:
 try:
 	fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 except:
-	fC = "\c%s" % hex2strColor(int(skin.parseColor("#00ffffff").argb()))
+	fC = "\c%s" % hex2strColor(int(skin.parseColor("#00f0f0f0").argb()))
 
 greyC = "\c%s" % hex2strColor(int(skin.parseColor("#00a0a0a0").argb()))
 gC = "\c%s" % hex2strColor(int(skin.parseColor("#0000ff80").argb()))
