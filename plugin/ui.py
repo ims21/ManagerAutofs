@@ -70,15 +70,15 @@ def hex2strColor(argb):
 try:
 	yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
 except:
-	yC = "\c%s" % hex2strColor(int(skin.parseColor("#00fcc000").argb()))
+	yC = "\c%s" % hex2strColor(0x00fcc000)
 try:
 	fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
 except:
-	fC = "\c%s" % hex2strColor(int(skin.parseColor("#00f0f0f0").argb()))
+	fC = "\c%s" % hex2strColor(0x00f0f0f0)
 
-greyC = "\c%s" % hex2strColor(int(skin.parseColor("#00a0a0a0").argb()))
-gC = "\c%s" % hex2strColor(int(skin.parseColor("#0000ff80").argb()))
-bC = "\c%s" % hex2strColor(int(skin.parseColor("#000080ff").argb()))
+greyC = "\c%s" % hex2strColor(0x00a0a0a0)
+gC = "\c%s" % hex2strColor(0x0000ff80)
+bC = "\c%s" % hex2strColor(0x000080ff)
 
 _X_ = "%sx%s" % (gC,fC)
 
