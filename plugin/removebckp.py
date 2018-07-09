@@ -170,7 +170,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 					os.unlink(i[1])
 					self.list.removeSelection(i)
 			else:
-				os.unlink(i[1])
+				os.unlink(self["config"].getCurrent()[0][1])
 				self.list.removeSelection(self["config"].getCurrent()[0])
 		if not self.list.len():
 			self.exit()
