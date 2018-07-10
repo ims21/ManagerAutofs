@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 10:08+0200\n"
-"PO-Revision-Date: 2018-06-16 10:10+0200\n"
+"POT-Creation-Date: 2018-07-10 10:03+0200\n"
+"PO-Revision-Date: 2018-07-10 10:28+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 
 msgid "Manager Autofs"
-msgstr ""
+msgstr "Manager Autofs"
 
 msgid "Manage autofs files and conection"
 msgstr "Upravuje soubory Autofs a připojení"
@@ -215,16 +215,16 @@ msgid "mountpoint name"
 msgstr "bod připojení"
 
 msgid "auto.name"
-msgstr ""
+msgstr "auto.name"
 
 msgid "ghost"
-msgstr ""
+msgstr "iocharset"
 
 msgid "timeout"
-msgstr ""
+msgstr "timeout"
 
 msgid "time"
-msgstr ""
+msgstr "time"
 
 msgid "Put autoname"
 msgstr "Vložit auto.name"
@@ -258,16 +258,16 @@ msgid "local directory"
 msgstr "místní adresář"
 
 msgid "fstype"
-msgstr ""
+msgstr "fstype"
 
 msgid "soft"
-msgstr ""
+msgstr "soft"
 
 msgid "intr"
-msgstr ""
+msgstr "fstype"
 
 msgid "rw/ro"
-msgstr ""
+msgstr "rw/ro"
 
 msgid "use user/pass"
 msgstr "uživatel/heslo"
@@ -282,43 +282,43 @@ msgid "domain"
 msgstr "doména"
 
 msgid "domain name"
-msgstr ""
+msgstr "domain name"
 
 msgid "noperm"
-msgstr ""
+msgstr "noperm"
 
 msgid "noatime"
-msgstr ""
+msgstr "noatime"
 
 msgid "noserverino"
-msgstr ""
+msgstr "noserverino"
 
 msgid "nosuid"
-msgstr ""
+msgstr "nosuid"
 
 msgid "nodev"
-msgstr ""
+msgstr "nodev"
 
 msgid "rsize"
-msgstr ""
+msgstr "rsize"
 
 msgid "wsize"
-msgstr ""
+msgstr "wsize"
 
 msgid "iocharset"
-msgstr ""
+msgstr "iocharset"
 
 msgid "security"
-msgstr ""
+msgstr "security"
 
 msgid "used ip"
 msgstr "použít IP"
 
 msgid "ip"
-msgstr ""
+msgstr "IP"
 
 msgid "dev"
-msgstr ""
+msgstr "dev"
 
 msgid "remote directory"
 msgstr "sdílený adresář"
@@ -503,6 +503,66 @@ msgstr "příklad pro auto.synology:"
 
 msgid "then will be mounted as:"
 msgstr "bude připojeno jako:"
+
+#, python-format
+msgid ""
+"After change parameters in auto.file is better use %s'Restart autofs with "
+"GUI restart'%s there in 'Menu-Utility'"
+msgstr ""
+"Po změnách parametrů v auto.souboru je lepší použít %s'Restartovat autofs a "
+"enigma'%s v 'Menu-Nástroje'"
+
+#, python-format
+msgid "%sConnect to Win7,8,10 shared folder:%s"
+msgstr "%sPřipojení ke sdílenému adresáři Win7,8,10:%s"
+
+msgid "PC side:"
+msgstr "Strana PC:"
+
+#, python-format
+msgid ""
+"-on directory press right mouse, select %s'Properties'%s and use bookmark "
+"%s'Sharing'%s"
+msgstr ""
+"-na složce stiskněte pravé tlačítko myši, zvolte %s'Vlastnosti'%s a vyberte "
+"záložku %s'Sdílení'%s"
+
+#, python-format
+msgid ""
+"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr ""
+"-stiskněte tlačítko %s'Rozšířené možnosti sdílení...'%s a zaškrtněte "
+"%s'Sdílet tuto složku'%s"
+
+#, python-format
+msgid "-can be changed %s'Shared name'%s too"
+msgstr "-můžete změnit %s'Název sdílené složky'%s"
+
+#, python-format
+msgid ""
+"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
+"with enabled %s'Change'%s and %s'Read'%s"
+msgstr ""
+"-stiskněte tlačítko %s'Oprávnění'%s a zkontrolujte, jestli zde existuje "
+"%s'Everyone'%s s povoleným %s'Změnit'%s a %s'Číst'%s"
+
+msgid "Box side:"
+msgstr "Strana přijímače:"
+
+#, python-format
+msgid ""
+"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr ""
+"- pod %s'uživatel/heslo'%s musí být použit platný %s'uživatel'%s a "
+"%s'heslo'%s z PC"
+
+#, python-format
+msgid ""
+"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
+"%s'2.0'%s"
+msgstr ""
+"- pro %s'cifs'%s fstype a Win10 musí být %s'smb version'%s nastavena "
+"minimálně na %s'2.0'%s"
 
 #~ msgid "Exit plugin"
 #~ msgstr "Zavřít plugin"

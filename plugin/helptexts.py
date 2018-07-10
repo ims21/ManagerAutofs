@@ -58,7 +58,7 @@ class ManagerAutofsHelp(Screen):
 	def mode3(self):
 		self["HelpText"].setText(self.mode3txt())
 	def all(self):
-		self["HelpText"].setText(self.prolog() + self.mode1txt() + self.mode2txt() + self.mode3txt())
+		self["HelpText"].setText(self.prolog() + self.mode1txt() + self.mode2txt() + self.mode3txt() + self.commontxt() + self.modeWintxt())
 
 	def prolog(self):
 		text = _("Install autofs with:  opkg install autofs") + "\n\n"
@@ -68,17 +68,17 @@ class ManagerAutofsHelp(Screen):
 		return text
 
 	def mode1txt(self):
-		text = _("%sMode I:%s  (auto.master + one auto.xxxx only)") % (ui.yC,ui.fC) + "\n\n"
+		text = _("%sMode I:%s  (auto.master + one auto.xxxx only)") % self.yellow() + "\n\n"
 		text += _("/etc/auto.master - one record only, mountpoint must be '/mnt/net':") + "\n"
-		text += 4*" " + ("%s/mnt/net /etc/auto.test --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%s/mnt/net /etc/auto.test --ghost%s") % self.grey() + "\n\n"
 		text += _("/etc/auto.test - 'test' used as example:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text +=	4*" " + ("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text +=	4*" " + ("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % self.grey() + "\n"
+		text +=	4*" " + ("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n"
+		text +=	4*" " + ("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
 		text += _("All remote directories from all devices will be mounted under '/media/net':") + "\n"
-		text += 4*" " + ("%s/media/net/video%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/media/net/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/media/net/hdd2%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%s/media/net/video%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/net/hdd%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/net/hdd2%s") % self.grey() + "\n\n"
 		text += _("+ only 2 files for whole work") + "\n"
 		text += _("- mount/umount all together") + "\n"
 		text += _("- it is not very clear what is what") + "\n"
@@ -86,38 +86,68 @@ class ManagerAutofsHelp(Screen):
 		return text
 
 	def mode2txt(self):
-		text = _("%sMode II:%s  (auto.master + more auto.xxxx files)") % (ui.yC,ui.fC) + "\n\n"
+		text = _("%sMode II:%s  (auto.master + more auto.xxxx files)") % self.yellow() + "\n\n"
 		text += _("auto.master with more records (no mountpoint as '/mnt/net'):") + "\n"
-		text += 4*" " + ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/mnt/render /etc/auto.render --ghost%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/mnt/wd /etc/auto.wd --ghost%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/mnt/render /etc/auto.render --ghost%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/mnt/wd /etc/auto.wd --ghost%s") % self.grey() + "\n\n"
 		text += _("more auto.xxxx files - each file for one shared directory:") + "\n"
 		text += ("auto.formuler:") + "\n"
-		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.20/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n\n"
 		text += ("auto.render:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.1.219/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.1.219/hdd%s") % self.grey() + "\n\n"
 		text += ("auto.wd:") + "\n"
-		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
 		text += _("Each shared directory has own mounpoint under /media:") + "\n"
-		text += 4*" " + ("%s/media/f1/hdd%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/media/render/video%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/media/wd/hdd%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%s/media/f1/hdd%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/render/video%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/wd/hdd%s") % self.grey() + "\n\n"
 		text += _("- more auto.xxxx files") + "\n"
 		text += _("+ very clear what is what") + "\n"
 		text += _("+ can be mounted/umounted independently with uncomment/comment line(s) in auto.master") + "\n\n"
 		return text
 
 	def mode3txt(self):
-		text = _("%sMode III:%s  (similar as II)") % (ui.yC,ui.fC) + "\n\n"
+		text = _("%sMode III:%s  (similar as II)") % self.yellow() + "\n\n"
 		text += _("-in auto.xxxx files can be used more lines") + "\n"
 		text += _("-useful, if one device sharing more directories") + "\n"
 		text += _("-everything else is the same as for II") + "\n\n"
 		text += _("example of auto.synology:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/video%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%saudio -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/music%s") % (ui.greyC,ui.fC) + "\n\n"
+		text += 4*" " + ("%svideo -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/video%s") % self.grey() + "\n"
+		text += 4*" " + ("%saudio -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/music%s") % self.grey() + "\n\n"
 		text += _("then will be mounted as:") + "\n"
 		text += 4*" " + ("...") + "\n"
-		text += 4*" " + ("%s/media/synology/video%s") % (ui.greyC,ui.fC) + "\n"
-		text += 4*" " + ("%s/media/synology/audio%s") % (ui.greyC,ui.fC) + "\n"
+		text += 4*" " + ("%s/media/synology/video%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/synology/audio%s") % self.grey() + "\n"
 		text += 4*" " + ("...") + "\n"
 		return text
+
+	def commontxt(self):
+		text = "\\n" + _("After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'") % self.yellow() + "\n"
+		return text
+
+	def modeWintxt(self):
+		text = "\n\n" + _("%sConnect to Win7,8,10 shared folder:%s") % self.yellow() + "\n\n"
+		text += _("PC side:") + "\n"
+		text += _("-on directory press right mouse, select %s'Properties'%s and use bookmark %s'Sharing'%s") % self.grey(2) + "\n"
+		text += _("-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on") % self.grey(2) + "\n"
+		text += _("-can be changed %s'Shared name'%s too") % self.grey() + "\n"
+		text += _("-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s with enabled %s'Change'%s and %s'Read'%s") % self.grey(4) + "\n\n"
+		text += _("Box side:") + "\n"
+		text += _("- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s") % self.grey(3) + "\n"
+		text += _("- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s") % self.grey(3) + "\n"
+		return text
+
+	def yellow(self,n=1):
+		ret = []
+		for i in range(n):
+			ret.append(ui.yC)
+			ret.append(ui.fC)
+		return tuple(ret)
+
+	def grey(self,n=1):
+		ret = []
+		for i in range(n):
+			ret.append(ui.greyC)
+			ret.append(ui.fC)
+		return tuple(ret)

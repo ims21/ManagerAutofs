@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 10:08+0200\n"
+"POT-Creation-Date: 2018-07-10 10:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -493,4 +493,52 @@ msgid "example of auto.synology:"
 msgstr ""
 
 msgid "then will be mounted as:"
+msgstr ""
+
+#, python-format
+msgid ""
+"After change parameters in auto.file is better use %s'Restart autofs with "
+"GUI restart'%s there in 'Menu-Utility'"
+msgstr ""
+
+#, python-format
+msgid "%sConnect to Win7,8,10 shared folder:%s"
+msgstr ""
+
+msgid "PC side:"
+msgstr ""
+
+#, python-format
+msgid ""
+"-on directory press right mouse, select %s'Properties'%s and use bookmark "
+"%s'Sharing'%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr ""
+
+#, python-format
+msgid "-can be changed %s'Shared name'%s too"
+msgstr ""
+
+#, python-format
+msgid ""
+"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
+"with enabled %s'Change'%s and %s'Read'%s"
+msgstr ""
+
+msgid "Box side:"
+msgstr ""
+
+#, python-format
+msgid ""
+"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
+"%s'2.0'%s"
 msgstr ""
