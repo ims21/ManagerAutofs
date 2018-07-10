@@ -295,7 +295,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			menu.append(((_("Add line to -") + " %s%s%s" % (bC,autoname,fC)),11))
 			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
 			buttons += ["", "", ""]
-		menu.append((_("Help"),30))
+		menu.append((_("Help")+"...",30))
 		buttons += [""]
 		if cfg.extended_menu.value:
 			txt = _("Remove from extended menu")
@@ -303,7 +303,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			txt = _("Add into extended menu")
 		menu.append((txt,40))
 		buttons += ["blue"]
-		menu.append((_("Utility"),50))
+		menu.append((_("Utility")+"...",50))
 		buttons += ["menu"]
 
 		text = _("Select operation:")
