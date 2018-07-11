@@ -127,7 +127,7 @@ class ManagerAutofsHelp(Screen):
 		return text
 
 	def modeWintxt(self):
-		text = "\n\n" + _("%sConnect to Win7,8,10 shared folder:%s") % self.yellow() + "\n\n"
+		text = "\n\n" + _("%sConnect to Win7,8,10 shared folder:%s") % self.blue() + "\n\n"
 		text += _("PC side:") + "\n"
 		text += _("-on directory press right mouse, select %s'Properties'%s and use bookmark %s'Sharing'%s") % self.grey(2) + "\n"
 		text += _("-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on") % self.grey(2) + "\n"
@@ -149,5 +149,19 @@ class ManagerAutofsHelp(Screen):
 		ret = []
 		for i in range(n):
 			ret.append(ui.greyC)
+			ret.append(ui.fC)
+		return tuple(ret)
+
+	def green(self,n=1):
+		ret = []
+		for i in range(n):
+			ret.append(ui.gC)
+			ret.append(ui.fC)
+		return tuple(ret)
+
+	def blue(self,n=1):
+		ret = []
+		for i in range(n):
+			ret.append(ui.bC)
 			ret.append(ui.fC)
 		return tuple(ret)
