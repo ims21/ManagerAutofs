@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.73"
+VERSION = "1.74"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -935,8 +935,10 @@ config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", 
 config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8") ]))
 config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
 
+config.plugins.mautofs.use_ip_or_name = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
+config.plugins.mautofs.name = NoSave(ConfigText(default = "servername", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("","no"),("dev","dev") ]))
 
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
@@ -988,6 +990,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			"red":		self.keyClose,
 			 }, -1)
 
+		self.msgNM=None
+
 		if self.new:
 			self.setDefaultPars()
 		else:
@@ -1037,10 +1041,15 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("wsize"), cfg.wsize))
 		self.list.append(getConfigListEntry(_("iocharset"), cfg.iocharset))
 		self.list.append(getConfigListEntry(_("security"), cfg.sec))
-		self.usedip = _("used ip")
-		self.list.append(getConfigListEntry(self.usedip, cfg.usedip))
-		if cfg.usedip.value:
-			self.list.append(getConfigListEntry(dx + _("ip"), cfg.ip))
+		self.use_ip_or_name = _("use ip/name or dev")
+		self.list.append(getConfigListEntry(self.use_ip_or_name, cfg.use_ip_or_name))
+		if cfg.use_ip_or_name.value:
+			self.usedip = dx + _("ip or name")
+			self.list.append(getConfigListEntry(self.usedip, cfg.usedip))
+			if cfg.usedip.value:
+				self.list.append(getConfigListEntry(2*dx + _("ip"), cfg.ip))
+			else:
+				self.list.append(getConfigListEntry(2*dx + _("name"), cfg.name))
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
 		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
@@ -1054,7 +1063,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.fillString()
 
 	def changedEntry(self):
-		if self["config"].getCurrent()[0] in (self.useddomain, self.useduserpass, self.usedip, self.fstype):
+		if self["config"].getCurrent()[0] in (self.useddomain, self.useduserpass, self.use_ip_or_name, self.usedip, self.fstype):
 			self.createConfig()
 		self.fillString()
 
@@ -1085,12 +1094,12 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("%s,") % cfg.rest.value if cfg.rest.value else ""
 		string = string.rstrip(',')
 		string += " "
-		ip = "%s.%s.%s.%s" % (tuple(cfg.ip.value))
-		if cfg.usedip.value:
+		if cfg.use_ip_or_name.value:
+			server = "%s.%s.%s.%s" % (tuple(cfg.ip.value)) if cfg.usedip.value else cfg.name.value
 			if cfg.fstype.value == "nfs":
-				string += ("%s:/%s" % (ip, cfg.remotedir.value))
+				string += ("%s:/%s" % (server, cfg.remotedir.value))
 			else:
-				string += ("://%s/%s" % (ip, cfg.remotedir.value))
+				string += ("://%s/%s" % (server, cfg.remotedir.value))
 		else:
 			string += (":/%s/%s" % (cfg.dev.value, cfg.remotedir.value))
 		return string
@@ -1122,8 +1131,9 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.wsize.value = cfg.wsize.default
 		cfg.iocharset.value = cfg.iocharset.default
 		cfg.sec.value = cfg.sec.default
-		cfg.usedip.value = cfg.usedip.default
+		cfg.use_ip_or_name.value = cfg.use_ip_or_name.default
 		cfg.ip.value = cfg.ip.default
+		cfg.name.value = cfg.name.default
 		cfg.dev.value = cfg.dev.default
 		cfg.remotedir.value = cfg.remotedir.default
 		cfg.smb.value = cfg.smb.default
@@ -1193,19 +1203,28 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			# dir name
 			cfg.localdir.value = parts[0].strip()
 
-			# ip and shared remote dir or dev and remote dir
+			# ip/name and shared remote dir or dev and remote dir
+			cfg.usedip.value = False
 			if parts[2].startswith('://'): 		# cifs	://10.0.0.10/video
-				cfg.usedip.value = True
+				cfg.use_ip_or_name.value = True
 				remote = parts[2].split('/')
-				cfg.ip.value = self.convertIP(remote[2])
+				if self.testIfIP(remote[2]):
+					cfg.usedip.value = True
+					cfg.ip.value = self.convertIP(remote[2])
+				else:
+					cfg.name.value = remote[2]
 				cfg.remotedir.value = remote[3]
 			elif parts[2].find(':/'):		# nfs	10.0.0.10:/video
-				cfg.usedip.value = True
+				cfg.use_ip_or_name.value = True
 				remote = parts[2].split(':/')
-				cfg.ip.value = self.convertIP(remote[0])
+				if self.testIfIP(remote[0]):
+					cfg.usedip.value = True
+					cfg.ip.value = self.convertIP(remote[0])
+				else:
+					cfg.name.value = remote[0]
 				cfg.remotedir.value = remote[1]
 			else:					# DVD,CD	:/dev/sr0
-				cfg.usedip.value = False
+				cfg.use_ip_or_name.value = False
 				remote = parts[2].split('/')
 				cfg.dev.value = remote[1]
 				cfg.remotedir.value = remote[2]
@@ -1213,12 +1232,26 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		except:
 			self.MessageBoxNM(True, _("Wrong file format!"), 5)
 
+	def testIfIP(self, string):
+		if len(string.split('.'))==4:
+			return True
+		return False
+
 	def convertIP(self, ip):
 		strIP = ip.split('.')
 		ip = []
 		for x in strIP:
 			ip.append(int(x))
 		return ip
+
+	def MessageBoxNM(self, display=False, text="", delay=0):
+		if self.msgNM:
+			self.session.deleteDialog(self.msgNM)
+			self.msgNM = None
+		else:
+			if display and self.session is not None:
+				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
+				self.msgNM.show()
 
 class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
@@ -1278,6 +1311,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self["blue"] = Pixmap()
 
 		self["text"] = Label("")
+
+		self.msgNM=None
 
 		self.onShown.append(self.setWindowTitle)
 		self.onLayoutFinish.append(self.readFile)
@@ -1408,6 +1443,15 @@ class ManagerAutofsMultiAutoEdit(Screen):
 
 	def keyCancel(self):
 		self.close()
+
+	def MessageBoxNM(self, display=False, text="", delay=0):
+		if self.msgNM:
+			self.session.deleteDialog(self.msgNM)
+			self.msgNM = None
+		else:
+			if display and self.session is not None:
+				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
+				self.msgNM.show()
 
 class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 	skin="""
