@@ -24,83 +24,11 @@ from Screens.MessageBox import MessageBox
 from Components.Button import Button
 from Components.Label import Label
 from Components.ActionMap import ActionMap
-from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN
+from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
+from Components.SelectionList import SelectionList
 import skin
 import os
-
-from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, getDesktop
-from Components.MenuList import MenuList
-from plugin import plugin_path
-
-from Components.Pixmap import Pixmap
-
-select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/lock_on.png"))
-
-# change select icons in list operation
-def setIcon(delete=False):
-	global select_png
-	resolution = ""
-	if getDesktop(0).size().width() <= 1280:
-		resolution = "_sd"
-	select_png = None
-	if delete:
-		select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, plugin_path + "/png/select_del%s.png" % resolution))
-	else:
-		select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, plugin_path + "/png/select_on%s.png" % resolution))
-	if select_png is None:
-		select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/lock_on.png"))
-
-def MySelectionEntryComponent(description, value, index, selected):
-	dx, dy, dw, dh = skin.parameters.get("SelectionListDescr",(35, 2, 650, 30))
-	res = [
-		(description, value, index, selected),
-		(eListboxPythonMultiContent.TYPE_TEXT, dx, dy, dw, dh, 0, RT_HALIGN_LEFT, description)
-	]
-	if selected:
-		ix, iy, iw, ih = skin.parameters.get("SelectionListLock",(0, 0, 24, 24))
-		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, ix, iy, iw, ih, select_png))
-	return res
-
-class MySelectionList(MenuList):
-	def __init__(self, list = None, enableWrapAround = False):
-		MenuList.__init__(self, list or [], enableWrapAround, content = eListboxPythonMultiContent)
-		font = skin.fonts.get("SelectionList", ("Regular", 20, 30))
-		self.l.setFont(0, gFont(font[0], font[1]))
-		self.l.setItemHeight(font[2])
-
-	def addSelection(self, description, value, index, selected = True):
-		self.list.append(MySelectionEntryComponent(description, value, index, selected))
-		self.setList(self.list)
-
-	def removeSelection(self, line):
-		for item in self.list:
-			if item[0][2] == line[2]:
-				self.list.pop(self.list.index(item))
-		self.setList(self.list)
-
-	def toggleSelection(self):
-		idx = self.getSelectedIndex()
-		item = self.list[idx][0]
-		self.list[idx] = MySelectionEntryComponent(item[0], item[1], item[2], not item[3])
-		self.setList(self.list)
-
-	def getSelectionsList(self):
-		return [ (item[0][0], item[0][1], item[0][2]) for item in self.list if item[0][3] ]
-
-	def toggleAllSelection(self):
-		for idx,item in enumerate(self.list):
-			item = self.list[idx][0]
-			self.list[idx] = MySelectionEntryComponent(item[0], item[1], item[2], not item[3])
-		self.setList(self.list)
-
-	def sort(self, sortType=False, flag=False):
-		# sorting by sortType: # 0 - description, 1 - value, 2 - index, 3 - selected
-		self.list.sort(key=lambda x: x[0][sortType],reverse=flag)
-		self.setList(self.list)
-
-	def len(self):
-		return len(self.list)
 
 class ManagerAutofsRemoveBackupFiles(Screen):
 	skin = """
@@ -123,13 +51,14 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 		self.session = session
 		self.setTitle(_("Remove backup files"))
 
-		setIcon(True) # selection will be as red cross
+		self.original_selectionpng = None
+		self.changePng()
 
-		data = MySelectionList([])
+		data = SelectionList([])
 		nr = 0
 		for x in os.listdir("/etc"):
-			if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$")):
-				data.list.append(MySelectionEntryComponent(x, "/etc/%s" % x, nr, False))
+			if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$") or x.endswith("_bak")):
+				data.addSelection(x, "/etc/%s" % x, nr, False)
 				nr += 1
 
 		self.list = data
@@ -149,7 +78,6 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Remove"))
-#		self["key_yellow"] = Button()
 		self["key_blue"] = Button(_("Inversion"))
 
 		self["text"].setText(_("Press 'Remove' on file or mark files with OK and then use 'Remove'"))
@@ -175,5 +103,15 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 		if not self.list.len():
 			self.exit()
 
+	def changePng(self):
+		path = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/mark_select.png")
+		if os.path.exists(path):
+			import Components.SelectionList
+			self.original_selectionpng = Components.SelectionList.selectionpng
+			Components.SelectionList.selectionpng = LoadPixmap(cached=True, path=path)
+
 	def exit(self):
+		if self.original_selectionpng:
+			import Components.SelectionList
+			Components.SelectionList.selectionpng = self.original_selectionpng
 		self.close()
