@@ -44,8 +44,8 @@ import skin
 import os
 
 from Components.Pixmap import Pixmap
-
 from helptexts import ManagerAutofsHelp
+from plugin import mountedLocalHDD
 
 # parameters for auto.master file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
@@ -60,6 +60,7 @@ cfg = config.plugins.mautofs
 AUTOMASTER="/etc/auto.master"
 AUTOBACKUP="/etc/backup.cfg"
 AUTOFS="/etc/init.d/autofs"
+DEFAULT_HDD = '/media/hdd'
 
 def hex2strColor(argb):
 	out = ""
@@ -558,8 +559,19 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
 		space = 4 * " "
-		menu.append((space + _("Use as HDD replacement"),20))
-		buttons += ["green"]
+
+		if not mountedLocalHDD():
+			sel = self["list"].getCurrent()
+			if sel:
+				currentpoint = sel[1][sel[1].rfind('/')+1:]
+				if sel[0] == _X_ and currentpoint not in cfg.hddreplace.value: # mounted and not used
+					menu.append((space + _("Use '%s' as HDD replacement") % currentpoint,20))
+					buttons += ["green"]
+				if cfg.hddreplace.value != DEFAULT_HDD:
+					mountpoint = cfg.hddreplace.value.split('/')[2]
+					menu.append((space + _("Do not use '%s' as HDD replacement") % mountpoint,21))
+					buttons += ["red"]
+
 		if os.path.exists(AUTOFS):
 			menu.append((space + _("Reload autofs"),10))
 			menu.append((space + _("Restart autofs with GUI restart"),11))
@@ -600,6 +612,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.installAutofs()
 		elif choice[1] == 20:
 			self.hddReplacement()
+		elif choice[1] == 21:
+			self.hddReplacementReset()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
@@ -611,8 +625,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			return
 
 	def hddReplacement(self):
-		# TODO: only active mount can to have "Use .... " in menu !!! (partialy done as warning)
-		# TODO: in menu "Use '%s' as HDD replacement" or "Purge '%s' as HDD replacement" (reboot)
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
@@ -646,6 +658,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			else:
 				self.MessageBoxNM(True, _("'%s.auto' has wrong format!") % name.split('.')[1], 5)
 				return
+
+	def hddReplacementReset(self):
+		makeMountAsHDD.setDefault()
+		makeMountAsHDD.createSymlink()
 
 	def callCreateSymlink(self, path):
 		cfg.hddreplace.value = path
@@ -1653,7 +1669,7 @@ class useMountAsHDD():
 
 	def createSymlink(self):
 		path = cfg.hddreplace.value
-		hdd_dir = '/media/hdd'
+		hdd_dir = DEFAULT_HDD
 		print "[ManagerAutofs] symlink %s %s" % (path, hdd_dir)
 		if os.path.islink(hdd_dir):
 			if os.readlink(hdd_dir) != path:
@@ -1673,7 +1689,7 @@ class useMountAsHDD():
 			except Exception, ex:
 				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
 	def setDefault(self):
-		cfg.hddreplace.value = '/media/hdd'
+		cfg.hddreplace.value = DEFAULT_HDD
 		cfg.hddreplace.save()
 
 makeMountAsHDD = useMountAsHDD()
