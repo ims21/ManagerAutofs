@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-14 19:34+0200\n"
+"POT-Creation-Date: 2018-08-28 19:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,6 +164,14 @@ msgstr ""
 msgid "Next items are not needed standardly:"
 msgstr ""
 
+#, python-format
+msgid "Use '%s' as HDD replacement"
+msgstr ""
+
+#, python-format
+msgid "Cancel '%s' as HDD replacement"
+msgstr ""
+
 msgid "Reload autofs"
 msgstr ""
 
@@ -177,6 +185,18 @@ msgid "Clear bookmarks..."
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"
+msgstr ""
+
+#, python-format
+msgid "Point '%s' is not mounted!"
+msgstr ""
+
+#, python-format
+msgid "Select '%s' directory:"
+msgstr ""
+
+#, python-format
+msgid "'%s.auto' has wrong format or is empty!"
 msgstr ""
 
 #, python-format
