@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.74"
+VERSION = "1.75"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -54,7 +54,7 @@ config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_
 config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
-
+config.plugins.mautofs.hddreplace = ConfigText(default = "/media/hdd", visible_width = 30, fixed_size = False)
 cfg = config.plugins.mautofs
 
 AUTOMASTER="/etc/auto.master"
@@ -558,6 +558,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
 		space = 4 * " "
+		menu.append((space + _("Use as HDD replacement"),20))
+		buttons += ["green"]
 		if os.path.exists(AUTOFS):
 			menu.append((space + _("Reload autofs"),10))
 			menu.append((space + _("Restart autofs with GUI restart"),11))
@@ -596,6 +598,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
 		elif choice[1] == 12:
 			self.installAutofs()
+		elif choice[1] == 20:
+			self.hddReplacement()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
@@ -605,6 +609,66 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.utilitySubmenu()
 		else:
 			return
+
+	def hddReplacement(self):
+		# TODO: only active mount can to have "Use .... " in menu !!!
+		# TODO: in menu "Use '%s' as HDD replacement" or "Purge '%s' as HDD replacement" (reboot)
+		# TODO: after box start and config.plugins.mautofs.hddreplace != "/media/hdd" run hddReplacement
+		hdd_dir = '/media/hdd'
+		sel = self["list"].getCurrent()
+		if sel:
+			name = sel[2]
+			if sel[0] != _X_:
+				self.MessageBoxNM(True, _("Point '%s' is not mounted!") % name.split('.')[1], 3)
+				return
+			lines = self.getAutoLines(name)
+			if lines == 1:		# for single line yet
+				line = open(name, "r").readline()
+				data = line.replace('\n','').strip()
+				if data:
+					local_dir = data.split()[0].strip()
+					path = '/media/%s/%s' % (name.split('.')[1],local_dir)
+					self.createSymlink(path, hdd_dir)
+				else:
+					return
+			elif lines > 1:
+				def callbackGetName(answer):
+					if answer:
+						path = '/media/%s/%s' % (name.split('.')[1],answer)
+						self.createSymlink(path, hdd_dir)
+				list = []
+				text = _("Select '%s' directory:") % name.split('.')[1]
+				for x in open(name, "r"):
+					line = x.replace('\n','').strip()
+					if line:
+						local_dir = line.split()[0].strip()
+						if local_dir:
+							list.append((local_dir, local_dir))
+						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list )
+			else:
+				self.MessageBoxNM(True, _("'%s.auto' has wrong format!") % name.split('.')[1], 5)
+				return
+
+	def createSymlink(self, path, hdd_dir):
+		cfg.mountpoint.value = path
+		print "[ManagerAutofs] symlink %s %s" % (path, hdd_dir)
+		if os.path.islink(hdd_dir):
+			if os.readlink(hdd_dir) != path:
+				os.remove(hdd_dir)
+				os.symlink(path, hdd_dir)
+		elif os.path.ismount(hdd_dir) is False:
+			if os.path.isdir(hdd_dir):
+				rm_rf(hdd_dir)
+		try:
+			os.symlink(path, hdd_dir)
+		except OSError, ex:
+			print "[ManagerAutofs] add symlink fails!", ex
+		movie = os.path.join(hdd_dir, 'movie')
+		if not os.path.exists(movie):
+			try:
+				os.mkdir(movie)
+			except Exception, ex:
+				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
 
 	def isBackupFile(self):
 		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
