@@ -559,7 +559,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
 		space = 4 * " "
-
 		if not mountedLocalHDD():
 			sel = self["list"].getCurrent()
 			if sel:
@@ -569,9 +568,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					buttons += ["green"]
 				if cfg.hddreplace.value != DEFAULT_HDD:
 					mountpoint = cfg.hddreplace.value.split('/')[2]
-					menu.append((space + _("Do not use '%s' as HDD replacement") % mountpoint,21))
+					menu.append((space + _("Cancel '%s' as HDD replacement") % mountpoint,21))
 					buttons += ["red"]
-
 		if os.path.exists(AUTOFS):
 			menu.append((space + _("Reload autofs"),10))
 			menu.append((space + _("Restart autofs with GUI restart"),11))
@@ -580,7 +578,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."),110))
 		buttons += [""]
-
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
 
@@ -632,7 +629,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.MessageBoxNM(True, _("Point '%s' is not mounted!") % name.split('.')[1], 3)
 				return
 			lines = self.getAutoLines(name)
-			if lines == 1:		# for single line yet
+			if lines == 1:	# single record file
 				line = open(name, "r").readline()
 				data = line.replace('\n','').strip()
 				if data:
@@ -641,7 +638,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					self.callCreateSymlink(path)
 				else:
 					return
-			elif lines > 1:
+			elif lines > 1: # multi record file
 				def callbackGetName(answer):
 					if answer:
 						path = '/media/%s/%s' % (name.split('.')[1],answer)
@@ -656,7 +653,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 							list.append((local_dir, local_dir))
 						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list )
 			else:
-				self.MessageBoxNM(True, _("'%s.auto' has wrong format!") % name.split('.')[1], 5)
+				self.MessageBoxNM(True, _("'%s.auto' has wrong format or is empty!") % name.split('.')[1], 5)
 				return
 
 	def hddReplacementReset(self):
@@ -1388,10 +1385,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			for x in open(self.name, "r"):
 				line = x.replace('\n','').strip()
 				if line:
-					p = line.split()
-					name = p[0]
-					self.list.append((name, line))
-
+					self.list.append((line.split()[0], line))
 			self['list'].setList(self.list)
 
 	def selectionChanged(self):
