@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 19:59+0200\n"
-"PO-Revision-Date: 2018-08-28 20:02+0200\n"
+"POT-Creation-Date: 2018-08-28 22:07+0200\n"
+"PO-Revision-Date: 2018-08-28 22:07+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -199,6 +199,10 @@ msgstr "Zvolte '%s' adresář:"
 #, python-format
 msgid "'%s.auto' has wrong format or is empty!"
 msgstr "'%s.auto' má neplatný formát nebo je prázdný!"
+
+#, python-format
+msgid "%s as /hdd"
+msgstr "%s jako /hdd"
 
 #, python-format
 msgid "File '%s' was created!"

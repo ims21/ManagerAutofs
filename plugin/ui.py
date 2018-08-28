@@ -235,6 +235,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				text = _("Enable")
 			self["key_blue"].setText(text)
 			self["text"].setText(self.formatString(sel))
+		self.hddInfo()
 
 	def clearTexts(self):
 		self.MessageBoxNM()
@@ -659,11 +660,16 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hddReplacementReset(self):
 		makeMountAsHDD.setDefault()
 		makeMountAsHDD.createSymlink()
+		self.hddInfo()
 
 	def callCreateSymlink(self, path):
 		cfg.hddreplace.value = path
 		cfg.hddreplace.save()
 		makeMountAsHDD.createSymlink()
+		self.hddInfo()
+
+	def hddInfo(self):
+		self["statusbar"].setText(_("%s as /hdd") % os.path.realpath('/hdd'))
 
 	def isBackupFile(self):
 		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
