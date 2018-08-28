@@ -671,6 +671,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hddRealPath(self):
 		if os.path.realpath('/hdd') != DEFAULT_HDD:
 			self["statusbar"].setText(_("%s as /hdd") % os.path.realpath('/hdd'))
+		else:
+			self["statusbar"].setText("")
 
 	def isBackupFile(self):
 		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
