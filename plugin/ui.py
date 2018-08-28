@@ -54,7 +54,7 @@ config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_
 config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
-config.plugins.mautofs.hddreplace = ConfigText(default = "/media/hdd", visible_width = 30, fixed_size = False)
+
 cfg = config.plugins.mautofs
 
 AUTOMASTER="/etc/auto.master"
@@ -611,10 +611,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			return
 
 	def hddReplacement(self):
-		# TODO: only active mount can to have "Use .... " in menu !!!
+		# TODO: only active mount can to have "Use .... " in menu !!! (partialy done as warning)
 		# TODO: in menu "Use '%s' as HDD replacement" or "Purge '%s' as HDD replacement" (reboot)
-		# TODO: after box start and config.plugins.mautofs.hddreplace != "/media/hdd" run hddReplacement
-		hdd_dir = '/media/hdd'
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
@@ -628,14 +626,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				if data:
 					local_dir = data.split()[0].strip()
 					path = '/media/%s/%s' % (name.split('.')[1],local_dir)
-					self.createSymlink(path, hdd_dir)
+					self.callCreateSymlink(path)
 				else:
 					return
 			elif lines > 1:
 				def callbackGetName(answer):
 					if answer:
 						path = '/media/%s/%s' % (name.split('.')[1],answer)
-						self.createSymlink(path, hdd_dir)
+						self.callCreateSymlink(path)
 				list = []
 				text = _("Select '%s' directory:") % name.split('.')[1]
 				for x in open(name, "r"):
@@ -649,26 +647,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.MessageBoxNM(True, _("'%s.auto' has wrong format!") % name.split('.')[1], 5)
 				return
 
-	def createSymlink(self, path, hdd_dir):
-		cfg.mountpoint.value = path
-		print "[ManagerAutofs] symlink %s %s" % (path, hdd_dir)
-		if os.path.islink(hdd_dir):
-			if os.readlink(hdd_dir) != path:
-				os.remove(hdd_dir)
-				os.symlink(path, hdd_dir)
-		elif os.path.ismount(hdd_dir) is False:
-			if os.path.isdir(hdd_dir):
-				rm_rf(hdd_dir)
-		try:
-			os.symlink(path, hdd_dir)
-		except OSError, ex:
-			print "[ManagerAutofs] add symlink fails!", ex
-		movie = os.path.join(hdd_dir, 'movie')
-		if not os.path.exists(movie):
-			try:
-				os.mkdir(movie)
-			except Exception, ex:
-				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
+	def callCreateSymlink(self, path):
+		cfg.hddreplace.value = path
+		cfg.hddreplace.save()
+		makeMountAsHDD.createSymlink()
 
 	def isBackupFile(self):
 		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
@@ -1664,3 +1646,34 @@ class NonModalMessageBoxDialog(Screen):
 			self.timer.start(1000, True)
 		else:
 			self.session.deleteDialog(self)
+
+class useMountAsHDD():
+	def __init__(self):
+		pass
+
+	def createSymlink(self):
+		path = cfg.hddreplace.value
+		hdd_dir = '/media/hdd'
+		print "[ManagerAutofs] symlink %s %s" % (path, hdd_dir)
+		if os.path.islink(hdd_dir):
+			if os.readlink(hdd_dir) != path:
+				os.remove(hdd_dir)
+				os.symlink(path, hdd_dir)
+		elif os.path.ismount(hdd_dir) is False:
+			if os.path.isdir(hdd_dir):
+				rm_rf(hdd_dir)
+		try:
+			os.symlink(path, hdd_dir)
+		except OSError, ex:
+			print "[ManagerAutofs] add symlink fails!", ex
+		movie = os.path.join(hdd_dir, 'movie')
+		if not os.path.exists(movie):
+			try:
+				os.mkdir(movie)
+			except Exception, ex:
+				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
+	def setDefault(self):
+		cfg.hddreplace.value = '/media/hdd'
+		cfg.hddreplace.save()
+
+makeMountAsHDD = useMountAsHDD()
