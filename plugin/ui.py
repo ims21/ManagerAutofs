@@ -1120,7 +1120,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				self.list.append(getConfigListEntry(2*dx + _("name"), cfg.name))
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
-		self.list.append(getConfigListEntry(_("remote directory"), cfg.remotedir))
+		self.list.append(getConfigListEntry(_("shared remote directory"), cfg.remotedir))
 		if cfg.fstype.value == "cifs":
 			self.list.append(getConfigListEntry(_("smb version"), cfg.smb))
 		self.list.append(getConfigListEntry(_("user string"), cfg.rest))
