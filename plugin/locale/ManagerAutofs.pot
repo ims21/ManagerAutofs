@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-19 00:08+0200\n"
+"POT-Creation-Date: 2018-10-20 13:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,6 +106,10 @@ msgid "Failed"
 msgstr ""
 
 msgid "Done"
+msgstr ""
+
+#, python-format
+msgid "'%s' not exists, %s will be with default values"
 msgstr ""
 
 #, python-format

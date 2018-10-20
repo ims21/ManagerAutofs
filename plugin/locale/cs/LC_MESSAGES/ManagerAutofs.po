@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-19 00:08+0200\n"
-"PO-Revision-Date: 2018-10-19 00:09+0200\n"
+"POT-Creation-Date: 2018-10-20 13:13+0200\n"
+"PO-Revision-Date: 2018-10-20 13:15+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -104,6 +104,10 @@ msgstr "Chyba"
 
 msgid "Done"
 msgstr "Dokončeno"
+
+#, python-format
+msgid "'%s' not exists, %s will be with default values"
+msgstr "'%s' neexistuje, %s proto bude mít výchozí hodnoty"
 
 #, python-format
 msgid "'%s' was removed"

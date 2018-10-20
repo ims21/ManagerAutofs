@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.75"
+VERSION = "1.76"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -387,7 +387,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				add = (enabled, mountpoint, autofile, optional )
 				self.addItem(add)
 				# autofile is created
-				copyfile(original_autofile, autofile)
+				if os.path.exists(original_autofile):
+					copyfile(original_autofile, autofile)
+				else:
+					self.MessageBoxNM(True, _("'%s' not exists, %s will be with default values") % (original_autofile, autofile), 5)
 
 		sel = self["list"].getCurrent()
 		if sel:
@@ -987,8 +990,8 @@ config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.user = NoSave(ConfigText(default="root", fixed_size=False))
-config.plugins.mautofs.passwd = NoSave(ConfigPassword(default="password", fixed_size=False))
+config.plugins.mautofs.user = NoSave(ConfigText(default="", fixed_size=False))
+config.plugins.mautofs.passwd = NoSave(ConfigPassword(default="", fixed_size=False))
 
 config.plugins.mautofs.useddomain = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.domain = NoSave(ConfigText(default="domain.local", fixed_size=False))
