@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-20 13:13+0200\n"
+"POT-Creation-Date: 2018-10-23 19:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,34 +69,77 @@ msgstr ""
 msgid "Edit record:"
 msgstr ""
 
+#, python-format
+msgid "Edit record for '%s' remote device in 'master' file."
+msgstr ""
+
 msgid "New record"
+msgstr ""
+
+msgid "Add new record to 'master' file."
 msgstr ""
 
 msgid "Remove record:"
 msgstr ""
 
+#, python-format
+msgid "Remove record with '%s' remote device from 'master' file."
+msgstr ""
+
 msgid "Create new record from:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Clone record with '%s' remote device in 'master' file and create file with "
+"mountpoint parameters withal."
 msgstr ""
 
 msgid "Edit -"
 msgstr ""
 
+#, python-format
+msgid ""
+"Edit file '%s' with mountpoint parameters for existing '%s' remote device."
+msgstr ""
+
 msgid "Add line to -"
+msgstr ""
+
+#, python-format
+msgid ""
+"Add next mountpoint parameters line to '%s' for existing '%s' remote device."
 msgstr ""
 
 msgid "Remove -"
 msgstr ""
 
+#, python-format
+msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
+msgstr ""
+
 msgid "Help"
+msgstr ""
+
+msgid "Brief help on how to use autofs."
 msgstr ""
 
 msgid "Remove from extended menu"
 msgstr ""
 
+msgid "Remove plugin's run from Extended menu."
+msgstr ""
+
 msgid "Add into extended menu"
 msgstr ""
 
+msgid "Add plugin's run to Extended menu."
+msgstr ""
+
 msgid "Utility"
+msgstr ""
+
+msgid "Next utilities."
 msgstr ""
 
 msgid "Select operation:"
@@ -153,16 +196,33 @@ msgstr ""
 msgid "Update autofs files in AutoBackup"
 msgstr ""
 
+msgid ""
+"Automaticaly add valid autofs files to /etc/backup.cfg file used by "
+"AutoBackup plugin."
+msgstr ""
+
 msgid "Open AutoBackup plugin"
+msgstr ""
+
+msgid "Runs AutoBackup plugin"
 msgstr ""
 
 msgid "Remove unused autofs files in AutoBackup"
 msgstr ""
 
+msgid "Remove unused autofs files from /etc/backup.cfg file."
+msgstr ""
+
 msgid "Remove backup files"
 msgstr ""
 
+msgid "Remove selected backup files created when editing autofs files."
+msgstr ""
+
 msgid "Install autofs"
+msgstr ""
+
+msgid "Install required autofs package if missing."
 msgstr ""
 
 msgid "Next items are not needed standardly:"
@@ -173,19 +233,43 @@ msgid "Use '%s' as HDD replacement"
 msgstr ""
 
 #, python-format
+msgid "You can use current mountpoint '%s' as HDD replacement."
+msgstr ""
+
+#, python-format
 msgid "Cancel '%s' as HDD replacement"
+msgstr ""
+
+#, python-format
+msgid "Cancel using '%s' as HDD replacement."
 msgstr ""
 
 msgid "Reload autofs"
 msgstr ""
 
+msgid "Reload autofs mount maps. It is made standardly on each plugin close."
+msgstr ""
+
 msgid "Restart autofs with GUI restart"
+msgstr ""
+
+msgid ""
+"Sometimes it is needed restart autofs deamon and GUI. Use this option and "
+"then wait for finishing and for restart GUI."
 msgstr ""
 
 msgid "Reload Bookmarks"
 msgstr ""
 
+msgid ""
+"Check bookmarks with current mountpoints. It is made standardly on each "
+"plugin close."
+msgstr ""
+
 msgid "Clear bookmarks..."
+msgstr ""
+
+msgid "Removing selected bookmarks."
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"

@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.76"
+VERSION = "1.77"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -285,27 +285,31 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		sel = self["list"].getCurrent()
 		if sel:
 			recordname = "%s" % (sel[1].split('/')[2])
+			device = "%s%s%s" % (gC,recordname,fC)
 			autoname = "%s" % sel[2].split('/')[2]
-			menu.append(((_("Edit record:") + "  %s%s%s" % (gC,recordname,fC)),0))
+			mountpoint = "%s%s%s" % (bC,autoname,fC)
+			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'master' file.") % device))
 			buttons = [""]
-		menu.append((_("New record"),1))
-		menu.append(((_("Remove record:") + "  %s%s%s" % (gC,recordname,fC)),2))
-		menu.append(((_("Create new record from:") + "  %s%s%s" % (gC,recordname,fC)),5))
+		menu.append((_("New record"), 1, _("Add new record to 'master' file.")))
+		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'master' file.") % device))
+		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'master' file and create file with mountpoint parameters withal.") % device))
 		buttons += ["","",""]
 		if sel:
-			menu.append(((_("Edit -") + " %s%s%s" % (bC,autoname,fC)),10))
-			menu.append(((_("Add line to -") + " %s%s%s" % (bC,autoname,fC)),11))
-			menu.append(((_("Remove -") + " %s%s%s" % (bC,autoname,fC)),12))
+			menu.append((_("Edit -") + " " + mountpoint, 10, _("Edit file '%s' with mountpoint parameters for existing '%s' remote device.") % (mountpoint, device)))
+			menu.append((_("Add line to -") + " " + mountpoint, 11, _("Add next mountpoint parameters line to '%s' for existing '%s' remote device.") % (mountpoint, device)))
+			menu.append((_("Remove -") + " " + mountpoint, 12, _("Remove file '%s' with mountpoint parameters for '%s' remote device.") % (mountpoint, device)))
 			buttons += ["", "", ""]
-		menu.append((_("Help")+"...",30))
+		menu.append((_("Help")+"...",30,_("Brief help on how to use autofs.")))
 		buttons += [""]
 		if cfg.extended_menu.value:
 			txt = _("Remove from extended menu")
+			descr = _("Remove plugin's run from Extended menu.")
 		else:
 			txt = _("Add into extended menu")
-		menu.append((txt,40))
+			descr = _("Add plugin's run to Extended menu.")
+		menu.append((txt,40,descr))
 		buttons += ["blue"]
-		menu.append((_("Utility")+"...",50))
+		menu.append((_("Utility")+"...",50,_("Next utilities.")))
 		buttons += ["menu"]
 
 		text = _("Select operation:")
@@ -550,15 +554,15 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu = []
 		buttons = []
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
-			menu.append((_("Update autofs files in AutoBackup"),0))
-			menu.append((_("Open AutoBackup plugin"),1))
-			menu.append((_("Remove unused autofs files in AutoBackup"),2))
+			menu.append((_("Update autofs files in AutoBackup"), 0, _("Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin.")))
+			menu.append((_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
+			menu.append((_("Remove unused autofs files in AutoBackup"), 2, _("Remove unused autofs files from /etc/backup.cfg file.")))
 			buttons += ["","2",""]
 		if self.isBackupFile():
-			menu.append((_("Remove backup files"),3))
+			menu.append((_("Remove backup files"), 3, _("Remove selected backup files created when editing autofs files.")))
 			buttons += [""]
 		if not os.path.exists(AUTOFS):
-			menu.append((_("Install autofs"),12))
+			menu.append((_("Install autofs"), 12, _("Install required autofs package if missing.")))
 			buttons += ["green"]
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
@@ -568,19 +572,19 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			if sel:
 				currentpoint = sel[1][sel[1].rfind('/')+1:]
 				if sel[0] == _X_ and currentpoint not in cfg.hddreplace.value: # mounted and not used
-					menu.append((space + _("Use '%s' as HDD replacement") % currentpoint,20))
+					menu.append((space + _("Use '%s' as HDD replacement") % currentpoint, 20, _("You can use current mountpoint '%s' as HDD replacement.") % currentpoint))
 					buttons += ["green"]
 				if cfg.hddreplace.value != DEFAULT_HDD:
 					mountpoint = cfg.hddreplace.value.split('/')[2]
-					menu.append((space + _("Cancel '%s' as HDD replacement") % mountpoint,21))
+					menu.append((space + _("Cancel '%s' as HDD replacement") % mountpoint, 21, _("Cancel using '%s' as HDD replacement.") % currentpoint))
 					buttons += ["red"]
 		if os.path.exists(AUTOFS):
-			menu.append((space + _("Reload autofs"),10))
-			menu.append((space + _("Restart autofs with GUI restart"),11))
+			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin close.")))
+			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
 			buttons += ["","4"]
-		menu.append((space + _("Reload Bookmarks"),100))
+		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin close.")))
 		buttons += [""]
-		menu.append((space + _("Clear bookmarks..."),110))
+		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
