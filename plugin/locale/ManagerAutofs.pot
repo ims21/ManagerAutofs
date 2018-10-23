@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 19:43+0200\n"
+"POT-Creation-Date: 2018-10-23 20:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,20 +70,20 @@ msgid "Edit record:"
 msgstr ""
 
 #, python-format
-msgid "Edit record for '%s' remote device in 'master' file."
+msgid "Edit record for '%s' remote device in 'auto.master' file."
 msgstr ""
 
 msgid "New record"
 msgstr ""
 
-msgid "Add new record to 'master' file."
+msgid "Add new record to 'auto.master' file."
 msgstr ""
 
 msgid "Remove record:"
 msgstr ""
 
 #, python-format
-msgid "Remove record with '%s' remote device from 'master' file."
+msgid "Remove record with '%s' remote device from 'auto.master' file."
 msgstr ""
 
 msgid "Create new record from:"
@@ -91,8 +91,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Clone record with '%s' remote device in 'master' file and create file with "
-"mountpoint parameters withal."
+"Clone record with '%s' remote device in 'auto.master' file and create file "
+"with mountpoint parameters withal."
 msgstr ""
 
 msgid "Edit -"

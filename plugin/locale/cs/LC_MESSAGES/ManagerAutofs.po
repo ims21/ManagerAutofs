@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-20 13:13+0200\n"
-"PO-Revision-Date: 2018-10-20 13:15+0200\n"
+"POT-Creation-Date: 2018-10-23 20:15+0200\n"
+"PO-Revision-Date: 2018-10-23 20:26+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -66,35 +66,86 @@ msgstr "Povolit"
 msgid "Edit record:"
 msgstr "Upravit záznam:"
 
+#, python-format
+msgid "Edit record for '%s' remote device in 'auto.master' file."
+msgstr "Úprava záznamu pro vzdálené zařízení '%s' v souboru 'auto.master'."
+
 msgid "New record"
 msgstr "Nový záznam"
+
+msgid "Add new record to 'auto.master' file."
+msgstr "Přidání nového řádku do souboru 'auto.master'."
 
 msgid "Remove record:"
 msgstr "Odstranit záznam:"
 
+#, python-format
+msgid "Remove record with '%s' remote device from 'auto.master' file."
+msgstr "Odstranění záznamu pro vzálené zařízení '%s' ze souboru 'auto.master'."
+
 msgid "Create new record from:"
 msgstr "Vytvořit nový záznam z:"
+
+#, python-format
+msgid ""
+"Clone record with '%s' remote device in 'auto.master' file and create file "
+"with mountpoint parameters withal."
+msgstr ""
+"Naklonování záznamu se vzdáleným zařízením '%s' v 'auto.master' souboru a "
+"zároveň vytvoření souboru s parametry připojení."
 
 msgid "Edit -"
 msgstr "Upravit -"
 
+#, python-format
+msgid ""
+"Edit file '%s' with mountpoint parameters for existing '%s' remote device."
+msgstr ""
+"Úprava souboru '%s' s parametry připojení pro existující vzdálené zařízení "
+"'%s'."
+
 msgid "Add line to -"
 msgstr "Přidat řádek do -"
+
+#, python-format
+msgid ""
+"Add next mountpoint parameters line to '%s' for existing '%s' remote device."
+msgstr ""
+"Přidá další řádek s parametry připojení do '%s' pro existující vzdálené "
+"zařízení '%s'. "
 
 msgid "Remove -"
 msgstr "Odstranit -"
 
+#, python-format
+msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
+msgstr ""
+"Odstraní soubor '%s' s parametry připojení pro existující vzdálené zařízení "
+"'%s'."
+
 msgid "Help"
 msgstr "Nápověda"
+
+msgid "Brief help on how to use autofs."
+msgstr "Stručná nápověda k používání autofs."
 
 msgid "Remove from extended menu"
 msgstr "Odebrat z Extended menu"
 
+msgid "Remove plugin's run from Extended menu."
+msgstr "Odebere spouštění pluginu z Extended menu."
+
 msgid "Add into extended menu"
 msgstr "Přidat do Extended menu"
 
+msgid "Add plugin's run to Extended menu."
+msgstr "Přidá spouštění pluginu do Extended menu."
+
 msgid "Utility"
 msgstr "Nástroje"
+
+msgid "Next utilities."
+msgstr "Další nástroje."
 
 msgid "Select operation:"
 msgstr "Zvolte operaci:"
@@ -154,17 +205,38 @@ msgstr "Opravdu smazat soubor: '%s'?"
 msgid "Update autofs files in AutoBackup"
 msgstr "Aktualizovat autofs soubory v AutoBackup"
 
+msgid ""
+"Automaticaly add valid autofs files to /etc/backup.cfg file used by "
+"AutoBackup plugin."
+msgstr ""
+"Automaticky přidá platné autofs soubory do souboru /etc/backup.cfg, který "
+"používá AutoBackup plugin."
+
 msgid "Open AutoBackup plugin"
 msgstr "Otevřít AutoBackup plugin"
+
+msgid "Runs AutoBackup plugin"
+msgstr "Spuštění AutoBackup plugin k provedení zálohy."
 
 msgid "Remove unused autofs files in AutoBackup"
 msgstr "Odstranit nepoužívané autofs soubory z AutoBackup"
 
+msgid "Remove unused autofs files from /etc/backup.cfg file."
+msgstr "Odstranění nepoužívaných autofs souborů z /etc/backup.cfg."
+
 msgid "Remove backup files"
 msgstr "Odstranit záložní soubory"
 
+msgid "Remove selected backup files created when editing autofs files."
+msgstr ""
+"Odstranění vybraných záložních souborů, které se vytvořily při úpravách "
+"autofs souborů."
+
 msgid "Install autofs"
 msgstr "Nainstalovat autofs"
+
+msgid "Install required autofs package if missing."
+msgstr "Instaluje požadovaný balíček autofs, jestliže chybí."
 
 msgid "Next items are not needed standardly:"
 msgstr "Následující položky nejsou standardně potřeba:"
@@ -174,20 +246,51 @@ msgid "Use '%s' as HDD replacement"
 msgstr "Použít '%s' jako náhradu HDD"
 
 #, python-format
+msgid "You can use current mountpoint '%s' as HDD replacement."
+msgstr "Můžete použít aktuální přístupový bod '%s' jako náhradu HDD."
+
+#, python-format
 msgid "Cancel '%s' as HDD replacement"
 msgstr "Zrušit '%s' jako náhradu HDD"
+
+#, python-format
+msgid "Cancel using '%s' as HDD replacement."
+msgstr "Zrušit používání '%s' jako náhrady HDD."
 
 msgid "Reload autofs"
 msgstr "Reload autofs"
 
+msgid "Reload autofs mount maps. It is made standardly on each plugin close."
+msgstr ""
+"Provede 'autofs reload', neboli aktualizaci map připojení. Standardně se "
+"provádí při každém ukončení pluginu."
+
 msgid "Restart autofs with GUI restart"
 msgstr "Restartovat autofs a enigma"
+
+msgid ""
+"Sometimes it is needed restart autofs deamon and GUI. Use this option and "
+"then wait for finishing and for restart GUI."
+msgstr ""
+"Někdy je potřeba restartovat autofs daemon zároveň s restartem uživatelského "
+"rozhraní. K tomu použijte tuto volbu a poté čekejte na spuštění a dokončení "
+"restartu systému. "
 
 msgid "Reload Bookmarks"
 msgstr "Aktualizovat záložky"
 
+msgid ""
+"Check bookmarks with current mountpoints. It is made standardly on each "
+"plugin close."
+msgstr ""
+"Zkontroluje záložky a aktuální připojení. Provádí se automaticky při každém "
+"ukončení pluginu."
+
 msgid "Clear bookmarks..."
 msgstr "Čistit záložky..."
+
+msgid "Removing selected bookmarks."
+msgstr "Odstranění vybraných záložek."
 
 msgid "Really reload autofs and restart GUI?"
 msgstr "Skutečně reload autofs a restartovat enigma?"

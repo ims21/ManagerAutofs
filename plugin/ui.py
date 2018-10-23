@@ -288,11 +288,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			device = "%s%s%s" % (gC,recordname,fC)
 			autoname = "%s" % sel[2].split('/')[2]
 			mountpoint = "%s%s%s" % (bC,autoname,fC)
-			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'master' file.") % device))
+			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'auto.master' file.") % device))
 			buttons = [""]
-		menu.append((_("New record"), 1, _("Add new record to 'master' file.")))
-		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'master' file.") % device))
-		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'master' file and create file with mountpoint parameters withal.") % device))
+		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
+		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'auto.master' file.") % device))
+		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal.") % device))
 		buttons += ["","",""]
 		if sel:
 			menu.append((_("Edit -") + " " + mountpoint, 10, _("Edit file '%s' with mountpoint parameters for existing '%s' remote device.") % (mountpoint, device)))
