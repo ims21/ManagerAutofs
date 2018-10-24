@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.77"
+VERSION = "1.78"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -299,7 +299,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			menu.append((_("Add line to -") + " " + mountpoint, 11, _("Add next mountpoint parameters line to '%s' for existing '%s' remote device.") % (mountpoint, device)))
 			menu.append((_("Remove -") + " " + mountpoint, 12, _("Remove file '%s' with mountpoint parameters for '%s' remote device.") % (mountpoint, device)))
 			buttons += ["", "", ""]
-		menu.append((_("Help")+"...",30,_("Brief help on how to use autofs.")))
+		menu.append((_("Help")+"...", 30, _("Brief help on how to use autofs.")))
 		buttons += [""]
 		if cfg.extended_menu.value:
 			txt = _("Remove from extended menu")
@@ -309,7 +309,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			descr = _("Add plugin's run to Extended menu.")
 		menu.append((txt,40,descr))
 		buttons += ["blue"]
-		menu.append((_("Utility")+"...",50,_("Next utilities.")))
+		menu.append((_("Utility")+"...", 50, _("Next utilities.")))
 		buttons += ["menu"]
 
 		text = _("Select operation:")
@@ -452,7 +452,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			index = self["list"].getIndex()
 			record = sel[1]
 			autofile = sel[2]
-			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("Record '%s' and its file '%s'") % (record, autofile), 2) ]
+			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("Record '%s' and its file '%s'") % (record, autofile), 2)]
 			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
 	def changeItemStatus(self, index, data):
@@ -988,10 +988,10 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660") ]))
+config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660")]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro") ]))
+config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro")]))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="", fixed_size=False))
@@ -1005,19 +1005,19 @@ config.plugins.mautofs.noatime = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
-config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768") ]))
-config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8") ]))
-config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlm2", "ntlm2") ]))
+config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
+config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
+config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8")]))
+config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlmv2", "ntlmv2"),("ntlmssp", "ntlmssp")]))
 
 config.plugins.mautofs.use_ip_or_name = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
 config.plugins.mautofs.name = NoSave(ConfigText(default = "servername", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("","no"),("dev","dev") ]))
+config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("",_("no")),("dev","dev")]))
 
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("","1.0"),("2.0","2.0"),("3.0","3.0")]))
+config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("",_("no")),("1.0","1.0"),("2.1","2.1"),("3.0","3.0")]))
 #user defined string
 config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
 
