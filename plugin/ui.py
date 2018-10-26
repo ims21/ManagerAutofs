@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.78"
+VERSION = "1.79"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -78,10 +78,14 @@ except:
 	fC = "\c%s" % hex2strColor(0x00f0f0f0)
 
 greyC = "\c%s" % hex2strColor(0x00a0a0a0)
+rC = "\c%s" % hex2strColor(0x00ff4000)
 gC = "\c%s" % hex2strColor(0x0000ff80)
 bC = "\c%s" % hex2strColor(0x000080ff)
 
 _X_ = "%sx%s" % (gC,fC)
+
+MOUNTED = "%s~%s" % (gC,fC)
+CHANGED = "%s~%s" % (rC,fC)
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -98,9 +102,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				<convert type="TemplatedMultiContent">
 				{"templates":
 					{"default": (25,[
-							MultiContentEntryText(pos = (5, 6), size = (10, 25), font=1, flags = RT_HALIGN_LEFT, text = 0), # index 0 is the status
+							MultiContentEntryText(pos = (5, 6), size = (10, 25), font=1, flags = RT_HALIGN_LEFT, text = 0), # index 0 is e/d status
 							MultiContentEntryText(pos = (50, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the name
-							MultiContentEntryText(pos = (300, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 1 is the autofile
+							MultiContentEntryText(pos = (300, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 2 is the autofile
+							MultiContentEntryText(pos = (15, 6), size = (20, 25), font=0, flags = RT_HALIGN_LEFT, text = 4), # mount status
 						])
 					},
 					"fonts": [gFont("Regular", 18),gFont("Regular", 12)],
@@ -185,7 +190,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC,fC,yC,fC))
 
 	def readMasterFile(self):
-		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3
+		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3 , 4 - mount status
 		self.list = []
 
 		for line in open(AUTOMASTER, "r"):
@@ -199,8 +204,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			m = line.split(' ')
 			if len(m) < 3: # wrong line
 				continue
-
-			self.list.append((_X_ if m[0] == "x" else '', m[1], m[2], self.parseOptional(m)))
+			mounted = self.getMountedStatus(m[1], m[2])
+			self.list.append((_X_ if m[0] == "x" else '', m[1], m[2], self.parseOptional(m), mounted))
 		self['list'].setList(self.list)
 
 	def parseOptional(self, m):
@@ -236,6 +241,17 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self["key_blue"].setText(text)
 			self["text"].setText(self.formatString(sel))
 		self.hddRealPath()
+
+	def getMountedStatus(self, device, autofile):
+		if not os.path.exists(autofile):
+			return
+		if self.getAutoLines(autofile) < 1:
+			return
+		# TODO: solve test for multiline files
+		point = open(autofile,"r").readline().split(' ')[0]
+		if os.path.exists("%s/%s/." % (device, point)):
+			return MOUNTED
+		return ""
 
 	def clearTexts(self):
 		self.MessageBoxNM()
@@ -415,7 +431,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				enabled =  cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				edit = (enabled, mountpoint, autofile, optional )
+				edit = (enabled, mountpoint, autofile, optional if len(optional) else '', '')
 				self.changeItem(index, edit)
 				if old_autofile != autofile:
 					if os.path.exists(old_autofile):
@@ -460,14 +476,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			status = ""
 		else:
 			status = _X_
-		self.changeItem(index, (status ,data[1], data[2], data[3] if len(data) > 3 else ''))
+		self["list"].modifyEntry(index, (status ,data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
 
 	def changeItem(self, index, new):
-		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3] if len(new) > 3 else ''))
+		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3], new[4]))
 		self.refreshText()
 
 	def addItem(self, new):
-		self.list.append((new[0], new[1], new[2], new[3] if len(new) > 3 else ''))
+		self.list.append((new[0], new[1], new[2], new[3] if len(new) > 3 else '', ''))
 		self.refreshText()
 
 	def removeItem(self, index):
@@ -563,7 +579,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			buttons += [""]
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"), 12, _("Install required autofs package if missing.")))
-			buttons += ["green"]
+			buttons += [""]
 		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
 		buttons += [""]
 		space = 4 * " "
@@ -581,7 +597,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if os.path.exists(AUTOFS):
 			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin close.")))
 			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
-			buttons += ["","4"]
+			buttons += ["","green"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin close.")))
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
