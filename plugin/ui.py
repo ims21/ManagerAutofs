@@ -87,6 +87,8 @@ _X_ = "%sx%s" % (gC,fC)
 MOUNTED = "%s~%s" % (gC,fC)
 CHANGED = "%s~%s" % (yC,fC)
 FAILED = "%s~%s" % (rC,fC)
+MISSING_FILE = "%s!%s" % (rC,fC)
+MISSING_LINE = "%s?%s" % (yC,fC)
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -245,16 +247,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def getMountedStatus(self, selected, device, autofile):
 		if not os.path.exists(autofile):
-			if selected == "x":
-				return FAILED
-			return ""
+			return MISSING_FILE
 		if self.getAutoLines(autofile) < 1:
-			if selected == "x":
-				return FAILED
-			return ""
+			return MISSING_LINE
 		# TODO: solve test for multiline files
 		point = open(autofile,"r").readline().split(' ')[0]
 		if os.path.exists("%s/%s/." % (device, point)):
+			if selected == "x":
+				return ""
 			return MOUNTED
 		if selected == "x":
 			return FAILED
