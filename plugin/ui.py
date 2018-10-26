@@ -245,9 +245,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def getMountedStatus(self, selected, device, autofile):
 		if not os.path.exists(autofile):
-			return
+			if selected == "x":
+				return FAILED
+			return ""
 		if self.getAutoLines(autofile) < 1:
-			return
+			if selected == "x":
+				return FAILED
+			return ""
 		# TODO: solve test for multiline files
 		point = open(autofile,"r").readline().split(' ')[0]
 		if os.path.exists("%s/%s/." % (device, point)):
