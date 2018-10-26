@@ -85,7 +85,8 @@ bC = "\c%s" % hex2strColor(0x000080ff)
 _X_ = "%sx%s" % (gC,fC)
 
 MOUNTED = "%s~%s" % (gC,fC)
-CHANGED = "%s~%s" % (rC,fC)
+CHANGED = "%s~%s" % (yC,fC)
+FAILED = "%s~%s" % (rC,fC)
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -204,7 +205,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			m = line.split(' ')
 			if len(m) < 3: # wrong line
 				continue
-			mounted = self.getMountedStatus(m[1], m[2])
+			mounted = self.getMountedStatus(m[0], m[1], m[2])
 			self.list.append((_X_ if m[0] == "x" else '', m[1], m[2], self.parseOptional(m), mounted))
 		self['list'].setList(self.list)
 
@@ -242,7 +243,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self["text"].setText(self.formatString(sel))
 		self.hddRealPath()
 
-	def getMountedStatus(self, device, autofile):
+	def getMountedStatus(self, selected, device, autofile):
 		if not os.path.exists(autofile):
 			return
 		if self.getAutoLines(autofile) < 1:
@@ -251,6 +252,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		point = open(autofile,"r").readline().split(' ')[0]
 		if os.path.exists("%s/%s/." % (device, point)):
 			return MOUNTED
+		if selected == "x":
+			return FAILED
 		return ""
 
 	def clearTexts(self):
@@ -424,14 +427,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, old_autofile, change = False):
+		def callbackEdit( index, old_autofile, mnt_status, change = False):
 			if change:
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				edit = (enabled, mountpoint, autofile, optional if len(optional) else '', '')
+				edit = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
 				self.changeItem(index, edit)
 				if old_autofile != autofile:
 					if os.path.exists(old_autofile):
@@ -452,7 +455,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if sel:
 			index = self["list"].getIndex()
 			old_autofile = sel[2]
-			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile), ManagerAutofsMasterEdit, sel, self.list)
+			mnt_status = sel[4]
+			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile, mnt_status), ManagerAutofsMasterEdit, sel, self.list)
 
 	def removeMasterRecord(self):
 		def callbackRemove(index, autofile, retval=False):
