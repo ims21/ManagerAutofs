@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.79"
+VERSION = "1.80"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -54,6 +54,10 @@ config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_
 config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
 config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
+
+# parameters for prefilled user/pass
+config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
+config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
 
 cfg = config.plugins.mautofs
 
@@ -269,7 +273,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def keyClose(self):
 		self.saveMasterFile()
 		self.updateAutofs()
+		self.resetCfg()
 		self.close()
+
+	def resetCfg(self):
+		config.plugins.mautofs.pre_user.value = ""
+		config.plugins.mautofs.pre_passwd.value = ""
 
 	def startMoving(self):
 		self.edit = not self.edit
@@ -610,6 +619,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
+		menu.append((space + _("User and password presetting..."), 200, _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings are on plugin exit cleared.")))
+		buttons += [""]
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
 
@@ -647,6 +658,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
 			self.session.open(ManagerAutofsClearBookmarks)
+		elif choice[1] == 200:
+			self.session.open(ManagerAutofsPreset)
 		elif choice[1] == 1000:
 			self.selectionUtilitySubmenu += 1 # jump to next item
 			self.utilitySubmenu()
@@ -1125,6 +1138,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.useduserpass = _("use user/pass")
 		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
 		if cfg.useduserpass.value:
+			if cfg.user.value == "":
+				cfg.user.value = cfg.pre_user.value
+			if not cfg.passwd.value:
+				cfg.passwd.value = cfg.pre_passwd.value
 			self.list.append(getConfigListEntry(dx + _("user"), cfg.user))
 			self.list.append(getConfigListEntry(dx + _("password"), cfg.passwd))
 		self.useddomain = _("domain")
@@ -1548,6 +1565,40 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			if display and self.session is not None:
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
+
+class ManagerAutofsPreset(Screen, ConfigListScreen):
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		self.skinName = "Setup"
+		self["config"] = List()
+
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("OK"))
+
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
+		self["VKeyIcon"] = Boolean(False)
+
+		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
+		{
+			"green": self.save,
+			"ok": self.save,
+			"red": self.exit,
+			"cancel": self.exit
+		}, -2)
+
+		list = []
+		list.append(getConfigListEntry(_("user"), cfg.pre_user))
+		list.append(getConfigListEntry(_("password"), cfg.pre_passwd))
+		ConfigListScreen.__init__(self, list, session)
+		self.onShown.append(self.setWindowTitle)
+
+	def setWindowTitle(self):
+		self.setTitle(_("User and password preseting"))
+	def save(self):
+		self.keySave()
+	def exit(self):
+		self.keyCancel()
 
 class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 	skin="""
