@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.80"
+VERSION = "1.81"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -58,6 +58,7 @@ config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits =
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
+config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
 
 cfg = config.plugins.mautofs
 
@@ -277,9 +278,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.close()
 
 	def resetCfg(self):
-		config.plugins.mautofs.pre_user.value = ""
+		if not cfg.pre_save.value:
+			config.plugins.mautofs.pre_user.value = ""
+			config.plugins.mautofs.pre_passwd.value = ""
 		config.plugins.mautofs.pre_user.save()
-		config.plugins.mautofs.pre_passwd.value = ""
 		config.plugins.mautofs.pre_passwd.save()
 
 	def startMoving(self):
@@ -622,7 +624,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
-		txt = _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings are on plugin exit cleared.")
+		txt = _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings can be on plugin exit cleared.")
 		menu.append((space + _("User and password presetting..."), 200, txt))
 		buttons += [""]
 		text = _("Select operation:")
@@ -1597,6 +1599,7 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		list = []
 		list.append(getConfigListEntry(_("user"), cfg.pre_user))
 		list.append(getConfigListEntry(_("password"), cfg.pre_passwd))
+		list.append(getConfigListEntry(_("save preset values"), cfg.pre_save, _("Preset values will be or will not be saved on plugin exit.")))
 		ConfigListScreen.__init__(self, list, session)
 		self.onShown.append(self.setWindowTitle)
 

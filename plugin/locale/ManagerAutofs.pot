@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-27 11:54+0200\n"
+"POT-Creation-Date: 2018-10-27 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,12 +201,6 @@ msgid ""
 "AutoBackup plugin."
 msgstr ""
 
-msgid "Open AutoBackup plugin"
-msgstr ""
-
-msgid "Runs AutoBackup plugin"
-msgstr ""
-
 msgid "Remove unused autofs files in AutoBackup"
 msgstr ""
 
@@ -258,6 +252,12 @@ msgid ""
 "then wait for finishing and for restart GUI."
 msgstr ""
 
+msgid "Open AutoBackup plugin"
+msgstr ""
+
+msgid "Runs AutoBackup plugin"
+msgstr ""
+
 msgid "Reload Bookmarks"
 msgstr ""
 
@@ -272,13 +272,13 @@ msgstr ""
 msgid "Removing selected bookmarks."
 msgstr ""
 
-msgid "User and password presetting..."
-msgstr ""
-
 msgid ""
 "You can set user and password before creating more autofiles. Values are "
 "used too, when item 'used user/pass' is turned off and on again and values "
-"in auto.file were empty before it. Presettings are on plugin exit cleared."
+"in auto.file were empty before it. Presettings can be on plugin exit cleared."
+msgstr ""
+
+msgid "User and password presetting..."
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"
@@ -489,6 +489,12 @@ msgid "Cancel"
 msgstr ""
 
 msgid "OK"
+msgstr ""
+
+msgid "save preset values"
+msgstr ""
+
+msgid "Preset values will be or will not be saved on plugin exit."
 msgstr ""
 
 msgid "User and password preseting"
