@@ -1580,9 +1580,11 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		Screen.__init__(self, session)
 		self.skinName = "Setup"
 		self["config"] = List()
+		self.setup_title = _("User and password preseting")
 
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("OK"))
+		self["description"] = Label()
 
 		self["HelpWindow"] = Pixmap()
 		self["HelpWindow"].hide()
@@ -1603,6 +1605,9 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		ConfigListScreen.__init__(self, list, session)
 		self.onShown.append(self.setWindowTitle)
 
+	def createSummary(self):
+		from Screens.Setup import SetupSummary
+		return SetupSummary
 	def setWindowTitle(self):
 		self.setTitle(_("User and password preseting"))
 	def save(self):
