@@ -62,7 +62,7 @@ config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
 cfg = config.plugins.mautofs
 
 AUTOMASTER="/etc/auto.master"
-AUTOBACKUP="/etc/backup.cfg"
+BACKUPCFG="/etc/backup.cfg"
 AUTOFS="/etc/init.d/autofs"
 DEFAULT_HDD = '/media/hdd'
 
@@ -590,9 +590,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons = []
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
 			menu.append((_("Update autofs files in AutoBackup"), 0, _("Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin.")))
-			menu.append((_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
 			menu.append((_("Remove unused autofs files in AutoBackup"), 2, _("Remove unused autofs files from /etc/backup.cfg file.")))
-			buttons += ["","2",""]
+			buttons += ["",""]
 		if self.isBackupFile():
 			menu.append((_("Remove backup files"), 3, _("Remove selected backup files created when editing autofs files.")))
 			buttons += [""]
@@ -617,11 +616,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin close.")))
 			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
 			buttons += ["","green"]
+		menu.append((space +_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
+		buttons += ["3"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin close.")))
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
-		menu.append((space + _("User and password presetting..."), 200, _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings are on plugin exit cleared.")))
+		txt = _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings are on plugin exit cleared.")
+		menu.append((space + _("User and password presetting..."), 200, txt))
 		buttons += [""]
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
@@ -731,57 +733,60 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
 			def readBackup():
-				if os.path.exists(AUTOBACKUP):
-					return open(AUTOBACKUP, "r").read()
-				self.MessageBoxNM(True, _("File '%s' was created!") % AUTOBACKUP, 3)
+				if os.path.exists(BACKUPCFG):
+					file = open(BACKUPCFG, "r")
+					content = file.read()
+					file.close()
+					return content
+				self.MessageBoxNM(True, _("File '%s' was created!") % BACKUPCFG, 3)
 				return ""
 			if value:
 				backup = readBackup()
-				fo = open(AUTOBACKUP, "a")
+				update = open(BACKUPCFG, "a")
 				if AUTOMASTER not in backup:
-					fo.write(AUTOMASTER + '\n')
+					update.write(AUTOMASTER + '\n')
 				for rec in self.list:
 					if rec[2] not in backup:
-						fo.write(rec[2] + '\n')
-				fo.close()
+						update.write(rec[2] + '\n')
+				update.close()
 				self.MessageBoxNM(True, _("Done"), 1)
 			self.utilitySubmenu()
-		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
+		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '%s'?") % BACKUPCFG, type=MessageBox.TYPE_YESNO, default=False)
 
-	def refreshAutoBackup(self):	# remove unused /etc/auto. lines from /etc/backup.cfg
+	def refreshAutoBackup(self):	# remove unused /etc/auto.files lines from /etc/backup.cfg
 		def callbackBackup(value=False):
 			if value:
-				if os.path.exists(AUTOBACKUP):
-					copyfile(AUTOBACKUP, AUTOBACKUP + '.bak')
+				if os.path.exists(BACKUPCFG):
+					copyfile(BACKUPCFG, BACKUPCFG + '.bak')
 
-					fi = open(AUTOBACKUP + '.bak',"r")
-					fo = open(AUTOBACKUP, "w")
+					backupcfg = open(BACKUPCFG + '.bak',"r")
+					new = open(BACKUPCFG, "w")
 
 					autofslines = []	# auto.xxxx lines
 					lines = []		# other lines
-					for l in fi:
-						l = l.replace('\n','')
-						if not l:
+					for line in backupcfg:
+						line = line.replace('\n','')
+						if not line:
 							continue
-						if l.startswith('/etc/auto.'):
+						if line.startswith('/etc/auto.'):
 							for rec in self.list:
-								if rec[2] == l:
-									autofslines.append(l + '\n')
+								if rec[2] == line:
+									autofslines.append(line + '\n')
 						else:
-							lines.append(l + '\n')
+							lines.append(line + '\n')
 					autofslines.sort()
-					fo.write(AUTOMASTER + '\n')
+					new.write(AUTOMASTER + '\n')
 					for auto in autofslines:
-						fo.write(auto)
+						new.write(auto)
 					for f in lines:
-						fo.write(f)
-					fo.close()
-					fi.close()
+						new.write(f)
+					new.close()
+					backupcfg.close()
 					self.MessageBoxNM(True, _("Done"), 1)
 				else:
 					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 3)
 			self.utilitySubmenu()
-		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % AUTOBACKUP, type=MessageBox.TYPE_YESNO, default=False)
+		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % BACKUPCFG, type=MessageBox.TYPE_YESNO, default=False)
 
 	def installAutofs(self):
 		cmd = 'opkg install autofs'
