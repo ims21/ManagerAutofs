@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:15+0200\n"
+"POT-Creation-Date: 2018-10-27 11:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,6 +272,15 @@ msgstr ""
 msgid "Removing selected bookmarks."
 msgstr ""
 
+msgid "User and password presetting..."
+msgstr ""
+
+msgid ""
+"You can set user and password before creating more autofiles. Values are "
+"used too, when item 'used user/pass' is turned off and on again and values "
+"in auto.file were empty before it. Presettings are on plugin exit cleared."
+msgstr ""
+
 msgid "Really reload autofs and restart GUI?"
 msgstr ""
 
@@ -476,6 +485,15 @@ msgstr ""
 msgid "Really erase record: '%s'?"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "User and password preseting"
+msgstr ""
+
 msgid "List of bookmarks"
 msgstr ""
 
@@ -489,9 +507,6 @@ msgid "Sort list"
 msgstr ""
 
 msgid "Invert selection"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "Delete"

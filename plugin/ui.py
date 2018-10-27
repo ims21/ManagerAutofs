@@ -278,7 +278,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def resetCfg(self):
 		config.plugins.mautofs.pre_user.value = ""
+		config.plugins.mautofs.pre_user.save()
 		config.plugins.mautofs.pre_passwd.value = ""
+		config.plugins.mautofs.pre_passwd.save()
 
 	def startMoving(self):
 		self.edit = not self.edit
