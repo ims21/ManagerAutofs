@@ -1074,10 +1074,12 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		<screen position="center,center" size="560,495">
 			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
 			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
-			<widget name="blue" pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
+			<widget objectTypes="key_blue,StaticText" source="key_blue" render="Pixmap" position="420,0" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on">
+				<convert type="ConditionalShowHide"/>
+			</widget>
 			<widget name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
 			<widget name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
-			<widget name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
+			<widget source="key_blue" render="Label" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
 			<widget name="text" position="5,42" size="550,56" font="Regular;14" halign="left" valign="center"/>
 			<widget name="config" position="5,100" size="550,375" scrollbarMode="showOnDemand"/>
 			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,475" zPosition="10" size="35,25" transparent="1" alphatest="on">
@@ -1098,7 +1100,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
-		self["key_blue"] = Button()
+		self["key_blue"] = StaticText()
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
 		self["blue"] = Pixmap()
