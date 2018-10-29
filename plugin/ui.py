@@ -626,7 +626,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
-		txt = _("You can preset several input parameters before creating more autofiles. Values can be then used with blue button on current item. Presettings account values can be cleared on plugin exit.")
+		txt = _("You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit.")
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += [""]
 		text = _("Select operation:")
@@ -1630,9 +1630,9 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		}, -2)
 
 		list = []
-		list.append(getConfigListEntry(_("user"), cfg.pre_user))
-		list.append(getConfigListEntry(_("password"), cfg.pre_passwd))
-		list.append(getConfigListEntry(_("save preset values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
+		list.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
+		list.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
+		list.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
 		list.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
 		list.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
 		ConfigListScreen.__init__(self, list, session)

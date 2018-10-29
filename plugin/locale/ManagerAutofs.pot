@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-27 14:58+0200\n"
+"POT-Creation-Date: 2018-10-29 19:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -273,12 +273,12 @@ msgid "Removing selected bookmarks."
 msgstr ""
 
 msgid ""
-"You can set user and password before creating more autofiles. Values are "
-"used too, when item 'used user/pass' is turned off and on again and values "
-"in auto.file were empty before it. Presettings can be on plugin exit cleared."
+"You can preset several input parameters before creating more autofiles. "
+"Values can be then inserted with blue button on current item. Presettings "
+"account values can be cleared on plugin exit."
 msgstr ""
 
-msgid "User and password presetting..."
+msgid "Presetting input values..."
 msgstr ""
 
 msgid "Really reload autofs and restart GUI?"
@@ -453,6 +453,9 @@ msgstr ""
 msgid "user string"
 msgstr ""
 
+msgid "Use preset"
+msgstr ""
+
 msgid "Wrong file format!"
 msgstr ""
 
@@ -485,19 +488,31 @@ msgstr ""
 msgid "Really erase record: '%s'?"
 msgstr ""
 
+msgid "User and password preseting"
+msgstr ""
+
 msgid "Cancel"
 msgstr ""
 
 msgid "OK"
 msgstr ""
 
-msgid "save preset values"
+msgid "Preset username account value."
 msgstr ""
 
-msgid "Preset values will be or will not be saved on plugin exit."
+msgid "Preset account password value."
 msgstr ""
 
-msgid "User and password preseting"
+msgid "save preset account values"
+msgstr ""
+
+msgid "Preset account values will be or will not be saved on plugin exit."
+msgstr ""
+
+msgid "Preset value for local directory."
+msgstr ""
+
+msgid "Preset value for shared remote directory."
 msgstr ""
 
 msgid "List of bookmarks"
