@@ -609,7 +609,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				currentpoint = sel[1][sel[1].rfind('/')+1:]
 				if sel[0] == _X_ and currentpoint not in cfg.hddreplace.value: # mounted and not used
 					menu.append((space + _("Use '%s' as HDD replacement") % currentpoint, 20, _("You can use current mountpoint '%s' as HDD replacement.") % currentpoint))
-					buttons += ["green"]
+					buttons += ["yellow"]
 				if cfg.hddreplace.value != DEFAULT_HDD:
 					mountpoint = cfg.hddreplace.value.split('/')[2]
 					menu.append((space + _("Cancel '%s' as HDD replacement") % mountpoint, 21, _("Cancel using '%s' as HDD replacement.") % currentpoint))
