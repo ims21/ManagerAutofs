@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.81"
+VERSION = "1.82"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -59,6 +59,8 @@ config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits =
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
 config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
+config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
+config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
 
 cfg = config.plugins.mautofs
 
@@ -624,8 +626,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
-		txt = _("You can set user and password before creating more autofiles. Values are used too, when item 'used user/pass' is turned off and on again and values in auto.file were empty before it. Presettings can be on plugin exit cleared.")
-		menu.append((space + _("User and password presetting..."), 200, txt))
+		txt = _("You can preset several input parameters before creating more autofiles. Values can be then used with blue button on current item. Presettings account values can be cleared on plugin exit.")
+		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += [""]
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
@@ -1072,8 +1074,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		<screen position="center,center" size="560,495">
 			<widget name="red" position="0,0" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />
 			<widget name="green" position="140,0" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />
+			<widget name="blue" pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on"/>
 			<widget name="key_red" position="0,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="red" font="Regular;20" transparent="1"/>
 			<widget name="key_green" position="140,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="green" font="Regular;20" transparent="1"/>
+			<widget name="key_blue" position="420,0" size="140,40" zPosition="1" valign="center" halign="center" backgroundColor="blue" font="Regular;20" transparent="1"/>
 			<widget name="text" position="5,42" size="550,56" font="Regular;14" halign="left" valign="center"/>
 			<widget name="config" position="5,100" size="550,375" scrollbarMode="showOnDemand"/>
 			<widget source="VKeyIcon" render="Pixmap" pixmap="skin_default/buttons/key_text.png" position="10,475" zPosition="10" size="35,25" transparent="1" alphatest="on">
@@ -1085,7 +1089,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def __init__(self, session, filename, line, new=False):
 		Screen.__init__(self, session)
 		name = "%s%s%s" % (bC, filename, fC)
-		self.setTitle(_("Manager Autofs - edited autofile/record: %s") % name)
+		self.setup_title = _("Manager Autofs - edited autofile/record: %s") % name
+		self.setTitle(self.setup_title)
 		self.session = session
 		self.new = new
 		self["text"] = Label("")
@@ -1093,12 +1098,14 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("Ok"))
+		self["key_blue"] = Button()
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
+		self["blue"] = Pixmap()
 		self["HelpWindow"] = Pixmap()
 		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
-		
+
 		self.list = [ ]
 		self.onChangedEntry = [ ]
 		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)		
@@ -1109,6 +1116,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			"cancel":	self.keyClose,
 			"green":	self.keyOk,
 			"red":		self.keyClose,
+			"blue":		self.preset,
 			 }, -1)
 
 		self.msgNM=None
@@ -1137,7 +1145,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def createConfig(self):
 		self.list = [ ]
 		dx = 4*' '
-		self.list.append(getConfigListEntry(_("local directory"), cfg.localdir))
+		self.localdir = _("local directory")
+		self.list.append(getConfigListEntry(self.localdir, cfg.localdir))
 		self.fstype = _("fstype")
 		self.list.append(getConfigListEntry(self.fstype, cfg.fstype))
 		if cfg.fstype.value == "nfs":
@@ -1146,13 +1155,11 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
 		self.useduserpass = _("use user/pass")
 		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
+		self.user = dx + _("user")
+		self.passwd = dx + _("password")
 		if cfg.useduserpass.value:
-			if cfg.user.value == "":
-				cfg.user.value = cfg.pre_user.value
-			if not cfg.passwd.value:
-				cfg.passwd.value = cfg.pre_passwd.value
-			self.list.append(getConfigListEntry(dx + _("user"), cfg.user))
-			self.list.append(getConfigListEntry(dx + _("password"), cfg.passwd))
+			self.list.append(getConfigListEntry(self.user, cfg.user))
+			self.list.append(getConfigListEntry(self.passwd, cfg.passwd))
 		self.useddomain = _("domain")
 		self.list.append(getConfigListEntry(self.useddomain, cfg.useddomain))
 		if cfg.useddomain.value:
@@ -1177,7 +1184,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				self.list.append(getConfigListEntry(2*dx + _("name"), cfg.name))
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
-		self.list.append(getConfigListEntry(_("shared remote directory"), cfg.remotedir))
+		self.remotedir = _("shared remote directory")
+		self.list.append(getConfigListEntry(self.remotedir, cfg.remotedir))
 		if cfg.fstype.value == "cifs":
 			self.list.append(getConfigListEntry(_("smb version"), cfg.smb))
 		self.list.append(getConfigListEntry(_("user string"), cfg.rest))
@@ -1191,6 +1199,29 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		if self["config"].getCurrent()[0] in (self.useddomain, self.useduserpass, self.use_ip_or_name, self.usedip, self.fstype):
 			self.createConfig()
 		self.fillString()
+
+	def preset(self):
+		if self["config"].getCurrent()[0] is self.localdir:
+			cfg.localdir.value = cfg.pre_localdir.value
+			self.createConfig()
+		elif self["config"].getCurrent()[0] is self.user:
+			cfg.user.value = cfg.pre_user.value
+			self.createConfig()
+		elif self["config"].getCurrent()[0] is self.passwd:
+			cfg.passwd.value = cfg.pre_passwd.value
+			self.createConfig()
+		elif self["config"].getCurrent()[0] is self.remotedir:
+			cfg.remotedir.value = cfg.pre_remotedir.value
+			self.createConfig()
+
+	def getCurrentEntry(self):
+		if self["config"].getCurrent()[0] in (self.localdir, self.user, self.passwd, self.remotedir):
+			self["key_blue"].setText(_("Use preset"))
+		else:
+			self["key_blue"].setText("")
+	def createSummary(self):
+		from Screens.Setup import SetupSummary
+		return SetupSummary
 
 	def fillString(self):
 		self["text"].setText(self.actualizeString())
@@ -1601,7 +1632,9 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		list = []
 		list.append(getConfigListEntry(_("user"), cfg.pre_user))
 		list.append(getConfigListEntry(_("password"), cfg.pre_passwd))
-		list.append(getConfigListEntry(_("save preset values"), cfg.pre_save, _("Preset values will be or will not be saved on plugin exit.")))
+		list.append(getConfigListEntry(_("save preset values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
+		list.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
+		list.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
 		ConfigListScreen.__init__(self, list, session)
 		self.onShown.append(self.setWindowTitle)
 
