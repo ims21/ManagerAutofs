@@ -500,6 +500,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		else:
 			status = _X_
 		self["list"].modifyEntry(index, (status ,data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
+		self.refreshText()
 
 	def changeItem(self, index, new):
 		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3], new[4]))
