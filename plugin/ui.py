@@ -804,6 +804,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			cmd = '%s %s' % (AUTOFS, option)
 			if restartGui:
 				cmd += '; killall enigma2'
+				self.MessageBoxNM(True, _("Please wait for restart GUI!"), 20)
 			if self.container.execute(cmd):
 				print "[ManagerAutofs] failed to execute"
 				self.showOutput()
