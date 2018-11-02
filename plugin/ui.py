@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.82"
+VERSION = "1.83"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -446,15 +446,18 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, old_autofile, mnt_status, change = False):
+		def callbackEdit( index, sel, change = False):
 			if change:
+				old_autofile = sel[2]
+				mnt_status = sel[4]
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				edit = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
-				self.changeItem(index, edit)
+				record = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
+				changed = self.testChangedRecord(sel, record)
+				self.changeItem(index, record, changed)
 				if old_autofile != autofile:
 					if os.path.exists(old_autofile):
 						if os.path.exists(autofile):
@@ -473,9 +476,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		sel = self["list"].getCurrent()
 		if sel:
 			index = self["list"].getIndex()
-			old_autofile = sel[2]
-			mnt_status = sel[4]
-			self.session.openWithCallback(boundFunction(callbackEdit, index, old_autofile, mnt_status), ManagerAutofsMasterEdit, sel, self.list)
+			self.session.openWithCallback(boundFunction(callbackEdit, index, sel), ManagerAutofsMasterEdit, sel, self.list)
 
 	def removeMasterRecord(self):
 		def callbackRemove(index, autofile, retval=False):
@@ -494,6 +495,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("Record '%s' and its file '%s'") % (record, autofile), 2)]
 			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
+	def testChangedRecord(self, old, new):
+		for i in range(0,4):
+			if old[i] != new[i]:
+				return True
+		return False
+
 	def changeItemStatus(self, index, data):
 		if data[0] == _X_:
 			status = ""
@@ -502,8 +509,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["list"].modifyEntry(index, (status ,data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
 		self.refreshText()
 
-	def changeItem(self, index, new):
-		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3], new[4]))
+	def changeItem(self, index, new, changed=False):
+		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3], CHANGED if changed else ''))
 		self.refreshText()
 
 	def addItem(self, new):
@@ -540,9 +547,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
 
 	def editAutofile(self):
-		def callBackSingle(name,text=""):
+		def callBackSingle(name, data="", text=""):
 			if text:
-				self.backupFile(name,"bak")
+				if text != data:
+					self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
+				self.backupFile(name, "bak")
 				self.saveFile(name, text)
 		sel = self["list"].getCurrent()
 		if sel:
@@ -552,13 +561,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			if lines == 1:		# single line
 				line = open(name, "r").readline()
 				data = line.replace('\n','').strip()
-				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
+				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, False)
 			elif lines > 1:		# multi
 				self.session.open(ManagerAutofsMultiAutoEdit, name)
 			elif lines == -1:	# missing
-				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, True)
 			else:			# empty
-				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, True)
 
 	def backupFile(self, name, ext):
 		if os.path.exists(name):
@@ -914,7 +923,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def parsePars(self):
 		if self.pars:
-			self.prepareOff()
+			self.preparedAsDisabled()
 			if self.pars[0] == _X_:
 				cfg.enabled.value = True
 			cfg.mountpoint.value = self.pars[1].split('/')[2]
@@ -938,7 +947,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.timeout.value = cfg.timeout.default
 		cfg.timeouttime.value = cfg.timeouttime.default
 
-	def prepareOff(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
+	def preparedAsDisabled(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
 		cfg.ghost.value = False
 		cfg.timeout.value = False
 
@@ -1120,7 +1129,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			"cancel":	self.keyClose,
 			"green":	self.keyOk,
 			"red":		self.keyClose,
-			"blue":		self.preset,
+			"blue":		self.presets,
 			 }, -1)
 
 		self.msgNM=None
@@ -1204,7 +1213,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self.createConfig()
 		self.fillString()
 
-	def preset(self):
+	def presets(self):
 		if self["config"].getCurrent()[0] is self.localdir:
 			cfg.localdir.value = cfg.pre_localdir.value
 			self.createConfig()
@@ -1299,7 +1308,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.smb.value = cfg.smb.default
 		cfg.rest.value = cfg.rest.default
 
-	def prepareOff(self):
+	def preparedAsDisabled(self):
 		# set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
 		cfg.rw.value = ""
 		cfg.soft.value = False
@@ -1315,7 +1324,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def parse(self, parts):
 		self.setDefaultPars()
-		self.prepareOff()
+		self.preparedAsDisabled()
 		rest = ""
 		try:
 			# parse line
