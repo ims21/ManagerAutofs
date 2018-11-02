@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.83"
+VERSION = "1.84"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -492,7 +492,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			index = self["list"].getIndex()
 			record = sel[1]
 			autofile = sel[2]
-			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("Record '%s' and its file '%s'") % (record, autofile), 2)]
+			removing = [(_("Nothing"), False), (_("Record '%s' only") % record, 1), (_("All (record '%s' and its file '%s')") % (record, autofile), 2)]
 			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
 	def testChangedRecord(self, old, new):
@@ -523,10 +523,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.refreshText()
 
 	def addAutofileLine(self):
-		def callBackCreate(name,text=""):
+		def callBackCreate(name ,text=""):
 			if text:
 				self.backupFile(name,"bak")
 				self.saveFile(name, text)
+				self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
@@ -535,7 +536,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				data = ""
 				self.session.openWithCallback(boundFunction(callBackCreate, name), ManagerAutofsAutoEdit, name, data, True)
 			else:
-				self.session.open(ManagerAutofsMultiAutoEdit, name)
+				def stringChanged(changed=False):
+					if changed:
+						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
+				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
 
 	def createMountpointWithAutofile(self, add):
 		name = add[2]
@@ -563,7 +567,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				data = line.replace('\n','').strip()
 				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, False)
 			elif lines > 1:		# multi
-				self.session.open(ManagerAutofsMultiAutoEdit, name)
+				def stringChanged(changed=False):
+					if changed:
+						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
+				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
 			elif lines == -1:	# missing
 				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, True)
 			else:			# empty
@@ -1459,7 +1466,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			"ok": self.keyEdit,
 			"cancel": self.keyCancel,
 			"red": self.keyCancel,
-			"green": self.keyOk,
+			"green": self.keyEdit,
 			"yellow": self.keyAdd,
 			"blue": self.keyErase,
 			"menu": self.menu,
@@ -1471,7 +1478,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			self["list"].onSelectionChanged.append(self.selectionChanged)
 
 		self["key_red"] = Label(_("Close"))
-		self["key_green"] = Label("Ok")
+		self["key_green"] = Label("Edit")
 		self["key_yellow"] = Label(_("Add"))
 		self["key_blue"] = Label(_("Erase"))
 		self["red"] = Pixmap()
@@ -1482,12 +1489,13 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self["text"] = Label("")
 
 		self.msgNM=None
+		self.changes = False
 
 		self.onShown.append(self.setWindowTitle)
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs - press %sOK%s for edit or use %sMenu%s") % (yC, fC, yC, fC,))
+		self.setTitle(_("Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s") % (yC, fC, yC, fC, yC, fC,))
 
 	def readFile(self):
 		if self.name:
@@ -1509,12 +1517,11 @@ class ManagerAutofsMultiAutoEdit(Screen):
 	def menu(self):
 		menu = []
 		buttons = []
-
 		sel = self["list"].getCurrent()
 		if sel:
-			menu.append((_("Edit line"),0))
-			menu.append((_("Add line"),1))
-			menu.append((_("Remove line"),2))
+			menu.append((_("Edit line"), 0, _("Edit line with mountpoint parameters.")))
+			menu.append((_("Add line"), 1, _("Add next line with mountpoint parameters.")))
+			menu.append((_("Remove line"), 2, _("Remove line with mountpoint parameters.")))
 			buttons += ["", "", ""]
 		else:
 			self.MessageBoxNM(True, _("No valid item"), 5)
@@ -1538,25 +1545,28 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				return
 
 	def keyEdit(self):
+		def callBackWriteLine(index, current, text=""):
+			if text:
+				name = text.split()[0]
+				if text != current[1]:
+					self.changes = True
+				self.changeItem(index, (name, text))
 		current = self["list"].getCurrent()
 		if current:
 			index = self["list"].getIndex()
-			def callBackWriteLine(index, text=""):
-				if text:
-					name = text.split()[0]
-					self.changeItem(index, (name, text))
-			self.session.openWithCallback(boundFunction(callBackWriteLine, index), ManagerAutofsAutoEdit, current[0], current[1], False)
+			self.session.openWithCallback(boundFunction(callBackWriteLine, index, current), ManagerAutofsAutoEdit, current[0], current[1], False)
 
 	def keyOk(self):
 		self.backupFile(self.name,"bak")
 		self.saveFile(self.name)
-		self.close()
+		self.close(self.changes)
 
 	def keyAdd(self):
 		def callBackAdd(text=""):
 			if text:
 				name = text.split()[0]
 				self.addItem((name, text))
+				self.changes = True
 		self.session.openWithCallback(boundFunction(callBackAdd), ManagerAutofsAutoEdit, _("New"), "", True)
 
 	def keyErase(self):
@@ -1564,6 +1574,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			if value:
 				index = self["list"].getIndex()
 				self.removeItem(index)
+				self.changes = True
 		name = self["list"].getCurrent()[0]
 		self.session.openWithCallback(callbackErase, MessageBox, _("Really erase record: '%s'?") % name, type=MessageBox.TYPE_YESNO, default=False)
 
@@ -1576,24 +1587,6 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			fo.write("%s\n" % data[1])
 		fo.close()
 
-# has no effect for autofs if is record commented
-	def disableItem(self, index, data):
-		if data[1][0] != "#":
-			line = "#" + data[1]
-			self.changeItem(index, (data[0], line))
-
-	def enableItem(self, index, data):
-		if data[1][0] == "#":
-			line = data[1][1:]
-			self.changeItem(index, (data[0], line))
-
-	def changeItemStatus(self, index, data):
-		if data[1][0] == "#":
-			line = data[1][1:]
-		else:
-			line = "#" + data[1]
-		self.changeItem(index, (data[0], line))
-#
 	def changeItem(self, index, new):
 		self["list"].modifyEntry(index,(new[0], new[1]))
 		self.refreshText()
@@ -1608,7 +1601,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.refreshText()
 
 	def keyCancel(self):
-		self.close()
+		self.close(self.changes)
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
 		if self.msgNM:
