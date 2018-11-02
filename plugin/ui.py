@@ -1478,7 +1478,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			self["list"].onSelectionChanged.append(self.selectionChanged)
 
 		self["key_red"] = Label(_("Close"))
-		self["key_green"] = Label("Edit")
+		self["key_green"] = Label(_("Edit"))
 		self["key_yellow"] = Label(_("Add"))
 		self["key_blue"] = Label(_("Erase"))
 		self["red"] = Pixmap()

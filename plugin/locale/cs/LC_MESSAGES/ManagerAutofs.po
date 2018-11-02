@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 22:47+0100\n"
-"PO-Revision-Date: 2018-10-31 22:47+0100\n"
+"POT-Creation-Date: 2018-11-02 18:28+0100\n"
+"PO-Revision-Date: 2018-11-02 18:28+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -192,8 +192,8 @@ msgid "Record '%s' only"
 msgstr "Pouze řádek '%s'"
 
 #, python-format
-msgid "Record '%s' and its file '%s'"
-msgstr "Řádek '%s' a soubor '%s'"
+msgid "All (record '%s' and its file '%s')"
+msgstr "Vše (řádek '%s' a soubor '%s')"
 
 msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"
@@ -488,6 +488,9 @@ msgstr "Použít přednastavené"
 msgid "Wrong file format!"
 msgstr "Chybný formát souboru!"
 
+msgid "Edit"
+msgstr "Upravit"
+
 msgid "Add"
 msgstr "Přidat"
 
@@ -495,17 +498,28 @@ msgid "Erase"
 msgstr "Odstranit"
 
 #, python-format
-msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
-msgstr "Manager Autofs - stiskněte %sOK%s pro úpravu nebo použijte %sMenu%s"
+msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
+msgstr ""
+"Manager Autofs - pro úpravu stiskněte %sUpravit%s nebo %sOK%s nebo použijte "
+"%sMenu%s"
 
 msgid "Edit line"
 msgstr "Upravit řádek"
 
+msgid "Edit line with mountpoint parameters."
+msgstr "Úprava řádku s parametry připojení."
+
 msgid "Add line"
 msgstr "Přidat řádek"
 
+msgid "Add next line with mountpoint parameters."
+msgstr "Přidání dalšího řádku s parametry připojení."
+
 msgid "Remove line"
 msgstr "Odstranit řádek"
+
+msgid "Remove line with mountpoint parameters."
+msgstr "Odstranění řádku s parametry připojení."
 
 msgid "No valid item"
 msgstr "Neplatná položka"

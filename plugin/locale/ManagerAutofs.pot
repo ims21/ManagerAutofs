@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 22:47+0100\n"
+"POT-Creation-Date: 2018-11-02 18:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,7 @@ msgid "Record '%s' only"
 msgstr ""
 
 #, python-format
-msgid "Record '%s' and its file '%s'"
+msgid "All (record '%s' and its file '%s')"
 msgstr ""
 
 msgid "What all do You want to remove?"
@@ -462,6 +462,9 @@ msgstr ""
 msgid "Wrong file format!"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
 msgid "Add"
 msgstr ""
 
@@ -469,16 +472,25 @@ msgid "Erase"
 msgstr ""
 
 #, python-format
-msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
+msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
 msgstr ""
 
 msgid "Edit line"
 msgstr ""
 
+msgid "Edit line with mountpoint parameters."
+msgstr ""
+
 msgid "Add line"
 msgstr ""
 
+msgid "Add next line with mountpoint parameters."
+msgstr ""
+
 msgid "Remove line"
+msgstr ""
+
+msgid "Remove line with mountpoint parameters."
 msgstr ""
 
 msgid "No valid item"
