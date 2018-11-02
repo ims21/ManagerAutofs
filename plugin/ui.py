@@ -39,7 +39,7 @@ from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
 
 from shutil import copyfile
-import enigma
+from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
 import skin
 import os
 
@@ -136,7 +136,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.session = session
 
 		self.data = ''
-		self.container = enigma.eConsoleAppContainer()
+		self.container = eConsoleAppContainer()
 		self.container.appClosed.append(self.appClosed)
 		self.container.dataAvail.append(self.dataAvail)
 		self["status"] = Label()
@@ -555,6 +555,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			if text:
 				if text != data:
 					self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
+					self.session.open(ManagerAutofsInfo, data, text)
 				self.backupFile(name, "bak")
 				self.saveFile(name, text)
 		sel = self["list"].getCurrent()
@@ -1549,6 +1550,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			if text:
 				name = text.split()[0]
 				if text != current[1]:
+					self.session.open(ManagerAutofsInfo, current[1], text)
 					self.changes = True
 				self.changeItem(index, (name, text))
 		current = self["list"].getCurrent()
@@ -1786,7 +1788,7 @@ class NonModalMessageBoxDialog(Screen):
 		self.delay = delay
 		self["message"]=Label()
 
-		self.timer = enigma.eTimer()
+		self.timer = eTimer()
 		self.timer.callback.append(self.timerLoop)
 
 		self.onLayoutFinish.append(self.timerStart)
@@ -1832,3 +1834,53 @@ class useMountAsHDD():
 		cfg.hddreplace.save()
 
 makeMountAsHDD = useMountAsHDD()
+
+class ManagerAutofsInfo(Screen):
+	skin="""
+	<screen name="ManagerAutofsInfo" position="fill" title="Info" flags="wfNoBorder" backgroundColor="background">
+		<widget name="old" position="10,15" size="1920,29" font="Regular;25"/>
+		<widget name="new" position="10,45" size="1920,29" font="Regular;25" foregroundColor="green"/>
+	</screen>"""
+
+	def __init__(self, session, old, new):
+		Screen.__init__(self, session)
+		self.session = session
+		self.old = old
+		self.new = new
+		self["old"] = Label()
+		self["new"] = Label()
+
+		self["actions"] = ActionMap(["ColorActions", "OkCancelActions"],
+		{
+			"ok": self.exit,
+			"cancel": self.exit,
+			"green": self.exit,
+			"red": self.exit,
+		}, -2)
+
+		self.onLayoutFinish.append(self.setSize)
+
+	def setSize(self):
+		x,y = self.getLineSize()
+		wsize = (x + 2*10, 3*y)
+		self.instance.resize(eSize(*wsize))
+		w,h = self.getScreenSize()
+		wx = (w - wsize[0])/2
+		wy = (h - wsize[1])/2
+		self.instance.move(ePoint(wx,wy))
+
+	def getLineSize(self):
+		self["old"].instance.setNoWrap(1)
+		self["old"].setText("%s" % self.old)
+		self["new"].instance.setNoWrap(1)
+		self["new"].setText("%s" % self.new)
+		old = self["old"].instance.calculateSize()
+		new = self["new"].instance.calculateSize()
+		return max(old.width(), new.width()), max(old.height(), new.height())
+
+	def getScreenSize(self):
+		desktop = getDesktop(0)
+		return desktop.size().width(), desktop.size().height()
+
+	def exit(self):
+		self.close()
