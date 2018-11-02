@@ -446,8 +446,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, sel, change = False):
-			if change:
+		def callbackEdit( index, sel, changed = False):
+			if changed:
 				old_autofile = sel[2]
 				mnt_status = sel[4]
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
@@ -458,6 +458,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				record = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
 				changed = self.testChangedRecord(sel, record)
 				self.changeItem(index, record, changed)
+				old = "%s %s %s" % (sel[1],sel[2],sel[3] if len(sel[3]) else '')
+				new = "%s %s %s" % (mountpoint, autofile, optional if len(optional) else '')
+				if old != new:
+					self.session.open(ManagerAutofsInfo, old, new)
 				if old_autofile != autofile:
 					if os.path.exists(old_autofile):
 						if os.path.exists(autofile):
