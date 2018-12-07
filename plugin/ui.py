@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.84"
+VERSION = "1.85"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -1088,7 +1088,7 @@ config.plugins.mautofs.name = NoSave(ConfigText(default = "servername", visible_
 config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("",_("no")),("dev","dev")]))
 
 config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("",_("no")),("1.0","1.0"),("2.1","2.1"),("3.0","3.0")]))
+config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("",_("no")),("1.0","1.0"),("2.0","2.0"),("2.1","2.1"),("3.0","3.0")]))
 #user defined string
 config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
 
@@ -1410,6 +1410,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				cfg.dev.value = remote[1]
 				cfg.remotedir.value = remote[2]
 			cfg.rest.value = rest
+
 		except:
 			self.MessageBoxNM(True, _("Wrong file format!"), 5)
 
