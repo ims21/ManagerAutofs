@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.85"
+VERSION = "1.86"
 #
 #  Coded by ims (c) 2018
 #  Support: openpli.org
@@ -1472,8 +1472,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			"ok": self.keyEdit,
 			"cancel": self.keyCancel,
 			"red": self.keyCancel,
-			"green": self.keyEdit,
-			"yellow": self.keyAdd,
+			"green": self.keyAdd,
+			"yellow": self.keyEdit,
 			"blue": self.keyErase,
 			"menu": self.menu,
 		}, -1)
@@ -1484,8 +1484,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			self["list"].onSelectionChanged.append(self.selectionChanged)
 
 		self["key_red"] = Label(_("Close"))
-		self["key_green"] = Label(_("Edit"))
-		self["key_yellow"] = Label(_("Add"))
+		self["key_green"] = Label(_("Add"))
+		self["key_yellow"] = Label(_("Edit"))
 		self["key_blue"] = Label(_("Erase"))
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
