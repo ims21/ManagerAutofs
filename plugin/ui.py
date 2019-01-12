@@ -676,6 +676,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		elif choice[1] == 11:
 			def callback(value=False):
 				if value:
+					self.saveMasterFile()
 					self.updateAutofs(option="restart", restartGui=True)
 			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
 		elif choice[1] == 12:
