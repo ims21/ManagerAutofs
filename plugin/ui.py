@@ -42,6 +42,7 @@ from shutil import copyfile
 from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
 import skin
 import os
+import time
 
 from Components.Pixmap import Pixmap
 from helptexts import ManagerAutofsHelp
@@ -277,6 +278,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.saveMasterFile()
 		self.updateAutofs()
 		self.resetCfg()
+		time.sleep(1)
+		config.movielist.videodirs.load()
 		self.close()
 
 	def resetCfg(self):
