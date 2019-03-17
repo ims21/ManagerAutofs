@@ -3,7 +3,7 @@
 #
 #  $Id$
 #
-#  Coded by ims (c) 2017-2018
+#  Coded by ims (c) 2017-2019
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -16,7 +16,6 @@
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
-
 # for localized messages
 from . import _
 

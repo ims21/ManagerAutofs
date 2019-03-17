@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-02 18:28+0100\n"
+"POT-Creation-Date: 2019-03-17 10:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,172 @@ msgstr ""
 msgid "Manage autofs files and conection"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Mode II"
+msgstr ""
+
+msgid "Mode III"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Install autofs with:  opkg install autofs"
+msgstr ""
+
+msgid "- then edit:"
+msgstr ""
+
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr ""
+
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
+msgstr ""
+
+#, python-format
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr ""
+
+msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
+msgstr ""
+
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr ""
+
+msgid ""
+"All remote directories from all devices will be mounted under '/media/net':"
+msgstr ""
+
+msgid "+ only 2 files for whole work"
+msgstr ""
+
+msgid "- mount/umount all together"
+msgstr ""
+
+msgid "- it is not very clear what is what"
+msgstr ""
+
+msgid "(It has not sense using this mode with this plugin)"
+msgstr ""
+
+#, python-format
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr ""
+
+msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
+msgstr ""
+
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr ""
+
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr ""
+
+msgid "- more auto.xxxx files"
+msgstr ""
+
+msgid "+ very clear what is what"
+msgstr ""
+
+msgid ""
+"+ can be mounted/umounted independently with uncomment/comment line(s) in "
+"auto.master"
+msgstr ""
+
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr ""
+
+msgid "-in auto.xxxx files can be used more lines"
+msgstr ""
+
+msgid "-useful, if one device sharing more directories"
+msgstr ""
+
+msgid "-everything else is the same as for II"
+msgstr ""
+
+msgid "example of auto.synology:"
+msgstr ""
+
+msgid "then will be mounted as:"
+msgstr ""
+
+#, python-format
+msgid ""
+"After change parameters in auto.file is better use %s'Restart autofs with "
+"GUI restart'%s there in 'Menu-Utility'"
+msgstr ""
+
+#, python-format
+msgid "%sConnect to Win7,8,10 shared folder:%s"
+msgstr ""
+
+msgid "PC side:"
+msgstr ""
+
+#, python-format
+msgid ""
+"-on directory press right mouse, select %s'Properties'%s and use bookmark "
+"%s'Sharing'%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr ""
+
+#, python-format
+msgid "-can be changed %s'Shared name'%s too"
+msgstr ""
+
+#, python-format
+msgid ""
+"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
+"with enabled %s'Change'%s and %s'Read'%s"
+msgstr ""
+
+msgid "Box side:"
+msgstr ""
+
+#, python-format
+msgid ""
+"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
+"%s'2.0'%s"
+msgstr ""
+
+msgid "Remove backup files"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Inversion"
+msgstr ""
+
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr ""
+
+msgid "Are you sure to remove selected files?"
+msgstr ""
+
+#, python-format
+msgid "Are you sure to remove file '%s'?"
+msgstr ""
+
 msgid "Mountpoint"
 msgstr ""
 
@@ -30,9 +196,6 @@ msgid "auto.file"
 msgstr ""
 
 msgid "Edit mountpoint"
-msgstr ""
-
-msgid "Close"
 msgstr ""
 
 msgid "Add mountpoint"
@@ -64,6 +227,9 @@ msgid "Disable"
 msgstr ""
 
 msgid "Enable"
+msgstr ""
+
+msgid "Updating mountpoints and bookmarks..."
 msgstr ""
 
 msgid "Edit record:"
@@ -116,9 +282,6 @@ msgstr ""
 
 #, python-format
 msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
-msgstr ""
-
-msgid "Help"
 msgstr ""
 
 msgid "Brief help on how to use autofs."
@@ -205,9 +368,6 @@ msgid "Remove unused autofs files in AutoBackup"
 msgstr ""
 
 msgid "Remove unused autofs files from /etc/backup.cfg file."
-msgstr ""
-
-msgid "Remove backup files"
 msgstr ""
 
 msgid "Remove selected backup files created when editing autofs files."
@@ -462,10 +622,10 @@ msgstr ""
 msgid "Wrong file format!"
 msgstr ""
 
-msgid "Edit"
+msgid "Add"
 msgstr ""
 
-msgid "Add"
+msgid "Edit"
 msgstr ""
 
 msgid "Erase"
@@ -504,9 +664,6 @@ msgid "Really erase record: '%s'?"
 msgstr ""
 
 msgid "User and password preseting"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "OK"
@@ -551,163 +708,9 @@ msgstr ""
 msgid "Sort"
 msgstr ""
 
-msgid "Inversion"
-msgstr ""
-
 msgid "Select with 'OK' and then remove with 'Delete'."
 msgstr ""
 
 #, python-format
 msgid "Are You sure to delete %s selected bookmark(s)?"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
-msgstr ""
-
-msgid "Are you sure to remove selected files?"
-msgstr ""
-
-#, python-format
-msgid "Are you sure to remove file '%s'?"
-msgstr ""
-
-msgid "All"
-msgstr ""
-
-msgid "Mode II"
-msgstr ""
-
-msgid "Mode III"
-msgstr ""
-
-msgid "Install autofs with:  opkg install autofs"
-msgstr ""
-
-msgid "- then edit:"
-msgstr ""
-
-msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
-msgstr ""
-
-msgid "/etc/auto.xxxx - as 'xxxx' use any name"
-msgstr ""
-
-#, python-format
-msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
-msgstr ""
-
-msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
-msgstr ""
-
-msgid "/etc/auto.test - 'test' used as example:"
-msgstr ""
-
-msgid ""
-"All remote directories from all devices will be mounted under '/media/net':"
-msgstr ""
-
-msgid "+ only 2 files for whole work"
-msgstr ""
-
-msgid "- mount/umount all together"
-msgstr ""
-
-msgid "- it is not very clear what is what"
-msgstr ""
-
-msgid "(It has not sense using this mode with this plugin)"
-msgstr ""
-
-#, python-format
-msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
-msgstr ""
-
-msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
-msgstr ""
-
-msgid "more auto.xxxx files - each file for one shared directory:"
-msgstr ""
-
-msgid "Each shared directory has own mounpoint under /media:"
-msgstr ""
-
-msgid "- more auto.xxxx files"
-msgstr ""
-
-msgid "+ very clear what is what"
-msgstr ""
-
-msgid ""
-"+ can be mounted/umounted independently with uncomment/comment line(s) in "
-"auto.master"
-msgstr ""
-
-#, python-format
-msgid "%sMode III:%s  (similar as II)"
-msgstr ""
-
-msgid "-in auto.xxxx files can be used more lines"
-msgstr ""
-
-msgid "-useful, if one device sharing more directories"
-msgstr ""
-
-msgid "-everything else is the same as for II"
-msgstr ""
-
-msgid "example of auto.synology:"
-msgstr ""
-
-msgid "then will be mounted as:"
-msgstr ""
-
-#, python-format
-msgid ""
-"After change parameters in auto.file is better use %s'Restart autofs with "
-"GUI restart'%s there in 'Menu-Utility'"
-msgstr ""
-
-#, python-format
-msgid "%sConnect to Win7,8,10 shared folder:%s"
-msgstr ""
-
-msgid "PC side:"
-msgstr ""
-
-#, python-format
-msgid ""
-"-on directory press right mouse, select %s'Properties'%s and use bookmark "
-"%s'Sharing'%s"
-msgstr ""
-
-#, python-format
-msgid ""
-"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
-msgstr ""
-
-#, python-format
-msgid "-can be changed %s'Shared name'%s too"
-msgstr ""
-
-#, python-format
-msgid ""
-"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
-"with enabled %s'Change'%s and %s'Read'%s"
-msgstr ""
-
-msgid "Box side:"
-msgstr ""
-
-#, python-format
-msgid ""
-"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
-msgstr ""
-
-#, python-format
-msgid ""
-"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
-"%s'2.0'%s"
 msgstr ""

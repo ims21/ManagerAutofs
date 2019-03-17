@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.86"
+VERSION = "1.87"
 #
-#  Coded by ims (c) 2018
+#  Coded by ims (c) 2017-2019
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
 from Components.PluginComponent import plugins
-from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN
+from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN, fileExists
 from Tools.LoadPixmap import LoadPixmap
 from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
@@ -42,7 +42,6 @@ from shutil import copyfile
 from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
 import skin
 import os
-import time
 
 from Components.Pixmap import Pixmap
 from helptexts import ManagerAutofsHelp
@@ -184,6 +183,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["yellow"] = Pixmap()
 		self["blue"] = Pixmap()
 
+		self.delayTimer = eTimer()
 		self.msgNM=None
 		self.selectionUtilitySubmenu = 0
 		self.onShown.append(self.setWindowTitle)
@@ -260,7 +260,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			return MISSING_LINE
 		# TODO: solve test for multiline files
 		point = open(autofile,"r").readline().split(' ')[0]
-		if os.path.exists("%s/%s/." % (device, point)):
+		if fileExists("%s/%s/." % (device, point)):
 			if selected == "x":
 				return ""
 			return MOUNTED
@@ -275,10 +275,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["text"].setText("")
 
 	def keyClose(self):
+		self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
 		self.saveMasterFile()
 		self.updateAutofs()
 		self.resetCfg()
-		time.sleep(1)
+		self.delayTimer.callback.append(self.finishPlugin)
+		self.delayTimer.start(1000)
+
+	def finishPlugin(self):
 		config.movielist.videodirs.load()
 		self.close()
 
