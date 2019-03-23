@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-17 10:41+0100\n"
+"POT-Creation-Date: 2019-03-23 19:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -685,6 +685,14 @@ msgid "Preset value for local directory."
 msgstr ""
 
 msgid "Preset value for shared remote directory."
+msgstr ""
+
+msgid "test mount points on plugin start"
+msgstr ""
+
+msgid ""
+"Tests enabled mount points on plugin start, but it increase plugin start "
+"time."
 msgstr ""
 
 msgid "List of bookmarks"

@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.87"
+VERSION = "1.88"
 #
 #  Coded by ims (c) 2017-2019
 #  Support: openpli.org
@@ -61,6 +61,7 @@ config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
 config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
+config.plugins.mautofs.testmountpoints = ConfigYesNo(default = False)
 
 cfg = config.plugins.mautofs
 
@@ -258,6 +259,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			return MISSING_FILE
 		if self.getAutoLines(autofile) < 1:
 			return MISSING_LINE
+		if not cfg.testmountpoints.value:
+			return ""
 		# TODO: solve test for multiline files
 		point = open(autofile,"r").readline().split(' ')[0]
 		if fileExists("%s/%s/." % (device, point)):
@@ -657,7 +660,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		txt = _("You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit.")
 		menu.append((space + _("Presetting input values..."), 200, txt))
-		buttons += [""]
+		buttons += ["menu"]
 		text = _("Select operation:")
 		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
 
@@ -1656,6 +1659,7 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		list.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
 		list.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
 		list.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
+		list.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
 		ConfigListScreen.__init__(self, list, session)
 		self.onShown.append(self.setWindowTitle)
 
