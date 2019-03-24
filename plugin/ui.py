@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.88"
+VERSION = "1.89"
 #
 #  Coded by ims (c) 2017-2019
 #  Support: openpli.org
@@ -278,12 +278,15 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["text"].setText("")
 
 	def keyClose(self):
-		self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
-		self.saveMasterFile()
-		self.updateAutofs()
 		self.resetCfg()
-		self.delayTimer.callback.append(self.finishPlugin)
-		self.delayTimer.start(1000)
+		if self.changes:
+			self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
+			self.saveMasterFile()
+			self.updateAutofs()
+			self.delayTimer.callback.append(self.finishPlugin)
+			self.delayTimer.start(1000)
+		else:
+			self.close()
 
 	def finishPlugin(self):
 		config.movielist.videodirs.load()
@@ -321,7 +324,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self["list"].modifyEntry(self.idx, tmp2)
 			self["list"].modifyEntry(self.idx+direction, tmp)
 			self.idx+=direction
-			self.changes = True
 
 	def help(self):
 		self.session.open(ManagerAutofsHelp)
@@ -419,6 +421,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def addMasterRecord(self):
 		def callbackAdd(change=False):
 			if change:
+				self.changes = True
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and _X_ or ""
@@ -431,6 +434,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def duplicateMountPoint(self):
 		def callbackAdd(original_autofile, change=False):
 			if change:
+				self.changes = True
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
 				enabled =  cfg.enabled.value and _X_ or ""
@@ -470,6 +474,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.changeItem(index, record, changed)
 				old = "%s %s %s" % (sel[1],sel[2],sel[3] if len(sel[3]) else '')
 				new = "%s %s %s" % (mountpoint, autofile, optional if len(optional) else '')
+				self.changes = changed
 				if old != new:
 					self.session.open(ManagerAutofsInfo, old, new)
 				if old_autofile != autofile:
@@ -499,6 +504,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					bakName = autofile + ".del"
 					os.rename(autofile, bakName)
 			if retval:	# remove record
+				self.changes = True
 				self.removeItem(index)
 
 		sel = self["list"].getCurrent()
@@ -516,6 +522,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		return False
 
 	def changeItemStatus(self, index, data):
+		self.changes = True
 		if data[0] == _X_:
 			status = ""
 		else:
@@ -539,6 +546,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def addAutofileLine(self):
 		def callBackCreate(name ,text=""):
 			if text:
+				self.changes = True
 				self.backupFile(name,"bak")
 				self.saveFile(name, text)
 				self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
@@ -552,6 +560,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			else:
 				def stringChanged(changed=False):
 					if changed:
+						self.changes = True
 						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
 				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
 
@@ -568,6 +577,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		def callBackSingle(name, data="", text=""):
 			if text:
 				if text != data:
+					self.changes = True
 					self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
 					self.session.open(ManagerAutofsInfo, data, text)
 				self.backupFile(name, "bak")
@@ -584,6 +594,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			elif lines > 1:		# multi
 				def stringChanged(changed=False):
 					if changed:
+						self.changes = True
 						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
 				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
 			elif lines == -1:	# missing
@@ -649,12 +660,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					menu.append((space + _("Cancel '%s' as HDD replacement") % mountpoint, 21, _("Cancel using '%s' as HDD replacement.") % currentpoint))
 					buttons += ["red"]
 		if os.path.exists(AUTOFS):
-			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin close.")))
+			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin exit if something was changed.")))
 			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
 			buttons += ["","green"]
 		menu.append((space +_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
 		buttons += ["3"]
-		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin close.")))
+		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed.")))
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
@@ -1574,11 +1585,6 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			index = self["list"].getIndex()
 			self.session.openWithCallback(boundFunction(callBackWriteLine, index, current), ManagerAutofsAutoEdit, current[0], current[1], False)
 
-	def keyOk(self):
-		self.backupFile(self.name,"bak")
-		self.saveFile(self.name)
-		self.close(self.changes)
-
 	def keyAdd(self):
 		def callBackAdd(text=""):
 			if text:
@@ -1619,6 +1625,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.refreshText()
 
 	def keyCancel(self):
+		self.backupFile(self.name,"bak")
+		self.saveFile(self.name)
 		self.close(self.changes)
 
 	def MessageBoxNM(self, display=False, text="", delay=0):
