@@ -26,7 +26,7 @@ from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
-from Components.SelectionList import SelectionList
+from myselectionlist import MySelectionList
 import skin
 import os
 
@@ -51,10 +51,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 		self.session = session
 		self.setTitle(_("Remove backup files"))
 
-		self.original_selectionpng = None
-		self.changePng()
-
-		data = SelectionList([])
+		data = MySelectionList([])
 		nr = 0
 		for x in os.listdir("/etc"):
 			if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$") or x.endswith("_bak")):
@@ -100,18 +97,8 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 			else:
 				os.unlink(self["config"].getCurrent()[0][1])
 				self.list.removeSelection(self["config"].getCurrent()[0])
-		if not self.list.len():
+		if not len(self.list.list):
 			self.exit()
 
-	def changePng(self):
-		path = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/mark_select.png")
-		if os.path.exists(path):
-			import Components.SelectionList
-			self.original_selectionpng = Components.SelectionList.selectionpng
-			Components.SelectionList.selectionpng = LoadPixmap(cached=True, path=path)
-
 	def exit(self):
-		if self.original_selectionpng:
-			import Components.SelectionList
-			Components.SelectionList.selectionpng = self.original_selectionpng
 		self.close()
