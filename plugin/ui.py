@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.89"
+VERSION = "1.90"
 #
 #  Coded by ims (c) 2017-2019
 #  Support: openpli.org
@@ -26,7 +26,6 @@ from Components.Button import Button
 from Components.Label import Label
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Screens.HelpMenu import HelpableScreen
-from Components.SelectionList import SelectionList
 from Components.ConfigList import ConfigListScreen
 from Components.config import config, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
 from Tools.BoundFunction import boundFunction
@@ -37,6 +36,7 @@ from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
+from myselectionlist import MySelectionList
 
 from shutil import copyfile
 from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
@@ -363,7 +363,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += ["menu"]
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons])
 
 	def menuCallback(self, choice):
 		if choice is None:
@@ -673,7 +673,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += ["menu"]
 		text = _("Select operation:")
-		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=buttons, selection = self.selectionUtilitySubmenu)
+		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons], selection = self.selectionUtilitySubmenu)
 
 	def utilityCallback(self, menu, choice):
 		if choice is None:
@@ -1556,7 +1556,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			return
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=buttons)
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons])
 
 	def menuCallback(self, choice):
 		if choice is None:
@@ -1704,10 +1704,8 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		self.session = session
 
 		self.setTitle(_("List of bookmarks"))
-		self.original_selectionpng = None
-		self.changePng()
 
-		self.list = SelectionList([])
+		self.list = MySelectionList([])
 		if self.loadAllMovielistVideodirs():
 			index = 0
 			for bookmark in eval(config.movielist.videodirs.saved_value):
@@ -1788,17 +1786,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 			config.movielist.videodirs.value = bookmarks
 			config.movielist.videodirs.save()
 
-	def changePng(self):
-		path = resolveFilename(SCOPE_CURRENT_SKIN, "skin_default/icons/mark_select.png")
-		if os.path.exists(path):
-			import Components.SelectionList
-			self.original_selectionpng = Components.SelectionList.selectionpng
-			Components.SelectionList.selectionpng = LoadPixmap(cached=True, path=path)
-
 	def exit(self):
-		if self.original_selectionpng:
-			import Components.SelectionList
-			Components.SelectionList.selectionpng = self.original_selectionpng
 		self.close()
 
 class NonModalMessageBoxDialog(Screen):
