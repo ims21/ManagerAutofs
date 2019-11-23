@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.91"
+VERSION = "1.92"
 #
 #  Coded by ims (c) 2017-2019
 #  Support: openpli.org
@@ -308,6 +308,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self["h_prev"].show()
 			self["h_next"].show()
 		else:
+			self.changes = True
 			self["h_prev"].hide()
 			self["h_next"].hide()
 	def moveUp(self):
@@ -343,7 +344,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
 		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'auto.master' file.") % device))
 		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal.") % device))
-		buttons += ["","",""]
+		buttons += ["","","5"]
 		if sel:
 			menu.append((_("Edit -") + " " + mountpoint, 10, _("Edit file '%s' with mountpoint parameters for existing '%s' remote device.") % (mountpoint, device)))
 			menu.append((_("Add line to -") + " " + mountpoint, 11, _("Add next mountpoint parameters line to '%s' for existing '%s' remote device.") % (mountpoint, device)))
@@ -1176,7 +1177,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def keyOk(self):
 #		self.writeFile()
-		self.close(self["text"].getText())
+		self.close(self.actualizeString())
+#		self.close(self["text"].getText())
 
 	def keyClose(self):
 		self.close()
