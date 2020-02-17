@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.92"
+VERSION = "1.93"
 #
-#  Coded by ims (c) 2017-2019
+#  Coded by ims (c) 2017-2020
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -284,7 +284,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.saveMasterFile()
 			self.updateAutofs()
 			self.delayTimer.callback.append(self.finishPlugin)
-			self.delayTimer.start(1000)
+			self.delayTimer.start(1000, True)
 		else:
 			self.close()
 
