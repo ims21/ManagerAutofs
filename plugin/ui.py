@@ -1165,7 +1165,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			"green":	self.keyOk,
 			"red":		self.keyClose,
 			"blue":		self.presets,
-			 }, -1)
+			}, -1)
 
 		self.msgNM=None
 
