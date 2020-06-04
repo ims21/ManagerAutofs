@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 19:52+0200\n"
+"POT-Creation-Date: 2020-06-04 19:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,711 +17,918 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: plugin.py:52
 msgid "Manager Autofs"
 msgstr ""
 
+#: plugin.py:53
 msgid "Manage autofs files and conection"
 msgstr ""
 
+#: helptexts.py:34 ui.py:153 ui.py:154 ui.py:178 ui.py:910 ui.py:1148
+#: ui.py:1520 ui.py:1730 ui.py:1735
 msgid "Close"
 msgstr ""
 
+#: helptexts.py:35
 msgid "All"
 msgstr ""
 
+#: helptexts.py:36
 msgid "Mode II"
 msgstr ""
 
+#: helptexts.py:37
 msgid "Mode III"
 msgstr ""
 
+#: helptexts.py:53 ui.py:353
 msgid "Help"
 msgstr ""
 
+#: helptexts.py:64
 msgid "Install autofs with:  opkg install autofs"
 msgstr ""
 
+#: helptexts.py:65
 msgid "- then edit:"
 msgstr ""
 
+#: helptexts.py:66
 msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
 msgstr ""
 
+#: helptexts.py:67
 msgid "/etc/auto.xxxx - as 'xxxx' use any name"
 msgstr ""
 
+#: helptexts.py:71
 #, python-format
 msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
 msgstr ""
 
+#: helptexts.py:72
 msgid "/etc/auto.master - one record only:"
 msgstr ""
 
+#: helptexts.py:74
 msgid "/etc/auto.test - 'test' used as example:"
 msgstr ""
 
+#: helptexts.py:78
 msgid ""
 "All remote directories from all devices will be mounted under '/media/test':"
 msgstr ""
 
+#: helptexts.py:82
 msgid "+ only 2 files for whole work"
 msgstr ""
 
+#: helptexts.py:83
 msgid "- it is not very clear what is what"
 msgstr ""
 
-msgid "Note: older autofs versions required a mount point as '/mnt/net'"
-msgstr ""
-
+#: helptexts.py:88
 #, python-format
 msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
 msgstr ""
 
+#: helptexts.py:89
 msgid "auto.master with more records:"
 msgstr ""
 
+#: helptexts.py:93
 msgid "more auto.xxxx files - each file for one shared directory:"
 msgstr ""
 
+#: helptexts.py:100
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr ""
 
+#: helptexts.py:104
 msgid "- more auto.xxxx files"
 msgstr ""
 
+#: helptexts.py:105
 msgid "+ very clear what is what"
 msgstr ""
 
+#: helptexts.py:106 helptexts.py:123
 msgid ""
 "+ can be mounted/umounted independently with uncomment/comment line(s)\n"
 "in auto.master or auto.xxxx files"
 msgstr ""
 
+#: helptexts.py:110
 #, python-format
 msgid "%sMode III:%s  (similar as II)"
 msgstr ""
 
+#: helptexts.py:111
 msgid "-in auto.xxxx files can be used more lines"
 msgstr ""
 
+#: helptexts.py:112
 msgid "-useful, if one device sharing more directories"
 msgstr ""
 
+#: helptexts.py:114
 msgid "-everything else is the same as for II"
 msgstr ""
 
+#: helptexts.py:115
 msgid "example of auto.synology:"
 msgstr ""
 
+#: helptexts.py:118
 msgid "then will be mounted as:"
 msgstr ""
 
+#: helptexts.py:127
 msgid ""
 "Note: older autofs versions can't handle commented lines in auto.xxxx files!"
 msgstr ""
 
+#: helptexts.py:128
 #, python-format
 msgid ""
 "After change parameters in auto.file is better use %s'Restart autofs with "
 "GUI restart'%s there in 'Menu-Utility'"
 msgstr ""
 
+#: helptexts.py:132
 #, python-format
 msgid "%sConnect to Win7,8,10 shared folder:%s"
 msgstr ""
 
+#: helptexts.py:133
 msgid "PC side:"
 msgstr ""
 
+#: helptexts.py:134
 #, python-format
 msgid ""
 "-on directory press right mouse, select %s'Properties'%s and use bookmark "
 "%s'Sharing'%s"
 msgstr ""
 
+#: helptexts.py:135
 #, python-format
 msgid ""
 "-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
 msgstr ""
 
+#: helptexts.py:136
 #, python-format
 msgid "-can be changed %s'Shared name'%s too"
 msgstr ""
 
+#: helptexts.py:137
 #, python-format
 msgid ""
 "-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
 "with enabled %s'Change'%s and %s'Read'%s"
 msgstr ""
 
+#: helptexts.py:138
 msgid "Box side:"
 msgstr ""
 
+#: helptexts.py:139
 #, python-format
 msgid ""
 "- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
 msgstr ""
 
+#: helptexts.py:140
 #, python-format
 msgid ""
 "- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
 "%s'2.0'%s"
 msgstr ""
 
+#: removebckp.py:52 ui.py:644
 msgid "Remove backup files"
 msgstr ""
 
+#: removebckp.py:76 ui.py:1660 ui.py:1741
 msgid "Cancel"
 msgstr ""
 
+#: removebckp.py:77
 msgid "Remove"
 msgstr ""
 
+#: removebckp.py:78 ui.py:1744
 msgid "Inversion"
 msgstr ""
 
+#: removebckp.py:80
 msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
 msgstr ""
 
+#: removebckp.py:85
 msgid "Are you sure to remove selected files?"
 msgstr ""
 
+#: removebckp.py:87
 #, python-format
 msgid "Are you sure to remove file '%s'?"
 msgstr ""
 
+#: ui.py:146
 msgid "Mountpoint"
 msgstr ""
 
+#: ui.py:147
 msgid "auto.file"
 msgstr ""
 
+#: ui.py:152
 msgid "Edit mountpoint"
 msgstr ""
 
+#: ui.py:155 ui.py:179
 msgid "Add mountpoint"
 msgstr ""
 
+#: ui.py:156
 msgid "Enable/disable mountpoint"
 msgstr ""
 
+#: ui.py:157 ui.py:180
 msgid "Edit auto file"
 msgstr ""
 
+#: ui.py:158
 msgid "Menu"
 msgstr ""
 
+#: ui.py:162
 msgid "Move item up"
 msgstr ""
 
+#: ui.py:163
 msgid "Move item down"
 msgstr ""
 
+#: ui.py:164
 msgid "Enable/disable moving item"
 msgstr ""
 
+#: ui.py:202
 #, python-format
 msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
 msgstr ""
 
+#: ui.py:250
 msgid "Disable"
 msgstr ""
 
+#: ui.py:252
 msgid "Enable"
 msgstr ""
 
+#: ui.py:283
 msgid "Updating mountpoints and bookmarks..."
 msgstr ""
 
+#: ui.py:342
 msgid "Edit record:"
 msgstr ""
 
+#: ui.py:342
 #, python-format
 msgid "Edit record for '%s' remote device in 'auto.master' file."
 msgstr ""
 
+#: ui.py:344
 msgid "New record"
 msgstr ""
 
+#: ui.py:344
 msgid "Add new record to 'auto.master' file."
 msgstr ""
 
+#: ui.py:345
 msgid "Remove record:"
 msgstr ""
 
+#: ui.py:345
 #, python-format
 msgid "Remove record with '%s' remote device from 'auto.master' file."
 msgstr ""
 
+#: ui.py:346
 msgid "Create new record from:"
 msgstr ""
 
+#: ui.py:346
 #, python-format
 msgid ""
 "Clone record with '%s' remote device in 'auto.master' file and create file "
 "with mountpoint parameters withal."
 msgstr ""
 
+#: ui.py:349
 msgid "Edit -"
 msgstr ""
 
+#: ui.py:349
 #, python-format
 msgid ""
 "Edit file '%s' with mountpoint parameters for existing '%s' remote device."
 msgstr ""
 
+#: ui.py:350
 msgid "Add line to -"
 msgstr ""
 
+#: ui.py:350
 #, python-format
 msgid ""
 "Add next mountpoint parameters line to '%s' for existing '%s' remote device."
 msgstr ""
 
+#: ui.py:351
 msgid "Remove -"
 msgstr ""
 
+#: ui.py:351
 #, python-format
 msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
 msgstr ""
 
+#: ui.py:353
 msgid "Brief help on how to use autofs."
 msgstr ""
 
+#: ui.py:356
 msgid "Remove from extended menu"
 msgstr ""
 
+#: ui.py:357
 msgid "Remove plugin's run from Extended menu."
 msgstr ""
 
+#: ui.py:359
 msgid "Add into extended menu"
 msgstr ""
 
+#: ui.py:360
 msgid "Add plugin's run to Extended menu."
 msgstr ""
 
+#: ui.py:363
 msgid "Utility"
 msgstr ""
 
+#: ui.py:363
 msgid "Next utilities."
 msgstr ""
 
+#: ui.py:366 ui.py:676 ui.py:1570
 msgid "Select operation:"
 msgstr ""
 
+#: ui.py:403
 msgid "Failed"
 msgstr ""
 
+#: ui.py:405 ui.py:801 ui.py:834
 msgid "Done"
 msgstr ""
 
+#: ui.py:450
 #, python-format
 msgid "'%s' not exists, %s will be with default values"
 msgstr ""
 
+#: ui.py:487
 #, python-format
 msgid "'%s' was removed"
 msgstr ""
 
+#: ui.py:488
 #, python-format
 msgid ""
 "Auto.name '%s' was attached to this record.\n"
 "Remove original '%s'?"
 msgstr ""
 
+#: ui.py:494
 #, python-format
 msgid "'%s' was renamed to '%s'"
 msgstr ""
 
+#: ui.py:495
 #, python-format
 msgid ""
 "Auto.name in record was changed.\n"
 "Do You want rename original '%s' to '%s' too?"
 msgstr ""
 
+#: ui.py:516
 msgid "Nothing"
 msgstr ""
 
+#: ui.py:516
 #, python-format
 msgid "Record '%s' only"
 msgstr ""
 
+#: ui.py:516
 #, python-format
 msgid "All (record '%s' and its file '%s')"
 msgstr ""
 
+#: ui.py:517
 msgid "What all do You want to remove?"
 msgstr ""
 
+#: ui.py:634
 #, python-format
 msgid "Really remove autofile '%s'?"
 msgstr ""
 
+#: ui.py:640
 msgid "Update autofs files in AutoBackup"
 msgstr ""
 
+#: ui.py:640
 msgid ""
 "Automaticaly add valid autofs files to /etc/backup.cfg file used by "
 "AutoBackup plugin."
 msgstr ""
 
+#: ui.py:641
 msgid "Remove unused autofs files in AutoBackup"
 msgstr ""
 
+#: ui.py:641
 msgid "Remove unused autofs files from /etc/backup.cfg file."
 msgstr ""
 
+#: ui.py:644
 msgid "Remove selected backup files created when editing autofs files."
 msgstr ""
 
+#: ui.py:647
 msgid "Install autofs"
 msgstr ""
 
+#: ui.py:647
 msgid "Install required autofs package if missing."
 msgstr ""
 
+#: ui.py:649
 msgid "Next items are not needed standardly:"
 msgstr ""
 
+#: ui.py:657
 #, python-format
 msgid "Use '%s' as HDD replacement"
 msgstr ""
 
+#: ui.py:657
 #, python-format
 msgid "You can use current mountpoint '%s' as HDD replacement."
 msgstr ""
 
+#: ui.py:661
 #, python-format
 msgid "Cancel '%s' as HDD replacement"
 msgstr ""
 
+#: ui.py:661
 #, python-format
 msgid "Cancel using '%s' as HDD replacement."
 msgstr ""
 
+#: ui.py:664
 msgid "Reload autofs"
 msgstr ""
 
+#: ui.py:664
 msgid ""
 "Reload autofs mount maps. It is made standardly on each plugin exit if "
 "something was changed."
 msgstr ""
 
+#: ui.py:665
 msgid "Restart autofs with GUI restart"
 msgstr ""
 
+#: ui.py:665
 msgid ""
 "Sometimes it is needed restart autofs deamon and GUI. Use this option and "
 "then wait for finishing and for restart GUI."
 msgstr ""
 
+#: ui.py:667
 msgid "Open AutoBackup plugin"
 msgstr ""
 
+#: ui.py:667
 msgid "Runs AutoBackup plugin"
 msgstr ""
 
+#: ui.py:669
 msgid "Reload Bookmarks"
 msgstr ""
 
+#: ui.py:669
 msgid ""
 "Check bookmarks with current mountpoints. It is made standardly on each "
 "plugin exit if something was changed."
 msgstr ""
 
+#: ui.py:671
 msgid "Clear bookmarks..."
 msgstr ""
 
+#: ui.py:671
 msgid "Removing selected bookmarks."
 msgstr ""
 
+#: ui.py:673
 msgid ""
 "You can preset several input parameters before creating more autofiles. "
 "Values can be then inserted with blue button on current item. Presettings "
 "account values can be cleared on plugin exit."
 msgstr ""
 
+#: ui.py:674
 msgid "Presetting input values..."
 msgstr ""
 
+#: ui.py:703
 msgid "Really reload autofs and restart GUI?"
 msgstr ""
 
+#: ui.py:727
 #, python-format
 msgid "Point '%s' is not mounted!"
 msgstr ""
 
+#: ui.py:745
 #, python-format
 msgid "Select '%s' directory:"
 msgstr ""
 
+#: ui.py:754
 #, python-format
 msgid "'%s.auto' has wrong format or is empty!"
 msgstr ""
 
+#: ui.py:770
 #, python-format
 msgid "%s as /hdd"
 msgstr ""
 
+#: ui.py:790
 #, python-format
 msgid "File '%s' was created!"
 msgstr ""
 
+#: ui.py:803
 #, python-format
 msgid "Update AutoBackup's '%s'?"
 msgstr ""
 
+#: ui.py:836
 msgid "Missing '/etc/backup.cfg'"
 msgstr ""
 
+#: ui.py:838
 #, python-format
 msgid "Remove unused lines from '%s'?"
 msgstr ""
 
+#: ui.py:851
 msgid "Please wait for restart GUI!"
 msgstr ""
 
+#: ui.py:856
 msgid "Autofs is not installed!"
 msgstr ""
 
+#: ui.py:898
 #, python-format
 msgid "Manager Autofs - edited record: %s"
 msgstr ""
 
+#: ui.py:902
 msgid "Manager Autofs - create new record"
 msgstr ""
 
+#: ui.py:911 ui.py:1149
 msgid "Ok"
 msgstr ""
 
+#: ui.py:945 ui.py:1198
 msgid "enabled"
 msgstr ""
 
+#: ui.py:946
 msgid "mountpoint name"
 msgstr ""
 
+#: ui.py:948
 msgid "auto.name"
 msgstr ""
 
+#: ui.py:950
 msgid "ghost"
 msgstr ""
 
+#: ui.py:951
 msgid "timeout"
 msgstr ""
 
+#: ui.py:954
 msgid "time"
 msgstr ""
 
+#: ui.py:993 ui.py:1016
 msgid "Put autoname"
 msgstr ""
 
+#: ui.py:995 ui.py:1018
 msgid "Put mountpoint name"
 msgstr ""
 
+#: ui.py:1045
 msgid "You cannot use 'master' in auto.file name"
 msgstr ""
 
+#: ui.py:1055
 #, python-format
 msgid ""
 "Do You want use existing '%s' file?\n"
 "If not then change auto.name."
 msgstr ""
 
+#: ui.py:1067
 #, python-format
 msgid "Mountpoint name '%s' is used!"
 msgstr ""
 
+#: ui.py:1086 ui.py:1089 ui.py:1103 ui.py:1104 ui.py:1105 ui.py:1106 ui.py:1112
+#: ui.py:1115
 msgid "no"
 msgstr ""
 
+#: ui.py:1141
 #, python-format
 msgid "Manager Autofs - edited autofile/record: %s"
 msgstr ""
 
+#: ui.py:1200 ui.py:1680
 msgid "local directory"
 msgstr ""
 
+#: ui.py:1202
 msgid "fstype"
 msgstr ""
 
+#: ui.py:1205
 msgid "soft"
 msgstr ""
 
+#: ui.py:1206
 msgid "intr"
 msgstr ""
 
+#: ui.py:1207
 msgid "rw/ro"
 msgstr ""
 
+#: ui.py:1208
 msgid "use user/pass"
 msgstr ""
 
+#: ui.py:1210 ui.py:1677
 msgid "user"
 msgstr ""
 
+#: ui.py:1211 ui.py:1678
 msgid "password"
 msgstr ""
 
+#: ui.py:1215
 msgid "domain"
 msgstr ""
 
+#: ui.py:1218
 msgid "domain name"
 msgstr ""
 
+#: ui.py:1219
 msgid "noperm"
 msgstr ""
 
+#: ui.py:1220
 msgid "noatime"
 msgstr ""
 
+#: ui.py:1221
 msgid "noserverino"
 msgstr ""
 
+#: ui.py:1222
 msgid "nosuid"
 msgstr ""
 
+#: ui.py:1223
 msgid "nodev"
 msgstr ""
 
+#: ui.py:1224
 msgid "rsize"
 msgstr ""
 
+#: ui.py:1225
 msgid "wsize"
 msgstr ""
 
+#: ui.py:1226
 msgid "iocharset"
 msgstr ""
 
+#: ui.py:1227
 msgid "security"
 msgstr ""
 
+#: ui.py:1228
 msgid "use ip/name or dev"
 msgstr ""
 
+#: ui.py:1231
 msgid "ip or name"
 msgstr ""
 
+#: ui.py:1234
 msgid "ip"
 msgstr ""
 
+#: ui.py:1236
 msgid "name"
 msgstr ""
 
+#: ui.py:1238
 msgid "dev"
 msgstr ""
 
+#: ui.py:1239 ui.py:1681
 msgid "shared remote directory"
 msgstr ""
 
+#: ui.py:1242
 msgid "smb version"
 msgstr ""
 
+#: ui.py:1243
 msgid "user string"
 msgstr ""
 
+#: ui.py:1271
 msgid "Use preset"
 msgstr ""
 
+#: ui.py:1449
 msgid "Wrong file format!"
 msgstr ""
 
+#: ui.py:1521
 msgid "Add"
 msgstr ""
 
+#: ui.py:1522
 msgid "Edit"
 msgstr ""
 
+#: ui.py:1523
 msgid "Erase"
 msgstr ""
 
+#: ui.py:1538
 #, python-format
 msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
 msgstr ""
 
+#: ui.py:1562
 msgid "Edit line"
 msgstr ""
 
+#: ui.py:1562
 msgid "Edit line with mountpoint parameters."
 msgstr ""
 
+#: ui.py:1563
 msgid "Add line"
 msgstr ""
 
+#: ui.py:1563
 msgid "Add next line with mountpoint parameters."
 msgstr ""
 
+#: ui.py:1564
 msgid "Remove line"
 msgstr ""
 
+#: ui.py:1564
 msgid "Remove line with mountpoint parameters."
 msgstr ""
 
+#: ui.py:1567
 msgid "No valid item"
 msgstr ""
 
+#: ui.py:1606
 msgid "New"
 msgstr ""
 
+#: ui.py:1615
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr ""
 
+#: ui.py:1658 ui.py:1690
 msgid "User and password preseting"
 msgstr ""
 
+#: ui.py:1661
 msgid "OK"
 msgstr ""
 
+#: ui.py:1677
 msgid "Preset username account value."
 msgstr ""
 
+#: ui.py:1678
 msgid "Preset account password value."
 msgstr ""
 
+#: ui.py:1679
 msgid "save preset account values"
 msgstr ""
 
+#: ui.py:1679
 msgid "Preset account values will be or will not be saved on plugin exit."
 msgstr ""
 
+#: ui.py:1680
 msgid "Preset value for local directory."
 msgstr ""
 
+#: ui.py:1681
 msgid "Preset value for shared remote directory."
 msgstr ""
 
+#: ui.py:1682
 msgid "test mount points on plugin start"
 msgstr ""
 
+#: ui.py:1682
 msgid ""
 "Tests enabled mount points on plugin start, but it increase plugin start "
 "time."
 msgstr ""
 
+#: ui.py:1718
 msgid "List of bookmarks"
 msgstr ""
 
+#: ui.py:1731
 msgid "Add or remove item of selection"
 msgstr ""
 
+#: ui.py:1736
 msgid "Delete selected"
 msgstr ""
 
+#: ui.py:1737
 msgid "Sort list"
 msgstr ""
 
+#: ui.py:1738
 msgid "Invert selection"
 msgstr ""
 
+#: ui.py:1742
 msgid "Delete"
 msgstr ""
 
+#: ui.py:1743
 msgid "Sort"
 msgstr ""
 
+#: ui.py:1747
 msgid "Select with 'OK' and then remove with 'Delete'."
 msgstr ""
 
+#: ui.py:1784
 #, python-format
 msgid "Are You sure to delete %s selected bookmark(s)?"
 msgstr ""

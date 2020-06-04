@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.93"
+VERSION = "1.94"
 #
 #  Coded by ims (c) 2017-2020
 #  Support: openpli.org
@@ -1081,6 +1081,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 				self.msgNM.show()
 
 # parameters for selected auto. file
+config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
 config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660")]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
@@ -1194,6 +1195,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	def createConfig(self):
 		self.list = [ ]
 		dx = 4*' '
+		self.enabled = _("enabled")
+		self.list.append(getConfigListEntry(self.enabled, cfg.enabled))
 		self.localdir = _("local directory")
 		self.list.append(getConfigListEntry(self.localdir, cfg.localdir))
 		self.fstype = _("fstype")
@@ -1245,7 +1248,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.fillString()
 
 	def changedEntry(self):
-		if self["config"].getCurrent()[0] in (self.useddomain, self.useduserpass, self.use_ip_or_name, self.usedip, self.fstype):
+		if self["config"].getCurrent()[0] in (self.enabled, self.useddomain, self.useduserpass, self.use_ip_or_name, self.usedip, self.fstype):
 			self.createConfig()
 		self.fillString()
 
@@ -1276,7 +1279,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self["text"].setText(self.actualizeString())
 
 	def actualizeString(self):
-		string = cfg.localdir.value
+		string = '' if cfg.enabled.value else '#'
+		string += cfg.localdir.value
 		string += " "
 		string += "-"
 		string += ("fstype=%s," % cfg.fstype.value) if cfg.fstype.value != "" else ""
@@ -1406,7 +1410,13 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 					rest +=x
 
 			# dir name
-			cfg.localdir.value = parts[0].strip()
+			d = parts[0].strip()
+			if d.startswith('#'):
+				cfg.enabled.value = False
+				cfg.localdir.value = d[1:]
+			else:
+				cfg.enabled.value = True
+				cfg.localdir.value = d
 
 			# ip/name and shared remote dir or dev and remote dir
 			cfg.usedip.value = False

@@ -2,339 +2,178 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-09 16:50+0100\n"
-"PO-Revision-Date: 2018-02-09 16:51+0100\n"
+"POT-Creation-Date: 2020-06-04 19:52+0200\n"
+"PO-Revision-Date: 2020-06-04 19:56+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
-"Language-Team: LANGUAGE <Dima-73@inbox.lv>\n"
-"Language: ru\n"
+"Language-Team: LANGUAGE\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Manager Autofs"
-msgstr "Управление Autofs"
+msgstr ""
 
 msgid "Manage autofs files and conection"
-msgstr "Управление файлами autofs и соединением"
-
-msgid "Mountpoint"
-msgstr "Точка монтирования"
-
-msgid "auto.file"
-msgstr "auto.file"
+msgstr ""
 
 msgid "Close"
-msgstr "Закрыть"
-
-msgid "Add mountpoint"
 msgstr ""
 
-msgid "Edit auto file"
-msgstr "Редактировать auto file"
-
-#, python-format
-msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
-msgstr ""
-"Управление Autofs в.%s - нажмите %sОК%s для редактирования или нажмите %sМеню"
-"%s"
-
-msgid "Disable"
-msgstr "Отключить"
-
-msgid "Enable"
-msgstr "Включить"
-
-msgid "Edit record:"
-msgstr "Редактировать запись:"
-
-msgid "New record"
-msgstr "Новая запись"
-
-msgid "Remove record:"
-msgstr "Удалить запись:"
-
-msgid "Create new record from:"
+msgid "All"
 msgstr ""
 
-msgid "Edit -"
-msgstr "Редактировать -"
+msgid "Mode II"
+msgstr ""
 
-msgid "Add line to -"
-msgstr "Добавить строку в -"
-
-msgid "Remove -"
-msgstr "Удалить -"
+msgid "Mode III"
+msgstr ""
 
 msgid "Help"
-msgstr "Помощь"
-
-msgid "Remove from extended menu"
 msgstr ""
 
-msgid "Add into extended menu"
+msgid "Install autofs with:  opkg install autofs"
 msgstr ""
 
-msgid "Utility"
-msgstr "Утилита"
+msgid "- then edit:"
+msgstr ""
 
-msgid "Select operation:"
-msgstr "Выбор операции:"
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr ""
 
-msgid "Failed"
-msgstr "Неудачно"
-
-msgid "Done"
-msgstr "Готово"
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
+msgstr ""
 
 #, python-format
-msgid "'%s' was removed"
-msgstr "'%s' был удален"
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr ""
+
+#| msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
+msgid "/etc/auto.master - one record only:"
+msgstr ""
+
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr ""
+
+#| msgid ""
+#| "All remote directories from all devices will be mounted under '/media/"
+#| "net':"
+msgid ""
+"All remote directories from all devices will be mounted under '/media/test':"
+msgstr ""
+
+msgid "+ only 2 files for whole work"
+msgstr ""
+
+msgid "- it is not very clear what is what"
+msgstr ""
+
+msgid "Note: older autofs versions required a mount point as '/mnt/net'"
+msgstr ""
+
+#, python-format
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr ""
+
+#| msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
+msgid "auto.master with more records:"
+msgstr ""
+
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr ""
+
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr ""
+
+msgid "- more auto.xxxx files"
+msgstr ""
+
+msgid "+ very clear what is what"
+msgstr ""
+
+#| msgid ""
+#| "+ can be mounted/umounted independently with uncomment/comment line(s) in "
+#| "auto.master"
+msgid ""
+"+ can be mounted/umounted independently with uncomment/comment line(s)\n"
+"in auto.master or auto.xxxx files"
+msgstr ""
+
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr ""
+
+msgid "-in auto.xxxx files can be used more lines"
+msgstr ""
+
+msgid "-useful, if one device sharing more directories"
+msgstr ""
+
+msgid "-everything else is the same as for II"
+msgstr ""
+
+msgid "example of auto.synology:"
+msgstr ""
+
+msgid "then will be mounted as:"
+msgstr ""
+
+msgid ""
+"Note: older autofs versions can't handle commented lines in auto.xxxx files!"
+msgstr ""
 
 #, python-format
 msgid ""
-"Auto.name '%s' was attached to this record.\n"
-"Remove original '%s'?"
+"After change parameters in auto.file is better use %s'Restart autofs with "
+"GUI restart'%s there in 'Menu-Utility'"
 msgstr ""
-"Auto.name '%s' был прикреплен к этой записи.\n"
-"Удалить оригинал '%s'?"
 
 #, python-format
-msgid "'%s' was renamed to '%s'"
-msgstr "'%s' был переименован в '%s'"
+msgid "%sConnect to Win7,8,10 shared folder:%s"
+msgstr ""
+
+msgid "PC side:"
+msgstr ""
 
 #, python-format
 msgid ""
-"Auto.name in record was changed.\n"
-"Do You want rename original '%s' to '%s' too?"
+"-on directory press right mouse, select %s'Properties'%s and use bookmark "
+"%s'Sharing'%s"
 msgstr ""
-"Auto.name записи было изменено.\n"
-"Вы хотите переименовать оригинал '%s' в '%s' too?"
-
-msgid "Nothing"
-msgstr "Ничего"
 
 #, python-format
-msgid "Record '%s' only"
-msgstr "Запись '%s' только"
+msgid ""
+"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr ""
 
 #, python-format
-msgid "Record '%s' and its file '%s'"
-msgstr "Запись '%s' и его файл '%s'"
-
-msgid "What all do You want to remove?"
-msgstr "Что вы хотите удалить?"
+msgid "-can be changed %s'Shared name'%s too"
+msgstr ""
 
 #, python-format
-msgid "Really remove autofile '%s'?"
-msgstr "Действительно удалить auto file '%s'?"
+msgid ""
+"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
+"with enabled %s'Change'%s and %s'Read'%s"
+msgstr ""
 
-msgid "Update autofs files in AutoBackup"
-msgstr "Обновление файлов autofs в AutoBackup"
+msgid "Box side:"
+msgstr ""
 
-msgid "Open AutoBackup plugin"
-msgstr "Открыть плагин AutoBackup"
+#, python-format
+msgid ""
+"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr ""
 
-msgid "Remove unused autofs files in AutoBackup"
-msgstr "Удалить неиспользуемые файлы autofs из AutoBackup"
+#, python-format
+msgid ""
+"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
+"%s'2.0'%s"
+msgstr ""
 
 msgid "Remove backup files"
 msgstr ""
-
-msgid "Install autofs"
-msgstr "Установить autofs"
-
-msgid "Next items are not needed standardly:"
-msgstr ""
-
-msgid "Reload autofs"
-msgstr "Перезагрузка autofs"
-
-msgid "Restart autofs with GUI restart"
-msgstr "Рестарт autofs вместе с рестартом GUI"
-
-msgid "Reload Bookmarks"
-msgstr "Перезагрузка autofs"
-
-msgid "Really reload autofs and restart GUI?"
-msgstr "Действительно перезагрузить autofs и выполнить рестарт GUI?"
-
-#, python-format
-msgid "File '%s' was created!"
-msgstr "Файл '%s' был создан!"
-
-#, python-format
-msgid "Update AutoBackup's '%s'?"
-msgstr "Обновить AutoBackup '%s'?"
-
-msgid "Missing '/etc/backup.cfg'"
-msgstr "Отсутствует '/etc/backup.cfg'"
-
-#, python-format
-msgid "Remove unused lines from '%s'?"
-msgstr "Удалить неиспользуемые строки из '%s'?"
-
-msgid "Autofs is not installed!"
-msgstr "Autofs не установлен!"
-
-#, python-format
-msgid "Manager Autofs - edited record: %s"
-msgstr "Управление Autofs - редактированная запись: %s"
-
-msgid "Manager Autofs - create new record"
-msgstr "Управление Autofs - создать новую запись"
-
-msgid "Ok"
-msgstr "Ол"
-
-msgid "enabled"
-msgstr "включено"
-
-msgid "mountpoint name"
-msgstr "название точки монтирования"
-
-msgid "auto.name"
-msgstr "auto.name"
-
-msgid "ghost"
-msgstr "ghost"
-
-msgid "timeout"
-msgstr "тайм-аут"
-
-msgid "time"
-msgstr "время"
-
-msgid "Put autoname"
-msgstr "Сделать autoname"
-
-msgid "Put mountpoint name"
-msgstr "Сделать название точки монтирования"
-
-msgid "You cannot use 'master' in auto.file name"
-msgstr ""
-
-#, python-format
-msgid ""
-"Do You want use existing '%s' file?\n"
-"If not then change auto.name."
-msgstr ""
-
-#, python-format
-msgid "Mountpoint name '%s' is used!"
-msgstr ""
-
-msgid "no"
-msgstr "нет"
-
-#, python-format
-msgid "Manager Autofs - edited autofile/record: %s"
-msgstr "Управление Autofs - редактированная autofile/запись: %s"
-
-msgid "local directory"
-msgstr "локальная директория"
-
-msgid "fstype"
-msgstr "fstype"
-
-msgid "soft"
-msgstr "soft"
-
-msgid "intr"
-msgstr "intr"
-
-msgid "rw/ro"
-msgstr "rw/ro"
-
-msgid "use user/pass"
-msgstr "использовать логин/пароль"
-
-msgid "user"
-msgstr "логин"
-
-msgid "password"
-msgstr "пароль"
-
-msgid "domain"
-msgstr "домен"
-
-msgid "domain name"
-msgstr "имя домена"
-
-msgid "noperm"
-msgstr "noperm"
-
-msgid "noatime"
-msgstr "noatime"
-
-msgid "noserverino"
-msgstr "noserverino"
-
-msgid "nosuid"
-msgstr "nosuid"
-
-msgid "nodev"
-msgstr "nodev"
-
-msgid "rsize"
-msgstr "rsize"
-
-msgid "wsize"
-msgstr "wsize"
-
-msgid "iocharset"
-msgstr "iocharse"
-
-msgid "security"
-msgstr "security"
-
-msgid "used ip"
-msgstr "использовать ip"
-
-msgid "ip"
-msgstr "ip"
-
-msgid "dev"
-msgstr "dev"
-
-msgid "remote directory"
-msgstr "удалить директорию"
-
-msgid "user string"
-msgstr "пользовательская строка"
-
-msgid "Wrong file format!"
-msgstr "Неверный формат файла!"
-
-msgid "Add"
-msgstr "Добавить"
-
-msgid "Erase"
-msgstr "Очистка"
-
-#, python-format
-msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
-msgstr ""
-"Управление Autofs - нажмите %sОК%s для редактирования или нажмите %sМеню%s"
-
-msgid "Edit line"
-msgstr "Изменить строку"
-
-msgid "Add line"
-msgstr "Добавить строку"
-
-msgid "Remove line"
-msgstr "Удалить строку"
-
-msgid "No valid item"
-msgstr "Нет действительных элементов"
-
-msgid "New"
-msgstr "Новый"
-
-#, python-format
-msgid "Really erase record: '%s'?"
-msgstr "Действительно очистить запись: '%s'?"
 
 msgid "Cancel"
 msgstr ""
@@ -355,98 +194,560 @@ msgstr ""
 msgid "Are you sure to remove file '%s'?"
 msgstr ""
 
-msgid "All"
-msgstr "Все"
-
-msgid "Mode II"
-msgstr "Режим II"
-
-msgid "Mode III"
-msgstr "Режим III"
-
-msgid "Install autofs with:  opkg install autofs"
-msgstr "Установка autofs с помощью:  opkg install autofs"
-
-msgid "- then edit:"
-msgstr "- - затем отредактируйте:"
-
-msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgid "Mountpoint"
 msgstr ""
-"/etc/auto.master файл (для этого плагина использовать линии с параметрами "
-"только!)"
 
-msgid "/etc/auto.xxxx - as 'xxxx' use any name"
-msgstr "/etc/auto.xxxx - 'xxxx' использовать любое имя"
+msgid "auto.file"
+msgstr ""
+
+#| msgid "Mountpoint"
+msgid "Edit mountpoint"
+msgstr ""
+
+msgid "Add mountpoint"
+msgstr ""
+
+msgid "Enable/disable mountpoint"
+msgstr ""
+
+msgid "Edit auto file"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Move item up"
+msgstr ""
+
+msgid "Move item down"
+msgstr ""
+
+msgid "Enable/disable moving item"
+msgstr ""
 
 #, python-format
-msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
-msgstr "%sРежим I:%s  (auto.master + один auto.xxxx только)"
-
-msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
 msgstr ""
-"/etc/auto.master - одна запись только, точка монтирования должна быть '/mnt/"
-"net':"
 
-msgid "/etc/auto.test - 'test' used as example:"
-msgstr "/etc/auto.test - 'test' используется как пример:"
+msgid "Disable"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Updating mountpoints and bookmarks..."
+msgstr ""
+
+msgid "Edit record:"
+msgstr ""
+
+#, python-format
+msgid "Edit record for '%s' remote device in 'auto.master' file."
+msgstr ""
+
+msgid "New record"
+msgstr ""
+
+msgid "Add new record to 'auto.master' file."
+msgstr ""
+
+msgid "Remove record:"
+msgstr ""
+
+#, python-format
+msgid "Remove record with '%s' remote device from 'auto.master' file."
+msgstr ""
+
+msgid "Create new record from:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Clone record with '%s' remote device in 'auto.master' file and create file "
+"with mountpoint parameters withal."
+msgstr ""
+
+msgid "Edit -"
+msgstr ""
+
+#, python-format
+msgid ""
+"Edit file '%s' with mountpoint parameters for existing '%s' remote device."
+msgstr ""
+
+msgid "Add line to -"
+msgstr ""
+
+#, python-format
+msgid ""
+"Add next mountpoint parameters line to '%s' for existing '%s' remote device."
+msgstr ""
+
+msgid "Remove -"
+msgstr ""
+
+#, python-format
+msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
+msgstr ""
+
+msgid "Brief help on how to use autofs."
+msgstr ""
+
+msgid "Remove from extended menu"
+msgstr ""
+
+msgid "Remove plugin's run from Extended menu."
+msgstr ""
+
+msgid "Add into extended menu"
+msgstr ""
+
+msgid "Add plugin's run to Extended menu."
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+msgid "Next utilities."
+msgstr ""
+
+msgid "Select operation:"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+#, python-format
+msgid "'%s' not exists, %s will be with default values"
+msgstr ""
+
+#, python-format
+msgid "'%s' was removed"
+msgstr ""
+
+#, python-format
+msgid ""
+"Auto.name '%s' was attached to this record.\n"
+"Remove original '%s'?"
+msgstr ""
+
+#, python-format
+msgid "'%s' was renamed to '%s'"
+msgstr ""
+
+#, python-format
+msgid ""
+"Auto.name in record was changed.\n"
+"Do You want rename original '%s' to '%s' too?"
+msgstr ""
+
+msgid "Nothing"
+msgstr ""
+
+#, python-format
+msgid "Record '%s' only"
+msgstr ""
+
+#, python-format
+#| msgid "Record '%s' and its file '%s'"
+msgid "All (record '%s' and its file '%s')"
+msgstr ""
+
+msgid "What all do You want to remove?"
+msgstr ""
+
+#, python-format
+msgid "Really remove autofile '%s'?"
+msgstr ""
+
+msgid "Update autofs files in AutoBackup"
+msgstr ""
 
 msgid ""
-"All remote directories from all devices will be mounted under '/media/net':"
-msgstr "Все директории со всех устройств будут смотнированы в '/media/net':"
+"Automaticaly add valid autofs files to /etc/backup.cfg file used by "
+"AutoBackup plugin."
+msgstr ""
 
-msgid "+ only 2 files for whole work"
-msgstr "+ всего 2 файла для всей работы"
+msgid "Remove unused autofs files in AutoBackup"
+msgstr ""
 
-msgid "- mount/umount all together"
-msgstr "- монтирование/отмонтирование все вместе"
+#| msgid "Remove unused autofs files in AutoBackup"
+msgid "Remove unused autofs files from /etc/backup.cfg file."
+msgstr ""
 
-msgid "- it is not very clear what is what"
-msgstr "- не совсем понятно, что это такое"
+msgid "Remove selected backup files created when editing autofs files."
+msgstr ""
 
-msgid "(It has not sense using this mode with this plugin)"
-msgstr "(Не имеет смысла использовать этот режим с этим плагином)"
+msgid "Install autofs"
+msgstr ""
+
+msgid "Install required autofs package if missing."
+msgstr ""
+
+msgid "Next items are not needed standardly:"
+msgstr ""
 
 #, python-format
-msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
-msgstr "%sРежим II:%s  (auto.master + больше auto.xxxx файлов)"
+msgid "Use '%s' as HDD replacement"
+msgstr ""
 
-msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
-msgstr "auto.master с несколькими записями (не монтировать как '/mnt/net'):"
+#, python-format
+msgid "You can use current mountpoint '%s' as HDD replacement."
+msgstr ""
 
-msgid "more auto.xxxx files - each file for one shared directory:"
-msgstr "больше auto.xxxx файлов - каждый файл для одной общей директории:"
+#, python-format
+msgid "Cancel '%s' as HDD replacement"
+msgstr ""
 
-msgid "Each shared directory has own mounpoint under /media:"
-msgstr "Каждая общая директория имеет точку монтирования в /media:"
+#, python-format
+msgid "Cancel using '%s' as HDD replacement."
+msgstr ""
 
-msgid "- more auto.xxxx files"
-msgstr "- больше auto.xxxx файлов"
-
-msgid "+ very clear what is what"
-msgstr "+ очень ясно, что есть что"
+msgid "Reload autofs"
+msgstr ""
 
 msgid ""
-"+ can be mounted/umounted independently with uncomment/comment line(s) in "
-"auto.master"
+"Reload autofs mount maps. It is made standardly on each plugin exit if "
+"something was changed."
 msgstr ""
-"+ могут монтироватся/отмонтироватся независимыми комментами строк в auto."
-"master"
+
+msgid "Restart autofs with GUI restart"
+msgstr ""
+
+msgid ""
+"Sometimes it is needed restart autofs deamon and GUI. Use this option and "
+"then wait for finishing and for restart GUI."
+msgstr ""
+
+msgid "Open AutoBackup plugin"
+msgstr ""
+
+#| msgid "Open AutoBackup plugin"
+msgid "Runs AutoBackup plugin"
+msgstr ""
+
+msgid "Reload Bookmarks"
+msgstr ""
+
+msgid ""
+"Check bookmarks with current mountpoints. It is made standardly on each "
+"plugin exit if something was changed."
+msgstr ""
+
+#| msgid "Reload Bookmarks"
+msgid "Clear bookmarks..."
+msgstr ""
+
+msgid "Removing selected bookmarks."
+msgstr ""
+
+msgid ""
+"You can preset several input parameters before creating more autofiles. "
+"Values can be then inserted with blue button on current item. Presettings "
+"account values can be cleared on plugin exit."
+msgstr ""
+
+msgid "Presetting input values..."
+msgstr ""
+
+msgid "Really reload autofs and restart GUI?"
+msgstr ""
 
 #, python-format
-msgid "%sMode III:%s  (similar as II)"
-msgstr "%sРежим III:%s  (такой же как II)"
+#| msgid "Autofs is not installed!"
+msgid "Point '%s' is not mounted!"
+msgstr ""
 
-msgid "-in auto.xxxx files can be used more lines"
-msgstr "-в файлах auto.xxxx можно использовать больше строк"
+#, python-format
+#| msgid "local directory"
+msgid "Select '%s' directory:"
+msgstr ""
 
-msgid "-useful, if one device sharing more directories"
-msgstr "-полезно, если одно устройство использует несколько директорий"
+#, python-format
+msgid "'%s.auto' has wrong format or is empty!"
+msgstr ""
 
-msgid "-everything else is the same as for II"
-msgstr "-все остальное такое же, как для II"
+#, python-format
+msgid "%s as /hdd"
+msgstr ""
 
-msgid "example of auto.synology:"
-msgstr "пример из auto.synology:"
+#, python-format
+msgid "File '%s' was created!"
+msgstr ""
 
-msgid "then will be mounted as:"
-msgstr "затем будет смонтирован как:"
+#, python-format
+msgid "Update AutoBackup's '%s'?"
+msgstr ""
+
+msgid "Missing '/etc/backup.cfg'"
+msgstr ""
+
+#, python-format
+msgid "Remove unused lines from '%s'?"
+msgstr ""
+
+msgid "Please wait for restart GUI!"
+msgstr ""
+
+msgid "Autofs is not installed!"
+msgstr ""
+
+#, python-format
+msgid "Manager Autofs - edited record: %s"
+msgstr ""
+
+msgid "Manager Autofs - create new record"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "mountpoint name"
+msgstr ""
+
+msgid "auto.name"
+msgstr ""
+
+msgid "ghost"
+msgstr ""
+
+msgid "timeout"
+msgstr ""
+
+msgid "time"
+msgstr ""
+
+msgid "Put autoname"
+msgstr ""
+
+msgid "Put mountpoint name"
+msgstr ""
+
+msgid "You cannot use 'master' in auto.file name"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do You want use existing '%s' file?\n"
+"If not then change auto.name."
+msgstr ""
+
+#, python-format
+msgid "Mountpoint name '%s' is used!"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+#, python-format
+msgid "Manager Autofs - edited autofile/record: %s"
+msgstr ""
+
+msgid "local directory"
+msgstr ""
+
+msgid "fstype"
+msgstr ""
+
+msgid "soft"
+msgstr ""
+
+msgid "intr"
+msgstr ""
+
+msgid "rw/ro"
+msgstr ""
+
+msgid "use user/pass"
+msgstr ""
+
+msgid "user"
+msgstr ""
+
+msgid "password"
+msgstr ""
+
+msgid "domain"
+msgstr ""
+
+msgid "domain name"
+msgstr ""
+
+msgid "noperm"
+msgstr ""
+
+msgid "noatime"
+msgstr ""
+
+msgid "noserverino"
+msgstr ""
+
+msgid "nosuid"
+msgstr ""
+
+msgid "nodev"
+msgstr ""
+
+msgid "rsize"
+msgstr ""
+
+msgid "wsize"
+msgstr ""
+
+msgid "iocharset"
+msgstr ""
+
+msgid "security"
+msgstr ""
+
+msgid "use ip/name or dev"
+msgstr ""
+
+msgid "ip or name"
+msgstr ""
+
+msgid "ip"
+msgstr ""
+
+#| msgid "auto.name"
+msgid "name"
+msgstr ""
+
+msgid "dev"
+msgstr ""
+
+#| msgid "remote directory"
+msgid "shared remote directory"
+msgstr ""
+
+msgid "smb version"
+msgstr ""
+
+msgid "user string"
+msgstr ""
+
+msgid "Use preset"
+msgstr ""
+
+msgid "Wrong file format!"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+#| msgid "Edit -"
+msgid "Edit"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+#, python-format
+#| msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
+msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
+msgstr ""
+
+msgid "Edit line"
+msgstr ""
+
+msgid "Edit line with mountpoint parameters."
+msgstr ""
+
+msgid "Add line"
+msgstr ""
+
+msgid "Add next line with mountpoint parameters."
+msgstr ""
+
+msgid "Remove line"
+msgstr ""
+
+msgid "Remove line with mountpoint parameters."
+msgstr ""
+
+msgid "No valid item"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+#, python-format
+msgid "Really erase record: '%s'?"
+msgstr ""
+
+msgid "User and password preseting"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Preset username account value."
+msgstr ""
+
+msgid "Preset account password value."
+msgstr ""
+
+msgid "save preset account values"
+msgstr ""
+
+msgid "Preset account values will be or will not be saved on plugin exit."
+msgstr ""
+
+#| msgid "local directory"
+msgid "Preset value for local directory."
+msgstr ""
+
+msgid "Preset value for shared remote directory."
+msgstr ""
+
+msgid "test mount points on plugin start"
+msgstr ""
+
+msgid ""
+"Tests enabled mount points on plugin start, but it increase plugin start "
+"time."
+msgstr ""
+
+#| msgid "Reload Bookmarks"
+msgid "List of bookmarks"
+msgstr ""
+
+msgid "Add or remove item of selection"
+msgstr ""
+
+msgid "Delete selected"
+msgstr ""
+
+msgid "Sort list"
+msgstr ""
+
+msgid "Invert selection"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Sort"
+msgstr ""
+
+msgid "Select with 'OK' and then remove with 'Delete'."
+msgstr ""
+
+#, python-format
+msgid "Are You sure to delete %s selected bookmark(s)?"
+msgstr ""
+
+#~ msgid "used ip"
+#~ msgstr "использовать ip"
+
+#~ msgid "- mount/umount all together"
+#~ msgstr "- монтирование/отмонтирование все вместе"
+
+#~ msgid "(It has not sense using this mode with this plugin)"
+#~ msgstr "(Не имеет смысла использовать этот режим с этим плагином)"

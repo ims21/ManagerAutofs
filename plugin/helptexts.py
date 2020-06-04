@@ -69,25 +69,24 @@ class ManagerAutofsHelp(Screen):
 
 	def mode1txt(self):
 		text = _("%sMode I:%s  (auto.master + one auto.xxxx only)") % self.yellow() + "\n\n"
-		text += _("/etc/auto.master - one record only, mountpoint must be '/mnt/net':") + "\n"
-		text += 4*" " + ("%s/mnt/net /etc/auto.test --ghost%s") % self.grey() + "\n\n"
+		text += _("/etc/auto.master - one record only:") + "\n"
+		text += 4*" " + ("%s/mnt/net /etc/auto.test --ghost%s") % self.grey() + "\n"
 		text += _("/etc/auto.test - 'test' used as example:") + "\n"
 		text += 4*" " + ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % self.grey() + "\n"
 		text +=	4*" " + ("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n"
 		text +=	4*" " + ("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
-		text += _("All remote directories from all devices will be mounted under '/media/net':") + "\n"
-		text += 4*" " + ("%s/media/net/video%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/net/hdd%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/net/hdd2%s") % self.grey() + "\n\n"
+		text += _("All remote directories from all devices will be mounted under '/media/test':") + "\n"
+		text += 4*" " + ("%s/media/test/video%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/test/hdd%s") % self.grey() + "\n"
+		text += 4*" " + ("%s/media/test/hdd2%s") % self.grey() + "\n\n"
 		text += _("+ only 2 files for whole work") + "\n"
-		text += _("- mount/umount all together") + "\n"
 		text += _("- it is not very clear what is what") + "\n"
-		text += _("(It has not sense using this mode with this plugin)") + "\n\n"
+		text += _("Note: older autofs versions required a mount point as '/mnt/net'") + "\n\n"
 		return text
 
 	def mode2txt(self):
 		text = _("%sMode II:%s  (auto.master + more auto.xxxx files)") % self.yellow() + "\n\n"
-		text += _("auto.master with more records (no mountpoint as '/mnt/net'):") + "\n"
+		text += _("auto.master with more records:") + "\n"
 		text += 4*" " + ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % self.grey() + "\n"
 		text += 4*" " + ("%s/mnt/render /etc/auto.render --ghost%s") % self.grey() + "\n"
 		text += 4*" " + ("%s/mnt/wd /etc/auto.wd --ghost%s") % self.grey() + "\n\n"
@@ -104,7 +103,7 @@ class ManagerAutofsHelp(Screen):
 		text += 4*" " + ("%s/media/wd/hdd%s") % self.grey() + "\n\n"
 		text += _("- more auto.xxxx files") + "\n"
 		text += _("+ very clear what is what") + "\n"
-		text += _("+ can be mounted/umounted independently with uncomment/comment line(s) in auto.master") + "\n\n"
+		text += _("+ can be mounted/umounted independently with uncomment/comment line(s)\nin auto.master or auto.xxxx files") + "\n\n"
 		return text
 
 	def mode3txt(self):
@@ -120,10 +119,12 @@ class ManagerAutofsHelp(Screen):
 		text += 4*" " + ("%s/media/synology/video%s") % self.grey() + "\n"
 		text += 4*" " + ("%s/media/synology/audio%s") % self.grey() + "\n"
 		text += 4*" " + ("...") + "\n"
+		text += _("+ can be mounted/umounted independently with uncomment/comment line(s)\nin auto.master or auto.xxxx files") + "\n\n"
 		return text
 
 	def commontxt(self):
-		text = "\\n" + _("After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'") % self.yellow() + "\n"
+		text = "\n\n" + _("Note: older autofs versions can't handle commented lines in auto.xxxx files!") + "\n"
+		text += "\n" + _("After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'") % self.yellow() + "\n"
 		return text
 
 	def modeWintxt(self):
