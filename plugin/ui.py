@@ -908,7 +908,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self["text"] = Label()
 
 		self["key_red"] = Button(_("Close"))
-		self["key_green"] = Button(_("Ok"))
+		self["key_green"] = Button(_("OK"))
 		self["key_blue"] = StaticText()
 
 		self["red"] = Pixmap()
@@ -1146,7 +1146,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.autoName = filename
 		
 		self["key_red"] = Button(_("Close"))
-		self["key_green"] = Button(_("Ok"))
+		self["key_green"] = Button(_("OK"))
 		self["key_blue"] = StaticText()
 		self["red"] = Pixmap()
 		self["green"] = Pixmap()
