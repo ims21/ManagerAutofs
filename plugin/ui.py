@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.94"
+VERSION = "1.95"
 #
 #  Coded by ims (c) 2017-2020
 #  Support: openpli.org
@@ -187,6 +187,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.delayTimer = eTimer()
 		self.msgNM=None
 		self.selectionUtilitySubmenu = 0
+		self.inExitProcess = False
 		self.onShown.append(self.setWindowTitle)
 
 		if os.path.exists(AUTOMASTER):
@@ -280,11 +281,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def keyClose(self):
 		self.resetCfg()
 		if self.changes:
-			self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
-			self.saveMasterFile()
-			self.updateAutofs()
-			self.delayTimer.callback.append(self.finishPlugin)
-			self.delayTimer.start(1000, True)
+			if not self.inExitProcess:
+				self.inExitProcess = True
+				self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
+				self.saveMasterFile()
+				self.updateAutofs()
+				self.delayTimer.callback.append(self.finishPlugin)
+				self.delayTimer.start(1000, True)
 		else:
 			self.close()
 
