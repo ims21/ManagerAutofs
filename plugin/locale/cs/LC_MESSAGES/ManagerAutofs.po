@@ -2,354 +2,222 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 19:52+0200\n"
-"PO-Revision-Date: 2020-06-04 19:53+0200\n"
+"POT-Creation-Date: 2020-10-31 11:08+0100\n"
+"PO-Revision-Date: 2020-10-31 11:14+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Poedit 2.4.1\n"
 
-msgid "Manager Autofs"
-msgstr "Manager Autofs"
-
-msgid "Manage autofs files and conection"
-msgstr "Upravuje soubory Autofs a připojení"
-
-msgid "Close"
-msgstr "Zavřít"
-
-msgid "All"
-msgstr "Vše"
-
-msgid "Mode II"
-msgstr "Mód II"
-
-msgid "Mode III"
-msgstr "Mód III"
-
-msgid "Help"
-msgstr "Nápověda"
-
-msgid "Install autofs with:  opkg install autofs"
-msgstr "Nainstalujte autofs příkazem:  opkg install autofs"
-
-msgid "- then edit:"
-msgstr "- poté upravte:"
-
-msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
-msgstr ""
-"/etc/auto.master soubor (pro plugin používejte pouze řádky s parametry!)"
-
-msgid "/etc/auto.xxxx - as 'xxxx' use any name"
-msgstr "/etc/auto.xxxx - jako 'xxxx' použijte nějaké jméno"
-
+#: ../ui.py:778
 #, python-format
-msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
-msgstr "%sMód I:%s  (auto.master + pouze jeden auto.xxxx soubor)"
+msgid "%s as /hdd"
+msgstr "%s jako /hdd"
 
-msgid "/etc/auto.master - one record only:"
-msgstr "/etc/auto.master - pouze jeden řádek:"
-
-msgid "/etc/auto.test - 'test' used as example:"
-msgstr "/etc/auto.test - 'test' použit jako příklad:"
-
-msgid ""
-"All remote directories from all devices will be mounted under '/media/test':"
-msgstr ""
-"Všechny vzdálené adresáře ze všech zařízení budou připojeny pod '/media/"
-"test':"
-
-msgid "+ only 2 files for whole work"
-msgstr "+ pouze 2 soubory pro práci"
-
-msgid "- it is not very clear what is what"
-msgstr "- není moc přehledné, co je co"
-
-msgid "Note: older autofs versions required a mount point as '/mnt/net'"
-msgstr "Pozn.: starší verze autofs vyžadovaly mount point jako '/mnt/net'"
-
-#, python-format
-msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
-msgstr "%sMód II:%s  (auto.master + více auto.xxxx souborů)"
-
-msgid "auto.master with more records:"
-msgstr "auto.master s více řádky:"
-
-msgid "more auto.xxxx files - each file for one shared directory:"
-msgstr "více souborů auto.xxxx - každý soubor pro jedno připojení:"
-
-msgid "Each shared directory has own mounpoint under /media:"
-msgstr "Každý sdílený adresář má vlastní připojení pod /media:"
-
-msgid "- more auto.xxxx files"
-msgstr "- více souborů auto.xxxx"
-
-msgid "+ very clear what is what"
-msgstr "+ velice přehledné, co je co"
-
-msgid ""
-"+ can be mounted/umounted independently with uncomment/comment line(s)\n"
-"in auto.master or auto.xxxx files"
-msgstr ""
-"+ může být připojeno/odpojeno každé připojení zvlášť povolením/zakázáním "
-"řádku\n"
-" v auto.master i auto.xxxx souborech"
-
-#, python-format
-msgid "%sMode III:%s  (similar as II)"
-msgstr "%sMód III:%s  (podobný jako II)"
-
-msgid "-in auto.xxxx files can be used more lines"
-msgstr "-v souboru auto.xxxx může být použito více řádků"
-
-msgid "-useful, if one device sharing more directories"
-msgstr "-užitečné, jestliže jedno zařízení sdílí více adresářů"
-
-msgid "-everything else is the same as for II"
-msgstr "-vše ostatní je stejné jako pro II"
-
-msgid "example of auto.synology:"
-msgstr "příklad pro auto.synology:"
-
-msgid "then will be mounted as:"
-msgstr "bude připojeno jako:"
-
-msgid ""
-"Note: older autofs versions can't handle commented lines in auto.xxxx files!"
-msgstr ""
-"Pozn.: starší verze autofs neumí pracovat se zakomentovanými řádky v auto."
-"xxxx souborech!"
-
-#, python-format
-msgid ""
-"After change parameters in auto.file is better use %s'Restart autofs with "
-"GUI restart'%s there in 'Menu-Utility'"
-msgstr ""
-"Po změnách parametrů v auto.souboru je lepší použít %s'Restartovat autofs a "
-"enigma'%s v 'Menu-Nástroje'"
-
+#: ../helptexts.py:131
 #, python-format
 msgid "%sConnect to Win7,8,10 shared folder:%s"
 msgstr "%sPřipojení ke sdílenému adresáři Win7,8,10:%s"
 
-msgid "PC side:"
-msgstr "Strana PC:"
-
+#: ../helptexts.py:71
 #, python-format
-msgid ""
-"-on directory press right mouse, select %s'Properties'%s and use bookmark "
-"%s'Sharing'%s"
-msgstr ""
-"-na složce stiskněte pravé tlačítko myši, zvolte %s'Vlastnosti'%s a vyberte "
-"záložku %s'Sdílení'%s"
+msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
+msgstr "%sMód I:%s  (auto.master + pouze jeden auto.xxxx soubor)"
 
+#: ../helptexts.py:88
 #, python-format
-msgid ""
-"-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
-msgstr ""
-"-stiskněte tlačítko %s'Rozšířené možnosti sdílení...'%s a zaškrtněte "
-"%s'Sdílet tuto složku'%s"
+msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
+msgstr "%sMód II:%s  (auto.master + více auto.xxxx souborů)"
 
+#: ../helptexts.py:110
 #, python-format
-msgid "-can be changed %s'Shared name'%s too"
-msgstr "-můžete změnit %s'Název sdílené složky'%s"
+msgid "%sMode III:%s  (similar as II)"
+msgstr "%sMód III:%s  (podobný jako II)"
 
-#, python-format
-msgid ""
-"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s "
-"with enabled %s'Change'%s and %s'Read'%s"
-msgstr ""
-"-stiskněte tlačítko %s'Oprávnění'%s a zkontrolujte, jestli zde existuje "
-"%s'Everyone'%s s povoleným %s'Změnit'%s a %s'Číst'%s"
-
-msgid "Box side:"
-msgstr "Strana přijímače:"
-
-#, python-format
-msgid ""
-"- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
-msgstr ""
-"- pod %s'uživatel/heslo'%s musí být použit platný %s'uživatel'%s a "
-"%s'heslo'%s z PC"
-
-#, python-format
-msgid ""
-"- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to "
-"%s'2.0'%s"
-msgstr ""
-"- pro %s'cifs'%s fstype a Win10 musí být %s'smb version'%s nastavena "
-"minimálně na %s'2.0'%s"
-
-msgid "Remove backup files"
-msgstr "Odstranit záložní soubory"
-
-msgid "Cancel"
-msgstr "Zavřít"
-
-msgid "Remove"
-msgstr "Smazat"
-
-msgid "Inversion"
-msgstr "Inverze"
-
-msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
-msgstr ""
-"Stiskněte 'Odstranit' na souboru nebo označte soubory pomocí 'OK' a poté "
-"použijte tlačítko 'Odstranit'"
-
-msgid "Are you sure to remove selected files?"
-msgstr "Chcete odstranit vybrané soubory?"
-
-#, python-format
-msgid "Are you sure to remove file '%s'?"
-msgstr "Opravdu smazat soubor: '%s'?"
-
-msgid "Mountpoint"
-msgstr "Bod připojení"
-
-msgid "auto.file"
-msgstr "Soubor auto"
-
-msgid "Edit mountpoint"
-msgstr "Upravit bod připojení"
-
-msgid "Add mountpoint"
-msgstr "Přidat bod připojení"
-
-msgid "Enable/disable mountpoint"
-msgstr "Povolit/zakázat bod připojení"
-
-msgid "Edit auto file"
-msgstr "Upravit auto soubor"
-
-msgid "Menu"
-msgstr "Menu"
-
-msgid "Move item up"
-msgstr "Přesun položky nahoru"
-
-msgid "Move item down"
-msgstr "Přesun položky dolů"
-
-msgid "Enable/disable moving item"
-msgstr "Povolit/zakázat přesun položky"
-
-#, python-format
-msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
-msgstr "Manager Autofs v.%s - stiskněte %sOK%s na řádku nebo použijte %sMenu%s"
-
-msgid "Disable"
-msgstr "Zakázat"
-
-msgid "Enable"
-msgstr "Povolit"
-
-msgid "Updating mountpoints and bookmarks..."
-msgstr "Aktualizují se body připojení a záložky..."
-
-msgid "Edit record:"
-msgstr "Upravit záznam:"
-
-#, python-format
-msgid "Edit record for '%s' remote device in 'auto.master' file."
-msgstr "Úprava záznamu pro vzdálené zařízení '%s' v souboru 'auto.master'."
-
-msgid "New record"
-msgstr "Nový záznam"
-
-msgid "Add new record to 'auto.master' file."
-msgstr "Přidání nového řádku do souboru 'auto.master'."
-
-msgid "Remove record:"
-msgstr "Odstranit záznam:"
-
-#, python-format
-msgid "Remove record with '%s' remote device from 'auto.master' file."
-msgstr "Odstranění záznamu pro vzálené zařízení '%s' ze souboru 'auto.master'."
-
-msgid "Create new record from:"
-msgstr "Vytvořit nový záznam z:"
-
-#, python-format
-msgid ""
-"Clone record with '%s' remote device in 'auto.master' file and create file "
-"with mountpoint parameters withal."
-msgstr ""
-"Naklonování záznamu se vzdáleným zařízením '%s' v 'auto.master' souboru a "
-"zároveň vytvoření souboru s parametry připojení."
-
-msgid "Edit -"
-msgstr "Upravit -"
-
-#, python-format
-msgid ""
-"Edit file '%s' with mountpoint parameters for existing '%s' remote device."
-msgstr ""
-"Úprava souboru '%s' s parametry připojení pro existující vzdálené zařízení "
-"'%s'."
-
-msgid "Add line to -"
-msgstr "Přidat řádek do -"
-
-#, python-format
-msgid ""
-"Add next mountpoint parameters line to '%s' for existing '%s' remote device."
-msgstr ""
-"Přidá další řádek s parametry připojení do '%s' pro existující vzdálené "
-"zařízení '%s'. "
-
-msgid "Remove -"
-msgstr "Odstranit -"
-
-#, python-format
-msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
-msgstr ""
-"Odstraní soubor '%s' s parametry připojení pro existující vzdálené zařízení "
-"'%s'."
-
-msgid "Brief help on how to use autofs."
-msgstr "Stručná nápověda k používání autofs."
-
-msgid "Remove from extended menu"
-msgstr "Odebrat z Extended menu"
-
-msgid "Remove plugin's run from Extended menu."
-msgstr "Odebere spouštění pluginu z Extended menu."
-
-msgid "Add into extended menu"
-msgstr "Přidat do Extended menu"
-
-msgid "Add plugin's run to Extended menu."
-msgstr "Přidá spouštění pluginu do Extended menu."
-
-msgid "Utility"
-msgstr "Nástroje"
-
-msgid "Next utilities."
-msgstr "Další nástroje."
-
-msgid "Select operation:"
-msgstr "Zvolte operaci:"
-
-msgid "Failed"
-msgstr "Chyba"
-
-msgid "Done"
-msgstr "Dokončeno"
-
+#: ../ui.py:454
 #, python-format
 msgid "'%s' not exists, %s will be with default values"
 msgstr "'%s' neexistuje, %s proto bude mít výchozí hodnoty"
 
+#: ../ui.py:491
 #, python-format
 msgid "'%s' was removed"
 msgstr "'%s' byl odstraněn"
 
+#: ../ui.py:498
+#, python-format
+msgid "'%s' was renamed to '%s'"
+msgstr "'%s' přejmenován na '%s'"
+
+#: ../ui.py:762
+#, python-format
+msgid "'%s.auto' has wrong format or is empty!"
+msgstr "'%s.auto' má neplatný formát nebo je prázdný!"
+
+#: ../helptexts.py:106 ../helptexts.py:122
+msgid ""
+"+ can be mounted/umounted independently with uncomment/comment line(s)\n"
+"in auto.master or auto.xxxx files"
+msgstr ""
+"+ může být připojeno/odpojeno každé připojení zvlášť povolením/zakázáním řádku\n"
+" v auto.master i auto.xxxx souborech"
+
+#: ../helptexts.py:82
+msgid "+ only 2 files for whole work"
+msgstr "+ pouze 2 soubory pro práci"
+
+#: ../helptexts.py:105
+msgid "+ very clear what is what"
+msgstr "+ velice přehledné, co je co"
+
+#: ../helptexts.py:139
+#, python-format
+msgid "- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s"
+msgstr "- pro %s'cifs'%s fstype a Win10 musí být %s'smb version'%s nastavena minimálně na %s'2.0'%s"
+
+#: ../helptexts.py:83
+msgid "- it is not very clear what is what"
+msgstr "- není moc přehledné, co je co"
+
+#: ../helptexts.py:104
+msgid "- more auto.xxxx files"
+msgstr "- více souborů auto.xxxx"
+
+#: ../helptexts.py:65
+msgid "- then edit:"
+msgstr "- poté upravte:"
+
+#: ../helptexts.py:138
+#, python-format
+msgid "- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr "- pod %s'uživatel/heslo'%s musí být použit platný %s'uživatel'%s a %s'heslo'%s z PC"
+
+#: ../helptexts.py:135
+#, python-format
+msgid "-can be changed %s'Shared name'%s too"
+msgstr "-můžete změnit %s'Název sdílené složky'%s"
+
+#: ../helptexts.py:113
+msgid "-everything else is the same as for II"
+msgstr "-vše ostatní je stejné jako pro II"
+
+#: ../helptexts.py:111
+msgid "-in auto.xxxx files can be used more lines"
+msgstr "-v souboru auto.xxxx může být použito více řádků"
+
+#: ../helptexts.py:133
+#, python-format
+msgid "-on directory press right mouse, select %s'Properties'%s and use bookmark %s'Sharing'%s"
+msgstr "-na složce stiskněte pravé tlačítko myši, zvolte %s'Vlastnosti'%s a vyberte záložku %s'Sdílení'%s"
+
+#: ../helptexts.py:134
+#, python-format
+msgid "-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr "-stiskněte tlačítko %s'Rozšířené možnosti sdílení...'%s a zaškrtněte %s'Sdílet tuto složku'%s"
+
+#: ../helptexts.py:136
+#, python-format
+msgid "-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s with enabled %s'Change'%s and %s'Read'%s"
+msgstr "-stiskněte tlačítko %s'Oprávnění'%s a zkontrolujte, jestli zde existuje %s'Everyone'%s s povoleným %s'Změnit'%s a %s'Číst'%s"
+
+#: ../helptexts.py:112
+msgid "-useful, if one device sharing more directories"
+msgstr "-užitečné, jestliže jedno zařízení sdílí více adresářů"
+
+#: ../helptexts.py:72
+msgid "/etc/auto.master - one record only:"
+msgstr "/etc/auto.master - pouze jeden řádek:"
+
+#: ../helptexts.py:66
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr "/etc/auto.master soubor (pro plugin používejte pouze řádky s parametry!)"
+
+#: ../helptexts.py:74
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr "/etc/auto.test - 'test' použit jako příklad:"
+
+#: ../helptexts.py:67
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
+msgstr "/etc/auto.xxxx - jako 'xxxx' použijte nějaké jméno"
+
+#: ../ui.py:1550
+msgid "Add"
+msgstr "Přidat"
+
+#: ../ui.py:363
+msgid "Add into extended menu"
+msgstr "Přidat do Extended menu"
+
+#: ../ui.py:1592
+msgid "Add line"
+msgstr "Přidat řádek"
+
+#: ../ui.py:354
+msgid "Add line to -"
+msgstr "Přidat řádek do -"
+
+#: ../ui.py:156 ../ui.py:180
+msgid "Add mountpoint"
+msgstr "Přidat bod připojení"
+
+#: ../ui.py:348
+msgid "Add new record to 'auto.master' file."
+msgstr "Přidání nového řádku do souboru 'auto.master'."
+
+#: ../ui.py:1592
+msgid "Add next line with mountpoint parameters."
+msgstr "Přidání dalšího řádku s parametry připojení."
+
+#: ../ui.py:354
+#, python-format
+msgid "Add next mountpoint parameters line to '%s' for existing '%s' remote device."
+msgstr "Přidá další řádek s parametry připojení do '%s' pro existující vzdálené zařízení '%s'. "
+
+#: ../ui.py:1760
+msgid "Add or remove item of selection"
+msgstr "Přidat nebo odebrat položku z výběru"
+
+#: ../ui.py:364
+msgid "Add plugin's run to Extended menu."
+msgstr "Přidá spouštění pluginu do Extended menu."
+
+#: ../helptexts.py:127
+#, python-format
+msgid "After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'"
+msgstr "Po změnách parametrů v auto.souboru je lepší použít %s'Restartovat autofs a enigma'%s v 'Menu-Nástroje'"
+
+#: ../helptexts.py:35
+msgid "All"
+msgstr "Vše"
+
+#: ../ui.py:520
+#, python-format
+msgid "All (record '%s' and its file '%s')"
+msgstr "Vše (řádek '%s' a soubor '%s')"
+
+#: ../helptexts.py:78
+msgid "All remote directories from all devices will be mounted under '/media/test':"
+msgstr "Všechny vzdálené adresáře ze všech zařízení budou připojeny pod '/media/test':"
+
+#: ../ui.py:1813
+#, python-format
+msgid "Are You sure to delete %s selected bookmark(s)?"
+msgstr "Opravdu chctete smazat %s označených  záložek?"
+
+#: ../removebckp.py:87
+#, python-format
+msgid "Are you sure to remove file '%s'?"
+msgstr "Opravdu smazat soubor: '%s'?"
+
+#: ../removebckp.py:85
+msgid "Are you sure to remove selected files?"
+msgstr "Chcete odstranit vybrané soubory?"
+
+#: ../ui.py:492
 #, python-format
 msgid ""
 "Auto.name '%s' was attached to this record.\n"
@@ -358,10 +226,7 @@ msgstr ""
 "Auto.name '%s' byl přiřazen k tomuto řádku.\n"
 "Odstranit původní '%s'?"
 
-#, python-format
-msgid "'%s' was renamed to '%s'"
-msgstr "'%s' přejmenován na '%s'"
-
+#: ../ui.py:499
 #, python-format
 msgid ""
 "Auto.name in record was changed.\n"
@@ -370,203 +235,79 @@ msgstr ""
 "Auto.name byl změněn.\n"
 "Chcete přejmenovat původní '%s' na '%s'?"
 
-msgid "Nothing"
-msgstr "Nic"
+#: ../ui.py:885
+msgid "Autofs is not installed!"
+msgstr "Autofs není nainstalován!"
 
-#, python-format
-msgid "Record '%s' only"
-msgstr "Pouze řádek '%s'"
+#: ../ui.py:644
+msgid "Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin."
+msgstr "Automaticky přidá platné autofs soubory do souboru /etc/backup.cfg, který používá AutoBackup plugin."
 
-#, python-format
-msgid "All (record '%s' and its file '%s')"
-msgstr "Vše (řádek '%s' a soubor '%s')"
+#: ../helptexts.py:137
+msgid "Box side:"
+msgstr "Strana přijímače:"
 
-msgid "What all do You want to remove?"
-msgstr "Co všechno si přejete odstranit?"
+#: ../ui.py:357
+msgid "Brief help on how to use autofs."
+msgstr "Stručná nápověda k používání autofs."
 
-#, python-format
-msgid "Really remove autofile '%s'?"
-msgstr "Opravdu smazat soubor: '%s'?"
+#: ../removebckp.py:76 ../ui.py:1689 ../ui.py:1770
+msgid "Cancel"
+msgstr "Zavřít"
 
-msgid "Update autofs files in AutoBackup"
-msgstr "Aktualizovat autofs soubory v AutoBackup"
-
-msgid ""
-"Automaticaly add valid autofs files to /etc/backup.cfg file used by "
-"AutoBackup plugin."
-msgstr ""
-"Automaticky přidá platné autofs soubory do souboru /etc/backup.cfg, který "
-"používá AutoBackup plugin."
-
-msgid "Remove unused autofs files in AutoBackup"
-msgstr "Odstranit nepoužívané autofs soubory z AutoBackup"
-
-msgid "Remove unused autofs files from /etc/backup.cfg file."
-msgstr "Odstranění nepoužívaných autofs souborů z /etc/backup.cfg."
-
-msgid "Remove selected backup files created when editing autofs files."
-msgstr ""
-"Odstranění vybraných záložních souborů, které se vytvořily při úpravách "
-"autofs souborů."
-
-msgid "Install autofs"
-msgstr "Nainstalovat autofs"
-
-msgid "Install required autofs package if missing."
-msgstr "Instaluje požadovaný balíček autofs, jestliže chybí."
-
-msgid "Next items are not needed standardly:"
-msgstr "Následující položky nejsou standardně potřeba:"
-
-#, python-format
-msgid "Use '%s' as HDD replacement"
-msgstr "Použít '%s' jako náhradu HDD"
-
-#, python-format
-msgid "You can use current mountpoint '%s' as HDD replacement."
-msgstr "Můžete použít aktuální přístupový bod '%s' jako náhradu HDD."
-
+#: ../ui.py:665
 #, python-format
 msgid "Cancel '%s' as HDD replacement"
 msgstr "Zrušit '%s' jako náhradu HDD"
 
+#: ../ui.py:665
 #, python-format
 msgid "Cancel using '%s' as HDD replacement."
 msgstr "Zrušit používání '%s' jako náhrady HDD."
 
-msgid "Reload autofs"
-msgstr "Reload autofs"
+#: ../ui.py:671
+msgid "Change hostname"
+msgstr "Změna názvu v síti"
 
-msgid ""
-"Reload autofs mount maps. It is made standardly on each plugin exit if "
-"something was changed."
-msgstr ""
-"Provede 'autofs reload', neboli aktualizaci map připojení. Standardně se "
-"provádí při každém ukončení pluginu, jestliže bylo něco změněno."
+#: ../ui.py:671
+msgid "Change the hostname of your Receiver."
+msgstr "Změna názvu Vašeho příjimače v sítí."
 
-msgid "Restart autofs with GUI restart"
-msgstr "Restartovat autofs a enigma"
+#: ../ui.py:675
+msgid "Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed."
+msgstr "Zkontroluje záložky a aktuální připojení. Provádí se automaticky při každém ukončení pluginu, jestliže bylo něco změněno."
 
-msgid ""
-"Sometimes it is needed restart autofs deamon and GUI. Use this option and "
-"then wait for finishing and for restart GUI."
-msgstr ""
-"Někdy je potřeba restartovat autofs daemon zároveň s restartem uživatelského "
-"rozhraní. K tomu použijte tuto volbu a poté čekejte na spuštění a dokončení "
-"restartu systému. "
-
-msgid "Open AutoBackup plugin"
-msgstr "Otevřít AutoBackup plugin"
-
-msgid "Runs AutoBackup plugin"
-msgstr "Spuštění AutoBackup plugin k provedení zálohy."
-
-msgid "Reload Bookmarks"
-msgstr "Aktualizovat záložky"
-
-msgid ""
-"Check bookmarks with current mountpoints. It is made standardly on each "
-"plugin exit if something was changed."
-msgstr ""
-"Zkontroluje záložky a aktuální připojení. Provádí se automaticky při každém "
-"ukončení pluginu, jestliže bylo něco změněno."
-
+#: ../ui.py:677
 msgid "Clear bookmarks..."
 msgstr "Čistit záložky..."
 
-msgid "Removing selected bookmarks."
-msgstr "Odstranění vybraných záložek."
-
-msgid ""
-"You can preset several input parameters before creating more autofiles. "
-"Values can be then inserted with blue button on current item. Presettings "
-"account values can be cleared on plugin exit."
-msgstr ""
-"Před zakládáním více 'auto.file' souborů můžete přednastavit několik "
-"zadávaných hodnot. Hodnoty mohou být poté vkládány pomocí modrého tlačítka "
-"na aktuální položce. Přednastavené hodnoty pro připojení mohou být při "
-"ukončení pluginu smazány."
-
-msgid "Presetting input values..."
-msgstr "Přednastavené vstupní hodnoty..."
-
-msgid "Really reload autofs and restart GUI?"
-msgstr "Skutečně reload autofs a restartovat enigma?"
-
+#: ../ui.py:350
 #, python-format
-msgid "Point '%s' is not mounted!"
-msgstr "Bod '%s' není připojen!"
+msgid "Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal."
+msgstr "Naklonování záznamu se vzdáleným zařízením '%s' v 'auto.master' souboru a zároveň vytvoření souboru s parametry připojení."
 
-#, python-format
-msgid "Select '%s' directory:"
-msgstr "Zvolte '%s' adresář:"
+#: ../helptexts.py:34 ../ui.py:154 ../ui.py:155 ../ui.py:179 ../ui.py:939
+#: ../ui.py:1177 ../ui.py:1549 ../ui.py:1759 ../ui.py:1764
+msgid "Close"
+msgstr "Zavřít"
 
-#, python-format
-msgid "'%s.auto' has wrong format or is empty!"
-msgstr "'%s.auto' má neplatný formát nebo je prázdný!"
+#: ../ui.py:350
+msgid "Create new record from:"
+msgstr "Vytvořit nový záznam z:"
 
-#, python-format
-msgid "%s as /hdd"
-msgstr "%s jako /hdd"
+#: ../ui.py:1771
+msgid "Delete"
+msgstr "Odstranit"
 
-#, python-format
-msgid "File '%s' was created!"
-msgstr "Soubor '%s' byl založen!"
+#: ../ui.py:1765
+msgid "Delete selected"
+msgstr "Smazat vybrané"
 
-#, python-format
-msgid "Update AutoBackup's '%s'?"
-msgstr "Aktualizovat AutoBackup '%s'?"
+#: ../ui.py:252
+msgid "Disable"
+msgstr "Zakázat"
 
-msgid "Missing '/etc/backup.cfg'"
-msgstr "Chybějící '/etc/backup.cfg'"
-
-#, python-format
-msgid "Remove unused lines from '%s'?"
-msgstr "Odstranit nepoužívané soubory z '%s'?"
-
-msgid "Please wait for restart GUI!"
-msgstr "Počkejte na dokončení restartu GUI!"
-
-msgid "Autofs is not installed!"
-msgstr "Autofs není nainstalován!"
-
-#, python-format
-msgid "Manager Autofs - edited record: %s"
-msgstr "Manager Autofs - upravovaný záznam: %s"
-
-msgid "Manager Autofs - create new record"
-msgstr "Manager Autofs - založení nového záznamu"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "enabled"
-msgstr "povolen"
-
-msgid "mountpoint name"
-msgstr "bod připojení"
-
-msgid "auto.name"
-msgstr "auto.name"
-
-msgid "ghost"
-msgstr "ghost"
-
-msgid "timeout"
-msgstr "timeout"
-
-msgid "time"
-msgstr "time"
-
-msgid "Put autoname"
-msgstr "Vložit auto.name"
-
-msgid "Put mountpoint name"
-msgstr "Vložit bod připojení"
-
-msgid "You cannot use 'master' in auto.file name"
-msgstr "Nelze použít 'master' v názvu auto.name"
-
+#: ../ui.py:1084
 #, python-format
 msgid ""
 "Do You want use existing '%s' file?\n"
@@ -575,232 +316,610 @@ msgstr ""
 "Chcete použít existující soubor '%s'?\n"
 "Jestliže ne, změňte auto.name."
 
+#: ../ui.py:409 ../ui.py:830 ../ui.py:863
+msgid "Done"
+msgstr "Dokončeno"
+
+#: ../helptexts.py:100
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr "Každý sdílený adresář má vlastní připojení pod /media:"
+
+#: ../ui.py:1551
+msgid "Edit"
+msgstr "Upravit"
+
+#: ../ui.py:353
+msgid "Edit -"
+msgstr "Upravit -"
+
+#: ../ui.py:158 ../ui.py:181
+msgid "Edit auto file"
+msgstr "Upravit auto soubor"
+
+#: ../ui.py:353
 #, python-format
-msgid "Mountpoint name '%s' is used!"
-msgstr "Název bodu připojení '%s' je již použitý!"
+msgid "Edit file '%s' with mountpoint parameters for existing '%s' remote device."
+msgstr "Úprava souboru '%s' s parametry připojení pro existující vzdálené zařízení '%s'."
 
-msgid "no"
-msgstr "ne"
+#: ../ui.py:1591
+msgid "Edit line"
+msgstr "Upravit řádek"
 
+#: ../ui.py:1591
+msgid "Edit line with mountpoint parameters."
+msgstr "Úprava řádku s parametry připojení."
+
+#: ../ui.py:153
+msgid "Edit mountpoint"
+msgstr "Upravit bod připojení"
+
+#: ../ui.py:346
+#, python-format
+msgid "Edit record for '%s' remote device in 'auto.master' file."
+msgstr "Úprava záznamu pro vzdálené zařízení '%s' v souboru 'auto.master'."
+
+#: ../ui.py:346
+msgid "Edit record:"
+msgstr "Upravit záznam:"
+
+#: ../ui.py:254
+msgid "Enable"
+msgstr "Povolit"
+
+#: ../ui.py:157
+msgid "Enable/disable mountpoint"
+msgstr "Povolit/zakázat bod připojení"
+
+#: ../ui.py:165
+msgid "Enable/disable moving item"
+msgstr "Povolit/zakázat přesun položky"
+
+#: ../ui.py:794
+msgid "Enter new hostname for your Receiver"
+msgstr "Zadejte sítový název Vašeho příjimače"
+
+#: ../ui.py:1552
+msgid "Erase"
+msgstr "Odstranit"
+
+#: ../ui.py:407
+msgid "Failed"
+msgstr "Chyba"
+
+#: ../ui.py:819
+#, python-format
+msgid "File '%s' was created!"
+msgstr "Soubor '%s' byl založen!"
+
+#: ../ui.py:805
+msgid "For apply new hostname restart box!"
+msgstr "Změna se projeví až po restartu příjimače!"
+
+#: ../helptexts.py:53 ../ui.py:357
+msgid "Help"
+msgstr "Nápověda"
+
+#: ../ui.py:651
+msgid "Install autofs"
+msgstr "Nainstalovat autofs"
+
+#: ../helptexts.py:64
+msgid "Install autofs with:  opkg install autofs"
+msgstr "Nainstalujte autofs příkazem:  opkg install autofs"
+
+#: ../ui.py:651
+msgid "Install required autofs package if missing."
+msgstr "Instaluje požadovaný balíček autofs, jestliže chybí."
+
+#: ../removebckp.py:78 ../ui.py:1773
+msgid "Inversion"
+msgstr "Inverze"
+
+#: ../ui.py:1767
+msgid "Invert selection"
+msgstr "Inverze výběru"
+
+#: ../ui.py:1747
+msgid "List of bookmarks"
+msgstr "Seznam záložek"
+
+#: ../plugin.py:53
+msgid "Manage autofs files and conection"
+msgstr "Upravuje soubory Autofs a připojení"
+
+#: ../plugin.py:52
+msgid "Manager Autofs"
+msgstr "Manager Autofs"
+
+#: ../ui.py:931
+msgid "Manager Autofs - create new record"
+msgstr "Manager Autofs - založení nového záznamu"
+
+#: ../ui.py:1170
 #, python-format
 msgid "Manager Autofs - edited autofile/record: %s"
 msgstr "Manager Autofs - upravovaný soubor/řádek: %s"
 
-msgid "local directory"
-msgstr "místní adresář"
+#: ../ui.py:927
+#, python-format
+msgid "Manager Autofs - edited record: %s"
+msgstr "Manager Autofs - upravovaný záznam: %s"
 
-msgid "fstype"
-msgstr "fstype"
-
-msgid "soft"
-msgstr "soft"
-
-msgid "intr"
-msgstr "fstype"
-
-msgid "rw/ro"
-msgstr "rw/ro"
-
-msgid "use user/pass"
-msgstr "uživatel/heslo"
-
-msgid "user"
-msgstr "uživatel"
-
-msgid "password"
-msgstr "heslo"
-
-msgid "domain"
-msgstr "doména"
-
-msgid "domain name"
-msgstr "domain name"
-
-msgid "noperm"
-msgstr "noperm"
-
-msgid "noatime"
-msgstr "noatime"
-
-msgid "noserverino"
-msgstr "noserverino"
-
-msgid "nosuid"
-msgstr "nosuid"
-
-msgid "nodev"
-msgstr "nodev"
-
-msgid "rsize"
-msgstr "rsize"
-
-msgid "wsize"
-msgstr "wsize"
-
-msgid "iocharset"
-msgstr "iocharset"
-
-msgid "security"
-msgstr "security"
-
-msgid "use ip/name or dev"
-msgstr "použít IP/název nebo dev"
-
-msgid "ip or name"
-msgstr "IP nebo název"
-
-msgid "ip"
-msgstr "IP"
-
-msgid "name"
-msgstr "název"
-
-msgid "dev"
-msgstr "dev"
-
-msgid "shared remote directory"
-msgstr "sdílený vzdálený adresář"
-
-msgid "smb version"
-msgstr "samba verze"
-
-msgid "user string"
-msgstr "uživatelský řetězec"
-
-msgid "Use preset"
-msgstr "Použít přednastavené"
-
-msgid "Wrong file format!"
-msgstr "Chybný formát souboru!"
-
-msgid "Add"
-msgstr "Přidat"
-
-msgid "Edit"
-msgstr "Upravit"
-
-msgid "Erase"
-msgstr "Odstranit"
-
+#: ../ui.py:1567
 #, python-format
 msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
-msgstr ""
-"Manager Autofs - pro úpravu stiskněte %sUpravit%s nebo %sOK%s nebo použijte "
-"%sMenu%s"
+msgstr "Manager Autofs - pro úpravu stiskněte %sUpravit%s nebo %sOK%s nebo použijte %sMenu%s"
 
-msgid "Edit line"
-msgstr "Upravit řádek"
+#: ../ui.py:204
+#, python-format
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
+msgstr "Manager Autofs v.%s - stiskněte %sOK%s na řádku nebo použijte %sMenu%s"
 
-msgid "Edit line with mountpoint parameters."
-msgstr "Úprava řádku s parametry připojení."
+#: ../ui.py:159
+msgid "Menu"
+msgstr "Menu"
 
-msgid "Add line"
-msgstr "Přidat řádek"
+#: ../ui.py:865
+msgid "Missing '/etc/backup.cfg'"
+msgstr "Chybějící '/etc/backup.cfg'"
 
-msgid "Add next line with mountpoint parameters."
-msgstr "Přidání dalšího řádku s parametry připojení."
+#: ../helptexts.py:36
+msgid "Mode II"
+msgstr "Mód II"
 
-msgid "Remove line"
-msgstr "Odstranit řádek"
+#: ../helptexts.py:37
+msgid "Mode III"
+msgstr "Mód III"
 
-msgid "Remove line with mountpoint parameters."
-msgstr "Odstranění řádku s parametry připojení."
+#: ../ui.py:147
+msgid "Mountpoint"
+msgstr "Bod připojení"
 
-msgid "No valid item"
-msgstr "Neplatná položka"
+#: ../ui.py:1096
+#, python-format
+msgid "Mountpoint name '%s' is used!"
+msgstr "Název bodu připojení '%s' je již použitý!"
 
+#: ../ui.py:164
+msgid "Move item down"
+msgstr "Přesun položky dolů"
+
+#: ../ui.py:163
+msgid "Move item up"
+msgstr "Přesun položky nahoru"
+
+#: ../ui.py:1635
 msgid "New"
 msgstr "Nový"
 
+#: ../ui.py:348
+msgid "New record"
+msgstr "Nový záznam"
+
+#: ../ui.py:653
+msgid "Next items are not needed standardly:"
+msgstr "Následující položky nejsou standardně potřeba:"
+
+#: ../ui.py:367
+msgid "Next utilities."
+msgstr "Další nástroje."
+
+#: ../ui.py:1596
+msgid "No valid item"
+msgstr "Neplatná položka"
+
+#: ../helptexts.py:126
+msgid "Note: older autofs versions can't handle commented lines in auto.xxxx files!"
+msgstr "Pozn.: starší verze autofs neumí pracovat se zakomentovanými řádky v auto.xxxx souborech!"
+
+#: ../helptexts.py:84
+msgid "Note: older autofs versions required a mount point as '/mnt/net'"
+msgstr "Pozn.: starší verze autofs vyžadovaly mount point jako '/mnt/net'"
+
+#: ../ui.py:520
+msgid "Nothing"
+msgstr "Nic"
+
+#: ../ui.py:940 ../ui.py:1178 ../ui.py:1690
+msgid "OK"
+msgstr "OK"
+
+#: ../ui.py:673
+msgid "Open AutoBackup plugin"
+msgstr "Otevřít AutoBackup plugin"
+
+#: ../helptexts.py:132
+msgid "PC side:"
+msgstr "Strana PC:"
+
+#: ../ui.py:880
+msgid "Please wait for restart GUI!"
+msgstr "Počkejte na dokončení restartu GUI!"
+
+#: ../ui.py:735
+#, python-format
+msgid "Point '%s' is not mounted!"
+msgstr "Bod '%s' není připojen!"
+
+#: ../ui.py:1707
+msgid "Preset account password value."
+msgstr "Přednastavená hodnota hesla účtu."
+
+#: ../ui.py:1708
+msgid "Preset account values will be or will not be saved on plugin exit."
+msgstr "Přednastavené hodnoty pro připojení budou nebo nebudou při ukončení pluginu ukládány."
+
+#: ../ui.py:1706
+msgid "Preset username account value."
+msgstr "Přednastavená hodnota uživatelského jména."
+
+#: ../ui.py:1709
+msgid "Preset value for local directory."
+msgstr "Přednastavená hodnota pro místní adresář."
+
+#: ../ui.py:1710
+msgid "Preset value for shared remote directory."
+msgstr "Přednastavená hodnota pro sdílený vzdálený adresář."
+
+#: ../ui.py:680
+msgid "Presetting input values..."
+msgstr "Přednastavené vstupní hodnoty..."
+
+#: ../removebckp.py:80
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr "Stiskněte 'Odstranit' na souboru nebo označte soubory pomocí 'OK' a poté použijte tlačítko 'Odstranit'"
+
+#: ../ui.py:1022 ../ui.py:1045
+msgid "Put autoname"
+msgstr "Vložit auto.name"
+
+#: ../ui.py:1024 ../ui.py:1047
+msgid "Put mountpoint name"
+msgstr "Vložit bod připojení"
+
+#: ../ui.py:1644
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr "Opravdu smazat řádek: '%s'?"
 
-msgid "User and password preseting"
-msgstr "Přednastavení přístupových údajů"
+#: ../ui.py:709
+msgid "Really reload autofs and restart GUI?"
+msgstr "Skutečně reload autofs a restartovat enigma?"
 
-msgid "OK"
-msgstr "OK"
+#: ../ui.py:638
+#, python-format
+msgid "Really remove autofile '%s'?"
+msgstr "Opravdu smazat soubor: '%s'?"
 
-msgid "Preset username account value."
-msgstr "Přednastavená hodnota uživatelského jména."
+#: ../ui.py:520
+#, python-format
+msgid "Record '%s' only"
+msgstr "Pouze řádek '%s'"
 
-msgid "Preset account password value."
-msgstr "Přednastavená hodnota hesla účtu."
+#: ../ui.py:675
+msgid "Reload Bookmarks"
+msgstr "Aktualizovat záložky"
 
-msgid "save preset account values"
-msgstr "ukládat přednastavené hodnoty přístupu"
+#: ../ui.py:668
+msgid "Reload autofs"
+msgstr "Reload autofs"
 
-msgid "Preset account values will be or will not be saved on plugin exit."
-msgstr ""
-"Přednastavené hodnoty pro připojení budou nebo nebudou při ukončení pluginu "
-"ukládány."
+#: ../ui.py:668
+msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
+msgstr "Provede 'autofs reload', neboli aktualizaci map připojení. Standardně se provádí při každém ukončení pluginu, jestliže bylo něco změněno."
 
-msgid "Preset value for local directory."
-msgstr "Přednastavená hodnota pro místní adresář."
+#: ../removebckp.py:77
+msgid "Remove"
+msgstr "Smazat"
 
-msgid "Preset value for shared remote directory."
-msgstr "Přednastavená hodnota pro sdílený vzdálený adresář."
+#: ../ui.py:355
+msgid "Remove -"
+msgstr "Odstranit -"
 
-msgid "test mount points on plugin start"
-msgstr "testovat body pripojení při startu"
+#: ../removebckp.py:52 ../ui.py:648
+msgid "Remove backup files"
+msgstr "Odstranit záložní soubory"
 
-msgid ""
-"Tests enabled mount points on plugin start, but it increase plugin start "
-"time."
-msgstr ""
-"Testuje povolené body připojení při startu pluginu, ale prodlouží dobu "
-"spouštění pluginu."
+#: ../ui.py:355
+#, python-format
+msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
+msgstr "Odstraní soubor '%s' s parametry připojení pro existující vzdálené zařízení '%s'."
 
-msgid "List of bookmarks"
-msgstr "Seznam záložek"
+#: ../ui.py:360
+msgid "Remove from extended menu"
+msgstr "Odebrat z Extended menu"
 
-msgid "Add or remove item of selection"
-msgstr "Přidat nebo odebrat položku z výběru"
+#: ../ui.py:1593
+msgid "Remove line"
+msgstr "Odstranit řádek"
 
-msgid "Delete selected"
-msgstr "Smazat vybrané"
+#: ../ui.py:1593
+msgid "Remove line with mountpoint parameters."
+msgstr "Odstranění řádku s parametry připojení."
 
-msgid "Sort list"
-msgstr "Setřídit seznam"
+#: ../ui.py:361
+msgid "Remove plugin's run from Extended menu."
+msgstr "Odebere spouštění pluginu z Extended menu."
 
-msgid "Invert selection"
-msgstr "Inverze výběru"
+#: ../ui.py:349
+#, python-format
+msgid "Remove record with '%s' remote device from 'auto.master' file."
+msgstr "Odstranění záznamu pro vzálené zařízení '%s' ze souboru 'auto.master'."
 
-msgid "Delete"
-msgstr "Odstranit"
+#: ../ui.py:349
+msgid "Remove record:"
+msgstr "Odstranit záznam:"
 
+#: ../ui.py:648
+msgid "Remove selected backup files created when editing autofs files."
+msgstr "Odstranění vybraných záložních souborů, které se vytvořily při úpravách autofs souborů."
+
+#: ../ui.py:645
+msgid "Remove unused autofs files from /etc/backup.cfg file."
+msgstr "Odstranění nepoužívaných autofs souborů z /etc/backup.cfg."
+
+#: ../ui.py:645
+msgid "Remove unused autofs files in AutoBackup"
+msgstr "Odstranit nepoužívané autofs soubory z AutoBackup"
+
+#: ../ui.py:867
+#, python-format
+msgid "Remove unused lines from '%s'?"
+msgstr "Odstranit nepoužívané soubory z '%s'?"
+
+#: ../ui.py:677
+msgid "Removing selected bookmarks."
+msgstr "Odstranění vybraných záložek."
+
+#: ../ui.py:669
+msgid "Restart autofs with GUI restart"
+msgstr "Restartovat autofs a enigma"
+
+#: ../ui.py:673
+msgid "Runs AutoBackup plugin"
+msgstr "Spuštění AutoBackup plugin k provedení zálohy."
+
+#: ../ui.py:753
+#, python-format
+msgid "Select '%s' directory:"
+msgstr "Zvolte '%s' adresář:"
+
+#: ../ui.py:370 ../ui.py:682 ../ui.py:1599
+msgid "Select operation:"
+msgstr "Zvolte operaci:"
+
+#: ../ui.py:1776
+msgid "Select with 'OK' and then remove with 'Delete'."
+msgstr "Vyberte pomocí 'OK' a pak odstraňte pomocí 'Odstranit'."
+
+#: ../ui.py:669
+msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
+msgstr "Někdy je potřeba restartovat autofs daemon zároveň s restartem uživatelského rozhraní. K tomu použijte tuto volbu a poté čekejte na spuštění a dokončení restartu systému. "
+
+#: ../ui.py:1772
 msgid "Sort"
 msgstr "Třídění"
 
-msgid "Select with 'OK' and then remove with 'Delete'."
-msgstr "Vyberte pomocí 'OK' a pak odstraňte pomocí 'Smazat'."
+#: ../ui.py:1766
+msgid "Sort list"
+msgstr "Setřídit seznam"
 
+#: ../ui.py:1711
+msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
+msgstr "Testuje povolené body připojení při startu pluginu, ale prodlouží dobu spouštění pluginu."
+
+#: ../ui.py:832
 #, python-format
-msgid "Are You sure to delete %s selected bookmark(s)?"
-msgstr "Opravdu chctete smazat %s označených  záložek?"
+msgid "Update AutoBackup's '%s'?"
+msgstr "Aktualizovat AutoBackup '%s'?"
 
-#~ msgid "- mount/umount all together"
-#~ msgstr "- připojení/odpojení pouze všeho najednou"
+#: ../ui.py:644
+msgid "Update autofs files in AutoBackup"
+msgstr "Aktualizovat autofs soubory v AutoBackup"
 
-#~ msgid "(It has not sense using this mode with this plugin)"
-#~ msgstr "(tento mód nemá moc smysl používat s tímto pluginem)"
+#: ../ui.py:287
+msgid "Updating mountpoints and bookmarks..."
+msgstr "Aktualizují se body připojení a záložky..."
 
-#~ msgid "User and password presetting..."
-#~ msgstr "Přednastavení přístupových údajů..."
+#: ../ui.py:661
+#, python-format
+msgid "Use '%s' as HDD replacement"
+msgstr "Použít '%s' jako náhradu HDD"
 
-#~ msgid "used ip"
-#~ msgstr "použít IP"
+#: ../ui.py:1300
+msgid "Use preset"
+msgstr "Použít přednastavené"
 
-#~ msgid "Exit plugin"
-#~ msgstr "Zavřít plugin"
+#: ../ui.py:1687 ../ui.py:1719
+msgid "User and password preseting"
+msgstr "Přednastavení přístupových údajů"
 
-#~ msgid "Autofs file: %s"
-#~ msgstr "Autofs soubor: %s"
+#: ../ui.py:367
+msgid "Utility"
+msgstr "Nástroje"
 
-#~ msgid ""
-#~ "File %s with %d lines.\n"
-#~ "Not supported yet"
-#~ msgstr ""
-#~ "Soubor %s s %d řádky.\n"
-#~ "Zatím není podporováno."
+#: ../ui.py:521
+msgid "What all do You want to remove?"
+msgstr "Co všechno si přejete odstranit?"
+
+#: ../ui.py:1478
+msgid "Wrong file format!"
+msgstr "Chybný formát souboru!"
+
+#: ../ui.py:679
+msgid "You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit."
+msgstr "Před zakládáním více 'auto.file' souborů můžete přednastavit několik zadávaných hodnot. Hodnoty mohou být poté vkládány pomocí modrého tlačítka na aktuální položce. Přednastavené hodnoty pro připojení mohou být při ukončení pluginu smazány."
+
+#: ../ui.py:661
+#, python-format
+msgid "You can use current mountpoint '%s' as HDD replacement."
+msgstr "Můžete použít aktuální přístupový bod '%s' jako náhradu HDD."
+
+#: ../ui.py:1074
+msgid "You cannot use 'master' in auto.file name"
+msgstr "Nelze použít 'master' v názvu auto.name"
+
+#: ../ui.py:148
+msgid "auto.file"
+msgstr "Soubor auto"
+
+#: ../helptexts.py:89
+msgid "auto.master with more records:"
+msgstr "auto.master s více řádky:"
+
+#: ../ui.py:977
+msgid "auto.name"
+msgstr "auto.name"
+
+#: ../ui.py:1267
+msgid "dev"
+msgstr "dev"
+
+#: ../ui.py:1244
+msgid "domain"
+msgstr "doména"
+
+#: ../ui.py:1247
+msgid "domain name"
+msgstr "domain name"
+
+#: ../ui.py:974 ../ui.py:1227
+msgid "enabled"
+msgstr "povolen"
+
+#: ../helptexts.py:114
+msgid "example of auto.synology:"
+msgstr "příklad pro auto.synology:"
+
+#: ../ui.py:1231
+msgid "fstype"
+msgstr "fstype"
+
+#: ../ui.py:979
+msgid "ghost"
+msgstr "ghost"
+
+#: ../ui.py:1235
+msgid "intr"
+msgstr "fstype"
+
+#: ../ui.py:1255
+msgid "iocharset"
+msgstr "iocharset"
+
+#: ../ui.py:1263
+msgid "ip"
+msgstr "IP"
+
+#: ../ui.py:1260
+msgid "ip or name"
+msgstr "IP nebo název"
+
+#: ../ui.py:1229 ../ui.py:1709
+msgid "local directory"
+msgstr "místní adresář"
+
+#: ../helptexts.py:93
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr "více souborů auto.xxxx - každý soubor pro jedno připojení:"
+
+#: ../ui.py:975
+msgid "mountpoint name"
+msgstr "bod připojení"
+
+#: ../ui.py:1265
+msgid "name"
+msgstr "název"
+
+#: ../ui.py:1115 ../ui.py:1118 ../ui.py:1132 ../ui.py:1133 ../ui.py:1134
+#: ../ui.py:1135 ../ui.py:1141 ../ui.py:1144
+msgid "no"
+msgstr "ne"
+
+#: ../ui.py:1249
+msgid "noatime"
+msgstr "noatime"
+
+#: ../ui.py:1252
+msgid "nodev"
+msgstr "nodev"
+
+#: ../ui.py:1248
+msgid "noperm"
+msgstr "noperm"
+
+#: ../ui.py:1250
+msgid "noserverino"
+msgstr "noserverino"
+
+#: ../ui.py:1251
+msgid "nosuid"
+msgstr "nosuid"
+
+#: ../ui.py:1240 ../ui.py:1707
+msgid "password"
+msgstr "heslo"
+
+#: ../ui.py:1253
+msgid "rsize"
+msgstr "rsize"
+
+#: ../ui.py:1236
+msgid "rw/ro"
+msgstr "rw/ro"
+
+#: ../ui.py:1708
+msgid "save preset account values"
+msgstr "ukládat přednastavené hodnoty přístupu"
+
+#: ../ui.py:1256
+msgid "security"
+msgstr "security"
+
+#: ../ui.py:1268 ../ui.py:1710
+msgid "shared remote directory"
+msgstr "sdílený vzdálený adresář"
+
+#: ../ui.py:1271
+msgid "smb version"
+msgstr "samba verze"
+
+#: ../ui.py:1234
+msgid "soft"
+msgstr "soft"
+
+#: ../ui.py:1711
+msgid "test mount points on plugin start"
+msgstr "testovat body pripojení při startu"
+
+#: ../helptexts.py:117
+msgid "then will be mounted as:"
+msgstr "bude připojeno jako:"
+
+#: ../ui.py:983
+msgid "time"
+msgstr "time"
+
+#: ../ui.py:980
+msgid "timeout"
+msgstr "timeout"
+
+#: ../ui.py:1257
+msgid "use ip/name or dev"
+msgstr "použít IP/název nebo dev"
+
+#: ../ui.py:1237
+msgid "use user/pass"
+msgstr "uživatel/heslo"
+
+#: ../ui.py:1239 ../ui.py:1706
+msgid "user"
+msgstr "uživatel"
+
+#: ../ui.py:1272
+msgid "user string"
+msgstr "uživatelský řetězec"
+
+#: ../ui.py:1254
+msgid "wsize"
+msgstr "wsize"

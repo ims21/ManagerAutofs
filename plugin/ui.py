@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.95"
+VERSION = "1.96"
 #
 #  Coded by ims (c) 2017-2020
 #  Support: openpli.org
@@ -22,6 +22,7 @@ from . import _
 from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
+from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.Button import Button
 from Components.Label import Label
 from Components.ActionMap import ActionMap, HelpableActionMap
@@ -310,8 +311,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if self.edit:
 			self["h_prev"].show()
 			self["h_next"].show()
-		else:
 			self.changes = True
+		else:
 			self["h_prev"].hide()
 			self["h_next"].hide()
 	def moveUp(self):
@@ -667,6 +668,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin exit if something was changed.")))
 			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
 			buttons += ["","green"]
+		menu.append((space + _("Change hostname"), 90, _("Change the hostname of your Receiver.")))
+		buttons += [""]
 		menu.append((space +_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
 		buttons += ["3"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed.")))
@@ -710,6 +713,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.hddReplacement()
 		elif choice[1] == 21:
 			self.hddReplacementReset()
+		elif choice[1] == 90:
+			self.hostEdit()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
@@ -777,6 +782,27 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def isBackupFile(self):
 		files = [x for x in os.listdir("/etc") if x.startswith("auto.") and (x.endswith(".bak") or x.endswith(".del") or x.endswith(".$$$"))]
 		return len(files)
+
+	def hostEdit(self):
+		try:
+			with open('/etc/hostname', 'r') as fi:
+				hostname = fi.read()
+				fi.close()
+		except:
+			print "[ManagerAutofs] failed to read etc/hostname"
+			return
+		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title = (_("Enter new hostname for your Receiver")), text = hostname)
+
+	def hostnameCallback(self, hostname = None):
+		if hostname:
+			with open('/etc/hostname', 'r') as fi:
+				oldhostname = fi.read()
+				fi.close()
+			if hostname != oldhostname:
+				with open('/etc/hostname', 'w+') as fo:
+					fo.write(hostname)
+					fo.close()
+					self.MessageBoxNM(True, _("For apply new hostname restart box!"), 5)
 
 	def removeBackupFiles(self):
 		from removebckp import ManagerAutofsRemoveBackupFiles
