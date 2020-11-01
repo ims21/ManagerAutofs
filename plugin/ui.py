@@ -17,7 +17,7 @@ VERSION = "1.96"
 #  GNU General Public License for more details.
 #
 # for localized messages
-from . import _
+from . import _, ngettext
 
 from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
@@ -1810,7 +1810,8 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 			selected = len(self.list.getSelectionsList())
 			if not selected:
 				selected = 1
-			self.session.openWithCallback(self.delete, MessageBox, _("Are You sure to delete %s selected bookmark(s)?") % selected, type=MessageBox.TYPE_YESNO, default=False)
+			text = ngettext("Are You sure to delete %s selected bookmark?", "Are You sure to delete %s selected bookmarks?", selected) % selected
+			self.session.openWithCallback(self.delete, MessageBox, text, type=MessageBox.TYPE_YESNO, default=False)
 
 	def delete(self, choice):
 		if choice:
