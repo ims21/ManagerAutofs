@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 19:52+0200\n"
+"POT-Creation-Date: 2020-12-06 00:31+0100\n"
 "PO-Revision-Date: 2020-10-30 09:41+0300\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE\n"
@@ -13,84 +13,52 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
-msgid "Manager Autofs"
-msgstr "Менеджер Autofs"
+#: ../ui.py:791
+#, python-format
+msgid "%s as /hdd"
+msgstr "%s как /hdd"
 
-msgid "Manage autofs files and conection"
-msgstr "Управление файлами autofs и подключением"
+#: ../helptexts.py:131
+#, python-format
+msgid "%sConnect to Win7,8,10 shared folder:%s"
+msgstr "%sПодключиться к общей папке Win7,8,10:%s"
 
-msgid "Close"
-msgstr "Закрыть"
-
-msgid "All"
-msgstr "Все"
-
-msgid "Mode II"
-msgstr "Режим II"
-
-msgid "Mode III"
-msgstr "Режим III"
-
-msgid "Help"
-msgstr "Помощь"
-
-msgid "Install autofs with:  opkg install autofs"
-msgstr "Установить autofs с помощью: opkg install autofs"
-
-msgid "- then edit:"
-msgstr "- затем отредактировать:"
-
-msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
-msgstr "файл /etc/auto.master (используйте только строки параметров для плагина!)"
-
-msgid "/etc/auto.xxxx - as 'xxxx' use any name"
-msgstr "/etc/auto.xxxx - в качестве 'xxxx' используйте любое имя"
-
+#: ../helptexts.py:71
 #, python-format
 msgid "%sMode I:%s  (auto.master + one auto.xxxx only)"
 msgstr "%sРежим I:%s  (auto.master + только один auto.xxxx)"
 
-#| msgid "/etc/auto.master - one record only, mountpoint must be '/mnt/net':"
-msgid "/etc/auto.master - one record only:"
-msgstr "/etc/auto.master - только одна запись:"
-
-msgid "/etc/auto.test - 'test' used as example:"
-msgstr "/etc/auto.test - 'test' используется в качестве примера:"
-
-#| msgid "All remote directories from all devices will be mounted under '/media/net':"
-msgid "All remote directories from all devices will be mounted under '/media/test':"
-msgstr "Все удаленные каталоги со всех устройств будут смонтированы в '/media/test':"
-
-msgid "+ only 2 files for whole work"
-msgstr "+ только 2 файла на всю работу"
-
-msgid "- it is not very clear what is what"
-msgstr "- не очень понятно, что к чему"
-
-msgid "Note: older autofs versions required a mount point as '/mnt/net'"
-msgstr "Примечание: более старые версии autofs требовали точки монтирования как '/mnt/net'"
-
+#: ../helptexts.py:88
 #, python-format
 msgid "%sMode II:%s  (auto.master + more auto.xxxx files)"
 msgstr "%sРежим II:%s  (auto.master + больше auto.xxxx файлов)"
 
-#| msgid "auto.master with more records (no mountpoint as '/mnt/net'):"
-msgid "auto.master with more records:"
-msgstr "auto.master с большим количеством записей:"
+#: ../helptexts.py:110
+#, python-format
+msgid "%sMode III:%s  (similar as II)"
+msgstr "%sРежим III:%s  (аналогичный как II)"
 
-msgid "more auto.xxxx files - each file for one shared directory:"
-msgstr "больше auto.xxxx файлов - каждый файл для одного общего каталога:"
+#: ../ui.py:463
+#, python-format
+msgid "'%s' not exists, %s will be with default values"
+msgstr "'%s' не существует, '%s' будет со значениями по умолчанию"
 
-msgid "Each shared directory has own mounpoint under /media:"
-msgstr "Каждый общий каталог имеет собственную точку монтирования в разделе /media:"
+#: ../ui.py:500
+#, python-format
+msgid "'%s' was removed"
+msgstr "'%s' был удален"
 
-msgid "- more auto.xxxx files"
-msgstr "- больше auto.xxxx файлов"
+#: ../ui.py:507
+#, python-format
+msgid "'%s' was renamed to '%s'"
+msgstr "'%s' был переименован в '%s'"
 
-msgid "+ very clear what is what"
-msgstr "+ очень понятно, что к чему"
+#: ../ui.py:775
+#, python-format
+msgid "'%s.auto' has wrong format or is empty!"
+msgstr "'%s.auto' имеет неправильный формат или пуст!"
 
-#| msgid "+ can be mounted/umounted independently with uncomment/comment line(s) in auto.master"
+#: ../helptexts.py:106 ../helptexts.py:122
 msgid ""
 "+ can be mounted/umounted independently with uncomment/comment line(s)\n"
 "in auto.master or auto.xxxx files"
@@ -98,230 +66,174 @@ msgstr ""
 "+ может быть смонтирован/размонтирован независимо с раскомментированной строкой(строками)\n"
 "в файлах auto.master или auto.xxxx"
 
-#, python-format
-msgid "%sMode III:%s  (similar as II)"
-msgstr "%sРежим III:%s  (аналогичный как II)"
+#: ../helptexts.py:82
+msgid "+ only 2 files for whole work"
+msgstr "+ только 2 файла на всю работу"
 
-msgid "-in auto.xxxx files can be used more lines"
-msgstr "-в файлах auto.xxxx можно использовать больше строк"
+#: ../helptexts.py:105
+msgid "+ very clear what is what"
+msgstr "+ очень понятно, что к чему"
 
-msgid "-useful, if one device sharing more directories"
-msgstr "-полезно, если одно устройство совместно использует несколько каталогов"
-
-msgid "-everything else is the same as for II"
-msgstr "-все остальное то же, что и для II"
-
-msgid "example of auto.synology:"
-msgstr "пример для auto.synology:"
-
-msgid "then will be mounted as:"
-msgstr "будет смонтирован как:"
-
-msgid "Note: older autofs versions can't handle commented lines in auto.xxxx files!"
-msgstr ""
-"Примечание: более старые версии autofs не могут обрабатывать закомментированные строки в файлах auto.xxxx!"
-
-#, python-format
-msgid ""
-"After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'"
-msgstr ""
-"После изменения параметров в auto.file лучше использовать %s'Рестарт autofs и Рестарт GUI'%s в 'Меню-"
-"Инструменты'"
-
-#, python-format
-msgid "%sConnect to Win7,8,10 shared folder:%s"
-msgstr "%sПодключиться к общей папке Win7,8,10:%s"
-
-msgid "PC side:"
-msgstr "Сторона ПК:"
-
-#, python-format
-msgid "-on directory press right mouse, select %s'Properties'%s and use bookmark %s'Sharing'%s"
-msgstr "-щелкните правой кнопкой мыши папку, выберите %s'Свойства'%s и используйте закладку %s'Доступ'%s"
-
-#, python-format
-msgid "-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
-msgstr "-нажмите кнопку %s'Расширенная настройка...'%s, включите %s'Общий доступ к этой папке'%s"
-
-#, python-format
-msgid "-can be changed %s'Shared name'%s too"
-msgstr "-можно также изменить %s'Имя общей папки'%s"
-
-#, python-format
-msgid ""
-"-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s with enabled %s'Change'%s and "
-"%s'Read'%s"
-msgstr ""
-"-нажать кнопку %s'Разрешения'%s и проверить, существует ли %s'Все'%s с включенными %s'Изменение'%s и "
-"%s'Чтение'%s"
-
-msgid "Box side:"
-msgstr "Сторона Тюнера:"
-
-#, python-format
-msgid "- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
-msgstr ""
-"- в разделе %s'пользователь/пароль'%s должны использоваться действительные %s'пользователь'%s и %s'пароль'%s ПК"
-
+#: ../helptexts.py:139
 #, python-format
 msgid "- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s"
 msgstr "- для %s'cifs'%s fstype и Win10 необходимо установить %s'smb version'%s минимально на %s'2.0'%s"
 
-msgid "Remove backup files"
-msgstr "Удалить файлы резервных копий"
+#: ../helptexts.py:83
+msgid "- it is not very clear what is what"
+msgstr "- не очень понятно, что к чему"
 
-msgid "Cancel"
-msgstr "Отмена"
+#: ../helptexts.py:104
+msgid "- more auto.xxxx files"
+msgstr "- больше auto.xxxx файлов"
 
-msgid "Remove"
-msgstr "Удалить"
+#: ../helptexts.py:65
+msgid "- then edit:"
+msgstr "- затем отредактировать:"
 
-msgid "Inversion"
-msgstr "Инвертировать"
-
-msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
-msgstr "Нажмите 'Удалить' на файле или отметьте файлы с помощью OK, а затем используйте 'Удалить'"
-
-msgid "Are you sure to remove selected files?"
-msgstr "Вы действительно хотите удалить выбранные файлы?"
-
+#: ../helptexts.py:138
 #, python-format
-msgid "Are you sure to remove file '%s'?"
-msgstr "Вы уверены, что хотите удалите файл '%s'?"
+msgid "- under %s'user/pass'%s must be used valid PC's %s'user'%s and %s'password'%s"
+msgstr "- в разделе %s'пользователь/пароль'%s должны использоваться действительные %s'пользователь'%s и %s'пароль'%s ПК"
 
-msgid "Mountpoint"
-msgstr "Точка монтирования"
-
-msgid "auto.file"
-msgstr "auto.file"
-
-#| msgid "Mountpoint"
-msgid "Edit mountpoint"
-msgstr "Редактировать точку монтирования"
-
-msgid "Add mountpoint"
-msgstr "Добавить точку монтирования"
-
-msgid "Enable/disable mountpoint"
-msgstr "Включить/отключить точку монтирования"
-
-msgid "Edit auto file"
-msgstr "Редактировать auto file"
-
-msgid "Menu"
-msgstr "Меню"
-
-msgid "Move item up"
-msgstr "Переместить элемент вверх"
-
-msgid "Move item down"
-msgstr "Переместить элемент вниз"
-
-msgid "Enable/disable moving item"
-msgstr "Включить/отключить перемещение элемента"
-
+#: ../helptexts.py:135
 #, python-format
-msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
-msgstr "Менеджер Autofs v.%s - нажмите %sОК%s на записи или используйте %sМеню%s"
+msgid "-can be changed %s'Shared name'%s too"
+msgstr "-можно также изменить %s'Имя общей папки'%s"
 
-msgid "Disable"
-msgstr "Отключить"
+#: ../helptexts.py:113
+msgid "-everything else is the same as for II"
+msgstr "-все остальное то же, что и для II"
 
-msgid "Enable"
-msgstr "Включить"
+#: ../helptexts.py:111
+msgid "-in auto.xxxx files can be used more lines"
+msgstr "-в файлах auto.xxxx можно использовать больше строк"
 
-msgid "Updating mountpoints and bookmarks..."
-msgstr "Обновление точек монтирования и закладок..."
-
-msgid "Edit record:"
-msgstr "Редактировать запись:"
-
+#: ../helptexts.py:133
 #, python-format
-msgid "Edit record for '%s' remote device in 'auto.master' file."
-msgstr "Редактировать запись для удаленного устройства '%s' в файле auto.master'."
+msgid "-on directory press right mouse, select %s'Properties'%s and use bookmark %s'Sharing'%s"
+msgstr "-щелкните правой кнопкой мыши папку, выберите %s'Свойства'%s и используйте закладку %s'Доступ'%s"
 
-msgid "New record"
-msgstr "Новая запись"
-
-msgid "Add new record to 'auto.master' file."
-msgstr "Добавить новую запись в файл 'auto.master'."
-
-msgid "Remove record:"
-msgstr "Удалить запись:"
-
+#: ../helptexts.py:134
 #, python-format
-msgid "Remove record with '%s' remote device from 'auto.master' file."
-msgstr "Удалить запись с удаленным устройством '%s' из файла 'auto.master'."
+msgid "-press %s'Advanced Sharing...'%s button, set %s'Share this folder'%s to on"
+msgstr "-нажмите кнопку %s'Расширенная настройка...'%s, включите %s'Общий доступ к этой папке'%s"
 
-msgid "Create new record from:"
-msgstr "Создать новую запись из:"
-
+#: ../helptexts.py:136
 #, python-format
-msgid ""
-"Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal."
-msgstr ""
-"Клонировать запись с удаленного устройства '%s' в файл 'auto.master' и создать файл с параметрами точки "
-"монтирования."
+msgid "-press %s'Permissions'%s button and check, if there exists %s'Everyone'%s with enabled %s'Change'%s and %s'Read'%s"
+msgstr "-нажать кнопку %s'Разрешения'%s и проверить, существует ли %s'Все'%s с включенными %s'Изменение'%s и %s'Чтение'%s"
 
-msgid "Edit -"
-msgstr "Редактировать -"
+#: ../helptexts.py:112
+msgid "-useful, if one device sharing more directories"
+msgstr "-полезно, если одно устройство совместно использует несколько каталогов"
 
-#, python-format
-msgid "Edit file '%s' with mountpoint parameters for existing '%s' remote device."
-msgstr "Редактировать файл '%s' с параметрами монтирования для существующего удаленного устройства '%s'."
+#: ../helptexts.py:72
+msgid "/etc/auto.master - one record only:"
+msgstr "/etc/auto.master - только одна запись:"
 
+#: ../helptexts.py:66
+msgid "/etc/auto.master file (for this plugin use lines with parameters only!)"
+msgstr "файл /etc/auto.master (используйте только строки параметров для плагина!)"
+
+#: ../helptexts.py:74
+msgid "/etc/auto.test - 'test' used as example:"
+msgstr "/etc/auto.test - 'test' используется в качестве примера:"
+
+#: ../helptexts.py:67
+msgid "/etc/auto.xxxx - as 'xxxx' use any name"
+msgstr "/etc/auto.xxxx - в качестве 'xxxx' используйте любое имя"
+
+#: ../ui.py:1563
+msgid "Add"
+msgstr "Добавить"
+
+#: ../ui.py:372
+msgid "Add into extended menu"
+msgstr "Добавить в расширенное меню"
+
+#: ../ui.py:1605
+msgid "Add line"
+msgstr "Добавить строку"
+
+#: ../ui.py:363
 msgid "Add line to -"
 msgstr "Добавить строку в -"
 
+#: ../ui.py:165 ../ui.py:189
+msgid "Add mountpoint"
+msgstr "Добавить точку монтирования"
+
+#: ../ui.py:357
+msgid "Add new record to 'auto.master' file."
+msgstr "Добавить новую запись в файл 'auto.master'."
+
+#: ../ui.py:1605
+msgid "Add next line with mountpoint parameters."
+msgstr "Добавить следующую строку с параметрами точки монтирования."
+
+#: ../ui.py:363
 #, python-format
 msgid "Add next mountpoint parameters line to '%s' for existing '%s' remote device."
 msgstr "Добавить следующую строку параметров монтирования в '%s' для существующего удаленного устройства '%s'."
 
-msgid "Remove -"
-msgstr "Удалить -"
+#: ../ui.py:1773
+msgid "Add or remove item of selection"
+msgstr "Добавить или удалить элемент выбора"
 
-#, python-format
-msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
-msgstr "Удалить файл '%s' с параметрами монтирования для удаленного устройства '%s'."
+#: ../ui.py:2050
+#, fuzzy
+msgid "Add or remove item to/from selection"
+msgstr "Добавить или удалить элемент выбора"
 
-msgid "Brief help on how to use autofs."
-msgstr "Краткая справка по использованию autofs."
-
-msgid "Remove from extended menu"
-msgstr "Удалить из расширенного меню"
-
-msgid "Remove plugin's run from Extended menu."
-msgstr "Удалить запуск плагина из Расширенного меню."
-
-msgid "Add into extended menu"
-msgstr "Добавить в расширенное меню"
-
+#: ../ui.py:373
 msgid "Add plugin's run to Extended menu."
 msgstr "Добавить запуск плагина в Расширенное меню."
 
-msgid "Utility"
-msgstr "Инструменты"
-
-msgid "Next utilities."
-msgstr "Следующие инструменты."
-
-msgid "Select operation:"
-msgstr "Выберите операцию:"
-
-msgid "Failed"
-msgstr "Не удалось"
-
-msgid "Done"
-msgstr "Готово"
-
+#: ../helptexts.py:127
 #, python-format
-msgid "'%s' not exists, %s will be with default values"
-msgstr "'%s' не существует, '%s' будет со значениями по умолчанию"
+msgid "After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'"
+msgstr "После изменения параметров в auto.file лучше использовать %s'Рестарт autofs и Рестарт GUI'%s в 'Меню-Инструменты'"
 
+#: ../helptexts.py:35
+msgid "All"
+msgstr "Все"
+
+#: ../ui.py:529
 #, python-format
-msgid "'%s' was removed"
-msgstr "'%s' был удален"
+msgid "All (record '%s' and its file '%s')"
+msgstr "Все (запись '%s' и ее файл '%s')"
 
+#: ../helptexts.py:78
+msgid "All remote directories from all devices will be mounted under '/media/test':"
+msgstr "Все удаленные каталоги со всех устройств будут смонтированы в '/media/test':"
+
+#: ../ui.py:1826
+#, python-format
+msgid "Are You sure to delete %s selected bookmark?"
+msgid_plural "Are You sure to delete %s selected bookmarks?"
+msgstr[0] "Вы действительно хотите удалить выбранную %s закладку?"
+msgstr[1] "Вы действительно хотите удалить выбранные %s закладки?"
+msgstr[2] "Вы действительно хотите удалить выбранные %s закладки?"
+
+#: ../removebckp.py:87
+#, python-format
+msgid "Are you sure to remove file '%s'?"
+msgstr "Вы уверены, что хотите удалите файл '%s'?"
+
+#: ../removebckp.py:85
+msgid "Are you sure to remove selected files?"
+msgstr "Вы действительно хотите удалить выбранные файлы?"
+
+#: ../ui.py:2146
+#, fuzzy, python-format
+msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
+msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
+msgstr[0] "Вы действительно хотите удалить выбранные файлы?"
+msgstr[1] "Вы действительно хотите удалить выбранные файлы?"
+msgstr[2] "Вы действительно хотите удалить выбранные файлы?"
+
+#: ../ui.py:501
 #, python-format
 msgid ""
 "Auto.name '%s' was attached to this record.\n"
@@ -330,10 +242,7 @@ msgstr ""
 "Auto.name '%s' был прикреплен к этой записи.\n"
 "Удалить исходный '%s'?"
 
-#, python-format
-msgid "'%s' was renamed to '%s'"
-msgstr "'%s' был переименован в '%s'"
-
+#: ../ui.py:508
 #, python-format
 msgid ""
 "Auto.name in record was changed.\n"
@@ -342,197 +251,97 @@ msgstr ""
 "Auto.name в записи было изменено.\n"
 "Вы тоже хотите переименовать исходный '%s' в '%s'?"
 
-msgid "Nothing"
-msgstr "Ничего"
+#: ../ui.py:898
+msgid "Autofs is not installed!"
+msgstr "Autofs не устанавливается!"
 
-#, python-format
-msgid "Record '%s' only"
-msgstr "Только '%s' запись"
-
-#, python-format
-#| msgid "Record '%s' and its file '%s'"
-msgid "All (record '%s' and its file '%s')"
-msgstr "Все (запись '%s' и ее файл '%s')"
-
-msgid "What all do You want to remove?"
-msgstr "Что все это вы хотите удалить?"
-
-#, python-format
-msgid "Really remove autofile '%s'?"
-msgstr "Действительно удалить автофайл '%s'?"
-
-msgid "Update autofs files in AutoBackup"
-msgstr "Обновить файлы autofs в AutoBackup"
-
+#: ../ui.py:653
 msgid "Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin."
 msgstr "Автоматически добавлять допустимые файлы autofs в файл /etc/backup.cfg, используемый плагином AutoBackup."
 
-msgid "Remove unused autofs files in AutoBackup"
-msgstr "Удалить неиспользуемые файлы autofs в AutoBackup"
+#: ../helptexts.py:137
+msgid "Box side:"
+msgstr "Сторона Тюнера:"
 
-#| msgid "Remove unused autofs files in AutoBackup"
-msgid "Remove unused autofs files from /etc/backup.cfg file."
-msgstr "Удалить неиспользуемые файлы autofs из файла /etc/backup.cfg."
+#: ../ui.py:366
+msgid "Brief help on how to use autofs."
+msgstr "Краткая справка по использованию autofs."
 
-msgid "Remove selected backup files created when editing autofs files."
-msgstr "Удалить выбранные файлы резервных копий, созданные при редактировании файлов autofs."
+#: ../removebckp.py:76 ../ui.py:1702 ../ui.py:1783 ../ui.py:1963 ../ui.py:2060
+msgid "Cancel"
+msgstr "Отмена"
 
-msgid "Install autofs"
-msgstr "Установить autofs"
-
-msgid "Install required autofs package if missing."
-msgstr "Установите необходимый пакет autofs, если он отсутствует."
-
-msgid "Next items are not needed standardly:"
-msgstr "Следующие пункты не нужны стандартно:"
-
-#, python-format
-msgid "Use '%s' as HDD replacement"
-msgstr "Использовать '%s' в качестве замены HDD"
-
-#, python-format
-msgid "You can use current mountpoint '%s' as HDD replacement."
-msgstr "Вы можете использовать текущую точку монтирования '%s' в качестве замены HDD."
-
+#: ../ui.py:674
 #, python-format
 msgid "Cancel '%s' as HDD replacement"
 msgstr "Отменить '%s' как замену HDD"
 
+#: ../ui.py:674
 #, python-format
 msgid "Cancel using '%s' as HDD replacement."
 msgstr "Отменить использование '%s' в качестве замены HDD."
 
-msgid "Reload autofs"
-msgstr "Перезагрузить autofs"
-
-msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
+#: ../ui.py:680
+msgid "Change hostname"
 msgstr ""
-"Перезагрузить карты монтирования autofs. Делается стандартно при каждом выходе плагина, если что-то было "
-"изменено."
 
-msgid "Restart autofs with GUI restart"
-msgstr "Перезапуск autofs с помощью рестарта GUI"
-
-msgid ""
-"Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for "
-"restart GUI."
+#: ../ui.py:680
+msgid "Change the hostname of your Receiver."
 msgstr ""
-"Иногда требуется перезапуск autofs deamon и GUI. Используйте эту опцию и затем дождитесь завершения и рестарта "
-"GUI."
 
-msgid "Open AutoBackup plugin"
-msgstr "Открыть плагин AutoBackup"
+#: ../ui.py:684
+msgid "Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed."
+msgstr "Провеять закладки с текущими точками монтирования. Делается стандартно при каждом выходе плагина, если что-то было изменено."
 
-#| msgid "Open AutoBackup plugin"
-msgid "Runs AutoBackup plugin"
-msgstr "Запустить плагин AutoBackup"
-
-msgid "Reload Bookmarks"
-msgstr "Обновить закладки"
-
-msgid ""
-"Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed."
-msgstr ""
-"Провеять закладки с текущими точками монтирования. Делается стандартно при каждом выходе плагина, если что-то "
-"было изменено."
-
-#| msgid "Reload Bookmarks"
+#: ../ui.py:686
 msgid "Clear bookmarks..."
 msgstr "Очистить закладки..."
 
-msgid "Removing selected bookmarks."
-msgstr "Удаление выбранных закладок."
+#: ../ui.py:359
+#, python-format
+msgid "Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal."
+msgstr "Клонировать запись с удаленного устройства '%s' в файл 'auto.master' и создать файл с параметрами точки монтирования."
 
-msgid ""
-"You can preset several input parameters before creating more autofiles. Values can be then inserted with blue "
-"button on current item. Presettings account values can be cleared on plugin exit."
+#: ../helptexts.py:34 ../ui.py:163 ../ui.py:164 ../ui.py:188 ../ui.py:952
+#: ../ui.py:1190 ../ui.py:1562 ../ui.py:1772 ../ui.py:1777 ../ui.py:2049
+#: ../ui.py:2054
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../ui.py:688
+msgid "Create 'settings' file from selected receiver."
 msgstr ""
-"Вы можете предварительно установить несколько входных параметров, прежде чем создавать новые автофайлы. "
-"Значения можно затем вставить с помощью синей кнопки в текущий элемент. Предварительные настройки значения "
-"учетной записи могут быть очищены при выходе из плагина."
 
-msgid "Presetting input values..."
+#: ../ui.py:359
+msgid "Create new record from:"
+msgstr "Создать новую запись из:"
+
+#: ../ui.py:688
+#, fuzzy
+msgid "Create settings file..."
 msgstr "Предварительные настройки входных значений..."
 
-msgid "Really reload autofs and restart GUI?"
-msgstr "Действительно перезагрузить autofs и перезапустить GUI?"
+#: ../ui.py:1784
+msgid "Delete"
+msgstr "Удалить"
 
-#, python-format
-#| msgid "Autofs is not installed!"
-msgid "Point '%s' is not mounted!"
-msgstr "Точка '%s' не монтируется!"
+#: ../ui.py:1778
+msgid "Delete selected"
+msgstr "Удалить выбранные"
 
-#, python-format
-#| msgid "local directory"
-msgid "Select '%s' directory:"
-msgstr "Выбрать каталог '%s':"
+#: ../ui.py:261
+msgid "Disable"
+msgstr "Отключить"
 
-#, python-format
-msgid "'%s.auto' has wrong format or is empty!"
-msgstr "'%s.auto' имеет неправильный формат или пуст!"
+#: ../ui.py:1993
+msgid "Display in description current item value."
+msgstr ""
 
-#, python-format
-msgid "%s as /hdd"
-msgstr "%s как /hdd"
+#: ../ui.py:1993
+msgid "Displaying values"
+msgstr ""
 
-#, python-format
-msgid "File '%s' was created!"
-msgstr "Файл '%s' создан!"
-
-#, python-format
-msgid "Update AutoBackup's '%s'?"
-msgstr "Обновить AutoBackup '%s'?"
-
-msgid "Missing '/etc/backup.cfg'"
-msgstr "Отсутствует '/etc/backup.cfg'"
-
-#, python-format
-msgid "Remove unused lines from '%s'?"
-msgstr "Удалите неиспользуемые строки из '%s'?"
-
-msgid "Please wait for restart GUI!"
-msgstr "Пожалуйста, дождитесь рестарта GUI!"
-
-msgid "Autofs is not installed!"
-msgstr "Autofs не устанавливается!"
-
-#, python-format
-msgid "Manager Autofs - edited record: %s"
-msgstr "Менеджер Autofs - отредактированная запись: %s"
-
-msgid "Manager Autofs - create new record"
-msgstr "Менеджер Autofs - создать новую запись"
-
-msgid "Ok"
-msgstr "Ок"
-
-msgid "enabled"
-msgstr "включен"
-
-msgid "mountpoint name"
-msgstr "имя точки монтирования"
-
-msgid "auto.name"
-msgstr "auto.name"
-
-msgid "ghost"
-msgstr "ghost"
-
-msgid "timeout"
-msgstr "тайм-аут"
-
-msgid "time"
-msgstr "время"
-
-msgid "Put autoname"
-msgstr "Вставить autoname"
-
-msgid "Put mountpoint name"
-msgstr "Вставить имя точки монтирования"
-
-msgid "You cannot use 'master' in auto.file name"
-msgstr "Вы не можете использовать 'master' в имени auto.file"
-
+#: ../ui.py:1097
 #, python-format
 msgid ""
 "Do You want use existing '%s' file?\n"
@@ -541,209 +350,648 @@ msgstr ""
 "Вы хотите использовать существующий файл '%s'?\n"
 "Если нет, то измените auto.name."
 
+#: ../ui.py:418 ../ui.py:843 ../ui.py:876
+msgid "Done"
+msgstr "Готово"
+
+#: ../helptexts.py:100
+msgid "Each shared directory has own mounpoint under /media:"
+msgstr "Каждый общий каталог имеет собственную точку монтирования в разделе /media:"
+
+#: ../ui.py:1564
+msgid "Edit"
+msgstr "Редактировать"
+
+#: ../ui.py:362
+msgid "Edit -"
+msgstr "Редактировать -"
+
+#: ../ui.py:167 ../ui.py:190
+msgid "Edit auto file"
+msgstr "Редактировать auto file"
+
+#: ../ui.py:362
 #, python-format
-msgid "Mountpoint name '%s' is used!"
-msgstr "Имя точки монтирования '%s' используется!"
+msgid "Edit file '%s' with mountpoint parameters for existing '%s' remote device."
+msgstr "Редактировать файл '%s' с параметрами монтирования для существующего удаленного устройства '%s'."
 
-msgid "no"
-msgstr "нет"
+#: ../ui.py:1604
+msgid "Edit line"
+msgstr "Изменить строку"
 
+#: ../ui.py:1604
+msgid "Edit line with mountpoint parameters."
+msgstr "Редактировать строку с параметрами точки монтирования."
+
+#: ../ui.py:162
+msgid "Edit mountpoint"
+msgstr "Редактировать точку монтирования"
+
+#: ../ui.py:355
+#, python-format
+msgid "Edit record for '%s' remote device in 'auto.master' file."
+msgstr "Редактировать запись для удаленного устройства '%s' в файле auto.master'."
+
+#: ../ui.py:355
+msgid "Edit record:"
+msgstr "Редактировать запись:"
+
+#: ../ui.py:263
+msgid "Enable"
+msgstr "Включить"
+
+#: ../ui.py:166
+msgid "Enable/disable mountpoint"
+msgstr "Включить/отключить точку монтирования"
+
+#: ../ui.py:174
+msgid "Enable/disable moving item"
+msgstr "Включить/отключить перемещение элемента"
+
+#: ../ui.py:807
+msgid "Enter new hostname for your Receiver"
+msgstr ""
+
+#: ../ui.py:1565
+msgid "Erase"
+msgstr "Стереть"
+
+#: ../ui.py:416
+msgid "Failed"
+msgstr "Не удалось"
+
+#: ../ui.py:832
+#, python-format
+msgid "File '%s' was created!"
+msgstr "Файл '%s' создан!"
+
+#: ../ui.py:818
+msgid "For apply new hostname restart box!"
+msgstr ""
+
+#: ../helptexts.py:53 ../ui.py:366
+msgid "Help"
+msgstr "Помощь"
+
+#: ../ui.py:660
+msgid "Install autofs"
+msgstr "Установить autofs"
+
+#: ../helptexts.py:64
+msgid "Install autofs with:  opkg install autofs"
+msgstr "Установить autofs с помощью: opkg install autofs"
+
+#: ../ui.py:660
+msgid "Install required autofs package if missing."
+msgstr "Установите необходимый пакет autofs, если он отсутствует."
+
+#: ../removebckp.py:78 ../ui.py:1786 ../ui.py:2063
+msgid "Inversion"
+msgstr "Инвертировать"
+
+#: ../ui.py:1780 ../ui.py:2057
+msgid "Invert selection"
+msgstr "Инвертировать выбор"
+
+#: ../ui.py:1760
+msgid "List of bookmarks"
+msgstr "Список закладок"
+
+#: ../plugin.py:53
+msgid "Manage autofs files and conection"
+msgstr "Управление файлами autofs и подключением"
+
+#: ../plugin.py:52
+msgid "Manager Autofs"
+msgstr "Менеджер Autofs"
+
+#: ../ui.py:944
+msgid "Manager Autofs - create new record"
+msgstr "Менеджер Autofs - создать новую запись"
+
+#: ../ui.py:1183
 #, python-format
 msgid "Manager Autofs - edited autofile/record: %s"
 msgstr "Менеджер Autofs - редактируемый автофайл/запись: %s"
 
-msgid "local directory"
-msgstr "локальный каталог"
-
-msgid "fstype"
-msgstr "fstype"
-
-msgid "soft"
-msgstr "soft"
-
-msgid "intr"
-msgstr "intr"
-
-msgid "rw/ro"
-msgstr "rw/ro"
-
-msgid "use user/pass"
-msgstr "использовать пользователь/пароль"
-
-msgid "user"
-msgstr "пользователь"
-
-msgid "password"
-msgstr "пароль"
-
-msgid "domain"
-msgstr "домен"
-
-msgid "domain name"
-msgstr "доменное имя"
-
-msgid "noperm"
-msgstr "noperm"
-
-msgid "noatime"
-msgstr "noatime"
-
-msgid "noserverino"
-msgstr "noserverino"
-
-msgid "nosuid"
-msgstr "nosuid"
-
-msgid "nodev"
-msgstr "nodev"
-
-msgid "rsize"
-msgstr "rsize"
-
-msgid "wsize"
-msgstr "wsize"
-
-msgid "iocharset"
-msgstr "iocharset"
-
-msgid "security"
-msgstr "security"
-
-msgid "use ip/name or dev"
-msgstr "использовать ip/name или dev"
-
-msgid "ip or name"
-msgstr "ip или имя"
-
-msgid "ip"
-msgstr "ip"
-
-#| msgid "auto.name"
-msgid "name"
-msgstr "имя"
-
-msgid "dev"
-msgstr "dev"
-
-#| msgid "remote directory"
-msgid "shared remote directory"
-msgstr "общий удаленный каталог"
-
-msgid "smb version"
-msgstr "версия smb"
-
-msgid "user string"
-msgstr "строка пользователя"
-
-msgid "Use preset"
-msgstr "Использовать предустановку"
-
-msgid "Wrong file format!"
-msgstr "Неверный формат файла!"
-
-msgid "Add"
-msgstr "Добавить"
-
-#| msgid "Edit -"
-msgid "Edit"
-msgstr "Редактировать"
-
-msgid "Erase"
-msgstr "Стереть"
-
+#: ../ui.py:940
 #, python-format
-#| msgid "Manager Autofs - press %sOK%s for edit or use %sMenu%s"
+msgid "Manager Autofs - edited record: %s"
+msgstr "Менеджер Autofs - отредактированная запись: %s"
+
+#: ../ui.py:1580
+#, python-format
 msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
 msgstr "Менеджер Autofs - нажмите %sРедактировать%s или %sОК%s для редактирования или используйте %sМеню%s"
 
-msgid "Edit line"
-msgstr "Изменить строку"
+#: ../ui.py:213
+#, python-format
+msgid "Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s"
+msgstr "Менеджер Autofs v.%s - нажмите %sОК%s на записи или используйте %sМеню%s"
 
-msgid "Edit line with mountpoint parameters."
-msgstr "Редактировать строку с параметрами точки монтирования."
+#: ../ui.py:168
+msgid "Menu"
+msgstr "Меню"
 
-msgid "Add line"
-msgstr "Добавить строку"
+#: ../ui.py:878
+msgid "Missing '/etc/backup.cfg'"
+msgstr "Отсутствует '/etc/backup.cfg'"
 
-msgid "Add next line with mountpoint parameters."
-msgstr "Добавить следующую строку с параметрами точки монтирования."
+#: ../helptexts.py:36
+msgid "Mode II"
+msgstr "Режим II"
 
-msgid "Remove line"
-msgstr "Удалить строку"
+#: ../helptexts.py:37
+msgid "Mode III"
+msgstr "Режим III"
 
-msgid "Remove line with mountpoint parameters."
-msgstr "Удалить строку с параметрами точки монтирования."
+#: ../ui.py:156
+msgid "Mountpoint"
+msgstr "Точка монтирования"
 
-msgid "No valid item"
-msgstr "Не действует пункт"
+#: ../ui.py:1109
+#, python-format
+msgid "Mountpoint name '%s' is used!"
+msgstr "Имя точки монтирования '%s' используется!"
 
+#: ../ui.py:173
+msgid "Move item down"
+msgstr "Переместить элемент вниз"
+
+#: ../ui.py:172
+msgid "Move item up"
+msgstr "Переместить элемент вверх"
+
+#: ../ui.py:1648
 msgid "New"
 msgstr "Новый"
 
+#: ../ui.py:357
+msgid "New record"
+msgstr "Новая запись"
+
+#: ../ui.py:662
+msgid "Next items are not needed standardly:"
+msgstr "Следующие пункты не нужны стандартно:"
+
+#: ../ui.py:376
+msgid "Next utilities."
+msgstr "Следующие инструменты."
+
+#: ../ui.py:1609
+msgid "No valid item"
+msgstr "Не действует пункт"
+
+#: ../helptexts.py:126
+msgid "Note: older autofs versions can't handle commented lines in auto.xxxx files!"
+msgstr "Примечание: более старые версии autofs не могут обрабатывать закомментированные строки в файлах auto.xxxx!"
+
+#: ../helptexts.py:84
+msgid "Note: older autofs versions required a mount point as '/mnt/net'"
+msgstr "Примечание: более старые версии autofs требовали точки монтирования как '/mnt/net'"
+
+#: ../ui.py:529
+msgid "Nothing"
+msgstr "Ничего"
+
+#: ../ui.py:953 ../ui.py:1191 ../ui.py:1703
+msgid "OK"
+msgstr "ОК"
+
+#: ../ui.py:682
+msgid "Open AutoBackup plugin"
+msgstr "Открыть плагин AutoBackup"
+
+#: ../helptexts.py:132
+msgid "PC side:"
+msgstr "Сторона ПК:"
+
+#: ../ui.py:893
+msgid "Please wait for restart GUI!"
+msgstr "Пожалуйста, дождитесь рестарта GUI!"
+
+#: ../ui.py:748
+#, python-format
+msgid "Point '%s' is not mounted!"
+msgstr "Точка '%s' не монтируется!"
+
+#: ../ui.py:1720
+msgid "Preset account password value."
+msgstr "Предустановленное значение пароля учетной записи."
+
+#: ../ui.py:1721
+msgid "Preset account values will be or will not be saved on plugin exit."
+msgstr "Предустановленные значения учетной записи будут или не будут сохранены при выходе из плагина."
+
+#: ../ui.py:1719
+msgid "Preset username account value."
+msgstr "Предустановленное значение учетной записи имени пользователя."
+
+#: ../ui.py:1722
+msgid "Preset value for local directory."
+msgstr "Предустановленное значение для локального каталога."
+
+#: ../ui.py:1723
+msgid "Preset value for shared remote directory."
+msgstr "Предустановленное значение для общего удаленного каталога."
+
+#: ../ui.py:691
+msgid "Presetting input values..."
+msgstr "Предварительные настройки входных значений..."
+
+#: ../removebckp.py:80
+msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
+msgstr "Нажмите 'Удалить' на файле или отметьте файлы с помощью OK, а затем используйте 'Удалить'"
+
+#: ../ui.py:1035 ../ui.py:1058
+msgid "Put autoname"
+msgstr "Вставить autoname"
+
+#: ../ui.py:1037 ../ui.py:1060
+msgid "Put mountpoint name"
+msgstr "Вставить имя точки монтирования"
+
+#: ../ui.py:1964
+msgid "Read"
+msgstr ""
+
+#: ../ui.py:1657
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr "Действительно стереть запись: '%s'?"
 
-msgid "User and password preseting"
-msgstr "Предварительная настройка пользователя и пароля"
+#: ../ui.py:720
+msgid "Really reload autofs and restart GUI?"
+msgstr "Действительно перезагрузить autofs и перезапустить GUI?"
 
-msgid "OK"
-msgstr "ОК"
+#: ../ui.py:647
+#, python-format
+msgid "Really remove autofile '%s'?"
+msgstr "Действительно удалить автофайл '%s'?"
 
-msgid "Preset username account value."
-msgstr "Предустановленное значение учетной записи имени пользователя."
+#: ../ui.py:529
+#, python-format
+msgid "Record '%s' only"
+msgstr "Только '%s' запись"
 
-msgid "Preset account password value."
-msgstr "Предустановленное значение пароля учетной записи."
+#: ../ui.py:684
+msgid "Reload Bookmarks"
+msgstr "Обновить закладки"
 
-msgid "save preset account values"
-msgstr "сохранить предустановленные значения учетной записи"
+#: ../ui.py:677
+msgid "Reload autofs"
+msgstr "Перезагрузить autofs"
 
-msgid "Preset account values will be or will not be saved on plugin exit."
-msgstr "Предустановленные значения учетной записи будут или не будут сохранены при выходе из плагина."
+#: ../ui.py:677
+msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
+msgstr "Перезагрузить карты монтирования autofs. Делается стандартно при каждом выходе плагина, если что-то было изменено."
 
-#| msgid "local directory"
-msgid "Preset value for local directory."
-msgstr "Предустановленное значение для локального каталога."
+#: ../ui.py:1992
+msgid "Remote receiver's IP address"
+msgstr ""
 
-msgid "Preset value for shared remote directory."
-msgstr "Предустановленное значение для общего удаленного каталога."
-
-msgid "test mount points on plugin start"
-msgstr "тестовые точки монтирования при запуске плагина"
-
-msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
-msgstr "Включить тесты точек монтирования при запуске плагина, но это увеличивает время запуска плагина."
-
-#| msgid "Reload Bookmarks"
-msgid "List of bookmarks"
-msgstr "Список закладок"
-
-msgid "Add or remove item of selection"
-msgstr "Добавить или удалить элемент выбора"
-
-msgid "Delete selected"
-msgstr "Удалить выбранные"
-
-msgid "Sort list"
-msgstr "Сортировать список"
-
-msgid "Invert selection"
-msgstr "Инвертировать выбор"
-
-msgid "Delete"
+#: ../removebckp.py:77
+msgid "Remove"
 msgstr "Удалить"
 
-msgid "Sort"
-msgstr "Сортировать"
+#: ../ui.py:364
+msgid "Remove -"
+msgstr "Удалить -"
 
+#: ../removebckp.py:52 ../ui.py:657
+msgid "Remove backup files"
+msgstr "Удалить файлы резервных копий"
+
+#: ../ui.py:364
+#, python-format
+msgid "Remove file '%s' with mountpoint parameters for '%s' remote device."
+msgstr "Удалить файл '%s' с параметрами монтирования для удаленного устройства '%s'."
+
+#: ../ui.py:369
+msgid "Remove from extended menu"
+msgstr "Удалить из расширенного меню"
+
+#: ../ui.py:1606
+msgid "Remove line"
+msgstr "Удалить строку"
+
+#: ../ui.py:1606
+msgid "Remove line with mountpoint parameters."
+msgstr "Удалить строку с параметрами точки монтирования."
+
+#: ../ui.py:370
+msgid "Remove plugin's run from Extended menu."
+msgstr "Удалить запуск плагина из Расширенного меню."
+
+#: ../ui.py:358
+#, python-format
+msgid "Remove record with '%s' remote device from 'auto.master' file."
+msgstr "Удалить запись с удаленным устройством '%s' из файла 'auto.master'."
+
+#: ../ui.py:358
+msgid "Remove record:"
+msgstr "Удалить запись:"
+
+#: ../ui.py:657
+msgid "Remove selected backup files created when editing autofs files."
+msgstr "Удалить выбранные файлы резервных копий, созданные при редактировании файлов autofs."
+
+#: ../ui.py:654
+msgid "Remove unused autofs files from /etc/backup.cfg file."
+msgstr "Удалить неиспользуемые файлы autofs из файла /etc/backup.cfg."
+
+#: ../ui.py:654
+msgid "Remove unused autofs files in AutoBackup"
+msgstr "Удалить неиспользуемые файлы autofs в AutoBackup"
+
+#: ../ui.py:880
+#, python-format
+msgid "Remove unused lines from '%s'?"
+msgstr "Удалите неиспользуемые строки из '%s'?"
+
+#: ../ui.py:686
+msgid "Removing selected bookmarks."
+msgstr "Удаление выбранных закладок."
+
+#: ../ui.py:678
+msgid "Restart autofs with GUI restart"
+msgstr "Перезапуск autofs с помощью рестарта GUI"
+
+#: ../ui.py:1992
+msgid "Running box IP address for use its settings file as source."
+msgstr ""
+
+#: ../ui.py:682
+msgid "Runs AutoBackup plugin"
+msgstr "Запустить плагин AutoBackup"
+
+#: ../ui.py:2055 ../ui.py:2061
+#, fuzzy
+msgid "Save to file"
+msgstr "auto.file"
+
+#: ../ui.py:766
+#, python-format
+msgid "Select '%s' directory:"
+msgstr "Выбрать каталог '%s':"
+
+#: ../ui.py:379 ../ui.py:693 ../ui.py:1612
+msgid "Select operation:"
+msgstr "Выберите операцию:"
+
+#: ../ui.py:1789
 msgid "Select with 'OK' and then remove with 'Delete'."
 msgstr "Выберите с помощью 'ОК' и затем удалите с помощью 'Удалить'."
 
-#, python-format
-msgid "Are You sure to delete %s selected bookmark?"
-msgid_plural "Are You sure to delete %s selected bookmarks?"
-msgstr[0] "Вы действительно хотите удалить выбранную %s закладку?"
-msgstr[1] "Вы действительно хотите удалить выбранные %s закладки?"
-msgstr[2] "Вы действительно хотите удалить выбранные %s закладки?"
+#: ../ui.py:2066
+#, fuzzy
+msgid "Select with 'OK' or use 'Inverse'."
+msgstr "Выберите с помощью 'ОК' и затем удалите с помощью 'Удалить'."
 
+#: ../ui.py:2038
+msgid "Settings items list"
+msgstr ""
+
+#: ../ui.py:1961
+msgid "Setup source with settings"
+msgstr ""
+
+#: ../ui.py:678
+msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
+msgstr "Иногда требуется перезапуск autofs deamon и GUI. Используйте эту опцию и затем дождитесь завершения и рестарта GUI."
+
+#: ../ui.py:1785 ../ui.py:2062
+msgid "Sort"
+msgstr "Сортировать"
+
+#: ../ui.py:1779 ../ui.py:2056
+msgid "Sort list"
+msgstr "Сортировать список"
+
+#: ../ui.py:1724
+msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
+msgstr "Включить тесты точек монтирования при запуске плагина, но это увеличивает время запуска плагина."
+
+#: ../ui.py:845
+#, python-format
+msgid "Update AutoBackup's '%s'?"
+msgstr "Обновить AutoBackup '%s'?"
+
+#: ../ui.py:653
+msgid "Update autofs files in AutoBackup"
+msgstr "Обновить файлы autofs в AutoBackup"
+
+#: ../ui.py:296
+msgid "Updating mountpoints and bookmarks..."
+msgstr "Обновление точек монтирования и закладок..."
+
+#: ../ui.py:670
+#, python-format
+msgid "Use '%s' as HDD replacement"
+msgstr "Использовать '%s' в качестве замены HDD"
+
+#: ../ui.py:1990
+msgid "Use local '/etc/enigma/settings' file as source."
+msgstr ""
+
+#: ../ui.py:1313
+msgid "Use preset"
+msgstr "Использовать предустановку"
+
+#: ../ui.py:1989
+msgid "Use this receiver"
+msgstr ""
+
+#: ../ui.py:1700 ../ui.py:1732
+msgid "User and password preseting"
+msgstr "Предварительная настройка пользователя и пароля"
+
+#: ../ui.py:376
+msgid "Utility"
+msgstr "Инструменты"
+
+#: ../ui.py:530
+msgid "What all do You want to remove?"
+msgstr "Что все это вы хотите удалить?"
+
+#: ../ui.py:1491
+msgid "Wrong file format!"
+msgstr "Неверный формат файла!"
+
+#: ../ui.py:690
+msgid "You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit."
+msgstr "Вы можете предварительно установить несколько входных параметров, прежде чем создавать новые автофайлы. Значения можно затем вставить с помощью синей кнопки в текущий элемент. Предварительные настройки значения учетной записи могут быть очищены при выходе из плагина."
+
+#: ../ui.py:670
+#, python-format
+msgid "You can use current mountpoint '%s' as HDD replacement."
+msgstr "Вы можете использовать текущую точку монтирования '%s' в качестве замены HDD."
+
+#: ../ui.py:1087
+msgid "You cannot use 'master' in auto.file name"
+msgstr "Вы не можете использовать 'master' в имени auto.file"
+
+#: ../ui.py:157
+msgid "auto.file"
+msgstr "auto.file"
+
+#: ../helptexts.py:89
+msgid "auto.master with more records:"
+msgstr "auto.master с большим количеством записей:"
+
+#: ../ui.py:990
+msgid "auto.name"
+msgstr "auto.name"
+
+#: ../ui.py:1280
+msgid "dev"
+msgstr "dev"
+
+#: ../ui.py:1257
+msgid "domain"
+msgstr "домен"
+
+#: ../ui.py:1260
+msgid "domain name"
+msgstr "доменное имя"
+
+#: ../ui.py:987 ../ui.py:1240
+msgid "enabled"
+msgstr "включен"
+
+#: ../helptexts.py:114
+msgid "example of auto.synology:"
+msgstr "пример для auto.synology:"
+
+#: ../ui.py:1244
+msgid "fstype"
+msgstr "fstype"
+
+#: ../ui.py:992
+msgid "ghost"
+msgstr "ghost"
+
+#: ../ui.py:1248
+msgid "intr"
+msgstr "intr"
+
+#: ../ui.py:1268
+msgid "iocharset"
+msgstr "iocharset"
+
+#: ../ui.py:1276
+msgid "ip"
+msgstr "ip"
+
+#: ../ui.py:1273
+msgid "ip or name"
+msgstr "ip или имя"
+
+#: ../ui.py:1242 ../ui.py:1722
+msgid "local directory"
+msgstr "локальный каталог"
+
+#: ../helptexts.py:93
+msgid "more auto.xxxx files - each file for one shared directory:"
+msgstr "больше auto.xxxx файлов - каждый файл для одного общего каталога:"
+
+#: ../ui.py:988
+msgid "mountpoint name"
+msgstr "имя точки монтирования"
+
+#: ../ui.py:1278
+msgid "name"
+msgstr "имя"
+
+#: ../ui.py:1128 ../ui.py:1131 ../ui.py:1145 ../ui.py:1146 ../ui.py:1147
+#: ../ui.py:1148 ../ui.py:1154 ../ui.py:1157
+msgid "no"
+msgstr "нет"
+
+#: ../ui.py:1262
+msgid "noatime"
+msgstr "noatime"
+
+#: ../ui.py:1265
+msgid "nodev"
+msgstr "nodev"
+
+#: ../ui.py:1261
+msgid "noperm"
+msgstr "noperm"
+
+#: ../ui.py:1263
+msgid "noserverino"
+msgstr "noserverino"
+
+#: ../ui.py:1264
+msgid "nosuid"
+msgstr "nosuid"
+
+#: ../ui.py:1253 ../ui.py:1720
+msgid "password"
+msgstr "пароль"
+
+#: ../ui.py:1266
+msgid "rsize"
+msgstr "rsize"
+
+#: ../ui.py:1249
+msgid "rw/ro"
+msgstr "rw/ro"
+
+#: ../ui.py:1721
+msgid "save preset account values"
+msgstr "сохранить предустановленные значения учетной записи"
+
+#: ../ui.py:1269
+msgid "security"
+msgstr "security"
+
+#: ../ui.py:1281 ../ui.py:1723
+msgid "shared remote directory"
+msgstr "общий удаленный каталог"
+
+#: ../ui.py:1284
+msgid "smb version"
+msgstr "версия smb"
+
+#: ../ui.py:1247
+msgid "soft"
+msgstr "soft"
+
+#: ../ui.py:1724
+msgid "test mount points on plugin start"
+msgstr "тестовые точки монтирования при запуске плагина"
+
+#: ../helptexts.py:117
+msgid "then will be mounted as:"
+msgstr "будет смонтирован как:"
+
+#: ../ui.py:996
+msgid "time"
+msgstr "время"
+
+#: ../ui.py:993
+msgid "timeout"
+msgstr "тайм-аут"
+
+#: ../ui.py:1270
+msgid "use ip/name or dev"
+msgstr "использовать ip/name или dev"
+
+#: ../ui.py:1250
+msgid "use user/pass"
+msgstr "использовать пользователь/пароль"
+
+#: ../ui.py:1252 ../ui.py:1719
+msgid "user"
+msgstr "пользователь"
+
+#: ../ui.py:1285
+msgid "user string"
+msgstr "строка пользователя"
+
+#: ../ui.py:1267
+msgid "wsize"
+msgstr "wsize"

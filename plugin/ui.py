@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.96"
+VERSION = "1.97"
 #
 #  Coded by ims (c) 2017-2020
 #  Support: openpli.org
@@ -39,6 +39,10 @@ from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
 from myselectionlist import MySelectionList
 
+import urllib2
+from urllib2 import URLError, HTTPError
+import xml.etree.ElementTree as ET
+
 from shutil import copyfile
 from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
 import skin
@@ -63,6 +67,11 @@ config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
 config.plugins.mautofs.testmountpoints = ConfigYesNo(default = False)
+
+# settings
+config.plugins.mautofs.settings_local = NoSave(ConfigYesNo(default = True))
+config.plugins.mautofs.settings_ip = NoSave(ConfigIP(default=[192,168,0,1]))
+config.plugins.mautofs.settings_values = ConfigYesNo(default = False)
 
 cfg = config.plugins.mautofs
 
@@ -676,6 +685,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
 		buttons += [""]
+		menu.append((space + _("Create settings file..."), 180 ,_("Create 'settings' file from selected receiver.")))
+		buttons += [""]
 		txt = _("You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit.")
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += ["menu"]
@@ -719,6 +730,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
 			self.session.open(ManagerAutofsClearBookmarks)
+		elif choice[1] == 180:
+			self.session.open(ManagerAutofsSettingsIP)
 		elif choice[1] == 200:
 			self.session.open(ManagerAutofsPreset)
 		elif choice[1] == 1000:
@@ -1724,7 +1737,7 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 
 class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 	skin="""
-	<screen name="ManagerAutofs" position="center,center" size="600,390" title="List of bookmarks">
+	<screen name="ManagerAutofsClearBookmarks" position="center,center" size="600,390" title="List of bookmarks">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
 		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
@@ -1936,6 +1949,216 @@ class ManagerAutofsInfo(Screen):
 	def getScreenSize(self):
 		desktop = getDesktop(0)
 		return desktop.size().width(), desktop.size().height()
+
+	def exit(self):
+		self.close()
+
+class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		self.skinName = "Setup"
+		self["config"] = List()
+		self.setup_title = _("Setup source with settings")
+
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("Read"))
+		self["description"] = Label()
+
+		self["HelpWindow"] = Pixmap()
+		self["HelpWindow"].hide()
+		self["VKeyIcon"] = Boolean(False)
+
+		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
+		{
+			"green": self.read,
+			"ok": self.read,
+			"red": self.exit,
+			"cancel": self.exit
+		}, -2)
+
+		self.list = []
+		self.createConfig()
+		ConfigListScreen.__init__(self, self.list, session, on_change = self.changedEntry)
+		self.onShown.append(self.setWindowTitle)
+
+	def setWindowTitle(self):
+		self.setTitle(self.setup_title)
+
+	def createConfig(self):
+		self.list = []
+		self.localsetting = _("Use this receiver")
+		self.list.append(getConfigListEntry(self.localsetting, cfg.settings_local, _("Use local '/etc/enigma/settings' file as source.")))
+		if not cfg.settings_local.value:
+			self.list.append(getConfigListEntry(_("Remote receiver's IP address"), cfg.settings_ip, _("Running box IP address for use its settings file as source.")))
+		self.list.append(getConfigListEntry(_("Displaying values"), cfg.settings_values, _("Display in description current item value.")))
+		self["config"].list = self.list
+		self["config"].setList(self.list)
+
+	def changedEntry(self):
+		if self["config"].getCurrent()[0] is self.localsetting:
+			self.createConfig()
+
+	def createSummary(self):
+		from Screens.Setup import SetupSummary
+		return SetupSummary
+
+	def read(self):
+		if cfg.settings_local.value:
+			ip = "local"
+		else:
+			ip = "%s.%s.%s.%s" % (tuple(cfg.settings_ip.value))
+		cfg.settings_values.save()
+		self.session.open(ManagerAutofsGetSettings, ip)
+
+	def exit(self):
+		self.close()
+
+class ManagerAutofsGetSettings(Screen, HelpableScreen):
+	skin="""
+	<screen name="ManagerAutofsGetSettings" position="center,center" size="600,390" title="List of setting items">
+		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
+		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
+		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
+		<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on"/>
+		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4"  foregroundColor="white" font="Regular;20" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="config" position="5,50" zPosition="2" size="590,300" foregroundColor="white" scrollbarMode="showOnDemand"/>
+		<ePixmap pixmap="skin_default/div-h.png" position="5,355" zPosition="2" size="590,2"/>
+		<widget name="text" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
+	</screen>
+	"""
+	def __init__(self, session, ip):
+		Screen.__init__(self, session)
+		HelpableScreen.__init__(self)
+		self.skinName = ["ManagerAutofsRemoveBackupFiles", "Setup"]
+		self.session = session
+
+		self.setTitle(_("Settings items list"))
+
+		self.header = None
+		from base64 import encodestring
+		if config.usage.remote_fallback_openwebif_userid.value and config.usage.remote_fallback_openwebif_password.value:
+			self.header = "Basic %s" % encodestring("%s:%s" % (config.usage.remote_fallback_openwebif_userid.value, config.usage.remote_fallback_openwebif_password.value)).strip()
+
+		self.list = MySelectionList([])
+
+		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
+			{
+			"cancel": (self.exit, _("Close")),
+			"ok": (self.list.toggleSelection, _("Add or remove item to/from selection")),
+			})
+		self["ManagerAutofsActions"] = HelpableActionMap(self, "ColorActions",
+			{
+			"red": (self.exit, _("Close")),
+			"green": (self.save, _("Save to file")),
+			"yellow": (self.sortList, _("Sort list")),
+			"blue": (self.list.toggleAllSelection, _("Invert selection")),
+			}, -2)
+
+		self["key_red"] = Button(_("Cancel"))
+		self["key_green"] = Button(_("Save to file"))
+		self["key_yellow"] = Button(_("Sort"))
+		self["key_blue"] = Button(_("Inversion"))
+
+		self.sort = 0
+		self.helptext = _("Select with 'OK' or use 'Inverse'.")
+		self["text"] = Label(self.helptext)
+		self.fillList(ip)
+
+	def selectionChanged(self):
+		text = self.helptext
+		if cfg.settings_values.value:
+			cur = self["config"].getCurrent()
+			if cur:
+				text = str(cur[0][1])
+		self["text"].setText(text)
+
+	def fillList(self, ip="local"):
+		if ip is "local":
+			fi = open("/etc/enigma2/settings", "r")
+			index = 0
+			for line in fi:
+				data = line.split('=')
+				self.list.addSelection(data[0], data[1].rstrip('\n'), index, False)
+				index += 1
+			fi.close()
+		else:
+			data = self.getSettings(ip)
+			if len(data):
+				root = ET.fromstring(data)
+				index = 0
+				for data in root.findall('e2setting'):
+					name = data.find('e2settingname').text
+					value = data.find('e2settingvalue').text
+					if value == None:
+						value = ''
+					self.list.addSelection(name, value, index, False)
+					index += 1
+		self["config"] = self.list
+		if not self.selectionChanged in self["config"].onSelectionChanged:
+			self["config"].onSelectionChanged.append(self.selectionChanged)
+
+	def getSettings(self, ip):
+		settings = ""
+		for line in self.loadSettings(ip):
+			settings += line
+		return settings
+
+	def loadSettings(self, ip):
+		return self.getUrl("http://%s/web/settings" % ip)
+
+	def getUrl(self, url, timeout=5):
+		data = ""
+		request = urllib2.Request(url)
+		if self.header:
+			request.add_header("Authorization", self.header)
+		try:
+			data = urllib2.urlopen(request, timeout=timeout)
+		except urllib2.HTTPError, e:
+			self["text"].setText("HTTP error: %d %s" % (e.code, str(e)))
+			print "\n[ManagerAutofs] HTTP error: %d %s" % (e.code, str(e))
+		except urllib2.URLError, e:
+			self["text"].setText("Network error: %s" % e.reason.args[1])
+			print "[ManagerAutofs] Network error: %s" % e.reason.args[1]
+		return data
+
+	def sortList(self):
+		if self.sort == 1:	# z-a
+			self.list.sort(sortType=0, flag=True)
+			self.sort = 2
+		elif self.sort == 2:	# unsorted
+			self.list.sort(sortType=2)
+			self.sort = 3
+		elif self.sort == 3 and len(self.list.getSelectionsList()):	# selected top
+			self.list.sort(sortType=3, flag=True)
+			self.sort = 0
+		else:			# a-z
+			self.list.sort(sortType=0)
+			self.sort = 1
+
+	def save(self):
+		if self["config"].getCurrent():
+			selected = len(self.list.getSelectionsList())
+			if not selected:
+				selected = 1
+			text = ngettext("Are you sure to save %s selected config item to '/tmp/settings'?", "Are you sure to save %s selected config items to '/tmp/settings'?", selected) % selected
+			self.session.openWithCallback(self.saveItems, MessageBox, text, type=MessageBox.TYPE_YESNO, default=True)
+
+	def saveItems(self, choice):
+		if choice:
+			data = self.list.getSelectionsList()
+			selected = len(data)
+			if not selected:
+				data = [self["config"].getCurrent()[0]]
+				selected = 1
+			fo = open("/tmp/settings.new", "w")
+			for item in data:
+				# item ... (name, value, index, status)
+				fo.write("%s=%s\n" % (item[0], item[1]))
+				self.list.toggleItemSelection(item)
+			fo.close()
 
 	def exit(self):
 		self.close()
