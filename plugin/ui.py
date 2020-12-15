@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.97"
+VERSION = "1.98"
 #
 #  Coded by ims (c) 2017-2020
 #  Support: openpli.org
@@ -1329,7 +1329,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("%s," % cfg.rw.value) if cfg.rw.value else ""
 		string += "soft," if cfg.soft.value else ""
 		string += "intr," if cfg.intr.value else ""
-		string += ("user=%s," % cfg.user.value) if cfg.useduserpass.value else ""
+		string += ("username=%s," % cfg.user.value) if cfg.useduserpass.value else ""
 		string += ("password=%s," % cfg.passwd.value)if cfg.useduserpass.value else ""
 		string += ("domain=%s," % cfg.domain.value) if cfg.useddomain.value else ""
 		string += "noperm," if cfg.noperm.value else ""
