@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.98"
+VERSION = "1.99"
 #
-#  Coded by ims (c) 2017-2020
+#  Coded by ims (c) 2017-2021
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -1138,7 +1138,6 @@ config.plugins.mautofs.useddomain = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.domain = NoSave(ConfigText(default="domain.local", fixed_size=False))
 config.plugins.mautofs.noperm = NoSave(ConfigYesNo(default=False))
 
-config.plugins.mautofs.noatime = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
@@ -1259,7 +1258,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		if cfg.useddomain.value:
 			self.list.append(getConfigListEntry(dx + _("domain name"), cfg.domain))
 			self.list.append(getConfigListEntry(dx + _("noperm"), cfg.noperm))
-		self.list.append(getConfigListEntry(_("noatime"), cfg.noatime))
 		self.list.append(getConfigListEntry(_("noserverino"), cfg.noserverino))
 		self.list.append(getConfigListEntry(_("nosuid"), cfg.nosuid))
 		self.list.append(getConfigListEntry(_("nodev"), cfg.nodev))
@@ -1333,7 +1331,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += ("password=%s," % cfg.passwd.value)if cfg.useduserpass.value else ""
 		string += ("domain=%s," % cfg.domain.value) if cfg.useddomain.value else ""
 		string += "noperm," if cfg.noperm.value else ""
-		string += "noatime," if cfg.noatime.value else ""
 		string += "noserverino," if cfg.noserverino.value else ""
 		string += "nosuid," if cfg.nosuid.value else ""
 		string += "nodev," if cfg.nodev.value else ""
@@ -1374,7 +1371,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.useddomain.value = cfg.useddomain.default
 		cfg.domain.value = cfg.domain.default
 		cfg.noperm.value = cfg.noperm.default
-		cfg.noatime.value = cfg.noatime.default
 		cfg.noserverino.value = cfg.noserverino.default
 		cfg.nosuid.value = cfg.nosuid.default
 		cfg.nodev.value = cfg.nodev.default
@@ -1397,7 +1393,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.intr.value = False
 		cfg.useduserpass.value = False
 		cfg.useddomain.value = False
-		cfg.noatime.value = False
 		cfg.noserverino.value = False
 		cfg.nosuid.value = False
 		cfg.nodev.value = False
@@ -1436,8 +1431,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 					cfg.rw.value=x
 				elif x == "noperm":
 					cfg.noperm.value=True
-				elif x == "noatime":
-					cfg.noatime.value=True
 				elif x == "noserverino":
 					cfg.noserverino.value=True
 				elif x == "nosuid":
