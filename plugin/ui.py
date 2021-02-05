@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "1.99"
+VERSION = "2.00"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -1835,6 +1835,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 			config.movielist.videodirs.save()
 
 	def exit(self):
+		config.movielist.videodirs.load()
 		self.close()
 
 class NonModalMessageBoxDialog(Screen):
