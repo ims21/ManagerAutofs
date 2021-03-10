@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.00"
+VERSION = "2.01"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -799,7 +799,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hostEdit(self):
 		try:
 			with open('/etc/hostname', 'r') as fi:
-				hostname = fi.read()
+				hostname = fi.read().replace("\n","")
 				fi.close()
 		except:
 			print "[ManagerAutofs] failed to read etc/hostname"
@@ -809,7 +809,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hostnameCallback(self, hostname = None):
 		if hostname:
 			with open('/etc/hostname', 'r') as fi:
-				oldhostname = fi.read()
+				oldhostname = fi.read().replace("\n","")
 				fi.close()
 			if hostname != oldhostname:
 				with open('/etc/hostname', 'w+') as fo:
