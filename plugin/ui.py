@@ -799,7 +799,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hostEdit(self):
 		try:
 			with open('/etc/hostname', 'r') as fi:
-				hostname = fi.read().replace("\n","")
+				hostname = fi.read().rstrip("\n")
 				fi.close()
 		except:
 			print "[ManagerAutofs] failed to read etc/hostname"
@@ -809,7 +809,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def hostnameCallback(self, hostname = None):
 		if hostname:
 			with open('/etc/hostname', 'r') as fi:
-				oldhostname = fi.read().replace("\n","")
+				oldhostname = fi.read().rstrip("\n")
 				fi.close()
 			if hostname != oldhostname:
 				with open('/etc/hostname', 'w+') as fo:
