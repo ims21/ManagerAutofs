@@ -30,6 +30,7 @@ from myselectionlist import MySelectionList
 import skin
 import os
 
+
 class ManagerAutofsRemoveBackupFiles(Screen):
 	skin = """
 		<screen name="ManagerAutofsRemoveBackupFiles" position="center,center" size="560,410" title="ManagerAutofs - remove backup files">

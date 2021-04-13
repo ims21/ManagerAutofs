@@ -13,6 +13,7 @@ select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_PLUGINS, plugin_
 if select_png is None:
 	select_png = LoadPixmap(cached=True, path=resolveFilename(SCOPE_CURRENT_SKIN, "icons/lock_on.png"))
 
+
 def MySelectionEntryComponent(description, value, index, selected):
 	dx, dy, dw, dh = skin.parameters.get("ImsSelectionListDescr", (35, 2, 650, 30))
 	res = [
@@ -23,6 +24,7 @@ def MySelectionEntryComponent(description, value, index, selected):
 		ix, iy, iw, ih = skin.parameters.get("ImsSelectionListLock", (0, 0, 24, 24))
 		res.append((eListboxPythonMultiContent.TYPE_PIXMAP_ALPHABLEND, ix, iy, iw, ih, select_png))
 	return res
+
 
 class MySelectionList(MenuList):
 	def __init__(self, list=None, enableWrapAround=False):

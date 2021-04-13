@@ -8,6 +8,7 @@ from Components.Pixmap import Pixmap
 
 import ui
 
+
 class ManagerAutofsHelp(Screen):
 	skin = """
 	<screen position="center,center" size="660,520" title="ManagerAutofs Help" backgroundColor="#00000000">
@@ -55,8 +56,10 @@ class ManagerAutofsHelp(Screen):
 
 	def mode2(self):
 		self["HelpText"].setText(self.mode2txt())
+
 	def mode3(self):
 		self["HelpText"].setText(self.mode3txt())
+
 	def all(self):
 		self["HelpText"].setText(self.prolog() + self.mode1txt() + self.mode2txt() + self.mode3txt() + self.commontxt() + self.modeWintxt())
 

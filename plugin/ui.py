@@ -80,11 +80,13 @@ BACKUPCFG = "/etc/backup.cfg"
 AUTOFS = "/etc/init.d/autofs"
 DEFAULT_HDD = '/media/hdd'
 
+
 def hex2strColor(argb):
 	out = ""
 	for i in range(28, -1, -4):
 		out += "%s" % chr(0x30 + (argb >> i & 0xf))
 	return out
+
 
 try:
 	yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
@@ -107,6 +109,7 @@ CHANGED = "%s~%s" % (yC, fC)
 FAILED = "%s~%s" % (rC, fC)
 MISSING_FILE = "%s!%s" % (rC, fC)
 MISSING_LINE = "%s?%s" % (yC, fC)
+
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -316,6 +319,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.edit = not self.edit
 		self.idx = self["list"].getIndex()
 		self.showPrevNext()
+
 	def showPrevNext(self):
 		if self.edit:
 			self["h_prev"].show()
@@ -324,12 +328,15 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		else:
 			self["h_prev"].hide()
 			self["h_next"].hide()
+
 	def moveUp(self):
 		if self.edit and self.idx - 1 >= 0:
 			self.moveDirection(-1)
+
 	def moveDown(self):
 		if self.edit and self.idx + 1 < self["list"].count():
 			self.moveDirection(1)
+
 	def moveDirection(self, direction):
 			self["list"].setIndex(self.idx)
 			tmp = self["list"].getCurrent()
@@ -419,10 +426,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.showOutput()
 		self.data = ''
 		self["statusbar"].setText(txt)
+
 	def dataAvail(self, s):
 		self.data += s
 		print "[ManagerAutofs]", s.strip()
 		self.showOutput()
+
 	def showOutput(self):
 		self["status"].setText(self.data)
 
@@ -580,6 +589,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def createMountpointWithAutofile(self, add):
 		name = add[2]
+
 		def callBackSingle(name, text=""):
 			if text:
 				self.saveFile(name, text)
@@ -910,6 +920,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	skin = """
 		<screen position="center,center" size="560,220">
@@ -1122,6 +1133,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 # parameters for selected auto. file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.localdir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
@@ -1156,6 +1168,7 @@ config.plugins.mautofs.remotedir = NoSave(ConfigText(default="dirname", visible_
 config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("1.0", "1.0"), ("2.0", "2.0"), ("2.1", "2.1"), ("3.0", "3.0")]))
 #user defined string
 config.plugins.mautofs.rest = NoSave(ConfigText(default="", visible_width=40, fixed_size=False))
+
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -1311,6 +1324,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self["key_blue"].setText(_("Use preset"))
 		else:
 			self["key_blue"].setText("")
+
 	def createSummary(self):
 		from Screens.Setup import SetupSummary
 		return SetupSummary
@@ -1504,6 +1518,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
 		<screen name="ManagerAutofsMultiAutoEdit" position="center,center" size="680,400">
@@ -1685,6 +1700,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 class ManagerAutofsPreset(Screen, ConfigListScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
@@ -1721,12 +1737,16 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 	def createSummary(self):
 		from Screens.Setup import SetupSummary
 		return SetupSummary
+
 	def setWindowTitle(self):
 		self.setTitle(_("User and password preseting"))
+
 	def save(self):
 		self.keySave()
+
 	def exit(self):
 		self.keyCancel()
+
 
 class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 	skin = """
@@ -1744,6 +1764,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		<widget name="text" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
 	</screen>
 	"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
@@ -1838,12 +1859,14 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		config.movielist.videodirs.load()
 		self.close()
 
+
 class NonModalMessageBoxDialog(Screen):
 	skin = """
 		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00808080" zPosition="2" flags="wfNoBorder">
 			<widget name="message" position="center,center" size="460,110" font="Regular;20" valign="center" halign="center"/>
 		</screen>
 	"""
+
 	def __init__(self, session, text="", delay=0):
 		Screen.__init__(self, session)
 		self.text = text
@@ -1865,6 +1888,7 @@ class NonModalMessageBoxDialog(Screen):
 			self.timer.start(1000, True)
 		else:
 			self.session.deleteDialog(self)
+
 
 class useMountAsHDD():
 	def __init__(self):
@@ -1891,11 +1915,14 @@ class useMountAsHDD():
 				os.mkdir(movie)
 			except Exception, ex:
 				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
+
 	def setDefault(self):
 		cfg.hddreplace.value = DEFAULT_HDD
 		cfg.hddreplace.save()
 
+
 makeMountAsHDD = useMountAsHDD()
+
 
 class ManagerAutofsInfo(Screen):
 	skin = """
@@ -1946,6 +1973,7 @@ class ManagerAutofsInfo(Screen):
 
 	def exit(self):
 		self.close()
+
 
 class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 	def __init__(self, session):
@@ -2007,6 +2035,7 @@ class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 	def exit(self):
 		self.close()
 
+
 class ManagerAutofsGetSettings(Screen, HelpableScreen):
 	skin = """
 	<screen name="ManagerAutofsGetSettings" position="center,center" size="600,390" title="List of setting items">
@@ -2023,6 +2052,7 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 		<widget name="text" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
 	</screen>
 	"""
+
 	def __init__(self, session, ip):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)

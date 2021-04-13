@@ -28,6 +28,7 @@ config.plugins.mautofs = ConfigSubsection()
 config.plugins.mautofs.extended_menu = ConfigYesNo(default=False)
 config.plugins.mautofs.hddreplace = ConfigText(default="/media/hdd", visible_width=30, fixed_size=False)
 
+
 def mountedLocalHDD():
 	from os import system
 	cmd = "mount | grep '/dev' | grep '/media/hdd'"
@@ -35,9 +36,11 @@ def mountedLocalHDD():
 		return False
 	return True
 
+
 def main(session, **kwargs):
 	import ui
 	session.open(ui.ManagerAutofsMasterSelection)
+
 
 def sessionstart(reason, **kwargs):
 	if reason == 0:
@@ -45,6 +48,7 @@ def sessionstart(reason, **kwargs):
 		if not mountedLocalHDD():
 			if config.plugins.mautofs.hddreplace.value != "/media/hdd":
 				ui.makeMountAsHDD.createSymlink()
+
 
 def Plugins(path, **kwargs):
 	global plugin_path
