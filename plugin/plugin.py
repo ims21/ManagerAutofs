@@ -25,8 +25,8 @@ from Components.config import config, ConfigSubsection, ConfigYesNo, ConfigText
 plugin_path = None
 
 config.plugins.mautofs = ConfigSubsection()
-config.plugins.mautofs.extended_menu = ConfigYesNo(default = False)
-config.plugins.mautofs.hddreplace = ConfigText(default = "/media/hdd", visible_width = 30, fixed_size = False)
+config.plugins.mautofs.extended_menu = ConfigYesNo(default=False)
+config.plugins.mautofs.hddreplace = ConfigText(default="/media/hdd", visible_width=30, fixed_size=False)
 
 def mountedLocalHDD():
 	from os import system
@@ -51,8 +51,8 @@ def Plugins(path,**kwargs):
 	plugin_path = path
 	name = _("Manager Autofs")
 	descr = _("Manage autofs files and conection")
-	list = [PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_PLUGINMENU, icon = 'plugin.png', fnc = main)]
+	list = [PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon='plugin.png', fnc=main)]
 	list.append(PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART, fnc=sessionstart))
 	if config.plugins.mautofs.extended_menu.value:
-		list.append(PluginDescriptor(name=name, description=descr, where = PluginDescriptor.WHERE_EXTENSIONSMENU, icon = 'plugin.png', fnc = main))
+		list.append(PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_EXTENSIONSMENU, icon='plugin.png', fnc=main))
 	return list

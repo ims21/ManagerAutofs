@@ -53,25 +53,25 @@ from helptexts import ManagerAutofsHelp
 from plugin import mountedLocalHDD
 
 # parameters for auto.master file
-config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
-config.plugins.mautofs.mountpoint = NoSave(ConfigText(default = "/mnt/remote", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_width = 30, fixed_size = False ))
-config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
-config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
-config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
+config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.mountpoint = NoSave(ConfigText(default="/mnt/remote", visible_width=30, fixed_size=False))
+config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_width=30, fixed_size=False ))
+config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=60, limits=(1, 300)))
 
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
-config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
+config.plugins.mautofs.pre_save = ConfigYesNo(default=False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
-config.plugins.mautofs.testmountpoints = ConfigYesNo(default = False)
+config.plugins.mautofs.testmountpoints = ConfigYesNo(default=False)
 
 # settings
-config.plugins.mautofs.settings_local = NoSave(ConfigYesNo(default = True))
+config.plugins.mautofs.settings_local = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.settings_ip = NoSave(ConfigIP(default=[192,168,0,1]))
-config.plugins.mautofs.settings_values = ConfigYesNo(default = False)
+config.plugins.mautofs.settings_values = ConfigYesNo(default=False)
 
 cfg = config.plugins.mautofs
 
@@ -474,7 +474,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, sel, changed = False):
+		def callbackEdit( index, sel, changed=False):
 			if changed:
 				old_autofile = sel[2]
 				mnt_status = sel[4]
@@ -691,7 +691,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += ["menu"]
 		text = _("Select operation:")
-		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons], selection = self.selectionUtilitySubmenu)
+		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons], selection=self.selectionUtilitySubmenu)
 
 	def utilityCallback(self, menu, choice):
 		if choice is None:
@@ -804,9 +804,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		except:
 			print "[ManagerAutofs] failed to read etc/hostname"
 			return
-		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title = (_("Enter new hostname for your Receiver")), text = hostname)
+		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=(_("Enter new hostname for your Receiver")), text=hostname)
 
-	def hostnameCallback(self, hostname = None):
+	def hostnameCallback(self, hostname=None):
 		if hostname:
 			with open('/etc/hostname', 'r') as fi:
 				oldhostname = fi.read().rstrip("\n")
@@ -962,7 +962,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self.list = [ ]
 		self.onChangedEntry = [ ]
-		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry)		
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry)		
 
 		self["actions"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
 			{
@@ -1124,11 +1124,11 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
+config.plugins.mautofs.localdir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
 config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660")]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro")]))
+config.plugins.mautofs.rw = NoSave(ConfigSelection(default="", choices=[("", _("no")),("rw", "rw"),("ro", "ro")]))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="", fixed_size=False))
@@ -1144,18 +1144,18 @@ config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
 config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
 config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8")]))
-config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlmv2", "ntlmv2"),("ntlmssp", "ntlmssp")]))
+config.plugins.mautofs.sec = NoSave(ConfigSelection(default="", choices=[("", _("no")),("ntlm", "ntlm"),("ntlmv2", "ntlmv2"),("ntlmssp", "ntlmssp")]))
 
 config.plugins.mautofs.use_ip_or_name = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
-config.plugins.mautofs.name = NoSave(ConfigText(default = "servername", visible_width = 30, fixed_size = False))
+config.plugins.mautofs.name = NoSave(ConfigText(default="servername", visible_width=30, fixed_size=False))
 config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("",_("no")),("dev","dev")]))
 
-config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
+config.plugins.mautofs.remotedir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
 config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("",_("no")),("1.0","1.0"),("2.0","2.0"),("2.1","2.1"),("3.0","3.0")]))
 #user defined string
-config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
+config.plugins.mautofs.rest = NoSave(ConfigText(default="", visible_width=40, fixed_size=False))
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -1198,7 +1198,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 		self.list = [ ]
 		self.onChangedEntry = [ ]
-		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)		
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)		
 
 		self["actions"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
 			{
@@ -1531,7 +1531,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" halign="left" valign="center"/>
 		</screen>"""
 
-	def __init__(self, session, name = None):
+	def __init__(self, session, name=None):
 		Screen.__init__(self, session)
 		self.session = session
 		self.name = name
@@ -1972,7 +1972,7 @@ class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 
 		self.list = []
 		self.createConfig()
-		ConfigListScreen.__init__(self, self.list, session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.list, session, on_change=self.changedEntry)
 		self.onShown.append(self.setWindowTitle)
 
 	def setWindowTitle(self):
