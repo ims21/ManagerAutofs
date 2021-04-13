@@ -2,7 +2,7 @@ from distutils.core import setup
 import setup_translate
 
 pkg = 'Extensions.ManagerAutofs'
-setup (name='enigma2-plugin-extensions-managerautofs',
+setup(name='enigma2-plugin-extensions-managerautofs',
 	version='2.01',
 	description='manage autofs files',
 	packages=[pkg],

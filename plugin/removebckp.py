@@ -85,7 +85,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 			text = _("Are you sure to remove selected files?")
 		else:
 			text = _("Are you sure to remove file '%s'?") % self["config"].getCurrent()[0][1]
-		self.session.openWithCallback(self.removeFromSource, MessageBox, text, MessageBox.TYPE_YESNO, default=False )
+		self.session.openWithCallback(self.removeFromSource, MessageBox, text, MessageBox.TYPE_YESNO, default=False)
 
 	def removeFromSource(self, answer):
 		if answer == True:
