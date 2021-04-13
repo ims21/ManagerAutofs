@@ -14,10 +14,10 @@ class ManagerAutofsHelp(Screen):
 	<screen position="center,center" size="660,520" title="ManagerAutofs Help" backgroundColor="#00000000">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
-		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/> 
+		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
 		<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on"/>
-		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/> 
-		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/> 
+		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="HelpText" position="5,50" size="650,441" font="Regular;18" backgroundColor="#00000000" scrollbarMode="showOnDemand"/>

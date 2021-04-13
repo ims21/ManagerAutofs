@@ -973,7 +973,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self.list = []
 		self.onChangedEntry = []
-		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry)		
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry)
 
 		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
@@ -1047,7 +1047,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		elif self["config"].getCurrent()[0] == self.autofile:
 			self.blueText(_("Put mountpoint name"))
 		self.actualizeString()
-	
+
 	def actualizeString(self):
 		string = "#" if not cfg.enabled.value else ""
 		string += "/mnt/%s" % cfg.mountpoint.value
@@ -1198,7 +1198,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.new = new
 		self["text"] = Label("")
 		self.autoName = filename
-		
+
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("OK"))
 		self["key_blue"] = StaticText()
@@ -1211,7 +1211,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 		self.list = []
 		self.onChangedEntry = []
-		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)		
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 
 		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
