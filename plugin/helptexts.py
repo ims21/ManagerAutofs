@@ -38,7 +38,7 @@ class ManagerAutofsHelp(Screen):
 
 		self["HelpText"] = ScrollLabel()
 
-		self["Actions"] = ActionMap(["WizardActions","ColorActions"],
+		self["Actions"] = ActionMap(["WizardActions", "ColorActions"],
 			{
 				"back": self.close,
 				"red": self.close,
@@ -139,28 +139,28 @@ class ManagerAutofsHelp(Screen):
 		text += _("- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s") % self.grey(3) + "\n"
 		return text
 
-	def yellow(self,n=1):
+	def yellow(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.yC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def grey(self,n=1):
+	def grey(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.greyC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def green(self,n=1):
+	def green(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.gC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def blue(self,n=1):
+	def blue(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.bC)

@@ -46,7 +46,7 @@ def sessionstart(reason, **kwargs):
 			if config.plugins.mautofs.hddreplace.value != "/media/hdd":
 				ui.makeMountAsHDD.createSymlink()
 
-def Plugins(path,**kwargs):
+def Plugins(path, **kwargs):
 	global plugin_path
 	plugin_path = path
 	name = _("Manager Autofs")
