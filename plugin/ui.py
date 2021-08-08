@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.01"
+VERSION = "2.02"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -693,7 +693,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += ["3"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed.")))
 		buttons += [""]
-		menu.append((space + _("Clear bookmarks..."), 110, _("Removing selected bookmarks.")))
+		menu.append((space + _("Edit bookmarks..."), 110, _("Remove or edit bookmarks.")))
 		buttons += [""]
 		menu.append((space + _("Create settings file..."), 180, _("Create 'settings' file from selected receiver.")))
 		buttons += [""]
@@ -739,7 +739,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
 		elif choice[1] == 110:
-			self.session.open(ManagerAutofsClearBookmarks)
+			self.session.open(ManagerAutofsEditBookmarks)
 		elif choice[1] == 180:
 			self.session.open(ManagerAutofsSettingsIP)
 		elif choice[1] == 200:
@@ -1748,9 +1748,9 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		self.keyCancel()
 
 
-class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
+class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 	skin = """
-	<screen name="ManagerAutofsClearBookmarks" position="center,center" size="600,390" title="List of bookmarks">
+	<screen name="ManagerAutofsEditBookmarks" position="center,center" size="600,390" title="List of bookmarks">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
 		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
@@ -1786,12 +1786,13 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 			"cancel": (self.exit, _("Close")),
 			"ok": (self.list.toggleSelection, _("Add or remove item of selection")),
 			})
-		self["ManagerAutofsActions"] = HelpableActionMap(self, "ColorActions",
+		self["ManagerAutofsActions"] = HelpableActionMap(self, ["ColorActions", "EPGSelectActions"],
 			{
 			"red": (self.exit, _("Close")),
 			"green": (self.deleteSelected, _("Delete selected")),
 			"yellow": (self.sortList, _("Sort list")),
 			"blue": (self.list.toggleAllSelection, _("Invert selection")),
+			"info": (self.editCurrent, _("Change current bookmark")),
 			}, -2)
 
 		self["key_red"] = Button(_("Cancel"))
@@ -1800,7 +1801,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		self["key_blue"] = Button(_("Inversion"))
 
 		self.sort = 0
-		self["text"] = Label(_("Select with 'OK' and then remove with 'Delete'."))
+		self["text"] = Label(_("Select with 'OK' and then remove with 'Delete'. For change bookmark use 'Info/EPG' on bookmark."))
 		self["config"].onSelectionChanged.append(self.bookmark)
 
 	def loadAllMovielistVideodirs(self):
@@ -1854,6 +1855,25 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 				bookmarks.remove(item[0])
 			config.movielist.videodirs.value = bookmarks
 			config.movielist.videodirs.save()
+
+	def editCurrent(self):
+		def editBookmark(changedBookmark):
+			if changedBookmark:
+				if not changedBookmark.endswith('/'):
+					changedBookmark += '/'
+				bookmarks = config.movielist.videodirs.value
+				for i, text in enumerate(bookmarks):
+					if data[0] == text:
+						bookmarks[i] = changedBookmark
+						self.list.changeCurrentItem(data,(changedBookmark, changedBookmark, data[2], False))
+						config.movielist.videodirs.value = bookmarks
+						config.movielist.videodirs.save()
+						return
+
+		if self["config"].getCurrent():
+			if len(self.list.getSelectionsList()) <= 1:
+				data = self["config"].getCurrent()[0]
+				self.session.openWithCallback(editBookmark, VirtualKeyBoard, title=(_("Edit bookmark")), text=data[0])
 
 	def exit(self):
 		config.movielist.videodirs.load()

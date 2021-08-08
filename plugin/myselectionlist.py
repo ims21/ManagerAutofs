@@ -60,6 +60,13 @@ class MySelectionList(MenuList):
 				self.setList(self.list)
 				return
 
+	def changeCurrentItem(self, item, new):
+		if len(self.list):
+			idx = self.getSelectedIndex()
+			item = self.list[idx][0]
+			self.list[idx] = MySelectionEntryComponent(new[0], new[1], new[2], new[3])
+			self.setList(self.list)
+
 	def toggleItemSelection(self, item):
 		for idx, i in enumerate(self.list):
 			if i[0][0:3] == item[0:3]:
