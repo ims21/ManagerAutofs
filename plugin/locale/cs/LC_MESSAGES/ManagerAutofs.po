@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-08 13:54+0200\n"
-"PO-Revision-Date: 2021-08-08 13:57+0200\n"
+"PO-Revision-Date: 2021-08-08 17:55+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -282,7 +282,7 @@ msgstr "Zrušit používání '%s' jako náhrady HDD."
 
 #: ../ui.py:1795
 msgid "Change current bookmark"
-msgstr "Změnit aktuální záložku"
+msgstr "Upravit aktuální záložku"
 
 #: ../ui.py:690
 msgid "Change hostname"
@@ -374,7 +374,7 @@ msgstr "Upravte záložku"
 
 #: ../ui.py:696
 msgid "Edit bookmarks..."
-msgstr "Úpravit záložky..."
+msgstr "Upravit záložky..."
 
 #: ../ui.py:369
 #, python-format
