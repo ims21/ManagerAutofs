@@ -53,38 +53,40 @@ from helptexts import ManagerAutofsHelp
 from plugin import mountedLocalHDD
 
 # parameters for auto.master file
-config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default = False))
-config.plugins.mautofs.mountpoint = NoSave(ConfigText(default = "/mnt/remote", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.autofile = NoSave(ConfigText(default = "remote", visible_width = 30, fixed_size = False ))
-config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default = True))
-config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default = False))
-config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default = 60, limits = (1, 300)))
+config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.mountpoint = NoSave(ConfigText(default="/mnt/remote", visible_width=30, fixed_size=False))
+config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_width=30, fixed_size=False))
+config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=60, limits=(1, 300)))
 
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
-config.plugins.mautofs.pre_save = ConfigYesNo(default = False)
+config.plugins.mautofs.pre_save = ConfigYesNo(default=False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
-config.plugins.mautofs.testmountpoints = ConfigYesNo(default = False)
+config.plugins.mautofs.testmountpoints = ConfigYesNo(default=False)
 
 # settings
-config.plugins.mautofs.settings_local = NoSave(ConfigYesNo(default = True))
-config.plugins.mautofs.settings_ip = NoSave(ConfigIP(default=[192,168,0,1]))
-config.plugins.mautofs.settings_values = ConfigYesNo(default = False)
+config.plugins.mautofs.settings_local = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.settings_ip = NoSave(ConfigIP(default=[192, 168, 0, 1]))
+config.plugins.mautofs.settings_values = ConfigYesNo(default=False)
 
 cfg = config.plugins.mautofs
 
-AUTOMASTER="/etc/auto.master"
-BACKUPCFG="/etc/backup.cfg"
-AUTOFS="/etc/init.d/autofs"
+AUTOMASTER = "/etc/auto.master"
+BACKUPCFG = "/etc/backup.cfg"
+AUTOFS = "/etc/init.d/autofs"
 DEFAULT_HDD = '/media/hdd'
+
 
 def hex2strColor(argb):
 	out = ""
-	for i in range(28,-1,-4):
-		out += "%s" % chr(0x30 + (argb>>i & 0xf))
+	for i in range(28, -1, -4):
+		out += "%s" % chr(0x30 + (argb >> i & 0xf))
 	return out
+
 
 try:
 	yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
@@ -100,13 +102,14 @@ rC = "\c%s" % hex2strColor(0x00ff4000)
 gC = "\c%s" % hex2strColor(0x0000ff80)
 bC = "\c%s" % hex2strColor(0x000080ff)
 
-_X_ = "%sx%s" % (gC,fC)
+_X_ = "%sx%s" % (gC, fC)
 
-MOUNTED = "%s~%s" % (gC,fC)
-CHANGED = "%s~%s" % (yC,fC)
-FAILED = "%s~%s" % (rC,fC)
-MISSING_FILE = "%s!%s" % (rC,fC)
-MISSING_LINE = "%s?%s" % (yC,fC)
+MOUNTED = "%s~%s" % (gC, fC)
+CHANGED = "%s~%s" % (yC, fC)
+FAILED = "%s~%s" % (rC, fC)
+MISSING_FILE = "%s!%s" % (rC, fC)
+MISSING_LINE = "%s?%s" % (yC, fC)
+
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -157,21 +160,21 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["autofile"] = Label(_("auto.file"))
 		self["text"] = Label()
 
-		self["ManagerAutofsActions"] = HelpableActionMap(self, ["SetupActions","ColorActions","MenuActions"],
+		self["ManagerAutofsActions"] = HelpableActionMap(self, ["SetupActions", "ColorActions", "MenuActions"],
 			{
-			"ok":		(self.editMasterRecord,	_("Edit mountpoint")),
-			"cancel":	(self.keyClose, _("Close")),
-			"red":		(self.keyClose, _("Close")),
-			"green":	(self.addMasterRecord, _("Add mountpoint")),
-			"blue":		(self.changeMasterRecordStatus, _("Enable/disable mountpoint")),
-			"yellow":	(self.editAutofile, _("Edit auto file")),
-			"menu":		(self.menu, _("Menu")),
+			"ok": (self.editMasterRecord, _("Edit mountpoint")),
+			"cancel": (self.keyClose, _("Close")),
+			"red": (self.keyClose, _("Close")),
+			"green": (self.addMasterRecord, _("Add mountpoint")),
+			"blue": (self.changeMasterRecordStatus, _("Enable/disable mountpoint")),
+			"yellow": (self.editAutofile, _("Edit auto file")),
+			"menu": (self.menu, _("Menu")),
 			}, -1)
-		self["ManagerAutofsEditActions"] = HelpableActionMap(self, ["DirectionActions","NumberActions"],
+		self["ManagerAutofsEditActions"] = HelpableActionMap(self, ["DirectionActions", "NumberActions"],
 			{
-			"moveUp":	(self.moveUp, _("Move item up")),
-			"moveDown":	(self.moveDown, _("Move item down")),
-			"0": 		(self.startMoving, _("Enable/disable moving item")),
+			"moveUp": (self.moveUp, _("Move item up")),
+			"moveDown": (self.moveDown, _("Move item down")),
+			"0": (self.startMoving, _("Enable/disable moving item")),
 			}, -1)
 		self.edit = 0
 		self.idx = 0
@@ -195,13 +198,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["blue"] = Pixmap()
 
 		self.delayTimer = eTimer()
-		self.msgNM=None
+		self.msgNM = None
 		self.selectionUtilitySubmenu = 0
 		self.inExitProcess = False
 		self.onShown.append(self.setWindowTitle)
 
 		if os.path.exists(AUTOMASTER):
-			copyfile(AUTOMASTER, AUTOMASTER+".bak")
+			copyfile(AUTOMASTER, AUTOMASTER + ".bak")
 		else:
 			f = open(AUTOMASTER, "w")
 			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, "--ghost" if cfg.ghost.default else ""))
@@ -210,14 +213,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC,fC,yC,fC))
+		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC, fC, yC, fC))
 
 	def readMasterFile(self):
 		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3 , 4 - mount status
 		self.list = []
 
 		for line in open(AUTOMASTER, "r"):
-			line = line.replace('\n','')
+			line = line.replace('\n', '')
 			if '#' in line:
 				status = ""
 				line = line[1:]
@@ -273,7 +276,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not cfg.testmountpoints.value:
 			return ""
 		# TODO: solve test for multiline files
-		point = open(autofile,"r").readline().split(' ')[0]
+		point = open(autofile, "r").readline().split(' ')[0]
 		if fileExists("%s/%s/." % (device, point)):
 			if selected == "x":
 				return ""
@@ -293,7 +296,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if self.changes:
 			if not self.inExitProcess:
 				self.inExitProcess = True
-				self.MessageBoxNM(True,_("Updating mountpoints and bookmarks..."), delay=2)
+				self.MessageBoxNM(True, _("Updating mountpoints and bookmarks..."), delay=2)
 				self.saveMasterFile()
 				self.updateAutofs()
 				self.delayTimer.callback.append(self.finishPlugin)
@@ -316,6 +319,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.edit = not self.edit
 		self.idx = self["list"].getIndex()
 		self.showPrevNext()
+
 	def showPrevNext(self):
 		if self.edit:
 			self["h_prev"].show()
@@ -324,20 +328,23 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		else:
 			self["h_prev"].hide()
 			self["h_next"].hide()
+
 	def moveUp(self):
-		if self.edit and self.idx -1 >= 0:
+		if self.edit and self.idx - 1 >= 0:
 			self.moveDirection(-1)
+
 	def moveDown(self):
-		if self.edit and self.idx +1 < self["list"].count():
+		if self.edit and self.idx + 1 < self["list"].count():
 			self.moveDirection(1)
+
 	def moveDirection(self, direction):
 			self["list"].setIndex(self.idx)
 			tmp = self["list"].getCurrent()
-			self["list"].setIndex(self.idx+direction)
+			self["list"].setIndex(self.idx + direction)
 			tmp2 = self["list"].getCurrent()
 			self["list"].modifyEntry(self.idx, tmp2)
-			self["list"].modifyEntry(self.idx+direction, tmp)
-			self.idx+=direction
+			self["list"].modifyEntry(self.idx + direction, tmp)
+			self.idx += direction
 
 	def help(self):
 		self.session.open(ManagerAutofsHelp)
@@ -349,21 +356,21 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		sel = self["list"].getCurrent()
 		if sel:
 			recordname = "%s" % (sel[1].split('/')[2])
-			device = "%s%s%s" % (gC,recordname,fC)
+			device = "%s%s%s" % (gC, recordname, fC)
 			autoname = "%s" % sel[2].split('/')[2]
-			mountpoint = "%s%s%s" % (bC,autoname,fC)
+			mountpoint = "%s%s%s" % (bC, autoname, fC)
 			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'auto.master' file.") % device))
 			buttons = [""]
 		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
 		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'auto.master' file.") % device))
 		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal.") % device))
-		buttons += ["","","5"]
+		buttons += ["", "", "5"]
 		if sel:
 			menu.append((_("Edit -") + " " + mountpoint, 10, _("Edit file '%s' with mountpoint parameters for existing '%s' remote device.") % (mountpoint, device)))
 			menu.append((_("Add line to -") + " " + mountpoint, 11, _("Add next mountpoint parameters line to '%s' for existing '%s' remote device.") % (mountpoint, device)))
 			menu.append((_("Remove -") + " " + mountpoint, 12, _("Remove file '%s' with mountpoint parameters for '%s' remote device.") % (mountpoint, device)))
 			buttons += ["", "", ""]
-		menu.append((_("Help")+"...", 30, _("Brief help on how to use autofs.")))
+		menu.append((_("Help") + "...", 30, _("Brief help on how to use autofs.")))
 		buttons += [""]
 		if cfg.extended_menu.value:
 			txt = _("Remove from extended menu")
@@ -371,13 +378,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		else:
 			txt = _("Add into extended menu")
 			descr = _("Add plugin's run to Extended menu.")
-		menu.append((txt,40,descr))
+		menu.append((txt, 40, descr))
 		buttons += ["blue"]
-		menu.append((_("Utility")+"...", 50, _("Next utilities.")))
+		menu.append((_("Utility") + "...", 50, _("Next utilities.")))
 		buttons += ["menu"]
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons])
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key == "" else key for key in buttons])
 
 	def menuCallback(self, choice):
 		if choice is None:
@@ -419,10 +426,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.showOutput()
 		self.data = ''
 		self["statusbar"].setText(txt)
+
 	def dataAvail(self, s):
 		self.data += s
 		print "[ManagerAutofs]", s.strip()
 		self.showOutput()
+
 	def showOutput(self):
 		self["status"].setText(self.data)
 
@@ -438,10 +447,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.changes = True
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and _X_ or ""
+				enabled = cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				add = (enabled, mountpoint, autofile, optional )
+				add = (enabled, mountpoint, autofile, optional)
 				self.createMountpointWithAutofile(add)
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None, self.list)
 
@@ -451,10 +460,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.changes = True
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and _X_ or ""
+				enabled = cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				add = (enabled, mountpoint, autofile, optional )
+				add = (enabled, mountpoint, autofile, optional)
 				self.addItem(add)
 				# autofile is created
 				if os.path.exists(original_autofile):
@@ -468,25 +477,25 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			mountpoint = "%s" % sel[1] + suffix
 			original_autofile = sel[2]
 			autofile = "%s" % original_autofile + suffix
-			enabled =  ""
+			enabled = ""
 			ghost = sel[3]
 			sel = [enabled, mountpoint, autofile, ghost]
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
-		def callbackEdit( index, sel, changed = False):
+		def callbackEdit(index, sel, changed=False):
 			if changed:
 				old_autofile = sel[2]
 				mnt_status = sel[4]
 				mountpoint = "/mnt/%s" % cfg.mountpoint.value
 				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled =  cfg.enabled.value and _X_ or ""
+				enabled = cfg.enabled.value and _X_ or ""
 				ghost = cfg.ghost.value and "--ghost" or ""
 				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
 				record = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
 				changed = self.testChangedRecord(sel, record)
 				self.changeItem(index, record, changed)
-				old = "%s %s %s" % (sel[1],sel[2],sel[3] if len(sel[3]) else '')
+				old = "%s %s %s" % (sel[1], sel[2], sel[3] if len(sel[3]) else '')
 				new = "%s %s %s" % (mountpoint, autofile, optional if len(optional) else '')
 				self.changes = changed
 				if old != new:
@@ -505,7 +514,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 									copyfile(old_autofile, old_autofile + '.$$$')
 									os.rename(old_autofile, autofile)
 									self.MessageBoxNM(True, _("'%s' was renamed to '%s'") % (old_autofile, autofile), 2)
-							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile) , MessageBox, _("Auto.name in record was changed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
+							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile), MessageBox, _("Auto.name in record was changed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
 		sel = self["list"].getCurrent()
 		if sel:
 			index = self["list"].getIndex()
@@ -530,7 +539,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(boundFunction(callbackRemove, index, autofile), MessageBox, _("What all do You want to remove?"), type=MessageBox.TYPE_YESNO, default=False, list=removing)
 
 	def testChangedRecord(self, old, new):
-		for i in range(0,4):
+		for i in range(0, 4):
 			if old[i] != new[i]:
 				return True
 		return False
@@ -541,11 +550,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			status = ""
 		else:
 			status = _X_
-		self["list"].modifyEntry(index, (status ,data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
+		self["list"].modifyEntry(index, (status, data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
 		self.refreshText()
 
 	def changeItem(self, index, new, changed=False):
-		self["list"].modifyEntry(index,(new[0], new[1], new[2], new[3], CHANGED if changed else ''))
+		self["list"].modifyEntry(index, (new[0], new[1], new[2], new[3], CHANGED if changed else ''))
 		self.refreshText()
 
 	def addItem(self, new):
@@ -558,10 +567,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.refreshText()
 
 	def addAutofileLine(self):
-		def callBackCreate(name ,text=""):
+		def callBackCreate(name, text=""):
 			if text:
 				self.changes = True
-				self.backupFile(name,"bak")
+				self.backupFile(name, "bak")
 				self.saveFile(name, text)
 				self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
 		sel = self["list"].getCurrent()
@@ -580,6 +589,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def createMountpointWithAutofile(self, add):
 		name = add[2]
+
 		def callBackSingle(name, text=""):
 			if text:
 				self.saveFile(name, text)
@@ -603,7 +613,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			data = ""
 			if lines == 1:		# single line
 				line = open(name, "r").readline()
-				data = line.replace('\n','').strip()
+				data = line.replace('\n', '').strip()
 				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, False)
 			elif lines > 1:		# multi
 				def stringChanged(changed=False):
@@ -618,7 +628,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def backupFile(self, name, ext):
 		if os.path.exists(name):
-			os.rename(name, "%s_%s" % (name,ext))
+			os.rename(name, "%s_%s" % (name, ext))
 
 	def saveFile(self, name, data):
 		fo = open(name, "w")
@@ -630,7 +640,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not os.path.exists(name):
 			return -1
 		for mline in open(name, "r"):
-			mline = mline.replace('\n','')
+			mline = mline.replace('\n', '')
 			if mline:
 				nr += 1
 		return nr
@@ -652,7 +662,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if os.path.exists('/usr/lib/enigma2/python/Plugins/Extensions/AutoBackup/settings-backup.sh'):
 			menu.append((_("Update autofs files in AutoBackup"), 0, _("Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin.")))
 			menu.append((_("Remove unused autofs files in AutoBackup"), 2, _("Remove unused autofs files from /etc/backup.cfg file.")))
-			buttons += ["",""]
+			buttons += ["", ""]
 		if self.isBackupFile():
 			menu.append((_("Remove backup files"), 3, _("Remove selected backup files created when editing autofs files.")))
 			buttons += [""]
@@ -665,7 +675,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not mountedLocalHDD():
 			sel = self["list"].getCurrent()
 			if sel:
-				currentpoint = sel[1][sel[1].rfind('/')+1:]
+				currentpoint = sel[1][sel[1].rfind('/') + 1:]
 				if sel[0] == _X_ and currentpoint not in cfg.hddreplace.value: # mounted and not used
 					menu.append((space + _("Use '%s' as HDD replacement") % currentpoint, 20, _("You can use current mountpoint '%s' as HDD replacement.") % currentpoint))
 					buttons += ["yellow"]
@@ -675,23 +685,23 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					buttons += ["red"]
 		if os.path.exists(AUTOFS):
 			menu.append((space + _("Reload autofs"), 10, _("Reload autofs mount maps. It is made standardly on each plugin exit if something was changed.")))
-			menu.append((space + _("Restart autofs with GUI restart"),11,_("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
-			buttons += ["","green"]
+			menu.append((space + _("Restart autofs with GUI restart"), 11, _("Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI.")))
+			buttons += ["", "green"]
 		menu.append((space + _("Change hostname"), 90, _("Change the hostname of your Receiver.")))
 		buttons += [""]
-		menu.append((space +_("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
+		menu.append((space + _("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
 		buttons += ["3"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed.")))
 		buttons += [""]
-		menu.append((space + _("Clear bookmarks..."), 110 ,_("Removing selected bookmarks.")))
+		menu.append((space + _("Clear bookmarks..."), 110, _("Removing selected bookmarks.")))
 		buttons += [""]
-		menu.append((space + _("Create settings file..."), 180 ,_("Create 'settings' file from selected receiver.")))
+		menu.append((space + _("Create settings file..."), 180, _("Create 'settings' file from selected receiver.")))
 		buttons += [""]
 		txt = _("You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit.")
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += ["menu"]
 		text = _("Select operation:")
-		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons], selection = self.selectionUtilitySubmenu)
+		self.session.openWithCallback(boundFunction(self.utilityCallback, menu), ChoiceBox, title=text, list=menu, keys=["dummy" if key == "" else key for key in buttons], selection=self.selectionUtilitySubmenu)
 
 	def utilityCallback(self, menu, choice):
 		if choice is None:
@@ -750,27 +760,27 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			lines = self.getAutoLines(name)
 			if lines == 1:	# single record file
 				line = open(name, "r").readline()
-				data = line.replace('\n','').strip()
+				data = line.replace('\n', '').strip()
 				if data:
 					local_dir = data.split()[0].strip()
-					path = '/media/%s/%s' % (name.split('.')[1],local_dir)
+					path = '/media/%s/%s' % (name.split('.')[1], local_dir)
 					self.callCreateSymlink(path)
 				else:
 					return
 			elif lines > 1: # multi record file
 				def callbackGetName(answer):
 					if answer:
-						path = '/media/%s/%s' % (name.split('.')[1],answer)
+						path = '/media/%s/%s' % (name.split('.')[1], answer)
 						self.callCreateSymlink(path)
 				list = []
 				text = _("Select '%s' directory:") % name.split('.')[1]
 				for x in open(name, "r"):
-					line = x.replace('\n','').strip()
+					line = x.replace('\n', '').strip()
 					if line:
 						local_dir = line.split()[0].strip()
 						if local_dir:
 							list.append((local_dir, local_dir))
-						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list )
+						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list)
 			else:
 				self.MessageBoxNM(True, _("'%s.auto' has wrong format or is empty!") % name.split('.')[1], 5)
 				return
@@ -804,9 +814,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		except:
 			print "[ManagerAutofs] failed to read etc/hostname"
 			return
-		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title = (_("Enter new hostname for your Receiver")), text = hostname)
+		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=(_("Enter new hostname for your Receiver")), text=hostname)
 
-	def hostnameCallback(self, hostname = None):
+	def hostnameCallback(self, hostname=None):
 		if hostname:
 			with open('/etc/hostname', 'r') as fi:
 				oldhostname = fi.read().rstrip("\n")
@@ -819,7 +829,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def removeBackupFiles(self):
 		from removebckp import ManagerAutofsRemoveBackupFiles
-		self.session.open( ManagerAutofsRemoveBackupFiles)
+		self.session.open(ManagerAutofsRemoveBackupFiles)
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
@@ -850,13 +860,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				if os.path.exists(BACKUPCFG):
 					copyfile(BACKUPCFG, BACKUPCFG + '.bak')
 
-					backupcfg = open(BACKUPCFG + '.bak',"r")
+					backupcfg = open(BACKUPCFG + '.bak', "r")
 					new = open(BACKUPCFG, "w")
 
 					autofslines = []	# auto.xxxx lines
 					lines = []		# other lines
 					for line in backupcfg:
-						line = line.replace('\n','')
+						line = line.replace('\n', '')
 						if not line:
 							continue
 						if line.startswith('/etc/auto.'):
@@ -910,6 +920,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	skin = """
 		<screen position="center,center" size="560,220">
@@ -960,20 +971,20 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
 
-		self.list = [ ]
-		self.onChangedEntry = [ ]
-		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.changedEntry)		
+		self.list = []
+		self.onChangedEntry = []
+		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.changedEntry)
 
-		self["actions"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
+		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
-			"ok":		self.keyOk,
-			"cancel":	self.keyClose,
-			"green":	self.keyOk,
-			"red":		self.keyClose,
-			"blue":		self.keyBlue,
+			"ok": self.keyOk,
+			"cancel": self.keyClose,
+			"green": self.keyOk,
+			"red": self.keyClose,
+			"blue": self.keyBlue,
 			}, -1)
 
-		self.msgNM=None
+		self.msgNM = None
 
 		self["config"].onSelectionChanged.append(self.moveOverItem)
 
@@ -982,8 +993,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.createConfig()
 
 	def createConfig(self):
-		dx = 4*' '
-		self.list = [ ]
+		dx = 4 * ' '
+		self.list = []
 		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
 		self.mountpoint = _("mountpoint name")
 		self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
@@ -1036,7 +1047,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		elif self["config"].getCurrent()[0] == self.autofile:
 			self.blueText(_("Put mountpoint name"))
 		self.actualizeString()
-	
+
 	def actualizeString(self):
 		string = "#" if not cfg.enabled.value else ""
 		string += "/mnt/%s" % cfg.mountpoint.value
@@ -1122,13 +1133,14 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
 
+
 # parameters for selected auto. file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.localdir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("",_("no")),("cifs","cifs"),("nfs","nfs"),("auto","auto"),("udf","udf"),("iso9660","iso9660")]))
+config.plugins.mautofs.localdir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
+config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("", _("no")), ("cifs", "cifs"), ("nfs", "nfs"), ("auto", "auto"), ("udf", "udf"), ("iso9660", "iso9660")]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.intr = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rw = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("rw", "rw"),("ro", "ro")]))
+config.plugins.mautofs.rw = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("rw", "rw"), ("ro", "ro")]))
 
 config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="", fixed_size=False))
@@ -1141,21 +1153,22 @@ config.plugins.mautofs.noperm = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
-config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")),("4096", "4096"),("8192", "8192"),("16384", "16384"),("32768", "32768")]))
-config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")),("utf8", "utf8")]))
-config.plugins.mautofs.sec = NoSave(ConfigSelection(default = "", choices = [("", _("no")),("ntlm", "ntlm"),("ntlmv2", "ntlmv2"),("ntlmssp", "ntlmssp")]))
+config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768")]))
+config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768")]))
+config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")), ("utf8", "utf8")]))
+config.plugins.mautofs.sec = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("ntlm", "ntlm"), ("ntlmv2", "ntlmv2"), ("ntlmssp", "ntlmssp")]))
 
 config.plugins.mautofs.use_ip_or_name = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.usedip = NoSave(ConfigYesNo(default=True))
-config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192,168,1,100]))
-config.plugins.mautofs.name = NoSave(ConfigText(default = "servername", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("",_("no")),("dev","dev")]))
+config.plugins.mautofs.ip = NoSave(ConfigIP(default=[192, 168, 1, 100]))
+config.plugins.mautofs.name = NoSave(ConfigText(default="servername", visible_width=30, fixed_size=False))
+config.plugins.mautofs.dev = NoSave(ConfigSelection(default="dev", choices=[("", _("no")), ("dev", "dev")]))
 
-config.plugins.mautofs.remotedir = NoSave(ConfigText(default = "dirname", visible_width = 30, fixed_size = False))
-config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("",_("no")),("1.0","1.0"),("2.0","2.0"),("2.1","2.1"),("3.0","3.0")]))
+config.plugins.mautofs.remotedir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
+config.plugins.mautofs.smb = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("1.0", "1.0"), ("2.0", "2.0"), ("2.1", "2.1"), ("3.0", "3.0")]))
 #user defined string
-config.plugins.mautofs.rest = NoSave(ConfigText(default = "", visible_width = 40, fixed_size = False))
+config.plugins.mautofs.rest = NoSave(ConfigText(default="", visible_width=40, fixed_size=False))
+
 
 class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 	skin = """
@@ -1185,7 +1198,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.new = new
 		self["text"] = Label("")
 		self.autoName = filename
-		
+
 		self["key_red"] = Button(_("Close"))
 		self["key_green"] = Button(_("OK"))
 		self["key_blue"] = StaticText()
@@ -1196,20 +1209,20 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self["HelpWindow"].hide()
 		self["VKeyIcon"] = Boolean(False)
 
-		self.list = [ ]
-		self.onChangedEntry = [ ]
-		ConfigListScreen.__init__(self, self.list, session = self.session, on_change = self.changedEntry)		
+		self.list = []
+		self.onChangedEntry = []
+		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 
-		self["actions"] = ActionMap(["SetupActions","OkCancelActions","ColorActions"],
+		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
 #			"ok":		self.keyOk,
-			"cancel":	self.keyClose,
-			"green":	self.keyOk,
-			"red":		self.keyClose,
-			"blue":		self.presets,
+			"cancel": self.keyClose,
+			"green": self.keyOk,
+			"red": self.keyClose,
+			"blue": self.presets,
 			}, -1)
 
-		self.msgNM=None
+		self.msgNM = None
 
 		if self.new:
 			self.setDefaultPars()
@@ -1234,8 +1247,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		fo.close()
 
 	def createConfig(self):
-		self.list = [ ]
-		dx = 4*' '
+		self.list = []
+		dx = 4 * ' '
 		self.enabled = _("enabled")
 		self.list.append(getConfigListEntry(self.enabled, cfg.enabled))
 		self.localdir = _("local directory")
@@ -1271,9 +1284,9 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self.usedip = dx + _("ip or name")
 			self.list.append(getConfigListEntry(self.usedip, cfg.usedip))
 			if cfg.usedip.value:
-				self.list.append(getConfigListEntry(2*dx + _("ip"), cfg.ip))
+				self.list.append(getConfigListEntry(2 * dx + _("ip"), cfg.ip))
 			else:
-				self.list.append(getConfigListEntry(2*dx + _("name"), cfg.name))
+				self.list.append(getConfigListEntry(2 * dx + _("name"), cfg.name))
 		else:
 			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
 		self.remotedir = _("shared remote directory")
@@ -1311,6 +1324,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self["key_blue"].setText(_("Use preset"))
 		else:
 			self["key_blue"].setText("")
+
 	def createSummary(self):
 		from Screens.Setup import SetupSummary
 		return SetupSummary
@@ -1407,42 +1421,42 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			# parse line
 			for x in parts[1].split(','):
 				if "fstype" in x:
-					cfg.fstype.value=x.split('=')[1]
+					cfg.fstype.value = x.split('=')[1]
 				elif "vers" in x:
-					cfg.smb.value=x.split('=')[1]
+					cfg.smb.value = x.split('=')[1]
 				elif "user" in x:
 					cfg.useduserpass.value = True # rozmyslet!
-					cfg.user.value=x.split('=')[1]
+					cfg.user.value = x.split('=')[1]
 				elif "password" in x:
 					cfg.useduserpass.value = True
-					cfg.passwd.value=x.split('=')[1]
+					cfg.passwd.value = x.split('=')[1]
 				elif "sec" in x:
-					cfg.sec.value=x.split('=')[1]
+					cfg.sec.value = x.split('=')[1]
 				elif "iocharset" in x:
-					cfg.iocharset.value=x.split('=')[1]
+					cfg.iocharset.value = x.split('=')[1]
 				elif "rsize" in x:
-					cfg.rsize.value=x.split('=')[1]
+					cfg.rsize.value = x.split('=')[1]
 				elif "wsize" in x:
-					cfg.wsize.value=x.split('=')[1]
+					cfg.wsize.value = x.split('=')[1]
 				elif "domain" in x:
 					cfg.useddomain.value = True
-					cfg.domain.value=x.split('=')[1]
+					cfg.domain.value = x.split('=')[1]
 				elif x == "rw" or x == "ro":
-					cfg.rw.value=x
+					cfg.rw.value = x
 				elif x == "noperm":
-					cfg.noperm.value=True
+					cfg.noperm.value = True
 				elif x == "noserverino":
-					cfg.noserverino.value=True
+					cfg.noserverino.value = True
 				elif x == "nosuid":
-					cfg.nosuid.value=True
+					cfg.nosuid.value = True
 				elif x == "nodev":
-					cfg.nodev.value=True
+					cfg.nodev.value = True
 				elif x == "soft":
-					cfg.nodev.value=True
+					cfg.nodev.value = True
 				elif x == "intr":
-					cfg.nodev.value=True
+					cfg.nodev.value = True
 				else:
-					rest +=x
+					rest += x
 
 			# dir name
 			d = parts[0].strip()
@@ -1484,7 +1498,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			self.MessageBoxNM(True, _("Wrong file format!"), 5)
 
 	def testIfIP(self, string):
-		if len(string.split('.'))==4:
+		if len(string.split('.')) == 4:
 			return True
 		return False
 
@@ -1503,6 +1517,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			if display and self.session is not None:
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
+
 
 class ManagerAutofsMultiAutoEdit(Screen):
 	skin = """
@@ -1531,12 +1546,12 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" halign="left" valign="center"/>
 		</screen>"""
 
-	def __init__(self, session, name = None):
+	def __init__(self, session, name=None):
 		Screen.__init__(self, session)
 		self.session = session
 		self.name = name
 
-		self["shortcuts"] = ActionMap(["SetupActions","OkCancelActions","ColorActions","MenuActions"],
+		self["shortcuts"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions", "MenuActions"],
 		{
 			"ok": self.keyEdit,
 			"cancel": self.keyCancel,
@@ -1563,7 +1578,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 
 		self["text"] = Label("")
 
-		self.msgNM=None
+		self.msgNM = None
 		self.changes = False
 
 		self.onShown.append(self.setWindowTitle)
@@ -1576,7 +1591,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		if self.name:
 			self.list = []
 			for x in open(self.name, "r"):
-				line = x.replace('\n','').strip()
+				line = x.replace('\n', '').strip()
 				if line:
 					self.list.append((line.split()[0], line))
 			self['list'].setList(self.list)
@@ -1603,7 +1618,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			return
 
 		text = _("Select operation:")
-		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key=="" else key for key in buttons])
+		self.session.openWithCallback(self.menuCallback, ChoiceBox, title=text, list=menu, keys=["dummy" if key == "" else key for key in buttons])
 
 	def menuCallback(self, choice):
 		if choice is None:
@@ -1650,7 +1665,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.session.openWithCallback(callbackErase, MessageBox, _("Really erase record: '%s'?") % name, type=MessageBox.TYPE_YESNO, default=False)
 
 	def backupFile(self, name, ext):
-		os.rename(name, "%s_%s" % (name,ext))
+		os.rename(name, "%s_%s" % (name, ext))
 
 	def saveFile(self, name):
 		fo = open(name, "w")
@@ -1659,7 +1674,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		fo.close()
 
 	def changeItem(self, index, new):
-		self["list"].modifyEntry(index,(new[0], new[1]))
+		self["list"].modifyEntry(index, (new[0], new[1]))
 		self.refreshText()
 
 	def addItem(self, new):
@@ -1672,7 +1687,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.refreshText()
 
 	def keyCancel(self):
-		self.backupFile(self.name,"bak")
+		self.backupFile(self.name, "bak")
 		self.saveFile(self.name)
 		self.close(self.changes)
 
@@ -1684,6 +1699,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			if display and self.session is not None:
 				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
 				self.msgNM.show()
+
 
 class ManagerAutofsPreset(Screen, ConfigListScreen):
 	def __init__(self, session):
@@ -1721,15 +1737,19 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 	def createSummary(self):
 		from Screens.Setup import SetupSummary
 		return SetupSummary
+
 	def setWindowTitle(self):
 		self.setTitle(_("User and password preseting"))
+
 	def save(self):
 		self.keySave()
+
 	def exit(self):
 		self.keyCancel()
 
+
 class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
-	skin="""
+	skin = """
 	<screen name="ManagerAutofsClearBookmarks" position="center,center" size="600,390" title="List of bookmarks">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
@@ -1744,6 +1764,7 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		<widget name="text" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
 	</screen>
 	"""
+
 	def __init__(self, session):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
@@ -1838,17 +1859,19 @@ class ManagerAutofsClearBookmarks(Screen, HelpableScreen):
 		config.movielist.videodirs.load()
 		self.close()
 
+
 class NonModalMessageBoxDialog(Screen):
-	skin="""
+	skin = """
 		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00808080" zPosition="2" flags="wfNoBorder">
 			<widget name="message" position="center,center" size="460,110" font="Regular;20" valign="center" halign="center"/>
 		</screen>
 	"""
+
 	def __init__(self, session, text="", delay=0):
 		Screen.__init__(self, session)
 		self.text = text
 		self.delay = delay
-		self["message"]=Label()
+		self["message"] = Label()
 
 		self.timer = eTimer()
 		self.timer.callback.append(self.timerLoop)
@@ -1865,6 +1888,7 @@ class NonModalMessageBoxDialog(Screen):
 			self.timer.start(1000, True)
 		else:
 			self.session.deleteDialog(self)
+
 
 class useMountAsHDD():
 	def __init__(self):
@@ -1891,14 +1915,17 @@ class useMountAsHDD():
 				os.mkdir(movie)
 			except Exception, ex:
 				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
+
 	def setDefault(self):
 		cfg.hddreplace.value = DEFAULT_HDD
 		cfg.hddreplace.save()
 
+
 makeMountAsHDD = useMountAsHDD()
 
+
 class ManagerAutofsInfo(Screen):
-	skin="""
+	skin = """
 	<screen name="ManagerAutofsInfo" position="fill" title="Info" flags="wfNoBorder" backgroundColor="background">
 		<widget name="old" position="10,15" size="1920,29" font="Regular;25"/>
 		<widget name="new" position="10,45" size="1920,29" font="Regular;25" foregroundColor="green"/>
@@ -1923,13 +1950,13 @@ class ManagerAutofsInfo(Screen):
 		self.onLayoutFinish.append(self.setSize)
 
 	def setSize(self):
-		x,y = self.getLineSize()
-		wsize = (x + 2*10, 3*y)
+		x, y = self.getLineSize()
+		wsize = (x + 2 * 10, 3 * y)
 		self.instance.resize(eSize(*wsize))
-		w,h = self.getScreenSize()
-		wx = (w - wsize[0])/2
-		wy = (h - wsize[1])/2
-		self.instance.move(ePoint(wx,wy))
+		w, h = self.getScreenSize()
+		wx = (w - wsize[0]) / 2
+		wy = (h - wsize[1]) / 2
+		self.instance.move(ePoint(wx, wy))
 
 	def getLineSize(self):
 		self["old"].instance.setNoWrap(1)
@@ -1946,6 +1973,7 @@ class ManagerAutofsInfo(Screen):
 
 	def exit(self):
 		self.close()
+
 
 class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 	def __init__(self, session):
@@ -1972,7 +2000,7 @@ class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 
 		self.list = []
 		self.createConfig()
-		ConfigListScreen.__init__(self, self.list, session, on_change = self.changedEntry)
+		ConfigListScreen.__init__(self, self.list, session, on_change=self.changedEntry)
 		self.onShown.append(self.setWindowTitle)
 
 	def setWindowTitle(self):
@@ -2007,8 +2035,9 @@ class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 	def exit(self):
 		self.close()
 
+
 class ManagerAutofsGetSettings(Screen, HelpableScreen):
-	skin="""
+	skin = """
 	<screen name="ManagerAutofsGetSettings" position="center,center" size="600,390" title="List of setting items">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
@@ -2023,6 +2052,7 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 		<widget name="text" position="5,360" zPosition="2" size="590,25" valign="center" halign="left" font="Regular;22" foregroundColor="white"/>
 	</screen>
 	"""
+
 	def __init__(self, session, ip):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)

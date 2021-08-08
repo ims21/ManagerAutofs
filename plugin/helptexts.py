@@ -8,15 +8,16 @@ from Components.Pixmap import Pixmap
 
 import ui
 
+
 class ManagerAutofsHelp(Screen):
 	skin = """
 	<screen position="center,center" size="660,520" title="ManagerAutofs Help" backgroundColor="#00000000">
 		<ePixmap name="red"    position="0,0"   zPosition="2" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on"/>
 		<ePixmap name="green"  position="140,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on"/>
-		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/> 
+		<ePixmap name="yellow" position="280,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/yellow.png" transparent="1" alphatest="on"/>
 		<ePixmap name="blue"   position="420,0" zPosition="2" size="140,40" pixmap="skin_default/buttons/blue.png" transparent="1" alphatest="on"/>
-		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/> 
-		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/> 
+		<widget name="key_red" position="0,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
+		<widget name="key_green" position="140,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="key_yellow" position="280,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="key_blue" position="420,0" size="140,40" valign="center" halign="center" zPosition="4" foregroundColor="white" font="Regular;22" transparent="1" shadowColor="background" shadowOffset="-2,-2"/>
 		<widget name="HelpText" position="5,50" size="650,441" font="Regular;18" backgroundColor="#00000000" scrollbarMode="showOnDemand"/>
@@ -38,7 +39,7 @@ class ManagerAutofsHelp(Screen):
 
 		self["HelpText"] = ScrollLabel()
 
-		self["Actions"] = ActionMap(["WizardActions","ColorActions"],
+		self["Actions"] = ActionMap(["WizardActions", "ColorActions"],
 			{
 				"back": self.close,
 				"red": self.close,
@@ -55,30 +56,32 @@ class ManagerAutofsHelp(Screen):
 
 	def mode2(self):
 		self["HelpText"].setText(self.mode2txt())
+
 	def mode3(self):
 		self["HelpText"].setText(self.mode3txt())
+
 	def all(self):
 		self["HelpText"].setText(self.prolog() + self.mode1txt() + self.mode2txt() + self.mode3txt() + self.commontxt() + self.modeWintxt())
 
 	def prolog(self):
 		text = _("Install autofs with:  opkg install autofs") + "\n\n"
 		text += _("- then edit:") + "\n\n"
-		text += 4*" " + _("/etc/auto.master file (for this plugin use lines with parameters only!)") + "\n"
-		text += 4*" " + _("/etc/auto.xxxx - as 'xxxx' use any name") + "\n\n"
+		text += 4 * " " + _("/etc/auto.master file (for this plugin use lines with parameters only!)") + "\n"
+		text += 4 * " " + _("/etc/auto.xxxx - as 'xxxx' use any name") + "\n\n"
 		return text
 
 	def mode1txt(self):
 		text = _("%sMode I:%s  (auto.master + one auto.xxxx only)") % self.yellow() + "\n\n"
 		text += _("/etc/auto.master - one record only:") + "\n"
-		text += 4*" " + ("%s/mnt/net /etc/auto.test --ghost%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/mnt/net /etc/auto.test --ghost%s") % self.grey() + "\n"
 		text += _("/etc/auto.test - 'test' used as example:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % self.grey() + "\n"
-		text +=	4*" " + ("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n"
-		text +=	4*" " + ("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%svideo -fstype=cifs,user=root,...,sec=ntlm ://192.168.1.10/hdd%s") % self.grey() + "\n"
+		text += 4 * " " + ("%shdd -fstype=cifs,...,iocharset=utf8,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n"
+		text += 4 * " " + ("%shdd2 -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
 		text += _("All remote directories from all devices will be mounted under '/media/test':") + "\n"
-		text += 4*" " + ("%s/media/test/video%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/test/hdd%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/test/hdd2%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%s/media/test/video%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/media/test/hdd%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/media/test/hdd2%s") % self.grey() + "\n\n"
 		text += _("+ only 2 files for whole work") + "\n"
 		text += _("- it is not very clear what is what") + "\n"
 		text += _("Note: older autofs versions required a mount point as '/mnt/net'") + "\n\n"
@@ -87,20 +90,20 @@ class ManagerAutofsHelp(Screen):
 	def mode2txt(self):
 		text = _("%sMode II:%s  (auto.master + more auto.xxxx files)") % self.yellow() + "\n\n"
 		text += _("auto.master with more records:") + "\n"
-		text += 4*" " + ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/mnt/render /etc/auto.render --ghost%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/mnt/wd /etc/auto.wd --ghost%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%s/mnt/f1 /etc/auto.formuler --ghost%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/mnt/render /etc/auto.render --ghost%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/mnt/wd /etc/auto.wd --ghost%s") % self.grey() + "\n\n"
 		text += _("more auto.xxxx files - each file for one shared directory:") + "\n"
 		text += ("auto.formuler:") + "\n"
-		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.20/hdd%s") % self.grey() + "\n\n"
 		text += ("auto.render:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.1.219/hdd%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%svideo -fstype=cifs,...,sec=ntlm, ://192.168.1.219/hdd%s") % self.grey() + "\n\n"
 		text += ("auto.wd:") + "\n"
-		text += 4*" " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%shdd -fstype=cifs,...,sec=ntlm ://192.168.1.17/hdd%s") % self.grey() + "\n\n"
 		text += _("Each shared directory has own mounpoint under /media:") + "\n"
-		text += 4*" " + ("%s/media/f1/hdd%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/render/video%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/wd/hdd%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%s/media/f1/hdd%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/media/render/video%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/media/wd/hdd%s") % self.grey() + "\n\n"
 		text += _("- more auto.xxxx files") + "\n"
 		text += _("+ very clear what is what") + "\n"
 		text += _("+ can be mounted/umounted independently with uncomment/comment line(s)\nin auto.master or auto.xxxx files") + "\n\n"
@@ -112,13 +115,13 @@ class ManagerAutofsHelp(Screen):
 		text += _("-useful, if one device sharing more directories") + "\n"
 		text += _("-everything else is the same as for II") + "\n\n"
 		text += _("example of auto.synology:") + "\n"
-		text += 4*" " + ("%svideo -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/video%s") % self.grey() + "\n"
-		text += 4*" " + ("%saudio -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/music%s") % self.grey() + "\n\n"
+		text += 4 * " " + ("%svideo -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/video%s") % self.grey() + "\n"
+		text += 4 * " " + ("%saudio -fstype=cifs,...,iocharset=utf8 ://192.168.1.99/music%s") % self.grey() + "\n\n"
 		text += _("then will be mounted as:") + "\n"
-		text += 4*" " + ("...") + "\n"
-		text += 4*" " + ("%s/media/synology/video%s") % self.grey() + "\n"
-		text += 4*" " + ("%s/media/synology/audio%s") % self.grey() + "\n"
-		text += 4*" " + ("...") + "\n"
+		text += 4 * " " + ("...") + "\n"
+		text += 4 * " " + ("%s/media/synology/video%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/media/synology/audio%s") % self.grey() + "\n"
+		text += 4 * " " + ("...") + "\n"
 		text += _("+ can be mounted/umounted independently with uncomment/comment line(s)\nin auto.master or auto.xxxx files") + "\n\n"
 		return text
 
@@ -139,28 +142,28 @@ class ManagerAutofsHelp(Screen):
 		text += _("- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s") % self.grey(3) + "\n"
 		return text
 
-	def yellow(self,n=1):
+	def yellow(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.yC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def grey(self,n=1):
+	def grey(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.greyC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def green(self,n=1):
+	def green(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.gC)
 			ret.append(ui.fC)
 		return tuple(ret)
 
-	def blue(self,n=1):
+	def blue(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.bC)
