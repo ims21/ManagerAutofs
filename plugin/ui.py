@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.02"
+VERSION = "2.03"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -836,7 +836,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			def readBackup():
 				if os.path.exists(BACKUPCFG):
 					file = open(BACKUPCFG, "r")
-					content = file.read()
+					content = file.read().splitlines()
 					file.close()
 					return content
 				self.MessageBoxNM(True, _("File '%s' was created!") % BACKUPCFG, 3)
