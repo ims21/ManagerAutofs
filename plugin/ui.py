@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.03"
+VERSION = "2.04"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -689,7 +689,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			buttons += ["", "green"]
 		menu.append((space + _("Change hostname"), 90, _("Change the hostname of your Receiver.")))
 		buttons += [""]
-		menu.append((space + _("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin")))
+		menu.append((space + _("Open AutoBackup plugin"), 1, _("Runs AutoBackup plugin.")))
 		buttons += ["3"]
 		menu.append((space + _("Reload Bookmarks"), 100, _("Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed.")))
 		buttons += [""]
@@ -1790,18 +1790,18 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 			{
 			"red": (self.exit, _("Close")),
 			"green": (self.deleteSelected, _("Delete selected")),
-			"yellow": (self.sortList, _("Sort list")),
+			"yellow": (self.editCurrent, _("Edit current bookmark")),
 			"blue": (self.list.toggleAllSelection, _("Invert selection")),
-			"info": (self.editCurrent, _("Change current bookmark")),
+			"info": (self.sortList, _("Sort list")),
 			}, -2)
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Delete"))
-		self["key_yellow"] = Button(_("Sort"))
+		self["key_yellow"] = Button(_("Edit"))
 		self["key_blue"] = Button(_("Inversion"))
 
 		self.sort = 0
-		self["text"] = Label(_("Select with 'OK' and then remove with 'Delete'. For change bookmark use 'Info/EPG' on bookmark."))
+		self["text"] = Label(_("Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."))
 		self["config"].onSelectionChanged.append(self.bookmark)
 
 	def loadAllMovielistVideodirs(self):
@@ -1826,12 +1826,15 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		if self.sort == 0:	# z-a
 			self.list.sort(sortType=0, flag=True)
 			self.sort += 1
+			self["text"].setText(_("Sorted from Z to a."))
 		elif self.sort == 1 and len(self.list.getSelectionsList()):	# selected top
 			self.list.sort(sortType=3, flag=True)
 			self.sort += 1
+			self["text"].setText(_("Selected top."))
 		else:			# a-z
 			self.list.sort(sortType=0)
 			self.sort = 0
+			self["text"].setText(_("Sorted from A to z."))
 
 	def deleteSelected(self):
 		if self["config"].getCurrent():

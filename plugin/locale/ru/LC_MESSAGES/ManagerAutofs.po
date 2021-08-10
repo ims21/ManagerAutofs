@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 13:54+0200\n"
-"PO-Revision-Date: 2020-10-30 09:41+0300\n"
+"POT-Creation-Date: 2021-08-10 14:46+0200\n"
+"PO-Revision-Date: 2021-08-10 14:47+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: ../ui.py:801
@@ -181,7 +181,7 @@ msgstr "Добавить следующую строку параметров м
 msgid "Add or remove item of selection"
 msgstr "Добавить или удалить элемент выбора"
 
-#: ../ui.py:2094
+#: ../ui.py:2097
 #, fuzzy
 msgid "Add or remove item to/from selection"
 msgstr "Добавить или удалить элемент выбора"
@@ -208,7 +208,7 @@ msgstr "Все (запись '%s' и ее файл '%s')"
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr "Все удаленные каталоги со всех устройств будут смонтированы в '/media/test':"
 
-#: ../ui.py:1841
+#: ../ui.py:1844
 #, python-format
 msgid "Are You sure to delete %s selected bookmark?"
 msgid_plural "Are You sure to delete %s selected bookmarks?"
@@ -225,7 +225,7 @@ msgstr "Вы уверены, что хотите удалите файл '%s'?"
 msgid "Are you sure to remove selected files?"
 msgstr "Вы действительно хотите удалить выбранные файлы?"
 
-#: ../ui.py:2190
+#: ../ui.py:2193
 #, fuzzy, python-format
 msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
 msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
@@ -267,7 +267,7 @@ msgstr "Сторона Тюнера:"
 msgid "Brief help on how to use autofs."
 msgstr "Краткая справка по использованию autofs."
 
-#: ../removebckp.py:77 ../ui.py:1711 ../ui.py:1798 ../ui.py:2005 ../ui.py:2104
+#: ../removebckp.py:77 ../ui.py:1711 ../ui.py:1798 ../ui.py:2008 ../ui.py:2107
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -280,10 +280,6 @@ msgstr "Отменить '%s' как замену HDD"
 #, python-format
 msgid "Cancel using '%s' as HDD replacement."
 msgstr "Отменить использование '%s' в качестве замены HDD."
-
-#: ../ui.py:1795
-msgid "Change current bookmark"
-msgstr ""
 
 #: ../ui.py:690
 msgid "Change hostname"
@@ -303,8 +299,8 @@ msgid "Clone record with '%s' remote device in 'auto.master' file and create fil
 msgstr "Клонировать запись с удаленного устройства '%s' в файл 'auto.master' и создать файл с параметрами точки монтирования."
 
 #: ../helptexts.py:35 ../ui.py:166 ../ui.py:167 ../ui.py:191 ../ui.py:963
-#: ../ui.py:1202 ../ui.py:1570 ../ui.py:1786 ../ui.py:1791 ../ui.py:2093
-#: ../ui.py:2098
+#: ../ui.py:1202 ../ui.py:1570 ../ui.py:1786 ../ui.py:1791 ../ui.py:2096
+#: ../ui.py:2101
 msgid "Close"
 msgstr "Закрыть"
 
@@ -333,11 +329,11 @@ msgstr "Удалить выбранные"
 msgid "Disable"
 msgstr "Отключить"
 
-#: ../ui.py:2035
+#: ../ui.py:2038
 msgid "Display in description current item value."
 msgstr ""
 
-#: ../ui.py:2035
+#: ../ui.py:2038
 msgid "Displaying values"
 msgstr ""
 
@@ -358,7 +354,7 @@ msgstr "Готово"
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr "Каждый общий каталог имеет собственную точку монтирования в разделе /media:"
 
-#: ../ui.py:1572
+#: ../ui.py:1572 ../ui.py:1800
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -370,7 +366,7 @@ msgstr "Редактировать -"
 msgid "Edit auto file"
 msgstr "Редактировать auto file"
 
-#: ../ui.py:1876
+#: ../ui.py:1879
 #, fuzzy
 msgid "Edit bookmark"
 msgstr "Список закладок"
@@ -379,6 +375,11 @@ msgstr "Список закладок"
 #, fuzzy
 msgid "Edit bookmarks..."
 msgstr "Очистить закладки..."
+
+#: ../ui.py:1793
+#, fuzzy
+msgid "Edit current bookmark"
+msgstr "Список закладок"
 
 #: ../ui.py:369
 #, python-format
@@ -455,11 +456,11 @@ msgstr "Установить autofs с помощью: opkg install autofs"
 msgid "Install required autofs package if missing."
 msgstr "Установите необходимый пакет autofs, если он отсутствует."
 
-#: ../removebckp.py:79 ../ui.py:1801 ../ui.py:2107
+#: ../removebckp.py:79 ../ui.py:1801 ../ui.py:2110
 msgid "Inversion"
 msgstr "Инвертировать"
 
-#: ../ui.py:1794 ../ui.py:2101
+#: ../ui.py:1794 ../ui.py:2104
 msgid "Invert selection"
 msgstr "Инвертировать выбор"
 
@@ -621,7 +622,7 @@ msgstr "Вставить autoname"
 msgid "Put mountpoint name"
 msgstr "Вставить имя точки монтирования"
 
-#: ../ui.py:2006
+#: ../ui.py:2009
 msgid "Read"
 msgstr ""
 
@@ -656,7 +657,7 @@ msgstr "Перезагрузить autofs"
 msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
 msgstr "Перезагрузить карты монтирования autofs. Делается стандартно при каждом выходе плагина, если что-то было изменено."
 
-#: ../ui.py:2034
+#: ../ui.py:2037
 msgid "Remote receiver's IP address"
 msgstr ""
 
@@ -728,15 +729,15 @@ msgstr "Удалите неиспользуемые строки из '%s'?"
 msgid "Restart autofs with GUI restart"
 msgstr "Перезапуск autofs с помощью рестарта GUI"
 
-#: ../ui.py:2034
+#: ../ui.py:2037
 msgid "Running box IP address for use its settings file as source."
 msgstr ""
 
 #: ../ui.py:692
-msgid "Runs AutoBackup plugin"
-msgstr "Запустить плагин AutoBackup"
+msgid "Runs AutoBackup plugin."
+msgstr "Запустить плагин AutoBackup."
 
-#: ../ui.py:2099 ../ui.py:2105
+#: ../ui.py:2102 ../ui.py:2108
 #, fuzzy
 msgid "Save to file"
 msgstr "auto.file"
@@ -750,21 +751,21 @@ msgstr "Выбрать каталог '%s':"
 msgid "Select operation:"
 msgstr "Выберите операцию:"
 
-#: ../ui.py:1804
-#, fuzzy
-msgid "Select with 'OK' and then remove with 'Delete'. For change bookmark use 'Info/EPG' on bookmark."
-msgstr "Выберите с помощью 'ОК' и затем удалите с помощью 'Удалить'."
-
-#: ../ui.py:2110
+#: ../ui.py:2113
 #, fuzzy
 msgid "Select with 'OK' or use 'Inverse'."
 msgstr "Выберите с помощью 'ОК' и затем удалите с помощью 'Удалить'."
 
-#: ../ui.py:2082
+#: ../ui.py:1833
+#, fuzzy
+msgid "Selected top."
+msgstr "Выберите операцию:"
+
+#: ../ui.py:2085
 msgid "Settings items list"
 msgstr ""
 
-#: ../ui.py:2003
+#: ../ui.py:2006
 msgid "Setup source with settings"
 msgstr ""
 
@@ -772,13 +773,21 @@ msgstr ""
 msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
 msgstr "Иногда требуется перезапуск autofs deamon и GUI. Используйте эту опцию и затем дождитесь завершения и рестарта GUI."
 
-#: ../ui.py:1800 ../ui.py:2106
+#: ../ui.py:2109
 msgid "Sort"
 msgstr "Сортировать"
 
-#: ../ui.py:1793 ../ui.py:2100
+#: ../ui.py:1795 ../ui.py:2103
 msgid "Sort list"
 msgstr "Сортировать список"
+
+#: ../ui.py:1837
+msgid "Sorted from A to z."
+msgstr ""
+
+#: ../ui.py:1829
+msgid "Sorted from Z to a."
+msgstr ""
 
 #: ../ui.py:1733
 msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
@@ -802,7 +811,11 @@ msgstr "Обновление точек монтирования и заклад
 msgid "Use '%s' as HDD replacement"
 msgstr "Использовать '%s' в качестве замены HDD"
 
-#: ../ui.py:2032
+#: ../ui.py:1804
+msgid "Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."
+msgstr ""
+
+#: ../ui.py:2035
 msgid "Use local '/etc/enigma/settings' file as source."
 msgstr ""
 
@@ -810,7 +823,7 @@ msgstr ""
 msgid "Use preset"
 msgstr "Использовать предустановку"
 
-#: ../ui.py:2031
+#: ../ui.py:2034
 msgid "Use this receiver"
 msgstr ""
 
