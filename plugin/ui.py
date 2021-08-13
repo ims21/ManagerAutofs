@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.04"
+VERSION = "2.05"
 #
 #  Coded by ims (c) 2017-2021
 #  Support: openpli.org
@@ -595,7 +595,22 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.saveFile(name, text)
 				self.addItem(add)
 		data = ""
-		self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+		if os.path.exists(name): # old auto.file exists and user accepted to use it
+			lines = self.getAutoLines(name)
+			data = ""
+			if lines == 1:		# single line
+				line = open(name, "r").readline()
+				data = line.replace('\n', '').strip()
+				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
+			elif lines > 1:		# multi
+				def stringChanged(changed=False):
+					self.changes = True
+					self.addItem(add) # - added record to master file
+				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
+			else:			# empty
+				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+		else:
+			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
 
 	def editAutofile(self):
 		def callBackSingle(name, data="", text=""):
@@ -1036,6 +1051,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.timeouttime.value = cfg.timeouttime.default
 
 	def preparedAsDisabled(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
+		cfg.enabled.value = False
 		cfg.ghost.value = False
 		cfg.timeout.value = False
 
@@ -1101,8 +1117,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		if af != self.inputAutoFile:
 			if os.path.exists(af):
 				def callBackUse(old_autofile, change=False):
-					if not change: # set back original auto.name
-						cfg.autofile.value = self.inputAutoFile.split('.')[1]
+					if not change: # back to name input
 						return
 					self.mountPointTest()
 				self.session.openWithCallback(boundFunction(callBackUse, af), MessageBox, _("Do You want use existing '%s' file?\nIf not then change auto.name.") % (af), type=MessageBox.TYPE_YESNO, default=False)
