@@ -1834,22 +1834,20 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 	def bookmark(self):
 		item = self["config"].getCurrent()
 		if item:
-			text = "%s" % item[0][0]
-			self["text"].setText(text)
+			self["text"].setText("%s" % item[0][0])
+		self["key_yellow"].setText(_("Edit") if len(self.list.getSelectionsList()) <= 1 else "")
 
 	def sortList(self):
 		if self.sort == 0:	# z-a
 			self.list.sort(sortType=0, flag=True)
 			self.sort += 1
-			self["text"].setText(_("Sorted from Z to a."))
 		elif self.sort == 1 and len(self.list.getSelectionsList()):	# selected top
 			self.list.sort(sortType=3, flag=True)
 			self.sort += 1
-			self["text"].setText(_("Selected top."))
 		else:			# a-z
 			self.list.sort(sortType=0)
 			self.sort = 0
-			self["text"].setText(_("Sorted from A to z."))
+		self["text"].setText(_("Sorted from Z to A.") if self.sort == 1 else _("Selected top.") if self.sort == 2 else _("Sorted from A to Z."))
 
 	def deleteSelected(self):
 		if self["config"].getCurrent():

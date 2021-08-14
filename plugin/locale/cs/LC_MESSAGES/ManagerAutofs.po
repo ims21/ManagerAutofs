@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 14:46+0200\n"
-"PO-Revision-Date: 2021-08-10 14:46+0200\n"
+"POT-Creation-Date: 2021-08-14 17:12+0200\n"
+"PO-Revision-Date: 2021-08-14 17:13+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: ../ui.py:801
+#: ../ui.py:816
 #, python-format
 msgid "%s as /hdd"
 msgstr "%s jako /hdd"
@@ -53,7 +53,7 @@ msgstr "'%s' byl odstraněn"
 msgid "'%s' was renamed to '%s'"
 msgstr "'%s' přejmenován na '%s'"
 
-#: ../ui.py:785
+#: ../ui.py:800
 #, python-format
 msgid "'%s.auto' has wrong format or is empty!"
 msgstr "'%s.auto' má neplatný formát nebo je prázdný!"
@@ -144,7 +144,7 @@ msgstr "/etc/auto.test - 'test' použit jako příklad:"
 msgid "/etc/auto.xxxx - as 'xxxx' use any name"
 msgstr "/etc/auto.xxxx - jako 'xxxx' použijte nějaké jméno"
 
-#: ../ui.py:1571
+#: ../ui.py:1586
 msgid "Add"
 msgstr "Přidat"
 
@@ -152,7 +152,7 @@ msgstr "Přidat"
 msgid "Add into extended menu"
 msgstr "Přidat do Extended menu"
 
-#: ../ui.py:1613
+#: ../ui.py:1628
 msgid "Add line"
 msgstr "Přidat řádek"
 
@@ -168,7 +168,7 @@ msgstr "Přidat bod připojení"
 msgid "Add new record to 'auto.master' file."
 msgstr "Přidání nového řádku do souboru 'auto.master'."
 
-#: ../ui.py:1613
+#: ../ui.py:1628
 msgid "Add next line with mountpoint parameters."
 msgstr "Přidání dalšího řádku s parametry připojení."
 
@@ -177,11 +177,11 @@ msgstr "Přidání dalšího řádku s parametry připojení."
 msgid "Add next mountpoint parameters line to '%s' for existing '%s' remote device."
 msgstr "Přidá další řádek s parametry připojení do '%s' pro existující vzdálené zařízení '%s'."
 
-#: ../ui.py:1787
+#: ../ui.py:1802
 msgid "Add or remove item of selection"
 msgstr "Přidat nebo odebrat položku z výběru"
 
-#: ../ui.py:2097
+#: ../ui.py:2110
 msgid "Add or remove item to/from selection"
 msgstr "Přidat nebo odebrat položku z/do výběru"
 
@@ -207,7 +207,7 @@ msgstr "Vše (řádek '%s' a soubor '%s')"
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr "Všechny vzdálené adresáře ze všech zařízení budou připojeny pod '/media/test':"
 
-#: ../ui.py:1844
+#: ../ui.py:1857
 #, python-format
 msgid "Are You sure to delete %s selected bookmark?"
 msgid_plural "Are You sure to delete %s selected bookmarks?"
@@ -224,7 +224,7 @@ msgstr "Opravdu smazat soubor: '%s'?"
 msgid "Are you sure to remove selected files?"
 msgstr "Chcete odstranit vybrané soubory?"
 
-#: ../ui.py:2193
+#: ../ui.py:2206
 #, python-format
 msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
 msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
@@ -250,11 +250,11 @@ msgstr ""
 "Auto.name byl změněn.\n"
 "Chcete přejmenovat původní '%s' na '%s'?"
 
-#: ../ui.py:908
+#: ../ui.py:923
 msgid "Autofs is not installed!"
 msgstr "Autofs není nainstalován!"
 
-#: ../ui.py:663
+#: ../ui.py:678
 msgid "Automaticaly add valid autofs files to /etc/backup.cfg file used by AutoBackup plugin."
 msgstr "Automaticky přidá platné autofs soubory do souboru /etc/backup.cfg, který používá AutoBackup plugin."
 
@@ -266,29 +266,29 @@ msgstr "Strana přijímače:"
 msgid "Brief help on how to use autofs."
 msgstr "Stručná nápověda k používání autofs."
 
-#: ../removebckp.py:77 ../ui.py:1711 ../ui.py:1798 ../ui.py:2008 ../ui.py:2107
+#: ../removebckp.py:77 ../ui.py:1726 ../ui.py:1813 ../ui.py:2021 ../ui.py:2120
 msgid "Cancel"
 msgstr "Zavřít"
 
-#: ../ui.py:684
+#: ../ui.py:699
 #, python-format
 msgid "Cancel '%s' as HDD replacement"
 msgstr "Zrušit '%s' jako náhradu HDD"
 
-#: ../ui.py:684
+#: ../ui.py:699
 #, python-format
 msgid "Cancel using '%s' as HDD replacement."
 msgstr "Zrušit používání '%s' jako náhrady HDD."
 
-#: ../ui.py:690
+#: ../ui.py:705
 msgid "Change hostname"
 msgstr "Změna názvu v síti"
 
-#: ../ui.py:690
+#: ../ui.py:705
 msgid "Change the hostname of your Receiver."
 msgstr "Změna názvu Vašeho přijímače v síti."
 
-#: ../ui.py:694
+#: ../ui.py:709
 msgid "Check bookmarks with current mountpoints. It is made standardly on each plugin exit if something was changed."
 msgstr "Zkontroluje záložky a aktuální připojení. Provádí se automaticky při každém ukončení pluginu, jestliže bylo něco změněno."
 
@@ -297,13 +297,13 @@ msgstr "Zkontroluje záložky a aktuální připojení. Provádí se automaticky
 msgid "Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal."
 msgstr "Naklonování záznamu se vzdáleným zařízením '%s' v 'auto.master' souboru a zároveň vytvoření souboru s parametry připojení."
 
-#: ../helptexts.py:35 ../ui.py:166 ../ui.py:167 ../ui.py:191 ../ui.py:963
-#: ../ui.py:1202 ../ui.py:1570 ../ui.py:1786 ../ui.py:1791 ../ui.py:2096
-#: ../ui.py:2101
+#: ../helptexts.py:35 ../ui.py:166 ../ui.py:167 ../ui.py:191 ../ui.py:978
+#: ../ui.py:1217 ../ui.py:1585 ../ui.py:1801 ../ui.py:1806 ../ui.py:2109
+#: ../ui.py:2114
 msgid "Close"
 msgstr "Zavřít"
 
-#: ../ui.py:698
+#: ../ui.py:713
 msgid "Create 'settings' file from selected receiver."
 msgstr "Vytvoření souboru nastavení z vybraného přijímače."
 
@@ -311,15 +311,15 @@ msgstr "Vytvoření souboru nastavení z vybraného přijímače."
 msgid "Create new record from:"
 msgstr "Vytvořit nový záznam z:"
 
-#: ../ui.py:698
+#: ../ui.py:713
 msgid "Create settings file..."
 msgstr "Vytvořit soubor nastavení..."
 
-#: ../ui.py:1799
+#: ../ui.py:1814
 msgid "Delete"
 msgstr "Odstranit"
 
-#: ../ui.py:1792
+#: ../ui.py:1807
 msgid "Delete selected"
 msgstr "Smazat vybrané"
 
@@ -327,15 +327,15 @@ msgstr "Smazat vybrané"
 msgid "Disable"
 msgstr "Zakázat"
 
-#: ../ui.py:2038
+#: ../ui.py:2051
 msgid "Display in description current item value."
 msgstr "V popisu se budou zobrazovat hodnoty aktuálních položek."
 
-#: ../ui.py:2038
+#: ../ui.py:2051
 msgid "Displaying values"
 msgstr "Zobrazovat hodnoty"
 
-#: ../ui.py:1108
+#: ../ui.py:1123
 #, python-format
 msgid ""
 "Do You want use existing '%s' file?\n"
@@ -344,7 +344,7 @@ msgstr ""
 "Chcete použít existující soubor '%s'?\n"
 "Jestliže ne, změňte auto.name."
 
-#: ../ui.py:425 ../ui.py:853 ../ui.py:886
+#: ../ui.py:425 ../ui.py:868 ../ui.py:901
 msgid "Done"
 msgstr "Dokončeno"
 
@@ -352,7 +352,7 @@ msgstr "Dokončeno"
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr "Každý sdílený adresář má vlastní připojení pod /media:"
 
-#: ../ui.py:1572 ../ui.py:1800
+#: ../ui.py:1587 ../ui.py:1815 ../ui.py:1838
 msgid "Edit"
 msgstr "Upravit"
 
@@ -364,15 +364,15 @@ msgstr "Upravit -"
 msgid "Edit auto file"
 msgstr "Upravit auto soubor"
 
-#: ../ui.py:1879
+#: ../ui.py:1892
 msgid "Edit bookmark"
 msgstr "Upravte záložku"
 
-#: ../ui.py:696
+#: ../ui.py:711
 msgid "Edit bookmarks..."
 msgstr "Upravit záložky..."
 
-#: ../ui.py:1793
+#: ../ui.py:1808
 msgid "Edit current bookmark"
 msgstr "Upravit aktuální záložku"
 
@@ -381,11 +381,11 @@ msgstr "Upravit aktuální záložku"
 msgid "Edit file '%s' with mountpoint parameters for existing '%s' remote device."
 msgstr "Úprava souboru '%s' s parametry připojení pro existující vzdálené zařízení '%s'."
 
-#: ../ui.py:1612
+#: ../ui.py:1627
 msgid "Edit line"
 msgstr "Upravit řádek"
 
-#: ../ui.py:1612
+#: ../ui.py:1627
 msgid "Edit line with mountpoint parameters."
 msgstr "Úprava řádku s parametry připojení."
 
@@ -414,11 +414,11 @@ msgstr "Povolit/zakázat bod připojení"
 msgid "Enable/disable moving item"
 msgstr "Povolit/zakázat přesun položky"
 
-#: ../ui.py:817
+#: ../ui.py:832
 msgid "Enter new hostname for your Receiver"
 msgstr "Zadejte sítový název Vašeho přijímače"
 
-#: ../ui.py:1573
+#: ../ui.py:1588
 msgid "Erase"
 msgstr "Odstranit"
 
@@ -426,12 +426,12 @@ msgstr "Odstranit"
 msgid "Failed"
 msgstr "Chyba"
 
-#: ../ui.py:842
+#: ../ui.py:857
 #, python-format
 msgid "File '%s' was created!"
 msgstr "Soubor '%s' byl založen!"
 
-#: ../ui.py:828
+#: ../ui.py:843
 msgid "For apply new hostname restart box!"
 msgstr "Změna se projeví až po restartu přijímače!"
 
@@ -439,7 +439,7 @@ msgstr "Změna se projeví až po restartu přijímače!"
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../ui.py:670
+#: ../ui.py:685
 msgid "Install autofs"
 msgstr "Nainstalovat autofs"
 
@@ -447,19 +447,19 @@ msgstr "Nainstalovat autofs"
 msgid "Install autofs with:  opkg install autofs"
 msgstr "Nainstalujte autofs příkazem:  opkg install autofs"
 
-#: ../ui.py:670
+#: ../ui.py:685
 msgid "Install required autofs package if missing."
 msgstr "Instaluje požadovaný balíček autofs, jestliže chybí."
 
-#: ../removebckp.py:79 ../ui.py:1801 ../ui.py:2110
+#: ../removebckp.py:79 ../ui.py:1816 ../ui.py:2123
 msgid "Inversion"
 msgstr "Inverze"
 
-#: ../ui.py:1794 ../ui.py:2104
+#: ../ui.py:1809 ../ui.py:2117
 msgid "Invert selection"
 msgstr "Inverze výběru"
 
-#: ../ui.py:1774
+#: ../ui.py:1789
 msgid "List of bookmarks"
 msgstr "Seznam záložek"
 
@@ -471,21 +471,21 @@ msgstr "Upravuje soubory Autofs a připojení"
 msgid "Manager Autofs"
 msgstr "Manager Autofs"
 
-#: ../ui.py:955
+#: ../ui.py:970
 msgid "Manager Autofs - create new record"
 msgstr "Manager Autofs - založení nového záznamu"
 
-#: ../ui.py:1195
+#: ../ui.py:1210
 #, python-format
 msgid "Manager Autofs - edited autofile/record: %s"
 msgstr "Manager Autofs - upravovaný soubor/řádek: %s"
 
-#: ../ui.py:951
+#: ../ui.py:966
 #, python-format
 msgid "Manager Autofs - edited record: %s"
 msgstr "Manager Autofs - upravovaný záznam: %s"
 
-#: ../ui.py:1588
+#: ../ui.py:1603
 #, python-format
 msgid "Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s"
 msgstr "Manager Autofs - pro úpravu stiskněte %sUpravit%s nebo %sOK%s nebo použijte %sMenu%s"
@@ -499,7 +499,7 @@ msgstr "Manager Autofs v.%s - stiskněte %sOK%s na řádku nebo použijte %sMenu
 msgid "Menu"
 msgstr "Menu"
 
-#: ../ui.py:888
+#: ../ui.py:903
 msgid "Missing '/etc/backup.cfg'"
 msgstr "Chybějící '/etc/backup.cfg'"
 
@@ -515,7 +515,7 @@ msgstr "Mód III"
 msgid "Mountpoint"
 msgstr "Bod připojení"
 
-#: ../ui.py:1120
+#: ../ui.py:1135
 #, python-format
 msgid "Mountpoint name '%s' is used!"
 msgstr "Název bodu připojení '%s' je již použitý!"
@@ -528,7 +528,7 @@ msgstr "Přesun položky dolů"
 msgid "Move item up"
 msgstr "Přesun položky nahoru"
 
-#: ../ui.py:1656
+#: ../ui.py:1671
 msgid "New"
 msgstr "Nový"
 
@@ -536,7 +536,7 @@ msgstr "Nový"
 msgid "New record"
 msgstr "Nový záznam"
 
-#: ../ui.py:672
+#: ../ui.py:687
 msgid "Next items are not needed standardly:"
 msgstr "Následující položky nejsou standardně potřeba:"
 
@@ -544,7 +544,7 @@ msgstr "Následující položky nejsou standardně potřeba:"
 msgid "Next utilities."
 msgstr "Další nástroje."
 
-#: ../ui.py:1617
+#: ../ui.py:1632
 msgid "No valid item"
 msgstr "Neplatná položka"
 
@@ -560,11 +560,11 @@ msgstr "Pozn.: starší verze autofs vyžadovaly mount point jako '/mnt/net'"
 msgid "Nothing"
 msgstr "Nic"
 
-#: ../ui.py:964 ../ui.py:1203 ../ui.py:1712
+#: ../ui.py:979 ../ui.py:1218 ../ui.py:1727
 msgid "OK"
 msgstr "OK"
 
-#: ../ui.py:692
+#: ../ui.py:707
 msgid "Open AutoBackup plugin"
 msgstr "Otevřít AutoBackup plugin"
 
@@ -572,36 +572,36 @@ msgstr "Otevřít AutoBackup plugin"
 msgid "PC side:"
 msgstr "Strana PC:"
 
-#: ../ui.py:903
+#: ../ui.py:918
 msgid "Please wait for restart GUI!"
 msgstr "Počkejte na dokončení restartu GUI!"
 
-#: ../ui.py:758
+#: ../ui.py:773
 #, python-format
 msgid "Point '%s' is not mounted!"
 msgstr "Bod '%s' není připojen!"
 
-#: ../ui.py:1729
+#: ../ui.py:1744
 msgid "Preset account password value."
 msgstr "Přednastavená hodnota hesla účtu."
 
-#: ../ui.py:1730
+#: ../ui.py:1745
 msgid "Preset account values will be or will not be saved on plugin exit."
 msgstr "Přednastavené hodnoty pro připojení budou nebo nebudou při ukončení pluginu ukládány."
 
-#: ../ui.py:1728
+#: ../ui.py:1743
 msgid "Preset username account value."
 msgstr "Přednastavená hodnota uživatelského jména."
 
-#: ../ui.py:1731
+#: ../ui.py:1746
 msgid "Preset value for local directory."
 msgstr "Přednastavená hodnota pro místní adresář."
 
-#: ../ui.py:1732
+#: ../ui.py:1747
 msgid "Preset value for shared remote directory."
 msgstr "Přednastavená hodnota pro sdílený vzdálený adresář."
 
-#: ../ui.py:701
+#: ../ui.py:716
 msgid "Presetting input values..."
 msgstr "Přednastavené vstupní hodnoty..."
 
@@ -609,28 +609,28 @@ msgstr "Přednastavené vstupní hodnoty..."
 msgid "Press 'Remove' on file or mark files with OK and then use 'Remove'"
 msgstr "Stiskněte 'Odstranit' na souboru nebo označte soubory pomocí 'OK' a poté použijte tlačítko 'Odstranit'"
 
-#: ../ui.py:1046 ../ui.py:1069
+#: ../ui.py:1062 ../ui.py:1085
 msgid "Put autoname"
 msgstr "Vložit auto.name"
 
-#: ../ui.py:1048 ../ui.py:1071
+#: ../ui.py:1064 ../ui.py:1087
 msgid "Put mountpoint name"
 msgstr "Vložit bod připojení"
 
-#: ../ui.py:2009
+#: ../ui.py:2022
 msgid "Read"
 msgstr "Načíst"
 
-#: ../ui.py:1665
+#: ../ui.py:1680
 #, python-format
 msgid "Really erase record: '%s'?"
 msgstr "Opravdu smazat řádek: '%s'?"
 
-#: ../ui.py:730
+#: ../ui.py:745
 msgid "Really reload autofs and restart GUI?"
 msgstr "Skutečně reload autofs a restartovat enigma?"
 
-#: ../ui.py:657
+#: ../ui.py:672
 #, python-format
 msgid "Really remove autofile '%s'?"
 msgstr "Opravdu smazat soubor: '%s'?"
@@ -640,19 +640,19 @@ msgstr "Opravdu smazat soubor: '%s'?"
 msgid "Record '%s' only"
 msgstr "Pouze řádek '%s'"
 
-#: ../ui.py:694
+#: ../ui.py:709
 msgid "Reload Bookmarks"
 msgstr "Aktualizovat záložky"
 
-#: ../ui.py:687
+#: ../ui.py:702
 msgid "Reload autofs"
 msgstr "Reload autofs"
 
-#: ../ui.py:687
+#: ../ui.py:702
 msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
 msgstr "Provede 'autofs reload', neboli aktualizaci map připojení. Standardně se provádí při každém ukončení pluginu, jestliže bylo něco změněno."
 
-#: ../ui.py:2037
+#: ../ui.py:2050
 msgid "Remote receiver's IP address"
 msgstr "IP adresa vzdáleného přijímače"
 
@@ -664,7 +664,7 @@ msgstr "Smazat"
 msgid "Remove -"
 msgstr "Odstranit -"
 
-#: ../removebckp.py:53 ../ui.py:667
+#: ../removebckp.py:53 ../ui.py:682
 msgid "Remove backup files"
 msgstr "Odstranit záložní soubory"
 
@@ -677,15 +677,15 @@ msgstr "Odstraní soubor '%s' s parametry připojení pro existující vzdálen�
 msgid "Remove from extended menu"
 msgstr "Odebrat z Extended menu"
 
-#: ../ui.py:1614
+#: ../ui.py:1629
 msgid "Remove line"
 msgstr "Odstranit řádek"
 
-#: ../ui.py:1614
+#: ../ui.py:1629
 msgid "Remove line with mountpoint parameters."
 msgstr "Odstranění řádku s parametry připojení."
 
-#: ../ui.py:696
+#: ../ui.py:711
 msgid "Remove or edit bookmarks."
 msgstr "Odstranění nebo úprava záložek."
 
@@ -702,95 +702,94 @@ msgstr "Odstranění záznamu pro vzálené zařízení '%s' ze souboru 'auto.ma
 msgid "Remove record:"
 msgstr "Odstranit záznam:"
 
-#: ../ui.py:667
+#: ../ui.py:682
 msgid "Remove selected backup files created when editing autofs files."
 msgstr "Odstranění vybraných záložních souborů, které se vytvořily při úpravách autofs souborů."
 
-#: ../ui.py:664
+#: ../ui.py:679
 msgid "Remove unused autofs files from /etc/backup.cfg file."
 msgstr "Odstranění nepoužívaných autofs souborů z /etc/backup.cfg."
 
-#: ../ui.py:664
+#: ../ui.py:679
 msgid "Remove unused autofs files in AutoBackup"
 msgstr "Odstranit nepoužívané autofs soubory z AutoBackup"
 
-#: ../ui.py:890
+#: ../ui.py:905
 #, python-format
 msgid "Remove unused lines from '%s'?"
 msgstr "Odstranit nepoužívané soubory z '%s'?"
 
-#: ../ui.py:688
+#: ../ui.py:703
 msgid "Restart autofs with GUI restart"
 msgstr "Restartovat autofs a enigma"
 
-#: ../ui.py:2037
+#: ../ui.py:2050
 msgid "Running box IP address for use its settings file as source."
 msgstr "IP adresa vzdáleného přijímače použitého pro získání souboru nastavení."
 
-#: ../ui.py:692
-#, fuzzy
+#: ../ui.py:707
 msgid "Runs AutoBackup plugin."
 msgstr "Spuštění AutoBackup pluginu k provedení zálohy."
 
-#: ../ui.py:2102 ../ui.py:2108
+#: ../ui.py:2115 ../ui.py:2121
 msgid "Save to file"
 msgstr "Uložit do souboru"
 
-#: ../ui.py:776
+#: ../ui.py:791
 #, python-format
 msgid "Select '%s' directory:"
 msgstr "Zvolte '%s' adresář:"
 
-#: ../ui.py:386 ../ui.py:703 ../ui.py:1620
+#: ../ui.py:386 ../ui.py:718 ../ui.py:1635
 msgid "Select operation:"
 msgstr "Zvolte operaci:"
 
-#: ../ui.py:2113
+#: ../ui.py:2126
 msgid "Select with 'OK' or use 'Inverse'."
 msgstr "Označujte pomocí 'OK' nebo pomocí 'Inverze'."
 
-#: ../ui.py:1833
+#: ../ui.py:1850
 msgid "Selected top."
 msgstr "Označené nahoře."
 
-#: ../ui.py:2085
+#: ../ui.py:2098
 msgid "Settings items list"
 msgstr "Seznam položek nastavení"
 
-#: ../ui.py:2006
+#: ../ui.py:2019
 msgid "Setup source with settings"
 msgstr "Výběr zdroje s nastavením"
 
-#: ../ui.py:688
+#: ../ui.py:703
 msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
 msgstr "Někdy je potřeba restartovat autofs daemon zároveň s restartem uživatelského rozhraní. K tomu použijte tuto volbu a poté čekejte na spuštění a dokončení restartu systému."
 
-#: ../ui.py:2109
+#: ../ui.py:2122
 msgid "Sort"
 msgstr "Třídění"
 
-#: ../ui.py:1795 ../ui.py:2103
+#: ../ui.py:1810 ../ui.py:2116
 msgid "Sort list"
 msgstr "Setřídit seznam"
 
-#: ../ui.py:1837
-msgid "Sorted from A to z."
-msgstr "Setříděno od A do z."
+#: ../ui.py:1850
+msgid "Sorted from A to Z."
+msgstr "Setříděno od A do Z."
 
-#: ../ui.py:1829
-msgid "Sorted from Z to a."
-msgstr "Setříděno od Z do a."
+#: ../ui.py:1850
+msgid "Sorted from Z to A."
+msgstr "Setříděno od Z do A."
 
-#: ../ui.py:1733
+#: ../ui.py:1748
 msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
 msgstr "Testuje povolené body připojení při startu pluginu, ale prodlouží dobu spouštění pluginu."
 
-#: ../ui.py:855
+#: ../ui.py:870
 #, python-format
 msgid "Update AutoBackup's '%s'?"
 msgstr "Aktualizovat AutoBackup '%s'?"
 
-#: ../ui.py:663
+#: ../ui.py:678
 msgid "Update autofs files in AutoBackup"
 msgstr "Aktualizovat autofs soubory v AutoBackup"
 
@@ -798,28 +797,28 @@ msgstr "Aktualizovat autofs soubory v AutoBackup"
 msgid "Updating mountpoints and bookmarks..."
 msgstr "Aktualizují se body připojení a záložky..."
 
-#: ../ui.py:680
+#: ../ui.py:695
 #, python-format
 msgid "Use '%s' as HDD replacement"
 msgstr "Použít '%s' jako náhradu HDD"
 
-#: ../ui.py:1804
+#: ../ui.py:1819
 msgid "Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."
 msgstr "Použijte 'OK' pro označení více záložek. Seznam lze třídit pomocí 'Info/Epg'."
 
-#: ../ui.py:2035
+#: ../ui.py:2048
 msgid "Use local '/etc/enigma/settings' file as source."
 msgstr "Jako zdrojový soubor se použije místní '/etc/enigma/settings'."
 
-#: ../ui.py:1324
+#: ../ui.py:1339
 msgid "Use preset"
 msgstr "Použít přednastavené"
 
-#: ../ui.py:2034
+#: ../ui.py:2047
 msgid "Use this receiver"
 msgstr "Použít tento přijímač"
 
-#: ../ui.py:1709 ../ui.py:1742
+#: ../ui.py:1724 ../ui.py:1757
 msgid "User and password preseting"
 msgstr "Přednastavení přístupových údajů"
 
@@ -831,20 +830,20 @@ msgstr "Nástroje"
 msgid "What all do You want to remove?"
 msgstr "Co všechno si přejete odstranit?"
 
-#: ../ui.py:1498
+#: ../ui.py:1513
 msgid "Wrong file format!"
 msgstr "Chybný formát souboru!"
 
-#: ../ui.py:700
+#: ../ui.py:715
 msgid "You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit."
 msgstr "Před zakládáním více 'auto.file' souborů můžete přednastavit několik zadávaných hodnot. Hodnoty mohou být poté vkládány pomocí modrého tlačítka na aktuální položce. Přednastavené hodnoty pro připojení mohou být při ukončení pluginu smazány."
 
-#: ../ui.py:680
+#: ../ui.py:695
 #, python-format
 msgid "You can use current mountpoint '%s' as HDD replacement."
 msgstr "Můžete použít aktuální přístupový bod '%s' jako náhradu HDD."
 
-#: ../ui.py:1098
+#: ../ui.py:1114
 msgid "You cannot use 'master' in auto.file name"
 msgstr "Nelze použít 'master' v názvu auto.name"
 
@@ -856,23 +855,23 @@ msgstr "Soubor auto"
 msgid "auto.master with more records:"
 msgstr "auto.master s více řádky:"
 
-#: ../ui.py:1001
+#: ../ui.py:1016
 msgid "auto.name"
 msgstr "auto.name"
 
-#: ../ui.py:1291
+#: ../ui.py:1306
 msgid "dev"
 msgstr "dev"
 
-#: ../ui.py:1269
+#: ../ui.py:1284
 msgid "domain"
 msgstr "doména"
 
-#: ../ui.py:1272
+#: ../ui.py:1287
 msgid "domain name"
 msgstr "domain name"
 
-#: ../ui.py:998 ../ui.py:1252
+#: ../ui.py:1013 ../ui.py:1267
 msgid "enabled"
 msgstr "povolen"
 
@@ -880,31 +879,31 @@ msgstr "povolen"
 msgid "example of auto.synology:"
 msgstr "příklad pro auto.synology:"
 
-#: ../ui.py:1256
+#: ../ui.py:1271
 msgid "fstype"
 msgstr "fstype"
 
-#: ../ui.py:1003
+#: ../ui.py:1018
 msgid "ghost"
 msgstr "ghost"
 
-#: ../ui.py:1260
+#: ../ui.py:1275
 msgid "intr"
 msgstr "fstype"
 
-#: ../ui.py:1279
+#: ../ui.py:1294
 msgid "iocharset"
 msgstr "iocharset"
 
-#: ../ui.py:1287
+#: ../ui.py:1302
 msgid "ip"
 msgstr "IP"
 
-#: ../ui.py:1284
+#: ../ui.py:1299
 msgid "ip or name"
 msgstr "IP nebo název"
 
-#: ../ui.py:1254 ../ui.py:1731
+#: ../ui.py:1269 ../ui.py:1746
 msgid "local directory"
 msgstr "místní adresář"
 
@@ -912,68 +911,68 @@ msgstr "místní adresář"
 msgid "more auto.xxxx files - each file for one shared directory:"
 msgstr "více souborů auto.xxxx - každý soubor pro jedno připojení:"
 
-#: ../ui.py:999
+#: ../ui.py:1014
 msgid "mountpoint name"
 msgstr "bod připojení"
 
-#: ../ui.py:1289
+#: ../ui.py:1304
 msgid "name"
 msgstr "název"
 
-#: ../ui.py:1140 ../ui.py:1143 ../ui.py:1156 ../ui.py:1157 ../ui.py:1158
-#: ../ui.py:1159 ../ui.py:1165 ../ui.py:1168
+#: ../ui.py:1155 ../ui.py:1158 ../ui.py:1171 ../ui.py:1172 ../ui.py:1173
+#: ../ui.py:1174 ../ui.py:1180 ../ui.py:1183
 msgid "no"
 msgstr "ne"
 
-#: ../ui.py:1276
+#: ../ui.py:1291
 msgid "nodev"
 msgstr "nodev"
 
-#: ../ui.py:1273
+#: ../ui.py:1288
 msgid "noperm"
 msgstr "noperm"
 
-#: ../ui.py:1274
+#: ../ui.py:1289
 msgid "noserverino"
 msgstr "noserverino"
 
-#: ../ui.py:1275
+#: ../ui.py:1290
 msgid "nosuid"
 msgstr "nosuid"
 
-#: ../ui.py:1265 ../ui.py:1729
+#: ../ui.py:1280 ../ui.py:1744
 msgid "password"
 msgstr "heslo"
 
-#: ../ui.py:1277
+#: ../ui.py:1292
 msgid "rsize"
 msgstr "rsize"
 
-#: ../ui.py:1261
+#: ../ui.py:1276
 msgid "rw/ro"
 msgstr "rw/ro"
 
-#: ../ui.py:1730
+#: ../ui.py:1745
 msgid "save preset account values"
 msgstr "ukládat přednastavené hodnoty přístupu"
 
-#: ../ui.py:1280
+#: ../ui.py:1295
 msgid "security"
 msgstr "security"
 
-#: ../ui.py:1292 ../ui.py:1732
+#: ../ui.py:1307 ../ui.py:1747
 msgid "shared remote directory"
 msgstr "sdílený vzdálený adresář"
 
-#: ../ui.py:1295
+#: ../ui.py:1310
 msgid "smb version"
 msgstr "samba verze"
 
-#: ../ui.py:1259
+#: ../ui.py:1274
 msgid "soft"
 msgstr "soft"
 
-#: ../ui.py:1733
+#: ../ui.py:1748
 msgid "test mount points on plugin start"
 msgstr "testovat body pripojení při startu"
 
@@ -981,30 +980,30 @@ msgstr "testovat body pripojení při startu"
 msgid "then will be mounted as:"
 msgstr "bude připojeno jako:"
 
-#: ../ui.py:1007
+#: ../ui.py:1022
 msgid "time"
 msgstr "time"
 
-#: ../ui.py:1004
+#: ../ui.py:1019
 msgid "timeout"
 msgstr "timeout"
 
-#: ../ui.py:1281
+#: ../ui.py:1296
 msgid "use ip/name or dev"
 msgstr "použít IP/název nebo dev"
 
-#: ../ui.py:1262
+#: ../ui.py:1277
 msgid "use user/pass"
 msgstr "uživatel/heslo"
 
-#: ../ui.py:1264 ../ui.py:1728
+#: ../ui.py:1279 ../ui.py:1743
 msgid "user"
 msgstr "uživatel"
 
-#: ../ui.py:1296
+#: ../ui.py:1311
 msgid "user string"
 msgstr "uživatelský řetězec"
 
-#: ../ui.py:1278
+#: ../ui.py:1293
 msgid "wsize"
 msgstr "wsize"
