@@ -80,27 +80,19 @@ BACKUPCFG = "/etc/backup.cfg"
 AUTOFS = "/etc/init.d/autofs"
 DEFAULT_HDD = '/media/hdd'
 
-
-def hex2strColor(argb):
-	out = ""
-	for i in range(28, -1, -4):
-		out += "%s" % chr(0x30 + (argb >> i & 0xf))
-	return out
-
-
 try:
-	yC = "\c%s" % hex2strColor(int(skin.parseColor("selectedFG").argb()))
+	yC = "\c%08x" % int(skin.parseColor("selectedFG").argb())
 except:
-	yC = "\c%s" % hex2strColor(0x00fcc000)
+	yC = "\c00fcc000"
 try:
-	fC = "\c%s" % hex2strColor(int(skin.parseColor("foreground").argb()))
+	fC = "\c%08x" % int(skin.parseColor("foreground").argb())
 except:
-	fC = "\c%s" % hex2strColor(0x00f0f0f0)
+	fC = "\c00f0f0f0"
 
-greyC = "\c%s" % hex2strColor(0x00a0a0a0)
-rC = "\c%s" % hex2strColor(0x00ff4000)
-gC = "\c%s" % hex2strColor(0x0000ff80)
-bC = "\c%s" % hex2strColor(0x000080ff)
+greyC = "\c00a0a0a0"
+rC = "\c00ff4000"
+gC = "\c0000ff80"
+bC = "\c000080ff"
 
 _X_ = "%sx%s" % (gC, fC)
 
