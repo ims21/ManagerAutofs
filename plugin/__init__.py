@@ -12,7 +12,7 @@ def localeInit():
 def _(txt):
 	t = gettext.dgettext("ManagerAutofs", txt)
 	if t == txt:
-#		print "[ManagerAutofs] fallback to default translation for", txt
+#		print("[ManagerAutofs] fallback to default translation for", txt)
 		t = gettext.gettext(txt)
 	return t
 

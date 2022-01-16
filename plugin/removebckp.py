@@ -2,7 +2,7 @@
 #  Manager Autofs
 #
 #
-#  Coded by ims (c) 2018
+#  Coded by ims (c) 2018-2022
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or

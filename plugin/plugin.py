@@ -3,7 +3,7 @@
 #
 #  $Id$
 #
-#  Coded by ims (c) 2017-2019
+#  Coded by ims (c) 2017-2022
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -55,8 +55,8 @@ def Plugins(path, **kwargs):
 	plugin_path = path
 	name = _("Manager Autofs")
 	descr = _("Manage autofs files and conection")
-	list = [PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon='plugin.png', fnc=main)]
-	list.append(PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART, fnc=sessionstart))
+	pluginList = [PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_PLUGINMENU, icon='plugin.png', fnc=main)]
+	pluginList.append(PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART, fnc=sessionstart))
 	if config.plugins.mautofs.extended_menu.value:
-		list.append(PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_EXTENSIONSMENU, icon='plugin.png', fnc=main))
-	return list
+		pluginList.append(PluginDescriptor(name=name, description=descr, where=PluginDescriptor.WHERE_EXTENSIONSMENU, icon='plugin.png', fnc=main))
+	return pluginList

@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.06"
+VERSION = "2.07"
 #
-#  Coded by ims (c) 2017-2021
+#  Coded by ims (c) 2017-2022
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -410,7 +410,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				return
 
 	def appClosed(self, retval):
-		print "[ManagerAutofs] done:", retval
+		print("[ManagerAutofs] done:", retval)
 		if retval:
 			txt = _("Failed")
 		else:
@@ -421,7 +421,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def dataAvail(self, s):
 		self.data += s
-		print "[ManagerAutofs]", s.strip()
+		print("[ManagerAutofs]", s.strip())
 		self.showOutput()
 
 	def showOutput(self):
@@ -819,7 +819,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				hostname = fi.read().rstrip("\n")
 				fi.close()
 		except:
-			print "[ManagerAutofs] failed to read etc/hostname"
+			print("[ManagerAutofs] failed to read etc/hostname")
 			return
 		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=(_("Enter new hostname for your Receiver")), text=hostname)
 
@@ -899,7 +899,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def installAutofs(self):
 		cmd = 'opkg install autofs'
 		if self.container.execute(cmd):
-			print "[ManagerAutofs] failed to execute"
+			print("[ManagerAutofs] failed to execute")
 			self.showOutput()
 
 	def updateAutofs(self, option="reload", restartGui=False):
@@ -909,7 +909,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				cmd += '; killall enigma2'
 				self.MessageBoxNM(True, _("Please wait for restart GUI!"), 20)
 			if self.container.execute(cmd):
-				print "[ManagerAutofs] failed to execute"
+				print("[ManagerAutofs] failed to execute")
 				self.showOutput()
 		else:
 			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
@@ -1739,14 +1739,14 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 			"cancel": self.exit
 		}, -2)
 
-		list = []
-		list.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
-		list.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
-		list.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
-		list.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
-		list.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
-		list.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
-		ConfigListScreen.__init__(self, list, session)
+		presetList = []
+		presetList.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
+		presetList.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
+		presetList.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
+		presetList.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
+		presetList.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
+		presetList.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
+		ConfigListScreen.__init__(self, presetList, session)
 		self.onShown.append(self.setWindowTitle)
 
 	def createSummary(self):
@@ -1933,7 +1933,7 @@ class useMountAsHDD():
 	def createSymlink(self):
 		path = cfg.hddreplace.value
 		hdd_dir = DEFAULT_HDD
-		print "[ManagerAutofs] symlink %s %s" % (path, hdd_dir)
+		print("[ManagerAutofs] symlink %s %s" % (path, hdd_dir))
 		if os.path.islink(hdd_dir):
 			if os.readlink(hdd_dir) != path:
 				os.remove(hdd_dir)
@@ -1944,13 +1944,13 @@ class useMountAsHDD():
 		try:
 			os.symlink(path, hdd_dir)
 		except OSError, ex:
-			print "[ManagerAutofs] add symlink fails!", ex
+			print("[ManagerAutofs] add symlink fails!", ex)
 		movie = os.path.join(hdd_dir, 'movie')
 		if not os.path.exists(movie):
 			try:
 				os.mkdir(movie)
 			except Exception, ex:
-				print "[ManagerAutofs] Failed to create ", movie, "Error:", ex
+				print("[ManagerAutofs] Failed to create ", movie, "Error:", ex)
 
 	def setDefault(self):
 		cfg.hddreplace.value = DEFAULT_HDD
@@ -2178,10 +2178,10 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 			data = urllib2.urlopen(request, timeout=timeout)
 		except urllib2.HTTPError, e:
 			self["text"].setText("HTTP error: %d %s" % (e.code, str(e)))
-			print "\n[ManagerAutofs] HTTP error: %d %s" % (e.code, str(e))
+			print("\n[ManagerAutofs] HTTP error: %d %s" % (e.code, str(e)))
 		except urllib2.URLError, e:
 			self["text"].setText("Network error: %s" % e.reason.args[1])
-			print "[ManagerAutofs] Network error: %s" % e.reason.args[1]
+			print("[ManagerAutofs] Network error: %s" % e.reason.args[1])
 		return data
 
 	def sortList(self):
