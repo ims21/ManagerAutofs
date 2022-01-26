@@ -1949,7 +1949,7 @@ class useMountAsHDD():
 		if not os.path.exists(movie):
 			try:
 				os.mkdir(movie)
-			except Exception, ex:
+			except Exception as ex:
 				print("[ManagerAutofs] Failed to create ", movie, "Error:", ex)
 
 	def setDefault(self):
@@ -2176,10 +2176,10 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 			request.add_header("Authorization", self.header)
 		try:
 			data = urllib2.urlopen(request, timeout=timeout)
-		except urllib2.HTTPError, e:
+		except urllib2.HTTPError as e:
 			self["text"].setText("HTTP error: %d %s" % (e.code, str(e)))
 			print("\n[ManagerAutofs] HTTP error: %d %s" % (e.code, str(e)))
-		except urllib2.URLError, e:
+		except urllib2.URLError as e:
 			self["text"].setText("Network error: %s" % e.reason.args[1])
 			print("[ManagerAutofs] Network error: %s" % e.reason.args[1])
 		return data
