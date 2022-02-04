@@ -65,7 +65,7 @@ class ManagerAutofsRemoveBackupFiles(Screen):
 		self["config"] = self.list
 		self["text"] = Label()
 
-		self["actions"] = ActionMap(["OkCancelActions", "RefreshBouquetActions"],
+		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"],
 			{
 				"cancel": self.exit,
 				"ok": self.list.toggleSelection,
