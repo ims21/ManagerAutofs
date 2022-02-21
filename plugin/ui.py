@@ -440,13 +440,19 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.changeItemStatus(index, curr)
 
 	def fillBasicRecordPars(self):
+		def optionsSpaces(pars):
+			out = ""
+			for i in(pars):
+				if i not in("", " "):
+					out += " %s" % i
+			return out.strip()
 		mountpoint = "/mnt/%s" % cfg.mountpoint.value
 		autofile = "/etc/auto.%s" % cfg.autofile.value
 		enabled = cfg.enabled.value and _X_ or ""
-		strict = cfg.strict.value and masterOptions.get('strict') or ""
-		timeout = cfg.timeout.value and "%s=%s" % (masterOptions.get('timeout'), cfg.timeouttime.value) or ""
-		browse = cfg.browse.value and "%s" % masterOptions.get('browse') or ""
-		options = " ".join((strict, timeout, browse)).strip()
+		strict = masterOptions.get('strict') if cfg.strict.value else ""
+		timeout = "%s=%s" % (masterOptions.get('timeout'), cfg.timeouttime.value) if cfg.timeout.value else ""
+		browse = "%s" % masterOptions.get('browse') if cfg.browse.value else ""
+		options = optionsSpaces((strict, timeout, browse))
 		return enabled, mountpoint, autofile, options
 
 	def addMasterRecord(self):
