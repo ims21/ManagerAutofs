@@ -58,7 +58,7 @@ config.plugins.mautofs.mountpoint = NoSave(ConfigText(default="/mnt/remote", vis
 config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_width=30, fixed_size=False))
 config.plugins.mautofs.strict = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=600, limits=(0, 3600)))
+config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=600, limits=(0, 900)))
 config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
 
 # parameters for prefilled user/pass
