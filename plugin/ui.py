@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.08"
+VERSION = "2.09"
 #
 #  Coded by ims (c) 2017-2022
 #  Support: openpli.org
@@ -56,9 +56,10 @@ from plugin import mountedLocalHDD
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.mountpoint = NoSave(ConfigText(default="/mnt/remote", visible_width=30, fixed_size=False))
 config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_width=30, fixed_size=False))
-config.plugins.mautofs.ghost = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.strict = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=60, limits=(1, 300)))
+config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=600, limits=(0, 3600)))
+config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
 
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
@@ -102,6 +103,11 @@ FAILED = "%s~%s" % (rC, fC)
 MISSING_FILE = "%s!%s" % (rC, fC)
 MISSING_LINE = "%s?%s" % (yC, fC)
 
+masterOptions = {
+	'strict': "-strict",
+	'timeout': "--timeout",
+	'browse': "browse"
+}
 
 class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	skin = """
@@ -199,7 +205,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			copyfile(AUTOMASTER, AUTOMASTER + ".bak")
 		else:
 			f = open(AUTOMASTER, "w")
-			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, "--ghost" if cfg.ghost.default else ""))
+			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, masterOptions.get('strict') if cfg.strict.default else "", masterOptions.get('browse') if cfg.browse.default else ""))
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -433,30 +439,28 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			index = self["list"].getIndex()
 			self.changeItemStatus(index, curr)
 
+	def fillBasicRecordPars(self):
+		mountpoint = "/mnt/%s" % cfg.mountpoint.value
+		autofile = "/etc/auto.%s" % cfg.autofile.value
+		enabled = cfg.enabled.value and _X_ or ""
+		strict = cfg.strict.value and masterOptions.get('strict') or ""
+		timeout = cfg.timeout.value and "%s=%s" % (masterOptions.get('timeout'), cfg.timeouttime.value) or ""
+		browse = cfg.browse.value and "%s" % masterOptions.get('browse') or ""
+		options = " ".join((strict, timeout, browse)).strip()
+		return enabled, mountpoint, autofile, options
+
 	def addMasterRecord(self):
 		def callbackAdd(change=False):
 			if change:
 				self.changes = True
-				mountpoint = "/mnt/%s" % cfg.mountpoint.value
-				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled = cfg.enabled.value and _X_ or ""
-				ghost = cfg.ghost.value and "--ghost" or ""
-				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				add = (enabled, mountpoint, autofile, optional)
-				self.createMountpointWithAutofile(add)
+				self.createMountpointWithAutofile(fillBasicRecordPars())
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None, self.list)
 
 	def duplicateMountPoint(self):
 		def callbackAdd(original_autofile, change=False):
 			if change:
 				self.changes = True
-				mountpoint = "/mnt/%s" % cfg.mountpoint.value
-				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled = cfg.enabled.value and _X_ or ""
-				ghost = cfg.ghost.value and "--ghost" or ""
-				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				add = (enabled, mountpoint, autofile, optional)
-				self.addItem(add)
+				self.addItem(self.fillBasicRecordPars())
 				# autofile is created
 				if os.path.exists(original_autofile):
 					copyfile(original_autofile, autofile)
@@ -470,8 +474,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			original_autofile = sel[2]
 			autofile = "%s" % original_autofile + suffix
 			enabled = ""
-			ghost = sel[3]
-			sel = [enabled, mountpoint, autofile, ghost]
+			options = sel[3]
+			sel = [enabled, mountpoint, autofile, options]
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
 	def editMasterRecord(self):
@@ -479,16 +483,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			if changed:
 				old_autofile = sel[2]
 				mnt_status = sel[4]
-				mountpoint = "/mnt/%s" % cfg.mountpoint.value
-				autofile = "/etc/auto.%s" % cfg.autofile.value
-				enabled = cfg.enabled.value and _X_ or ""
-				ghost = cfg.ghost.value and "--ghost" or ""
-				optional = ghost + (" --timeout=%s" % cfg.timeouttime.value if cfg.timeout.value else '')
-				record = (enabled, mountpoint, autofile, optional if len(optional) else '', mnt_status)
+				enabled, mountpoint, autofile, options = self.fillBasicRecordPars()
+				record = (enabled, mountpoint, autofile, options if len(options) else '', mnt_status)
 				changed = self.testChangedRecord(sel, record)
 				self.changeItem(index, record, changed)
 				old = "%s %s %s" % (sel[1], sel[2], sel[3] if len(sel[3]) else '')
-				new = "%s %s %s" % (mountpoint, autofile, optional if len(optional) else '')
+				new = "%s %s %s" % (mountpoint, autofile, options if len(options) else '')
 				self.changes = changed
 				if old != new:
 					self.session.open(ManagerAutofsInfo, old, new)
@@ -1007,11 +1007,12 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
 		self.autofile = _("auto.name")
 		self.list.append(getConfigListEntry(self.autofile, cfg.autofile))
-		self.list.append(getConfigListEntry(_("ghost"), cfg.ghost))
+		self.list.append(getConfigListEntry(_("strict"), cfg.strict))
 		self.timeout = _("timeout")
 		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
 		if cfg.timeout.value:
 			self.list.append(getConfigListEntry(dx + _("time"), cfg.timeouttime))
+		self.list.append(getConfigListEntry(_("browse"), cfg.browse))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 		self.actualizeString()
@@ -1026,11 +1027,13 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			if len(self.pars) > 3:
 				optional = self.pars[3].split()
 				for x in optional:
-					if "--ghost" in x:
-						cfg.ghost.value = True
-					if "--timeout" in x:
+					if masterOptions.get('strict') in x:
+						cfg.strict.value = True
+					if masterOptions.get('timeout') in x:
 						cfg.timeout.value = True
 						cfg.timeouttime.value = int(x.split('=')[1])
+					if masterOptions.get('browse') in x:
+						cfg.browse.value = True
 		else:
 			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
 
@@ -1038,14 +1041,16 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.enabled.value = cfg.enabled.default
 		cfg.mountpoint.value = cfg.mountpoint.default
 		cfg.autofile.value = cfg.autofile.default
-		cfg.ghost.value = cfg.ghost.default
+		cfg.strict.value = cfg.strict.default
 		cfg.timeout.value = cfg.timeout.default
 		cfg.timeouttime.value = cfg.timeouttime.default
+		cfg.browse.value = cfg.browse.default
 
 	def preparedAsDisabled(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
 		cfg.enabled.value = False
-		cfg.ghost.value = False
+		cfg.strict.value = False
 		cfg.timeout.value = False
+		cfg.browse.value = False
 
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.timeout:
@@ -1061,13 +1066,16 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		string += "/mnt/%s" % cfg.mountpoint.value
 		string += " "
 		string += "auto.%s" % cfg.autofile.value
-		if cfg.ghost.value:
+		if cfg.strict.value:
 			string += " "
-			string += "--ghost"
+			string += masterOptions.get('strict')
 		if cfg.timeout.value:
 			string += " "
-			string += "--timeout"
+			string += masterOptions.get('timeout')
 			string += "=%d" % cfg.timeouttime.value
+		if cfg.browse.value:
+			string += " "
+			string += masterOptions.get('browse')
 		self["text"].setText(string)
 
 	def moveOverItem(self):
