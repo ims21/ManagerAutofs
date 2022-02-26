@@ -1957,7 +1957,7 @@ class useMountAsHDD():
 				rm_rf(hdd_dir)
 		try:
 			os.symlink(path, hdd_dir)
-		except OSError, ex:
+		except OSError as ex:
 			print("[ManagerAutofs] add symlink fails!", ex)
 		movie = os.path.join(hdd_dir, 'movie')
 		if not os.path.exists(movie):
