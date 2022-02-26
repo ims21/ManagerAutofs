@@ -924,7 +924,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		plugins.clearPluginList()
 		plugins.readPluginList(resolveFilename(SCOPE_PLUGINS))
 
-	def MessageBoxNM(self, display=False, text="", delay=0):
+	def MessageBoxNM(self, display=False, text="", delay=1):
 		if self.msgNM:
 			self.session.deleteDialog(self.msgNM)
 			self.msgNM = None
@@ -1145,7 +1145,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def keyClose(self):
 		self.close()
 
-	def MessageBoxNM(self, display=False, text="", delay=0):
+	def MessageBoxNM(self, display=False, text="", delay=1):
 		if self.msgNM:
 			self.session.deleteDialog(self.msgNM)
 			self.msgNM = None
@@ -1538,7 +1538,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			ip.append(int(x))
 		return ip
 
-	def MessageBoxNM(self, display=False, text="", delay=0):
+	def MessageBoxNM(self, display=False, text="", delay=1):
 		if self.msgNM:
 			self.session.deleteDialog(self.msgNM)
 			self.msgNM = None
@@ -1720,7 +1720,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.saveFile(self.name)
 		self.close(self.changes)
 
-	def MessageBoxNM(self, display=False, text="", delay=0):
+	def MessageBoxNM(self, display=False, text="", delay=1):
 		if self.msgNM:
 			self.session.deleteDialog(self.msgNM)
 			self.msgNM = None
@@ -1917,7 +1917,7 @@ class NonModalMessageBoxDialog(Screen):
 		</screen>
 	"""
 
-	def __init__(self, session, text="", delay=0):
+	def __init__(self, session, text="", delay=1):
 		Screen.__init__(self, session)
 		self.text = text
 		self.delay = delay
@@ -1930,11 +1930,11 @@ class NonModalMessageBoxDialog(Screen):
 
 	def timerStart(self):
 		self["message"].setText(self.text)
-		self.timer.start(1000, True)
+		self.timer.start(True)
 
 	def timerLoop(self):
-		self.delay -= 1
 		if self.delay > 0:
+			self.delay -= 1
 			self.timer.start(1000, True)
 		else:
 			self.session.deleteDialog(self)
@@ -1957,7 +1957,7 @@ class useMountAsHDD():
 				rm_rf(hdd_dir)
 		try:
 			os.symlink(path, hdd_dir)
-		except OSError, ex:
+		except OSError as ex:
 			print("[ManagerAutofs] add symlink fails!", ex)
 		movie = os.path.join(hdd_dir, 'movie')
 		if not os.path.exists(movie):
