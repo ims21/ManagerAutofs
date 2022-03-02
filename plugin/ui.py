@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.09"
+VERSION = "2.10"
 #
 #  Coded by ims (c) 2017-2022
 #  Support: openpli.org
@@ -64,6 +64,7 @@ config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
+config.plugins.mautofs.pre_domain = ConfigPassword(default="", fixed_size=False)
 config.plugins.mautofs.pre_save = ConfigYesNo(default=False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
@@ -310,8 +311,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not cfg.pre_save.value:
 			config.plugins.mautofs.pre_user.value = ""
 			config.plugins.mautofs.pre_passwd.value = ""
+			config.plugins.mautofs.pre_domain.value = ""
 		config.plugins.mautofs.pre_user.save()
 		config.plugins.mautofs.pre_passwd.save()
+		config.plugins.mautofs.pre_domain.save()
 
 	def startMoving(self):
 		self.edit = not self.edit
@@ -1167,7 +1170,7 @@ config.plugins.mautofs.useduserpass = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.user = NoSave(ConfigText(default="", fixed_size=False))
 config.plugins.mautofs.passwd = NoSave(ConfigPassword(default="", fixed_size=False))
 
-config.plugins.mautofs.useddomain = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.useddomain = NoSave(ConfigSelection(default="", choices=[(None, _("no")), ("domain", _("domain")), ("workgroup", _("workgroup"))]))
 config.plugins.mautofs.domain = NoSave(ConfigText(default="domain.local", fixed_size=False))
 config.plugins.mautofs.noperm = NoSave(ConfigYesNo(default=False))
 
@@ -1288,11 +1291,14 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		if cfg.useduserpass.value:
 			self.list.append(getConfigListEntry(self.user, cfg.user))
 			self.list.append(getConfigListEntry(self.passwd, cfg.passwd))
-		self.useddomain = _("domain")
+		self.useddomain = _("domain/workgroup")
+		self.domain = ""
 		self.list.append(getConfigListEntry(self.useddomain, cfg.useddomain))
 		if cfg.useddomain.value:
-			self.list.append(getConfigListEntry(dx + _("domain name"), cfg.domain))
-			self.list.append(getConfigListEntry(dx + _("noperm"), cfg.noperm))
+			self.domain = dx + _("domain") if cfg.useddomain.value == "domain" else dx + _("workgroup")
+			self.list.append(getConfigListEntry(self.domain, cfg.domain))
+			if cfg.useddomain.value == "domain":
+				self.list.append(getConfigListEntry(dx + _("noperm"), cfg.noperm))
 		if cfg.fstype.value == "nfs":
 			self.list.append(getConfigListEntry(_("noatime"), cfg.noatime))
 		self.list.append(getConfigListEntry(_("noserverino"), cfg.noserverino))
@@ -1339,12 +1345,15 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		elif self["config"].getCurrent()[0] is self.passwd:
 			cfg.passwd.value = cfg.pre_passwd.value
 			self.createConfig()
+		elif self["config"].getCurrent()[0] is self.domain:
+			cfg.domain.value = cfg.pre_domain.value
+			self.createConfig()
 		elif self["config"].getCurrent()[0] is self.remotedir:
 			cfg.remotedir.value = cfg.pre_remotedir.value
 			self.createConfig()
 
 	def getCurrentEntry(self):
-		if self["config"].getCurrent()[0] in (self.localdir, self.user, self.passwd, self.remotedir):
+		if self["config"].getCurrent()[0] in (self.localdir, self.user, self.passwd, self.remotedir, self.domain):
 			self["key_blue"].setText(_("Use preset"))
 		else:
 			self["key_blue"].setText("")
@@ -1367,8 +1376,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		string += "intr," if cfg.intr.value else ""
 		string += ("username=%s," % cfg.user.value) if cfg.useduserpass.value else ""
 		string += ("password=%s," % cfg.passwd.value)if cfg.useduserpass.value else ""
-		string += ("domain=%s," % cfg.domain.value) if cfg.useddomain.value else ""
-		string += "noperm," if cfg.noperm.value else ""
+		string += ("%s=%s," % (cfg.useddomain.value, cfg.domain.value)) if cfg.useddomain.value else ""
+		string += "noperm," if cfg.noperm.value and cfg.useddomain.value == "domain" else ""
 		string += "noatime," if cfg.fstype.value == "nfs" and cfg.noatime.value else ""
 		string += "noserverino," if cfg.noserverino.value else ""
 		string += "nosuid," if cfg.nosuid.value else ""
@@ -1432,7 +1441,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		cfg.soft.value = False
 		cfg.intr.value = False
 		cfg.useduserpass.value = False
-		cfg.useddomain.value = False
+		cfg.useddomain.value = None
 		cfg.noatime.value = False
 		cfg.noserverino.value = False
 		cfg.nosuid.value = False
@@ -1466,7 +1475,10 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 				elif "wsize" in x:
 					cfg.wsize.value = x.split('=')[1]
 				elif "domain" in x:
-					cfg.useddomain.value = True
+					cfg.useddomain.value = "domain"
+					cfg.domain.value = x.split('=')[1]
+				elif "workgroup" in x:
+					cfg.useddomain.value = "workgroup"
 					cfg.domain.value = x.split('=')[1]
 				elif x == "rw" or x == "ro":
 					cfg.rw.value = x
@@ -1756,6 +1768,7 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		presetList = []
 		presetList.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
 		presetList.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
+		presetList.append(getConfigListEntry(_("domain/group"), cfg.pre_domain, _("Preset domain/group value.")))
 		presetList.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
 		presetList.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
 		presetList.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
