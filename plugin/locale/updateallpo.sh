@@ -74,7 +74,7 @@ printf "Merging pot files to create: $Plugin.pot\n"
 cat $Plugin-py.pot $Plugin-xml.pot | msguniq --no-wrap -o $Plugin.pot -
 OLDIFS=$IFS
 IFS=" "
-printf "\n"; read -n1 -r -p "Press 'M' to continue with generating .mo files" key; printf "\n"
+printf "\n"; read -n1 -r -p "Press 'M' to continue with generating .mo files or use any key to continue" key; printf "\n"
 for lang in "${languages[@]}" ; do
 	if [ -f $lang$FilePath$Plugin.po ]; then 
 		printf "Updating existing translation file %s.po\n" $lang

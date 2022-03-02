@@ -64,7 +64,7 @@ config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_passwd = ConfigPassword(default="", fixed_size=False)
-config.plugins.mautofs.pre_domain = ConfigPassword(default="", fixed_size=False)
+config.plugins.mautofs.pre_domain = ConfigText(default="", fixed_size=False)
 config.plugins.mautofs.pre_save = ConfigYesNo(default=False)
 config.plugins.mautofs.pre_localdir = ConfigText(default="hdd", fixed_size=False)
 config.plugins.mautofs.pre_remotedir = ConfigText(default="Harddisk", fixed_size=False)
