@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.10"
+VERSION = "2.11"
 #
 #  Coded by ims (c) 2017-2022
 #  Support: openpli.org
@@ -56,7 +56,7 @@ from plugin import mountedLocalHDD
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.mountpoint = NoSave(ConfigText(default="/mnt/remote", visible_width=30, fixed_size=False))
 config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_width=30, fixed_size=False))
-config.plugins.mautofs.strict = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.debug = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=600, limits=(0, 900)))
 config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
@@ -105,7 +105,7 @@ MISSING_FILE = "%s!%s" % (rC, fC)
 MISSING_LINE = "%s?%s" % (yC, fC)
 
 masterOptions = {
-	'strict': "-strict",
+	'debug': "--debug",
 	'timeout': "--timeout",
 	'browse': "browse"
 }
@@ -206,7 +206,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			copyfile(AUTOMASTER, AUTOMASTER + ".bak")
 		else:
 			f = open(AUTOMASTER, "w")
-			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, masterOptions.get('strict') if cfg.strict.default else "", masterOptions.get('browse') if cfg.browse.default else ""))
+			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, masterOptions.get('debug') if cfg.debug.default else "", masterOptions.get('browse') if cfg.browse.default else ""))
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -452,10 +452,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		mountpoint = "/mnt/%s" % cfg.mountpoint.value
 		autofile = "/etc/auto.%s" % cfg.autofile.value
 		enabled = cfg.enabled.value and _X_ or ""
-		strict = masterOptions.get('strict') if cfg.strict.value else ""
+		debug = masterOptions.get('debug') if cfg.debug.value else ""
 		timeout = "%s=%s" % (masterOptions.get('timeout'), cfg.timeouttime.value) if cfg.timeout.value else ""
 		browse = "%s" % masterOptions.get('browse') if cfg.browse.value else ""
-		options = optionsSpaces((strict, timeout, browse))
+		options = optionsSpaces((debug, timeout, browse))
 		return enabled, mountpoint, autofile, options
 
 	def addMasterRecord(self):
@@ -1016,7 +1016,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
 		self.autofile = _("auto.name")
 		self.list.append(getConfigListEntry(self.autofile, cfg.autofile))
-		self.list.append(getConfigListEntry(_("strict"), cfg.strict))
+		self.list.append(getConfigListEntry(_("debug"), cfg.debug))
 		self.timeout = _("timeout")
 		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
 		if cfg.timeout.value:
@@ -1036,8 +1036,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			if len(self.pars) > 3:
 				optional = self.pars[3].split()
 				for x in optional:
-					if masterOptions.get('strict') in x:
-						cfg.strict.value = True
+					if masterOptions.get('debug') in x:
+						cfg.debug.value = True
 					if masterOptions.get('timeout') in x:
 						cfg.timeout.value = True
 						cfg.timeouttime.value = int(x.split('=')[1])
@@ -1050,14 +1050,14 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.enabled.value = cfg.enabled.default
 		cfg.mountpoint.value = cfg.mountpoint.default
 		cfg.autofile.value = cfg.autofile.default
-		cfg.strict.value = cfg.strict.default
+		cfg.debug.value = cfg.debug.default
 		cfg.timeout.value = cfg.timeout.default
 		cfg.timeouttime.value = cfg.timeouttime.default
 		cfg.browse.value = cfg.browse.default
 
 	def preparedAsDisabled(self): # set (all what has sence, f.eg. if default is as True) as off or empty before parsing existing line
 		cfg.enabled.value = False
-		cfg.strict.value = False
+		cfg.debug.value = False
 		cfg.timeout.value = False
 		cfg.browse.value = False
 
@@ -1075,9 +1075,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		string += "/mnt/%s" % cfg.mountpoint.value
 		string += " "
 		string += "auto.%s" % cfg.autofile.value
-		if cfg.strict.value:
+		if cfg.debug.value:
 			string += " "
-			string += masterOptions.get('strict')
+			string += masterOptions.get('debug')
 		if cfg.timeout.value:
 			string += " "
 			string += masterOptions.get('timeout')
