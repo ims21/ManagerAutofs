@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.11"
+VERSION = "2.12"
 #
 #  Coded by ims (c) 2017-2022
 #  Support: openpli.org
@@ -1652,7 +1652,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		if sel:
 			menu.append((_("Edit line"), 0, _("Edit line with mountpoint parameters.")))
 			menu.append((_("Add line"), 1, _("Add next line with mountpoint parameters.")))
-			menu.append((_("Remove line"), 2, _("Remove line with mountpoint parameters.")))
+			menu.append((_("Duplicate line"), 2, _("Add next line with same mountpoint parameters.")))
+			menu.append((_("Remove line"), 3, _("Remove line with mountpoint parameters.")))
 			buttons += ["", "", ""]
 		else:
 			self.MessageBoxNM(True, _("No valid item"), 5)
@@ -1671,6 +1672,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			elif choice[1] == 1:
 				self.keyAdd()
 			elif choice[1] == 2:
+				self.keyDuplicate()
+			elif choice[1] == 3:
 				self.keyErase()
 			else:
 				return
@@ -1696,6 +1699,14 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				self.changes = True
 		self.session.openWithCallback(boundFunction(callBackAdd), ManagerAutofsAutoEdit, _("New"), "", True)
 
+	def keyDuplicate(self):
+		def callbackDuplicate(value=False):
+			if value:
+				self.duplicateItem(self["list"].getCurrent())
+				self.changes = True
+		name = self["list"].getCurrent()[0]
+		self.session.openWithCallback(callbackDuplicate, MessageBox, _("Really duplicate record: '%s'?") % name, type=MessageBox.TYPE_YESNO, default=False)
+
 	def keyErase(self):
 		def callbackErase(value=False):
 			if value:
@@ -1720,6 +1731,10 @@ class ManagerAutofsMultiAutoEdit(Screen):
 
 	def addItem(self, new):
 		self.list.append((new[0], new[1]))
+		self.refreshText()
+
+	def duplicateItem(self, item):
+		self.list.append((item))
 		self.refreshText()
 
 	def removeItem(self, index):
