@@ -38,13 +38,13 @@ def mountedLocalHDD():
 
 
 def main(session, **kwargs):
-	import ui
+	from . import ui
 	session.open(ui.ManagerAutofsMasterSelection)
 
 
 def sessionstart(reason, **kwargs):
 	if reason == 0:
-		import ui
+		from . import ui
 		if not mountedLocalHDD():
 			if config.plugins.mautofs.hddreplace.value != "/media/hdd":
 				ui.makeMountAsHDD.createSymlink()

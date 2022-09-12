@@ -6,7 +6,7 @@ from Components.ScrollLabel import ScrollLabel
 from Components.Button import Button
 from Components.Pixmap import Pixmap
 
-import ui
+from . import ui
 
 
 class ManagerAutofsHelp(Screen):

@@ -26,7 +26,7 @@ from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
-from myselectionlist import MySelectionList
+from .myselectionlist import MySelectionList
 import skin
 import os
 

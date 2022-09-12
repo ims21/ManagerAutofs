@@ -2,7 +2,7 @@ from Components.MenuList import MenuList
 from Tools.Directories import resolveFilename, SCOPE_CURRENT_SKIN, SCOPE_PLUGINS
 from enigma import eListboxPythonMultiContent, eListbox, gFont, getDesktop, RT_HALIGN_LEFT
 from Tools.LoadPixmap import LoadPixmap
-from plugin import plugin_path
+from .plugin import plugin_path
 import skin
 
 resolution = ""

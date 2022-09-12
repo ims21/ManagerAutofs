@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.12"
+VERSION = "2.13"
 #
 #  Coded by ims (c) 2017-2022
 #  Support: openpli.org
@@ -37,10 +37,16 @@ from Tools.Directories import SCOPE_PLUGINS, resolveFilename, SCOPE_CURRENT_SKIN
 from Tools.LoadPixmap import LoadPixmap
 from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
-from myselectionlist import MySelectionList
+from .myselectionlist import MySelectionList
 
-import urllib2
-from urllib2 import URLError, HTTPError
+#import urllib2
+try:
+    # For Python 3.0 and later
+    from urllib.request import URLError, HTTPError
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import URLError, HTTPError
+
 import xml.etree.ElementTree as ET
 
 from shutil import copyfile
@@ -49,8 +55,8 @@ import skin
 import os
 
 from Components.Pixmap import Pixmap
-from helptexts import ManagerAutofsHelp
-from plugin import mountedLocalHDD
+from .helptexts import ManagerAutofsHelp
+from .plugin import mountedLocalHDD
 
 # parameters for auto.master file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
