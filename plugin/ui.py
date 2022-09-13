@@ -435,7 +435,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["statusbar"].setText(txt)
 
 	def dataAvail(self, s):
-		self.data += s
+		self.data += s.decode()
 		print("[ManagerAutofs]", s.strip())
 		self.showOutput()
 
