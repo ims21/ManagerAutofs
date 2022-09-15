@@ -850,7 +850,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					self.MessageBoxNM(True, _("For apply new hostname restart box!"), 5)
 
 	def removeBackupFiles(self):
-		from removebckp import ManagerAutofsRemoveBackupFiles
+		from .removebckp import ManagerAutofsRemoveBackupFiles
 		self.session.open(ManagerAutofsRemoveBackupFiles)
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
@@ -1766,8 +1766,8 @@ class ManagerAutofsMultiAutoEdit(Screen):
 class ManagerAutofsPreset(Screen, ConfigListScreen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
+		self.session = session
 		self.skinName = "Setup"
-		self["config"] = List()
 		self.setup_title = _("User and password preseting")
 
 		self["key_red"] = Label(_("Cancel"))
@@ -1786,15 +1786,18 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 			"cancel": self.exit
 		}, -2)
 
-		presetList = []
-		presetList.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
-		presetList.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
-		presetList.append(getConfigListEntry(_("domain/group"), cfg.pre_domain, _("Preset domain/group value.")))
-		presetList.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
-		presetList.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
-		presetList.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
-		presetList.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
-		ConfigListScreen.__init__(self, presetList, session)
+		self["config"] = List()
+		self.presetList = []
+		self.presetList.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
+		self.presetList.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
+		self.presetList.append(getConfigListEntry(_("domain/group"), cfg.pre_domain, _("Preset domain/group value.")))
+		self.presetList.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
+		self.presetList.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
+		self.presetList.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
+		self.presetList.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
+		self["config"].list = self.presetList
+
+		ConfigListScreen.__init__(self, self.presetList, session=self.session)
 		self.onShown.append(self.setWindowTitle)
 
 	def createSummary(self):
@@ -2184,7 +2187,7 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 		self["text"].setText(text)
 
 	def fillList(self, ip="local"):
-		if ip is "local":
+		if ip == "local":
 			fi = open("/etc/enigma2/settings", "r")
 			index = 0
 			for line in fi:
