@@ -39,13 +39,7 @@ from Components.Sources.Boolean import Boolean
 from Components.Sources.StaticText import StaticText
 from .myselectionlist import MySelectionList
 
-#import urllib2
-try:
-    # For Python 3.0 and later
-    from urllib.request import URLError, HTTPError
-except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import URLError, HTTPError
+from urllib.request import urlopen, HTTPError, URLError
 
 import xml.etree.ElementTree as ET
 
@@ -2149,9 +2143,9 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 		self.setTitle(_("Settings items list"))
 
 		self.header = None
-		from base64 import encodestring
+		from base64 import encodebytes
 		if config.usage.remote_fallback_openwebif_userid.value and config.usage.remote_fallback_openwebif_password.value:
-			self.header = "Basic %s" % encodestring("%s:%s" % (config.usage.remote_fallback_openwebif_userid.value, config.usage.remote_fallback_openwebif_password.value)).strip()
+			self.header = {b"Authorization": "Basic %s" % encodebytes(("%s:%s" % (config.usage.remote_fallback_openwebif_userid.value, config.usage.remote_fallback_openwebif_password.value)).encode("UTF-8")).strip()}
 
 		self.list = MySelectionList([])
 
@@ -2212,25 +2206,22 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 			self["config"].onSelectionChanged.append(self.selectionChanged)
 
 	def getSettings(self, ip):
-		settings = ""
-		for line in self.loadSettings(ip):
-			settings += line
-		return settings
+		return self.loadSettings(ip)
 
 	def loadSettings(self, ip):
 		return self.getUrl("http://%s/web/settings" % ip)
 
 	def getUrl(self, url, timeout=5):
 		data = ""
-		request = urllib2.Request(url)
-		if self.header:
-			request.add_header("Authorization", self.header)
+		request = urlopen(url)
+#		if self.header:
+#			request.add_header("Authorization", self.header)
 		try:
-			data = urllib2.urlopen(request, timeout=timeout)
-		except urllib2.HTTPError as e:
+			data = request.read()
+		except HTTPError as e:
 			self["text"].setText("HTTP error: %d %s" % (e.code, str(e)))
 			print("\n[ManagerAutofs] HTTP error: %d %s" % (e.code, str(e)))
-		except urllib2.URLError as e:
+		except URLError as e:
 			self["text"].setText("Network error: %s" % e.reason.args[1])
 			print("[ManagerAutofs] Network error: %s" % e.reason.args[1])
 		return data
