@@ -1,9 +1,9 @@
 #
-#  Manager Autofs
+#  Manager Autofs (py2)
 #
-VERSION = "2.12"
+VERSION = "2.14"
 #
-#  Coded by ims (c) 2017-2022
+#  Coded by ims (c) 2017-2023
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -206,7 +206,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			copyfile(AUTOMASTER, AUTOMASTER + ".bak")
 		else:
 			f = open(AUTOMASTER, "w")
-			f.write("%s%s /etc/auto.%s %s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, masterOptions.get('debug') if cfg.debug.default else "", masterOptions.get('browse') if cfg.browse.default else ""))
+			option = " %s" % masterOptions.get('debug') if cfg.debug.default else ""
+			option += " %s" % masterOptions.get('browse') if cfg.browse.default else ""
+			automaster = "%s%s /etc/auto.%s%s\n" % ("#", cfg.mountpoint.default, cfg.autofile.default, option)
+			print("[ManagerAutofs] 'auto.master' created:", automaster)
+			f.write(automaster)
 			f.close()
 
 		self.onLayoutFinish.append(self.readMasterFile)
@@ -353,7 +357,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def menu(self):
 		menu = []
 		buttons = []
-
+		device = None
 		sel = self["list"].getCurrent()
 		if sel:
 			recordname = "%s" % (sel[1].split('/')[2])
@@ -363,9 +367,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'auto.master' file.") % device))
 			buttons = [""]
 		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
-		menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'auto.master' file.") % device))
-		menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal.") % device))
-		buttons += ["", "", "5"]
+		buttons += [""]
+		if device is not None:
+			menu.append((_("Remove record:") + "  " + device, 2, _("Remove record with '%s' remote device from 'auto.master' file.") % device))
+			menu.append((_("Create new record from:") + "  " + device, 5, _("Clone record with '%s' remote device in 'auto.master' file and create file with mountpoint parameters withal.") % device))
+			buttons += ["", "5"]
 		if sel:
 			menu.append((_("Edit -") + " " + mountpoint, 10, _("Edit file '%s' with mountpoint parameters for existing '%s' remote device.") % (mountpoint, device)))
 			menu.append((_("Add line to -") + " " + mountpoint, 11, _("Add next mountpoint parameters line to '%s' for existing '%s' remote device.") % (mountpoint, device)))
@@ -390,12 +396,22 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def menuCallback(self, choice):
 		if choice is None:
 			return
+		if choice[1] == 1:
+			self.addMasterRecord()
+		elif choice[1] == 30:
+			self.help()
+		elif choice[1] == 40:
+			cfg.extended_menu.value = not cfg.extended_menu.value
+			cfg.extended_menu.save()
+			self.refreshPlugins()
+		elif choice[1] == 50:
+			self.selectionUtilitySubmenu = 0
+			self.utilitySubmenu()
+
 		sel = self["list"].getCurrent()
 		if sel:
 			if choice[1] == 0:
 				self.editMasterRecord()
-			elif choice[1] == 1:
-				self.addMasterRecord()
 			elif choice[1] == 2:
 				self.removeMasterRecord()
 			elif choice[1] == 5:
@@ -406,15 +422,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.addAutofileLine()
 			elif choice[1] == 12:
 				self.removeAutofile()
-			elif choice[1] == 30:
-				self.help()
-			elif choice[1] == 40:
-				cfg.extended_menu.value = not cfg.extended_menu.value
-				cfg.extended_menu.save()
-				self.refreshPlugins()
-			elif choice[1] == 50:
-				self.selectionUtilitySubmenu = 0
-				self.utilitySubmenu()
 			else:
 				return
 
@@ -462,7 +469,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		def callbackAdd(change=False):
 			if change:
 				self.changes = True
-				self.createMountpointWithAutofile(fillBasicRecordPars())
+				self.createMountpointWithAutofile(self.fillBasicRecordPars())
 		self.session.openWithCallback(boundFunction(callbackAdd), ManagerAutofsMasterEdit, None, self.list)
 
 	def duplicateMountPoint(self):
@@ -2255,7 +2262,7 @@ class ManagerAutofsGetSettings(Screen, HelpableScreen):
 			if not selected:
 				data = [self["config"].getCurrent()[0]]
 				selected = 1
-			fo = open("/tmp/settings.new", "w")
+			fo = open("/tmp/settings", "w")
 			for item in data:
 				# item ... (name, value, index, status)
 				fo.write("%s=%s\n" % (item[0], item[1]))
