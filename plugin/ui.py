@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.14"
+VERSION = "2.15"
 #
-#  Coded by ims (c) 2017-2023
+#  Coded by ims (c) 2017-2024
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ import os
 from Components.Pixmap import Pixmap
 from .helptexts import ManagerAutofsHelp
 from .plugin import mountedLocalHDD
+from .nmmessagebox import MessageBoxNM
 
 # parameters for auto.master file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=False))
@@ -197,7 +198,6 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self["blue"] = Pixmap()
 
 		self.delayTimer = eTimer()
-		self.msgNM = None
 		self.selectionUtilitySubmenu = 0
 		self.inExitProcess = False
 		self.onShown.append(self.setWindowTitle)
@@ -289,7 +289,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		return ""
 
 	def clearTexts(self):
-		self.MessageBoxNM()
+		MessageBoxNM(self.session)
 		self["statusbar"].setText("")
 		self["status"].setText("")
 		self["text"].setText("")
@@ -299,7 +299,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if self.changes:
 			if not self.inExitProcess:
 				self.inExitProcess = True
-				self.MessageBoxNM(True, _("Updating mountpoints and bookmarks..."), delay=2)
+				MessageBoxNM(self.session, _("Updating mountpoints and bookmarks..."), delay=2)
 				self.saveMasterFile()
 				self.updateAutofs()
 				self.delayTimer.callback.append(self.finishPlugin)
@@ -481,7 +481,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				if os.path.exists(original_autofile):
 					copyfile(original_autofile, autofile)
 				else:
-					self.MessageBoxNM(True, _("'%s' not exists, %s will be with default values") % (original_autofile, autofile), 5)
+					MessageBoxNM(self.session, _("'%s' not exists, %s will be with default values") % (original_autofile, autofile), 5)
 
 		sel = self["list"].getCurrent()
 		if sel:
@@ -514,14 +514,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 							def callBackRemove(old_autofile, change=False):
 								if change:
 									os.rename(old_autofile, old_autofile + '.del')
-									self.MessageBoxNM(True, _("'%s' was removed" % old_autofile), 2)
+									MessageBoxNM(self.session, _("'%s' was removed" % old_autofile), 2)
 							self.session.openWithCallback(boundFunction(callBackRemove, old_autofile), MessageBox, _("Auto.name '%s' was attached to this record.\nRemove original '%s'?") % (autofile, old_autofile), type=MessageBox.TYPE_YESNO, default=False)
 						else:
 							def callBackRename(old_autofile, autofile, change=False):
 								if change:
 									copyfile(old_autofile, old_autofile + '.$$$')
 									os.rename(old_autofile, autofile)
-									self.MessageBoxNM(True, _("'%s' was renamed to '%s'") % (old_autofile, autofile), 2)
+									MessageBoxNM(self.session, _("'%s' was renamed to '%s'") % (old_autofile, autofile), 2)
 							self.session.openWithCallback(boundFunction(callBackRename, old_autofile, autofile), MessageBox, _("Auto.name in record was changed.\nDo You want rename original '%s' to '%s' too?") % (old_autofile, autofile), type=MessageBox.TYPE_YESNO, default=True)
 		sel = self["list"].getCurrent()
 		if sel:
@@ -778,7 +778,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if sel:
 			name = sel[2]
 			if sel[0] != _X_:
-				self.MessageBoxNM(True, _("Point '%s' is not mounted!") % name.split('.')[1], 3)
+				MessageBoxNM(self.session, _("Point '%s' is not mounted!") % name.split('.')[1], 3)
 				return
 			lines = self.getAutoLines(name)
 			if lines == 1:	# single record file
@@ -805,7 +805,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 							list.append((local_dir, local_dir))
 						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list)
 			else:
-				self.MessageBoxNM(True, _("'%s.auto' has wrong format or is empty!") % name.split('.')[1], 5)
+				MessageBoxNM(self.session, _("'%s.auto' has wrong format or is empty!") % name.split('.')[1], 5)
 				return
 
 	def hddReplacementReset(self):
@@ -848,7 +848,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				with open('/etc/hostname', 'w+') as fo:
 					fo.write(hostname)
 					fo.close()
-					self.MessageBoxNM(True, _("For apply new hostname restart box!"), 5)
+					MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
 
 	def removeBackupFiles(self):
 		from .removebckp import ManagerAutofsRemoveBackupFiles
@@ -862,7 +862,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					content = file.read().splitlines()
 					file.close()
 					return content
-				self.MessageBoxNM(True, _("File '%s' was created!") % BACKUPCFG, 3)
+				MessageBoxNM(self.session, _("File '%s' was created!") % BACKUPCFG, 3)
 				return ""
 			if value:
 				backup = readBackup()
@@ -873,7 +873,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					if rec[2] not in backup:
 						update.write(rec[2] + '\n')
 				update.close()
-				self.MessageBoxNM(True, _("Done"), 1)
+				MessageBoxNM(self.session, _("Done"), 1)
 			self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Update AutoBackup's '%s'?") % BACKUPCFG, type=MessageBox.TYPE_YESNO, default=False)
 
@@ -906,9 +906,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 						new.write(f)
 					new.close()
 					backupcfg.close()
-					self.MessageBoxNM(True, _("Done"), 1)
+					MessageBoxNM(self.session, _("Done"), 1)
 				else:
-					self.MessageBoxNM(True, _("Missing '/etc/backup.cfg'"), 3)
+					MessageBoxNM(self.session, _("Missing '/etc/backup.cfg'"), 3)
 			self.utilitySubmenu()
 		self.session.openWithCallback(callbackBackup, MessageBox, _("Remove unused lines from '%s'?") % BACKUPCFG, type=MessageBox.TYPE_YESNO, default=False)
 
@@ -923,25 +923,16 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			cmd = '%s %s' % (AUTOFS, option)
 			if restartGui:
 				cmd += '; killall enigma2'
-				self.MessageBoxNM(True, _("Please wait for restart GUI!"), 20)
+				MessageBoxNM(self.session, _("Please wait for restart GUI!"), 20)
 			if self.container.execute(cmd):
 				print("[ManagerAutofs] failed to execute")
 				self.showOutput()
 		else:
-			self.MessageBoxNM(True, _("Autofs is not installed!"), 3)
+			MessageBoxNM(self.session, _("Autofs is not installed!"), 3)
 
 	def refreshPlugins(self):
 		plugins.clearPluginList()
 		plugins.readPluginList(resolveFilename(SCOPE_PLUGINS))
-
-	def MessageBoxNM(self, display=False, text="", delay=1):
-		if self.msgNM:
-			self.session.deleteDialog(self.msgNM)
-			self.msgNM = None
-		else:
-			if display and self.session is not None:
-				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
-				self.msgNM.show()
 
 
 class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
@@ -967,6 +958,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, pars, master):
 		Screen.__init__(self, session)
+		self.session = session
 		self.inputMountPoint = None
 		self.inputAutoFile = None
 		if pars:
@@ -1006,8 +998,6 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			"red": self.keyClose,
 			"blue": self.keyBlue,
 			}, -1)
-
-		self.msgNM = None
 
 		self["config"].onSelectionChanged.append(self.moveOverItem)
 
@@ -1127,7 +1117,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def keyOk(self):
 		if cfg.autofile.value == "master":
-			self.MessageBoxNM(True, _("You cannot use 'master' in auto.file name"), 3)
+			MessageBoxNM(self.session, _("You cannot use 'master' in auto.file name"), 3)
 			return
 		af = "/etc/auto.%s" % cfg.autofile.value
 		if af != self.inputAutoFile:
@@ -1148,21 +1138,12 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			if not self.existMountPoint(mnt):
 				self.close(True)
 			else:
-				self.MessageBoxNM(True, _("Mountpoint name '%s' is used!" % mnt), 3)
+				MessageBoxNM(self.session, _("Mountpoint name '%s' is used!" % mnt), 3)
 		else:	# mountpoint record was edited, but mountpoint name was not changed
 			self.close(True)
 
 	def keyClose(self):
 		self.close()
-
-	def MessageBoxNM(self, display=False, text="", delay=1):
-		if self.msgNM:
-			self.session.deleteDialog(self.msgNM)
-			self.msgNM = None
-		else:
-			if display and self.session is not None:
-				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
-				self.msgNM.show()
 
 
 # parameters for selected auto. file
@@ -1253,8 +1234,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			"red": self.keyClose,
 			"blue": self.presets,
 			}, -1)
-
-		self.msgNM = None
 
 		if self.new:
 			self.setDefaultPars()
@@ -1543,7 +1522,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			cfg.rest.value = rest
 
 		except:
-			self.MessageBoxNM(True, _("Wrong file format!"), 5)
+			MessageBoxNM(self.session, _("Wrong file format!"), 5)
 
 	def testIfIP(self, string):
 		if len(string.split('.')) == 4:
@@ -1556,15 +1535,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		for x in strIP:
 			ip.append(int(x))
 		return ip
-
-	def MessageBoxNM(self, display=False, text="", delay=1):
-		if self.msgNM:
-			self.session.deleteDialog(self.msgNM)
-			self.msgNM = None
-		else:
-			if display and self.session is not None:
-				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
-				self.msgNM.show()
 
 
 class ManagerAutofsMultiAutoEdit(Screen):
@@ -1663,7 +1633,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			menu.append((_("Remove line"), 3, _("Remove line with mountpoint parameters.")))
 			buttons += ["", "", ""]
 		else:
-			self.MessageBoxNM(True, _("No valid item"), 5)
+			MessageBoxNM(self.session, _("No valid item"), 5)
 			return
 
 		text = _("Select operation:")
@@ -1753,15 +1723,6 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.backupFile(self.name, "bak")
 		self.saveFile(self.name)
 		self.close(self.changes)
-
-	def MessageBoxNM(self, display=False, text="", delay=1):
-		if self.msgNM:
-			self.session.deleteDialog(self.msgNM)
-			self.msgNM = None
-		else:
-			if display and self.session is not None:
-				self.msgNM = self.session.instantiateDialog(NonModalMessageBoxDialog, text=text, delay=delay)
-				self.msgNM.show()
 
 
 class ManagerAutofsPreset(Screen, ConfigListScreen):
@@ -1946,37 +1907,6 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 	def exit(self):
 		config.movielist.videodirs.load()
 		self.close()
-
-
-class NonModalMessageBoxDialog(Screen):
-	skin = """
-		<screen name="NonModalMessageBoxDialog" position="center,center" size="470,120" backgroundColor="#00808080" zPosition="2" flags="wfNoBorder">
-			<widget name="message" position="center,center" size="460,110" font="Regular;20" valign="center" halign="center"/>
-		</screen>
-	"""
-
-	def __init__(self, session, text="", delay=1):
-		Screen.__init__(self, session)
-		self.text = text
-		self.delay = delay
-		self["message"] = Label()
-
-		self.timer = eTimer()
-		self.timer.callback.append(self.timerLoop)
-
-		self.onLayoutFinish.append(self.timerStart)
-
-	def timerStart(self):
-		self["message"].setText(self.text)
-		self.timer.start(True)
-
-	def timerLoop(self):
-		if self.delay > 0:
-			self.delay -= 1
-			self.timer.start(1000, True)
-		else:
-			self.session.deleteDialog(self)
-
 
 class useMountAsHDD():
 	def __init__(self):
