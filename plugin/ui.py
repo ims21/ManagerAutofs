@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.15"
+VERSION = "2.16"
 #
-#  Coded by ims (c) 2017-2024
+#  Coded by ims (c) 2017-2025
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -1166,8 +1166,8 @@ config.plugins.mautofs.noatime = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.noserverino = NoSave(ConfigYesNo(default=True))
 config.plugins.mautofs.nosuid = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.nodev = NoSave(ConfigYesNo(default=False))
-config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768")]))
-config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768")]))
+config.plugins.mautofs.rsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768"), ("65536", "65536"), ("131072", "131072"), ("262144", "262144"), ("524288", "524288"), ("1048576", "1048576")]))
+config.plugins.mautofs.wsize = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("4096", "4096"), ("8192", "8192"), ("16384", "16384"), ("32768", "32768"), ("65536", "65536"), ("131072", "131072"), ("262144", "262144"), ("524288", "524288"), ("1048576", "1048576")]))
 config.plugins.mautofs.iocharset = NoSave(ConfigSelection(default="utf8", choices=[("", _("no")), ("utf8", "utf8")]))
 config.plugins.mautofs.sec = NoSave(ConfigSelection(default="", choices=[("", _("no")), ("ntlm", "ntlm"), ("ntlmv2", "ntlmv2"), ("ntlmssp", "ntlmssp")]))
 
