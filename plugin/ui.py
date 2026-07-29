@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.51"
+VERSION = "2.52"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -97,6 +97,7 @@ GREY = "a0a0a0"
 RED = "ff4000"
 GREEN = "00ff80"
 BLUE = "0080ff"
+DIRECT = "a0b0f0"
 
 _X_ = colorText(GREEN, "x")
 
@@ -253,7 +254,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			displayPoint = mapPoint if masterPoint == DIRECT_MAP and mapPoint else self.getDisplayMountpoint(masterPoint, autofile)
 			status = "x" if enabled else ""
 			mounted = self.getMountedStatus(status, masterPoint, autofile)
-			mapType = colorText("a0b0f0",_("direct")) if masterPoint == DIRECT_MAP else _("indirect")
+			mapType = _("direct") if masterPoint == DIRECT_MAP else _("indirect")
 			self.list.append((_X_ if enabled else "", masterPoint, autofile, options, mounted, displayPoint, mapType))
 			mapPoint = ""
 
@@ -300,7 +301,24 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			string += " " + x[3]
 		return string
 
+	def updateMapTypeColors(self):
+		selected = self["list"].getIndex()
+
+		for index, data in enumerate(self.list):
+			record = list(data)
+
+			if data[1] == DIRECT_MAP:
+				color = YELLOW if index == selected else DIRECT
+				mapType = colorText(color, _("direct"))
+			else:
+				mapType = _("indirect")
+
+			if record[6] != mapType:
+				record[6] = mapType
+				self["list"].modifyEntry(index, tuple(record))
+
 	def selectionChanged(self):
+		self.updateMapTypeColors()
 		self.refreshText()
 
 	def refreshText(self):
