@@ -126,7 +126,14 @@ class ManagerAutofsHelp(Screen):
 		return text
 
 	def commontxt(self):
-		text = "\n\n" + _("Note: older autofs versions can't handle commented lines in auto.xxxx files!") + "\n"
+		text = "\n\n" + _("%sDirect map:%s") % self.yellow() + "\n\n"
+		text += _("ManagerAutofs stores a direct map as two consecutive lines in /etc/auto.master:") + "\n"
+		text += 4 * " " + ("%s#map: /mnt/server%s") % self.grey() + "\n"
+		text += 4 * " " + ("%s/- /etc/auto.server%s") % self.grey() + "\n"
+		text += _("The '#map:' line is ManagerAutofs metadata for the displayed mountpoint and must immediately precede the '/-' line. Autofs itself ignores it as a comment.") + "\n\n"
+		text += _("The corresponding auto.file entry must use an absolute mountpoint:") + "\n"
+		text += 4 * " " + ("%s/mnt/server -fstype=cifs,... ://192.168.1.20/share%s") % self.grey() + "\n"
+		text += "\n" + _("Note: older autofs versions can't handle commented lines in auto.xxxx files!") + "\n"
 		text += "\n" + _("After change parameters in auto.file is better use %s'Restart autofs with GUI restart'%s there in 'Menu-Utility'") % self.yellow() + "\n"
 		return text
 
@@ -146,26 +153,26 @@ class ManagerAutofsHelp(Screen):
 		ret = []
 		for i in range(n):
 			ret.append(ui.yC)
-			ret.append(ui.fC)
+			ret.append("\\C")
 		return tuple(ret)
 
 	def grey(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.greyC)
-			ret.append(ui.fC)
+			ret.append("\\C")
 		return tuple(ret)
 
 	def green(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.gC)
-			ret.append(ui.fC)
+			ret.append("\\C")
 		return tuple(ret)
 
 	def blue(self, n=1):
 		ret = []
 		for i in range(n):
 			ret.append(ui.bC)
-			ret.append(ui.fC)
+			ret.append("\\C")
 		return tuple(ret)

@@ -1,9 +1,9 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.16"
+VERSION = "2.50"
 #
-#  Coded by ims (c) 2017-2025
+#  Coded by ims (c) 2017-2026
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
@@ -82,28 +82,26 @@ AUTOMASTER = "/etc/auto.master"
 BACKUPCFG = "/etc/backup.cfg"
 AUTOFS = "/etc/init.d/autofs"
 DEFAULT_HDD = '/media/hdd'
+DIRECT_MAP = "/-"
+MAP_COMMENT = "#map:"
 
 try:
-	yC = "\c%08x" % int(skin.parseColor("selectedFG").argb())
+	yC = "\\c%08x" % int(skin.parseColor("selectedFG").argb())
 except:
-	yC = "\c00fcc000"
-try:
-	fC = "\c%08x" % int(skin.parseColor("foreground").argb())
-except:
-	fC = "\c00f0f0f0"
+	yC = "\\c00fcc000"
 
-greyC = "\c00a0a0a0"
-rC = "\c00ff4000"
-gC = "\c0000ff80"
-bC = "\c000080ff"
+greyC = "\\c00a0a0a0"
+rC = "\\c00ff4000"
+gC = "\\c0000ff80"
+bC = "\\c000080ff"
 
-_X_ = "%sx%s" % (gC, fC)
+_X_ = "%sx\\C" % gC
 
-MOUNTED = "%s~%s" % (gC, fC)
-CHANGED = "%s~%s" % (yC, fC)
-FAILED = "%s~%s" % (rC, fC)
-MISSING_FILE = "%s!%s" % (rC, fC)
-MISSING_LINE = "%s?%s" % (yC, fC)
+MOUNTED = "%s~\\C" % gC
+CHANGED = "%s~\\C" % yC
+FAILED = "%s~\\C" % rC
+MISSING_FILE = "%s!\\C" % rC
+MISSING_LINE = "%s?\\C" % yC
 
 masterOptions = {
 	'debug': "--debug",
@@ -127,9 +125,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				{"templates":
 					{"default": (25,[
 							MultiContentEntryText(pos = (5, 6), size = (10, 25), font=1, flags = RT_HALIGN_LEFT, text = 0), # index 0 is e/d status
-							MultiContentEntryText(pos = (50, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 1), # index 1 is the name
+							MultiContentEntryText(pos = (50, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 5), # index 5 is displayed mountpoint
 							MultiContentEntryText(pos = (300, 3), size = (250, 25), font=0, flags = RT_HALIGN_LEFT, text = 2), # index 2 is the autofile
 							MultiContentEntryText(pos = (15, 6), size = (20, 25), font=0, flags = RT_HALIGN_LEFT, text = 4), # mount status
+							MultiContentEntryText(pos = (555, 3), size = (95, 25), font=0, flags = RT_HALIGN_LEFT, text = 6), # map type
 						])
 					},
 					"fonts": [gFont("Regular", 18),gFont("Regular", 12)],
@@ -139,6 +138,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			</widget>
 			<widget name="mntpoint" position="55,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
 			<widget name="autofile" position="305,40" size="250,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
+			<widget name="maptype" position="560,40" size="95,20" font="Regular;14" halign="left" valign="center" zPosition="1"/>
 			<widget name="text" position="55,435" zPosition="10" size="560,25" font="Regular;22" halign="left" valign="center"/>
 			<widget name="status" position="55,460" zPosition="10" size="300,20" font="Regular;18" halign="left" valign="center"/>
 			<widget name="statusbar" position="355,460" zPosition="10" size="300,20" font="Regular;18" halign="left" valign="center"/>
@@ -158,6 +158,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 		self["mntpoint"] = Label(_("Mountpoint"))
 		self["autofile"] = Label(_("auto.file"))
+		self["maptype"] = Label(_("Map type"))
 		self["text"] = Label()
 
 		self["ManagerAutofsActions"] = HelpableActionMap(self, ["SetupActions", "ColorActions", "MenuActions"],
@@ -216,43 +217,82 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC, fC, yC, fC))
+		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC, "\C", yC, "\C"))
 
 	def readMasterFile(self):
-		# mandatory: 0 - status 1 - mountpoint 2 - autofile  Optional pars: 3 , 4 - mount status
+		# 0 - status, 1 - master mountpoint, 2 - autofile,
+		# 3 - options, 4 - mount status, 5 - displayed mountpoint
 		self.list = []
+		mapPoint = ""
 
 		for line in open(AUTOMASTER, "r"):
-			line = line.replace('\n', '')
-			if '#' in line:
-				status = ""
-				line = line[1:]
-			else:
-				status = "x"
-			line = status + ' ' + line
-			m = line.split(' ')
-			if len(m) < 3: # wrong line
+			line = line.strip()
+			if not line:
 				continue
-			mounted = self.getMountedStatus(m[0], m[1], m[2])
-			self.list.append((_X_ if m[0] == "x" else '', m[1], m[2], self.parseOptional(m), mounted))
+
+			if line.startswith(MAP_COMMENT):
+				mapPoint = line[len(MAP_COMMENT):].strip()
+				continue
+
+			enabled = not line.startswith("#")
+			if not enabled:
+				line = line[1:].lstrip()
+
+			m = line.split()
+			if len(m) < 2 or not m[0].startswith("/") or not m[1].startswith("/etc/auto."):
+				mapPoint = ""
+				continue
+
+			masterPoint = m[0]
+			autofile = m[1]
+			options = " ".join(m[2:])
+			displayPoint = mapPoint if masterPoint == DIRECT_MAP and mapPoint else self.getDisplayMountpoint(masterPoint, autofile)
+			status = "x" if enabled else ""
+			mounted = self.getMountedStatus(status, masterPoint, autofile)
+			mapType = _("direct") if masterPoint == DIRECT_MAP else _("indirect")
+			self.list.append((_X_ if enabled else "", masterPoint, autofile, options, mounted, displayPoint, mapType))
+			mapPoint = ""
+
 		self['list'].setList(self.list)
 
-	def parseOptional(self, m):
-		optional = ""
-		for i in range(3, len(m)):
-			optional += m[i]
-			optional += " "
-		return optional.strip()
+	def getDisplayMountpoint(self, masterPoint, autofile):
+		if masterPoint != DIRECT_MAP:
+			return masterPoint
+		if os.path.exists(autofile):
+			for line in open(autofile, "r"):
+				line = line.strip()
+				if not line:
+					continue
+				if line.startswith("#"):
+					line = line[1:].lstrip()
+				parts = line.split()
+				if len(parts) >= 3 and parts[0].startswith("/"):
+					return parts[0]
+		return DIRECT_MAP
+
+	def normalizeRecord(self, data, mounted=None):
+		if mounted is None:
+			mounted = data[4] if len(data) > 4 else ""
+		displayPoint = data[5] if len(data) > 5 and data[5] else self.getDisplayMountpoint(data[1], data[2])
+		mapType = _("direct") if data[1] == DIRECT_MAP else _("indirect")
+		return (data[0], data[1], data[2], data[3] if len(data) > 3 else "", mounted, displayPoint, mapType)
+
+	def updateDisplayMountpoint(self, data):
+		record = list(self.normalizeRecord(data))
+		record[5] = self.getDisplayMountpoint(record[1], record[2])
+		return tuple(record)
 
 	def saveMasterFile(self):
 		fo = open(AUTOMASTER, "w")
 		for x in self.list:
+			if x[1] == DIRECT_MAP and len(x) > 5 and x[5]:
+				fo.write("%s %s\n" % (MAP_COMMENT, x[5]))
 			fo.write(self.formatString(x) + '\n')
 		fo.close()
 
 	def formatString(self, x):
 		string = "%s%s %s" % ("" if x[0] == _X_ else "#", x[1], x[2])
-		if len(x) > 3:
+		if len(x) > 3 and x[3]:
 			string += " " + x[3]
 		return string
 
@@ -268,7 +308,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			else:
 				text = _("Enable")
 			self["key_blue"].setText(text)
-			self["text"].setText(self.formatString(sel))
+			text = self.formatString(sel)
+			if sel[1] == DIRECT_MAP:
+				text = "%s %s   %s" % (_("map:"), sel[5], text)
+			self["text"].setText(text)
 		self.hddRealPath()
 
 	def getMountedStatus(self, selected, device, autofile):
@@ -360,10 +403,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		device = None
 		sel = self["list"].getCurrent()
 		if sel:
-			recordname = "%s" % (sel[1].split('/')[2])
-			device = "%s%s%s" % (gC, recordname, fC)
+			displayPoint = sel[5] if len(sel) > 5 else sel[1]
+			recordname = os.path.basename(displayPoint.rstrip("/"))
+			device = "%s%s\C" % (gC, recordname)
 			autoname = "%s" % sel[2].split('/')[2]
-			mountpoint = "%s%s%s" % (bC, autoname, fC)
+			mountpoint = "%s%s\C" % (bC, autoname)
 			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'auto.master' file.") % device))
 			buttons = [""]
 		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
@@ -456,12 +500,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				if i not in("", " "):
 					out += " %s" % i
 			return out.strip()
-		mountpoint = "/mnt/%s" % cfg.mountpoint.value
+		displayPoint = "/mnt/%s" % cfg.mountpoint.value
+		mountpoint = DIRECT_MAP if cfg.maptype.value else displayPoint
 		autofile = "/etc/auto.%s" % cfg.autofile.value
 		enabled = cfg.enabled.value and _X_ or ""
 		debug = masterOptions.get('debug') if cfg.debug.value else ""
 		timeout = "%s=%s" % (masterOptions.get('timeout'), cfg.timeouttime.value) if cfg.timeout.value else ""
-		browse = "%s" % masterOptions.get('browse') if cfg.browse.value else ""
+		browse = "%s" % masterOptions.get('browse') if cfg.browse.value and not cfg.maptype.value else ""
 		options = optionsSpaces((debug, timeout, browse))
 		return enabled, mountpoint, autofile, options
 
@@ -494,20 +539,53 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			sel = [enabled, mountpoint, autofile, options]
 			self.session.openWithCallback(boundFunction(callbackAdd, original_autofile), ManagerAutofsMasterEdit, sel, self.list)
 
+	def changeAutofileMapPoint(self, autofile, mapPoint):
+		line = open(autofile, "r").readline().rstrip("\n")
+		parts = line.split(None, 1)
+		if len(parts) != 2:
+			return False
+
+		disabled = parts[0].startswith("#")
+		key = "%s%s" % ("#" if disabled else "", mapPoint)
+		newLine = "%s %s" % (key, parts[1])
+
+		self.backupFile(autofile, "bak")
+		self.saveFile(autofile, newLine)
+		return True
+
 	def editMasterRecord(self):
 		def callbackEdit(index, sel, changed=False):
 			if changed:
 				old_autofile = sel[2]
 				mnt_status = sel[4]
 				enabled, mountpoint, autofile, options = self.fillBasicRecordPars()
-				record = (enabled, mountpoint, autofile, options if len(options) else '', mnt_status)
+				displayPoint = "/mnt/%s" % cfg.mountpoint.value
+
+				if sel[1] != DIRECT_MAP and mountpoint == DIRECT_MAP:
+					if not self.changeAutofileMapPoint(old_autofile, displayPoint):
+						MessageBoxNM(self.session, _("Failed to convert auto.file."), 5)
+						return
+
+				elif sel[1] == DIRECT_MAP and mountpoint != DIRECT_MAP:
+					if not self.changeAutofileMapPoint(old_autofile, cfg.localdir.value):
+						MessageBoxNM(self.session, _("Failed to convert auto.file."), 5)
+						return
+
+				record = (
+					enabled,
+					mountpoint,
+					autofile,
+					options if len(options) else "",
+					mnt_status,
+					displayPoint
+				)
 				changed = self.testChangedRecord(sel, record)
 				self.changeItem(index, record, changed)
 				old = "%s %s %s" % (sel[1], sel[2], sel[3] if len(sel[3]) else '')
 				new = "%s %s %s" % (mountpoint, autofile, options if len(options) else '')
 				self.changes = changed
 				if old != new:
-					self.session.open(ManagerAutofsInfo, old, new)
+					self.session.open(ManagerAutofsInfo, old, new, delay=4)
 				if old_autofile != autofile:
 					if os.path.exists(old_autofile):
 						if os.path.exists(autofile):
@@ -558,15 +636,17 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			status = ""
 		else:
 			status = _X_
-		self["list"].modifyEntry(index, (status, data[1], data[2], data[3] if len(data) > 3 else '', CHANGED))
+		record = self.normalizeRecord(data, CHANGED)
+		self["list"].modifyEntry(index, (status, record[1], record[2], record[3], record[4], record[5], record[6]))
 		self.refreshText()
 
 	def changeItem(self, index, new, changed=False):
-		self["list"].modifyEntry(index, (new[0], new[1], new[2], new[3], CHANGED if changed else ''))
+		record = self.normalizeRecord(new, CHANGED if changed else "")
+		self["list"].modifyEntry(index, record)
 		self.refreshText()
 
 	def addItem(self, new):
-		self.list.append((new[0], new[1], new[2], new[3] if len(new) > 3 else '', ''))
+		self.list.append(self.normalizeRecord(new, ""))
 		self.refreshText()
 
 	def removeItem(self, index):
@@ -580,74 +660,159 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				self.changes = True
 				self.backupFile(name, "bak")
 				self.saveFile(name, text)
-				self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
+				current = self["list"].getCurrent()
+				self.changeItem(self["list"].getIndex(), self.updateDisplayMountpoint(current), True)
+
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
+			direct = sel[1] == DIRECT_MAP
+			mapPoint = sel[5] if len(sel) > 5 else None
 			lines = self.getAutoLines(name)
-			if lines == -1 or lines == 0: # file not exist or is empty
+			if lines == -1 or lines == 0:
 				data = ""
-				self.session.openWithCallback(boundFunction(callBackCreate, name), ManagerAutofsAutoEdit, name, data, True)
+				self.session.openWithCallback(
+					boundFunction(callBackCreate, name),
+					ManagerAutofsAutoEdit,
+					name,
+					data,
+					True,
+					direct,
+					mapPoint
+				)
 			else:
 				def stringChanged(changed=False):
 					if changed:
 						self.changes = True
-						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
-				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
+						current = self["list"].getCurrent()
+						self.changeItem(self["list"].getIndex(), self.updateDisplayMountpoint(current), True)
+
+				self.session.openWithCallback(
+					stringChanged,
+					ManagerAutofsMultiAutoEdit,
+					name,
+					direct,
+					mapPoint
+				)
 
 	def createMountpointWithAutofile(self, add):
 		name = add[2]
+		direct = add[1] == DIRECT_MAP
+		mapPoint = "/mnt/%s" % cfg.mountpoint.value if direct else None
+
+		if direct and os.path.exists(name):
+			existingPoint = self.getDisplayMountpoint(DIRECT_MAP, name)
+			if existingPoint != DIRECT_MAP:
+				mapPoint = existingPoint
 
 		def callBackSingle(name, text=""):
 			if text:
 				self.saveFile(name, text)
 				self.addItem(add)
+
 		data = ""
-		if os.path.exists(name): # old auto.file exists and user accepted to use it
+		if os.path.exists(name):
 			lines = self.getAutoLines(name)
-			data = ""
-			if lines == 1:		# single line
+			if lines == 1:
 				line = open(name, "r").readline()
 				data = line.replace('\n', '').strip()
-				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, False)
-			elif lines > 1:		# multi
+				self.session.openWithCallback(
+					boundFunction(callBackSingle, name),
+					ManagerAutofsAutoEdit,
+					name,
+					data,
+					False,
+					direct,
+					mapPoint
+				)
+			elif lines > 1:
 				def stringChanged(changed=False):
 					self.changes = True
-					self.addItem(add) # - added record to master file
-				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
-			else:			# empty
-				self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+					self.addItem(add)
+
+				self.session.openWithCallback(
+					stringChanged,
+					ManagerAutofsMultiAutoEdit,
+					name,
+					direct,
+					mapPoint
+				)
+			else:
+				self.session.openWithCallback(
+					boundFunction(callBackSingle, name),
+					ManagerAutofsAutoEdit,
+					name,
+					data,
+					True,
+					direct,
+					mapPoint
+				)
 		else:
-			self.session.openWithCallback(boundFunction(callBackSingle, name), ManagerAutofsAutoEdit, name, data, True)
+			self.session.openWithCallback(
+				boundFunction(callBackSingle, name),
+				ManagerAutofsAutoEdit,
+				name,
+				data,
+				True,
+				direct,
+				mapPoint
+			)
 
 	def editAutofile(self):
 		def callBackSingle(name, data="", text=""):
 			if text:
 				if text != data:
 					self.changes = True
-					self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
-					self.session.open(ManagerAutofsInfo, data, text)
+					self.session.open(ManagerAutofsInfo, data, text, delay=8)
 				self.backupFile(name, "bak")
 				self.saveFile(name, text)
+				if text != data:
+					current = self["list"].getCurrent()
+					self.changeItem(self["list"].getIndex(), self.updateDisplayMountpoint(current), True)
+
 		sel = self["list"].getCurrent()
 		if sel:
 			name = sel[2]
+			direct = sel[1] == DIRECT_MAP
+			mapPoint = sel[5] if len(sel) > 5 else None
 			lines = self.getAutoLines(name)
 			data = ""
-			if lines == 1:		# single line
+			if lines == 1:
 				line = open(name, "r").readline()
 				data = line.replace('\n', '').strip()
-				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, False)
-			elif lines > 1:		# multi
+				self.session.openWithCallback(
+					boundFunction(callBackSingle, name, data),
+					ManagerAutofsAutoEdit,
+					name,
+					data,
+					False,
+					direct,
+					mapPoint
+				)
+			elif lines > 1:
 				def stringChanged(changed=False):
 					if changed:
 						self.changes = True
-						self.changeItem(self["list"].getIndex(), self["list"].getCurrent(), True)
-				self.session.openWithCallback(stringChanged, ManagerAutofsMultiAutoEdit, name)
-			elif lines == -1:	# missing
-				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, True)
-			else:			# empty
-				self.session.openWithCallback(boundFunction(callBackSingle, name, data), ManagerAutofsAutoEdit, name, data, True)
+						current = self["list"].getCurrent()
+						self.changeItem(self["list"].getIndex(), self.updateDisplayMountpoint(current), True)
+
+				self.session.openWithCallback(
+					stringChanged,
+					ManagerAutofsMultiAutoEdit,
+					name,
+					direct,
+					mapPoint
+				)
+			else:
+				self.session.openWithCallback(
+					boundFunction(callBackSingle, name, data),
+					ManagerAutofsAutoEdit,
+					name,
+					data,
+					True,
+					direct,
+					mapPoint
+				)
 
 	def backupFile(self, name, ext):
 		if os.path.exists(name):
@@ -692,7 +857,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"), 12, _("Install required autofs package if missing.")))
 			buttons += [""]
-		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "%s" % fC, 1000))
+		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "\C", 1000))
 		buttons += [""]
 		space = 4 * " "
 		if not mountedLocalHDD():
@@ -961,11 +1126,16 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.session = session
 		self.inputMountPoint = None
 		self.inputAutoFile = None
+		self.inputMapType = None
+		self.convertLocaldir = None
 		if pars:
-			record = "%s%s%s" % (gC, pars[1].split('/')[2], fC)
+			displayPoint = pars[5] if len(pars) > 5 else pars[1]
+			recordName = os.path.basename(displayPoint.rstrip("/"))
+			record = "%s%s\C" % (gC, recordName)
 			text = _("Manager Autofs - edited record: %s") % record
-			self.inputMountPoint = pars[1]
+			self.inputMountPoint = displayPoint
 			self.inputAutoFile = pars[2]
+			self.inputMapType = pars[1] == DIRECT_MAP
 		else:
 			text = _("Manager Autofs - create new record")
 		self.setTitle(text)
@@ -992,7 +1162,6 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
-			"ok": self.keyOk,
 			"cancel": self.keyClose,
 			"green": self.keyOk,
 			"red": self.keyClose,
@@ -1009,8 +1178,11 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		dx = 4 * ' '
 		self.list = []
 		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
+		self.maptype = _("Direct map")
+		self.list.append(getConfigListEntry(self.maptype, cfg.maptype))
 		self.mountpoint = _("mountpoint name")
-		self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
+		if not self.pars or not cfg.maptype.value:
+			self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
 		self.autofile = _("auto.name")
 		self.list.append(getConfigListEntry(self.autofile, cfg.autofile))
 		self.list.append(getConfigListEntry(_("debug"), cfg.debug))
@@ -1018,7 +1190,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
 		if cfg.timeout.value:
 			self.list.append(getConfigListEntry(dx + _("time"), cfg.timeouttime))
-		self.list.append(getConfigListEntry(_("browse"), cfg.browse))
+		if not cfg.maptype.value:
+			self.list.append(getConfigListEntry(_("browse"), cfg.browse))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 		self.actualizeString()
@@ -1028,7 +1201,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			self.preparedAsDisabled()
 			if self.pars[0] == _X_:
 				cfg.enabled.value = True
-			cfg.mountpoint.value = self.pars[1].split('/')[2]
+			cfg.maptype.value = self.pars[1] == DIRECT_MAP
+			displayPoint = self.pars[5] if len(self.pars) > 5 else self.pars[1]
+			cfg.mountpoint.value = os.path.basename(displayPoint.rstrip("/"))
 			cfg.autofile.value = self.pars[2].split('.')[1]
 			if len(self.pars) > 3:
 				optional = self.pars[3].split()
@@ -1041,10 +1216,11 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 					if masterOptions.get('browse') in x:
 						cfg.browse.value = True
 		else:
-			cfg.mountpoint.value = cfg.mountpoint.value.split('/')[2]
+			cfg.mountpoint.value = os.path.basename(cfg.mountpoint.value.rstrip("/"))
 
 	def setDefault(self):
 		cfg.enabled.value = cfg.enabled.default
+		cfg.maptype.value = cfg.maptype.default
 		cfg.mountpoint.value = cfg.mountpoint.default
 		cfg.autofile.value = cfg.autofile.default
 		cfg.debug.value = cfg.debug.default
@@ -1059,7 +1235,9 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		cfg.browse.value = False
 
 	def changedEntry(self):
-		if self["config"].getCurrent()[0] == self.timeout:
+		if self["config"].getCurrent()[0] == self.maptype:
+			self.createConfig()
+		elif self["config"].getCurrent()[0] == self.timeout:
 			self.createConfig()
 		elif self["config"].getCurrent()[0] == self.mountpoint:
 			self.blueText(_("Put autoname"))
@@ -1068,8 +1246,11 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		self.actualizeString()
 
 	def actualizeString(self):
+		displayPoint = "/mnt/%s" % cfg.mountpoint.value
+		masterPoint = DIRECT_MAP if cfg.maptype.value else displayPoint
+
 		string = "#" if not cfg.enabled.value else ""
-		string += "/mnt/%s" % cfg.mountpoint.value
+		string += masterPoint
 		string += " "
 		string += "auto.%s" % cfg.autofile.value
 		if cfg.debug.value:
@@ -1079,9 +1260,12 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 			string += " "
 			string += masterOptions.get('timeout')
 			string += "=%d" % cfg.timeouttime.value
-		if cfg.browse.value:
+		if cfg.browse.value and not cfg.maptype.value:
 			string += " "
 			string += masterOptions.get('browse')
+
+		if cfg.maptype.value:
+			string = "%s %s   %s" % (_("map:"), displayPoint, string)
 		self["text"].setText(string)
 
 	def moveOverItem(self):
@@ -1105,7 +1289,8 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def existMountPoint(self, mountpoint):
 		for rec in self.master:
-			if rec[1] == mountpoint:
+			displayPoint = rec[5] if len(rec) > 5 else rec[1]
+			if displayPoint == mountpoint:
 				return True
 		return False
 
@@ -1115,7 +1300,45 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 				return True
 		return False
 
+	def convertToIndirectCallback(self, localdir=None):
+		if localdir is None:
+			return
+
+		localdir = localdir.strip()
+		if not localdir or localdir.startswith("/"):
+			MessageBoxNM(self.session, _("Indirect map directory must be relative."), 4)
+			return
+
+		self.convertLocaldir = localdir
+		cfg.localdir.value = localdir
+		self.keyOk()
+
 	def keyOk(self):
+		if self.inputMapType is not None and cfg.maptype.value != self.inputMapType:
+			try:
+				with open(self.inputAutoFile, "r") as f:
+					lines = [line for line in f if line.strip()]
+			except IOError:
+				lines = []
+
+			if len(lines) != 1:
+				MessageBoxNM(self.session, _("Only a map with one auto.file line can be converted."), 4)
+				return
+
+			if self.inputMapType and self.convertLocaldir is None:
+				localdir = cfg.pre_localdir.value.strip()
+				if localdir and not localdir.startswith("/"):
+					self.convertLocaldir = localdir
+					cfg.localdir.value = localdir
+				else:
+					self.session.openWithCallback(
+						self.convertToIndirectCallback,
+						VirtualKeyBoard,
+						title=_("Enter local directory for the indirect map"),
+						text=""
+					)
+					return
+
 		if cfg.autofile.value == "master":
 			MessageBoxNM(self.session, _("You cannot use 'master' in auto.file name"), 3)
 			return
@@ -1148,6 +1371,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 # parameters for selected auto. file
 config.plugins.mautofs.enabled = NoSave(ConfigYesNo(default=True))
+config.plugins.mautofs.maptype = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.localdir = NoSave(ConfigText(default="dirname", visible_width=30, fixed_size=False))
 config.plugins.mautofs.fstype = NoSave(ConfigSelection(default="cifs", choices=[("", _("no")), ("cifs", "cifs"), ("nfs", "nfs"), ("auto", "auto"), ("udf", "udf"), ("iso9660", "iso9660")]))
 config.plugins.mautofs.soft = NoSave(ConfigYesNo(default=False))
@@ -1202,13 +1426,15 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			<!--widget name="HelpWindow" position="160,300" size="0,0"/-->
 		</screen>"""
 
-	def __init__(self, session, filename, line, new=False):
+	def __init__(self, session, filename, line, new=False, direct=False, mountpoint=None):
 		Screen.__init__(self, session)
-		name = "%s%s%s" % (bC, filename, fC)
+		name = "%s%s\C" % (bC, filename)
 		self.setup_title = _("Manager Autofs - edited autofile/record: %s") % name
 		self.setTitle(self.setup_title)
 		self.session = session
 		self.new = new
+		self.direct = direct
+		self.mountpoint = mountpoint
 		self["text"] = Label("")
 		self.autoName = filename
 
@@ -1237,14 +1463,20 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 		if self.new:
 			self.setDefaultPars()
+			if self.direct:
+				cfg.localdir.value = self.mountpoint if self.mountpoint else "/mnt/"
 		else:
 			self.parseParams(line)
 		self.createConfig()
 
 	def keyOk(self):
-#		self.writeFile()
+		if self.direct and not cfg.localdir.value.startswith("/"):
+			MessageBoxNM(self.session, _("Direct map mountpoint must be an absolute path."), 4)
+			return
+		if not self.direct and cfg.localdir.value.startswith("/"):
+			MessageBoxNM(self.session, _("Indirect map directory must be relative."), 4)
+			return
 		self.close(self.actualizeString())
-#		self.close(self["text"].getText())
 
 	def keyClose(self):
 		self.close()
@@ -1262,7 +1494,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		dx = 4 * ' '
 		self.enabled = _("enabled")
 		self.list.append(getConfigListEntry(self.enabled, cfg.enabled))
-		self.localdir = _("local directory")
+		self.localdir = _("mountpoint") if self.direct else _("local directory")
 		self.list.append(getConfigListEntry(self.localdir, cfg.localdir))
 		self.fstype = _("fstype")
 		self.list.append(getConfigListEntry(self.fstype, cfg.fstype))
@@ -1322,19 +1554,22 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.fillString()
 
 	def presets(self):
-		if self["config"].getCurrent()[0] is self.localdir:
-			cfg.localdir.value = cfg.pre_localdir.value
+		if self["config"].getCurrent()[0] == self.localdir:
+			if self.direct:
+				cfg.localdir.value = self.mountpoint if self.mountpoint else "/mnt/"
+			else:
+				cfg.localdir.value = cfg.pre_localdir.value
 			self.createConfig()
-		elif self["config"].getCurrent()[0] is self.user:
+		elif self["config"].getCurrent()[0] == self.user:
 			cfg.user.value = cfg.pre_user.value
 			self.createConfig()
-		elif self["config"].getCurrent()[0] is self.passwd:
+		elif self["config"].getCurrent()[0] == self.passwd:
 			cfg.passwd.value = cfg.pre_passwd.value
 			self.createConfig()
-		elif self["config"].getCurrent()[0] is self.domain:
+		elif self["config"].getCurrent()[0] == self.domain:
 			cfg.domain.value = cfg.pre_domain.value
 			self.createConfig()
-		elif self["config"].getCurrent()[0] is self.remotedir:
+		elif self["config"].getCurrent()[0] == self.remotedir:
 			cfg.remotedir.value = cfg.pre_remotedir.value
 			self.createConfig()
 
@@ -1564,10 +1799,12 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			<widget name="text" position="5,380" zPosition="10" size="660,15" font="Regular;11" halign="left" valign="center"/>
 		</screen>"""
 
-	def __init__(self, session, name=None):
+	def __init__(self, session, name=None, direct=False, mountpoint=None):
 		Screen.__init__(self, session)
 		self.session = session
 		self.name = name
+		self.direct = direct
+		self.mountpoint = mountpoint
 
 		self["shortcuts"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions", "MenuActions"],
 		{
@@ -1603,7 +1840,7 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s") % (yC, fC, yC, fC, yC, fC,))
+		self.setTitle(_("Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s") % (yC, "\C", yC, "\C", yC, "\C",))
 
 	def readFile(self):
 		if self.name:
@@ -1660,13 +1897,21 @@ class ManagerAutofsMultiAutoEdit(Screen):
 			if text:
 				name = text.split()[0]
 				if text != current[1]:
-					self.session.open(ManagerAutofsInfo, current[1], text)
+					self.session.open(ManagerAutofsInfo, current[1], text, delay=8)
 					self.changes = True
 				self.changeItem(index, (name, text))
 		current = self["list"].getCurrent()
 		if current:
 			index = self["list"].getIndex()
-			self.session.openWithCallback(boundFunction(callBackWriteLine, index, current), ManagerAutofsAutoEdit, current[0], current[1], False)
+			self.session.openWithCallback(
+				boundFunction(callBackWriteLine, index, current),
+				ManagerAutofsAutoEdit,
+				current[0],
+				current[1],
+				False,
+				self.direct,
+				self.mountpoint
+			)
 
 	def keyAdd(self):
 		def callBackAdd(text=""):
@@ -1674,7 +1919,15 @@ class ManagerAutofsMultiAutoEdit(Screen):
 				name = text.split()[0]
 				self.addItem((name, text))
 				self.changes = True
-		self.session.openWithCallback(boundFunction(callBackAdd), ManagerAutofsAutoEdit, _("New"), "", True)
+		self.session.openWithCallback(
+			boundFunction(callBackAdd),
+			ManagerAutofsAutoEdit,
+			_("New"),
+			"",
+			True,
+			self.direct,
+			"/mnt/" if self.direct else None
+		)
 
 	def keyDuplicate(self):
 		def callbackDuplicate(value=False):
@@ -1949,13 +2202,17 @@ class ManagerAutofsInfo(Screen):
 		<widget name="new" position="10,45" size="1920,29" font="Regular;25" foregroundColor="green"/>
 	</screen>"""
 
-	def __init__(self, session, old, new):
+	def __init__(self, session, old, new, delay=0):
 		Screen.__init__(self, session)
 		self.session = session
 		self.old = old
 		self.new = new
+		self.delay = delay
 		self["old"] = Label()
 		self["new"] = Label()
+
+		self.infoTimer = eTimer()
+		self.infoTimer.callback.append(self.exit)
 
 		self["actions"] = ActionMap(["ColorActions", "OkCancelActions"],
 		{
@@ -1966,6 +2223,11 @@ class ManagerAutofsInfo(Screen):
 		}, -2)
 
 		self.onLayoutFinish.append(self.setSize)
+		if self.delay:
+			self.onLayoutFinish.append(self.startTimer)
+
+	def startTimer(self):
+		self.infoTimer.start(self.delay * 1000, True)
 
 	def setSize(self):
 		x, y = self.getLineSize()
@@ -1990,6 +2252,7 @@ class ManagerAutofsInfo(Screen):
 		return desktop.size().width(), desktop.size().height()
 
 	def exit(self):
+		self.infoTimer.stop()
 		self.close()
 
 

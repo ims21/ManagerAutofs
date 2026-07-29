@@ -3,7 +3,7 @@
 #
 #  $Id$
 #
-#  Coded by ims (c) 2017-2025
+#  Coded by ims (c) 2017-2026
 #  Support: openpli.org
 #
 #  This program is free software; you can redistribute it and/or
