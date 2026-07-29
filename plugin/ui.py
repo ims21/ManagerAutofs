@@ -85,26 +85,27 @@ DEFAULT_HDD = '/media/hdd'
 DIRECT_MAP = "/-"
 MAP_COMMENT = "#map:"
 
-def colorText(rrggbb, text):
-	return "\\c00%s%s\\C" % (rrggbb, text)
+def colorText(color, text):
+	return "\\c00%s%s\\C" % (color[-6:], text)
 
 try:
-	yC = "%06x" % (int(skin.parseColor("selectedFG").argb()) & 0xFFFFFF)
+	YELLOW = "%06x" % (int(skin.parseColor("selectedFG").argb()) & 0xFFFFFF)
 except:
-	yC = "fcc000"
+	YELLOW = "fcc000"
 
-greyC = "a0a0a0"
-rC = "ff4000"
-gC = "00ff80"
-bC = "0080ff"
+GREY = "a0a0a0"
+RED = "ff4000"
+GREEN = "00ff80"
+BLUE = "0080ff"
 
-_X_ = colorText(gC, "x")
+_X_ = colorText(GREEN, "x")
 
-MOUNTED = colorText(gC, "~")
-CHANGED = colorText(yC, "~")
-FAILED = colorText(rC, "~")
-MISSING_AUTO_FILE = colorText(rC, "!")
-MISSING_AUTOFILE_LINE = colorText(yC, "?")
+MOUNTED = colorText(GREEN, "~")
+CHANGED = colorText(YELLOW, "~")
+FAILED = colorText(RED, "~")
+MISSING_AUTO_FILE = colorText(RED, "!")
+MISSING_AUTOFILE_LINE = colorText(YELLOW, "?")
+
 
 masterOptions = {
 	'debug': "--debug",
@@ -220,7 +221,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.onLayoutFinish.append(self.readMasterFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs v.%s - press %sOK%s on record or use %sMenu%s") % (VERSION, yC, "\C", yC, "\C"))
+		self.setTitle(_("Manager Autofs v.%s - press %s on record or use %s") % (VERSION, colorText(YELLOW, _("OK")), colorText(YELLOW, _("Menu"))))
 
 	def readMasterFile(self):
 		# 0 - status, 1 - master mountpoint, 2 - autofile,
@@ -408,9 +409,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if sel:
 			displayPoint = sel[5] if len(sel) > 5 else sel[1]
 			recordname = os.path.basename(displayPoint.rstrip("/"))
-			device = "%s%s\C" % (gC, recordname)
+			device = colorText(GREEN, recordname)
 			autoname = "%s" % sel[2].split('/')[2]
-			mountpoint = "%s%s\C" % (bC, autoname)
+			mountpoint = colorText(BLUE, autoname)
 			menu.append(((_("Edit record:") + "  " + device), 0, _("Edit record for '%s' remote device in 'auto.master' file.") % device))
 			buttons = [""]
 		menu.append((_("New record"), 1, _("Add new record to 'auto.master' file.")))
@@ -860,7 +861,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if not os.path.exists(AUTOFS):
 			menu.append((_("Install autofs"), 12, _("Install required autofs package if missing.")))
 			buttons += [""]
-		menu.append(("%s" % bC + _("Next items are not needed standardly:") + "\C", 1000))
+		menu.append((colorText(BLUE, _("Next items are not needed standardly:")), 1000))
 		buttons += [""]
 		space = 4 * " "
 		if not mountedLocalHDD():
@@ -1134,7 +1135,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 		if pars:
 			displayPoint = pars[5] if len(pars) > 5 else pars[1]
 			recordName = os.path.basename(displayPoint.rstrip("/"))
-			record = "%s%s\C" % (gC, recordName)
+			record = colorText(GREEN, recordName)
 			text = _("Manager Autofs - edited record: %s") % record
 			self.inputMountPoint = displayPoint
 			self.inputAutoFile = pars[2]
@@ -1431,7 +1432,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 	def __init__(self, session, filename, line, new=False, direct=False, mountpoint=None):
 		Screen.__init__(self, session)
-		name = "%s%s\C" % (bC, filename)
+		name = colorText(BLUE, filename)
 		self.setup_title = _("Manager Autofs - edited autofile/record: %s") % name
 		self.setTitle(self.setup_title)
 		self.session = session
@@ -1457,7 +1458,6 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 
 		self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
 			{
-#			"ok":		self.keyOk,
 			"cancel": self.keyClose,
 			"green": self.keyOk,
 			"red": self.keyClose,
@@ -1843,7 +1843,11 @@ class ManagerAutofsMultiAutoEdit(Screen):
 		self.onLayoutFinish.append(self.readFile)
 
 	def setWindowTitle(self):
-		self.setTitle(_("Manager Autofs - press %sEdit%s or %sOK%s for edit or use %sMenu%s") % (yC, "\C", yC, "\C", yC, "\C",))
+		self.setTitle(_("Manager Autofs - press %s or %s for edit or use %s") % (
+			colorText(YELLOW, _("Edit")),
+			colorText(YELLOW, _("OK")),
+			colorText(YELLOW, _("Menu")),
+			))
 
 	def readFile(self):
 		if self.name:

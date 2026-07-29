@@ -157,13 +157,13 @@ class ManagerAutofsHelp(Screen):
 		return tuple(ret)
 
 	def yellow(self, n=1):
-		return self.color(ui.yC, n)
+		return self.color(ui.YELLOW, n)
 
 	def grey(self, n=1):
-		return self.color(ui.greyC, n)
+		return self.color(ui.GREY, n)
 
 	def green(self, n=1):
-		return self.color(ui.gC, n)
+		return self.color(ui.GREEN, n)
 
 	def blue(self, n=1):
-		return self.color(ui.bC, n)
+		return self.color(ui.BLUE, n)
