@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.50"
+VERSION = "2.51"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -85,23 +85,26 @@ DEFAULT_HDD = '/media/hdd'
 DIRECT_MAP = "/-"
 MAP_COMMENT = "#map:"
 
+def colorText(rrggbb, text):
+	return "\\c00%s%s\\C" % (rrggbb, text)
+
 try:
-	yC = "\\c%08x" % int(skin.parseColor("selectedFG").argb())
+	yC = "%06x" % (int(skin.parseColor("selectedFG").argb()) & 0xFFFFFF)
 except:
-	yC = "\\c00fcc000"
+	yC = "fcc000"
 
-greyC = "\\c00a0a0a0"
-rC = "\\c00ff4000"
-gC = "\\c0000ff80"
-bC = "\\c000080ff"
+greyC = "a0a0a0"
+rC = "ff4000"
+gC = "00ff80"
+bC = "0080ff"
 
-_X_ = "%sx\\C" % gC
+_X_ = colorText(gC, "x")
 
-MOUNTED = "%s~\\C" % gC
-CHANGED = "%s~\\C" % yC
-FAILED = "%s~\\C" % rC
-MISSING_FILE = "%s!\\C" % rC
-MISSING_LINE = "%s?\\C" % yC
+MOUNTED = colorText(gC, "~")
+CHANGED = colorText(yC, "~")
+FAILED = colorText(rC, "~")
+MISSING_AUTO_FILE = colorText(rC, "!")
+MISSING_AUTOFILE_LINE = colorText(yC, "?")
 
 masterOptions = {
 	'debug': "--debug",
@@ -249,7 +252,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			displayPoint = mapPoint if masterPoint == DIRECT_MAP and mapPoint else self.getDisplayMountpoint(masterPoint, autofile)
 			status = "x" if enabled else ""
 			mounted = self.getMountedStatus(status, masterPoint, autofile)
-			mapType = _("direct") if masterPoint == DIRECT_MAP else _("indirect")
+			mapType = colorText("a0b0f0",_("direct")) if masterPoint == DIRECT_MAP else _("indirect")
 			self.list.append((_X_ if enabled else "", masterPoint, autofile, options, mounted, displayPoint, mapType))
 			mapPoint = ""
 
@@ -316,9 +319,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def getMountedStatus(self, selected, device, autofile):
 		if not os.path.exists(autofile):
-			return MISSING_FILE
+			return MISSING_AUTO_FILE
 		if self.getAutoLines(autofile) < 1:
-			return MISSING_LINE
+			return MISSING_AUTOFILE_LINE
 		if not cfg.testmountpoints.value:
 			return ""
 		# TODO: solve test for multiline files

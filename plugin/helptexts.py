@@ -149,30 +149,21 @@ class ManagerAutofsHelp(Screen):
 		text += _("- for %s'cifs'%s fstype and Win10 must be set %s'smb version'%s minimaly to %s'2.0'%s") % self.grey(3) + "\n"
 		return text
 
-	def yellow(self, n=1):
+	def color(self, rrggbb, n=1):
 		ret = []
 		for i in range(n):
-			ret.append(ui.yC)
+			ret.append("\\c00%s" % rrggbb)
 			ret.append("\\C")
 		return tuple(ret)
+
+	def yellow(self, n=1):
+		return self.color(ui.yC, n)
 
 	def grey(self, n=1):
-		ret = []
-		for i in range(n):
-			ret.append(ui.greyC)
-			ret.append("\\C")
-		return tuple(ret)
+		return self.color(ui.greyC, n)
 
 	def green(self, n=1):
-		ret = []
-		for i in range(n):
-			ret.append(ui.gC)
-			ret.append("\\C")
-		return tuple(ret)
+		return self.color(ui.gC, n)
 
 	def blue(self, n=1):
-		ret = []
-		for i in range(n):
-			ret.append(ui.bC)
-			ret.append("\\C")
-		return tuple(ret)
+		return self.color(ui.bC, n)
