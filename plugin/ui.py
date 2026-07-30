@@ -343,9 +343,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			return MISSING_AUTOFILE_LINE
 		if not cfg.testmountpoints.value:
 			return ""
-		# TODO: solve test for multiline files
+		# Multiline auto.files are indirect only; test first line only.
 		point = open(autofile, "r").readline().split(' ')[0]
-		if fileExists("%s/%s/." % (device, point)):
+		path = point if device == DIRECT_MAP else "%s/%s" % (device, point)
+		if fileExists("%s/." % path.rstrip("/")):
 			if selected == "x":
 				return ""
 			return MOUNTED
