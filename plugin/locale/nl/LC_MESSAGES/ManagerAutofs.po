@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 21:48+0200\n"
+"POT-Creation-Date: 2026-07-30 22:15+0200\n"
 "PO-Revision-Date: 2020-11-01 08:35+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
@@ -13,10 +13,33 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: ../settingspath.py:189
+#: ../settingspath.py:113
 #, python-format
-msgid "%d occurrences in %d settings entries will be updated."
-msgstr ""
+msgid "%d entry"
+msgid_plural "%d entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../settingspath.py:112
+#, python-format
+msgid "%d occurrence"
+msgid_plural "%d occurrences"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../settingspath.py:197
+#, python-format
+msgid "%d occurrence was updated."
+msgid_plural "%d occurrences were updated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../settingspath.py:198
+#, python-format
+msgid "%d settings entry was changed."
+msgid_plural "%d settings entries were changed."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../ui.py:1017
 #, python-format
@@ -219,7 +242,7 @@ msgstr ""
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr ""
 
-#: ../settingspath.py:190
+#: ../settingspath.py:199
 msgid "Apply changes and restart the GUI?"
 msgstr ""
 
@@ -458,15 +481,15 @@ msgstr ""
 msgid "Failed to convert auto.file."
 msgstr ""
 
-#: ../settingspath.py:93 ../settingspath.py:129
+#: ../settingspath.py:99 ../settingspath.py:137
 msgid "Failed to read the settings file."
 msgstr ""
 
-#: ../settingspath.py:218
+#: ../settingspath.py:227
 msgid "Failed to reload the settings file. The original file was restored."
 msgstr ""
 
-#: ../settingspath.py:206
+#: ../settingspath.py:215
 msgid "Failed to update the settings file."
 msgstr ""
 
@@ -600,7 +623,7 @@ msgstr ""
 msgid "Next utilities."
 msgstr ""
 
-#: ../settingspath.py:183
+#: ../settingspath.py:191
 msgid "No settings entries were changed."
 msgstr ""
 
@@ -624,10 +647,12 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../settingspath.py:158
+#: ../settingspath.py:166
 #, python-format
-msgid "Occurrences: %d"
-msgstr ""
+msgid "Occurrence: %d"
+msgid_plural "Occurrences: %d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../ui.py:1353
 msgid "Only a map with one auto.file line can be converted."
@@ -801,7 +826,7 @@ msgstr ""
 msgid "Replace a path in all values in the local settings file."
 msgstr ""
 
-#: ../settingspath.py:156
+#: ../settingspath.py:164
 msgid "Replace in settings item?"
 msgstr ""
 
@@ -809,12 +834,12 @@ msgstr ""
 msgid "Replace path in settings..."
 msgstr ""
 
-#: ../settingspath.py:109
+#: ../settingspath.py:117
 #, python-format
-msgid "Replace text (%d occurrences in %d entries)"
+msgid "Replace text (%s, %s)"
 msgstr ""
 
-#: ../settingspath.py:160
+#: ../settingspath.py:168
 msgid "Replace with:"
 msgstr ""
 
@@ -834,7 +859,7 @@ msgstr ""
 msgid "Save to file"
 msgstr ""
 
-#: ../settingspath.py:159
+#: ../settingspath.py:167
 msgid "Search:"
 msgstr ""
 
@@ -903,15 +928,15 @@ msgstr ""
 msgid "The corresponding auto.file entry must use an absolute mountpoint:"
 msgstr ""
 
-#: ../settingspath.py:119
+#: ../settingspath.py:127
 msgid "The search and replacement texts are identical."
 msgstr ""
 
-#: ../settingspath.py:86
+#: ../settingspath.py:89
 msgid "The search text must not be empty."
 msgstr ""
 
-#: ../settingspath.py:99 ../settingspath.py:135
+#: ../settingspath.py:105 ../settingspath.py:143
 msgid "The search text was not found in any settings value."
 msgstr ""
 

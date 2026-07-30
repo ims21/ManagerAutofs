@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from . import _
+from . import _, ngettext
 
 from Components.config import configfile
 from Screens.ChoiceBox import ChoiceBox
@@ -83,7 +83,13 @@ class SettingsPathEditor:
 		if oldText is None:
 			return
 		if not oldText:
-			self.showError(_("The search text must not be empty."))
+			self.session.openWithCallback(
+				lambda *_: self.selectPath(),
+				MessageBox,
+				_("The search text must not be empty."),
+				type=MessageBox.TYPE_ERROR,
+				timeout=10
+			)
 			return
 		try:
 			data = self.readSettings()
@@ -103,10 +109,12 @@ class SettingsPathEditor:
 			return
 
 		replacements = sum(entry[2] for entry in entries)
+		occurrencesText = ngettext("%d occurrence", "%d occurrences", replacements) % replacements
+		entriesText = ngettext("%d entry", "%d entries", len(entries)) % len(entries)
 		self.session.openWithCallback(
 			lambda newText: self.replacementEntered(oldText, newText),
 			VirtualKeyBoard,
-			title=_("Replace text (%d occurrences in %d entries)") % (replacements, len(entries)),
+			title=_("Replace text (%s, %s)") % (occurrencesText, entriesText),
 			text=asText(oldText)
 		)
 
@@ -155,7 +163,7 @@ class SettingsPathEditor:
 		_dummy, key, occurrences = self.entries[self.entryIndex]
 		text = _("Replace in settings item?") + "  (%d/%d)" % (self.entryIndex + 1, len(self.entries))
 		text += "\n\n" + asText(key)
-		text += "\n\n" + _("Occurrences: %d") % occurrences
+		text += "\n\n" + ngettext("Occurrence: %d", "Occurrences: %d", occurrences) % occurrences
 		text += "\n\n" + _("Search:") + "\n" + asText(self.oldText)
 		text += "\n\n" + _("Replace with:") + "\n" + asText(self.newText)
 		self.session.openWithCallback(
@@ -186,7 +194,8 @@ class SettingsPathEditor:
 			)
 			return
 
-		text = _("%d occurrences in %d settings entries will be updated.") % (self.replacements, self.changedEntries)
+		text = ngettext("%d occurrence was updated.", "%d occurrences were updated.", self.replacements) % self.replacements
+		text += "\n" + ngettext("%d settings entry was changed.", "%d settings entries were changed.", self.changedEntries) % self.changedEntries
 		text += "\n\n" + _("Apply changes and restart the GUI?")
 		self.session.openWithCallback(
 			self.applyConfirmed,
