@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.52"
+VERSION = "2.60"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -908,6 +908,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		buttons += [""]
 		menu.append((space + _("Create settings file..."), 180, _("Create 'settings' file from selected receiver.")))
 		buttons += [""]
+		menu.append((space + _("Replace path in settings..."), 181, _("Replace a path in all values in the local settings file.")))
+		buttons += [""]
 		txt = _("You can preset several input parameters before creating more autofiles. Values can be then inserted with blue button on current item. Presettings account values can be cleared on plugin exit.")
 		menu.append((space + _("Presetting input values..."), 200, txt))
 		buttons += ["menu"]
@@ -953,6 +955,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.open(ManagerAutofsEditBookmarks)
 		elif choice[1] == 180:
 			self.session.open(ManagerAutofsSettingsIP)
+		elif choice[1] == 181:
+			from .settingspath import SettingsPathEditor
+			SettingsPathEditor(self.session, loadAllMovielistVideodirs())
 		elif choice[1] == 200:
 			self.session.open(ManagerAutofsPreset)
 		elif choice[1] == 1000:
@@ -2055,6 +2060,19 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 		self.keyCancel()
 
 
+def loadAllMovielistVideodirs():
+	if config.movielist.videodirs.saved_value:
+		sv = config.movielist.videodirs.saved_value
+		tmp = eval(sv)
+		locations = [[x, None, False, False] for x in tmp]
+		for x in locations:
+			x[1] = x[0]
+			x[2] = True
+		config.movielist.videodirs.locations = locations
+		return tmp
+	return []
+
+
 class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 	skin = """
 	<screen name="ManagerAutofsEditBookmarks" position="center,center" size="600,390" title="List of bookmarks">
@@ -2081,11 +2099,8 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		self.setTitle(_("List of bookmarks"))
 
 		self.list = MySelectionList([])
-		if self.loadAllMovielistVideodirs():
-			index = 0
-			for bookmark in eval(config.movielist.videodirs.saved_value):
-				self.list.addSelection(bookmark, bookmark, index, False)
-				index += 1
+		for index, bookmark in enumerate(loadAllMovielistVideodirs()):
+			self.list.addSelection(bookmark, bookmark, index, False)
 		self["config"] = self.list
 
 		self["OkCancelActions"] = HelpableActionMap(self, "OkCancelActions",
@@ -2110,18 +2125,6 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		self.sort = 0
 		self["text"] = Label(_("Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."))
 		self["config"].onSelectionChanged.append(self.bookmark)
-
-	def loadAllMovielistVideodirs(self):
-		if config.movielist.videodirs.saved_value:
-			sv = config.movielist.videodirs.saved_value
-			tmp = eval(sv)
-			locations = [[x, None, False, False] for x in tmp]
-			for x in locations:
-				x[1] = x[0]
-				x[2] = True
-			config.movielist.videodirs.locations = locations
-			return True
-		return False
 
 	def bookmark(self):
 		item = self["config"].getCurrent()
