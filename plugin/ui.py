@@ -874,6 +874,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 	def utilityFinished(self, *args):
 		self.utilitySubmenu()
 
+	def prepareGuiRestart(self):
+		self.resetCfg()
+		if self.changes:
+			self.saveMasterFile()
+
 	def utilitySubmenu(self):
 		menu = []
 		buttons = []
@@ -940,12 +945,14 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		elif choice[1] == 3:
 			self.removeBackupFiles()
 		elif choice[1] == 10:
+			if self.changes:
+				self.saveMasterFile()
 			self.updateAutofs()
 			self.utilitySubmenu()
 		elif choice[1] == 11:
 			def callback(value=False):
 				if value:
-					self.saveMasterFile()
+					self.prepareGuiRestart()
 					if not self.updateAutofs(option="restart", restartGui=True):
 						self.utilitySubmenu()
 				else:
@@ -972,7 +979,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			self.session.openWithCallback(self.utilityFinished, ManagerAutofsSettingsIP)
 		elif choice[1] == 181:
 			from .settingspath import SettingsPathEditor
-			SettingsPathEditor(self.session, loadAllMovielistVideodirs(), self.utilityFinished)
+			SettingsPathEditor(self.session, loadAllMovielistVideodirs(), self.utilityFinished, self.prepareGuiRestart)
 		elif choice[1] == 200:
 			self.session.openWithCallback(self.utilityFinished, ManagerAutofsPreset)
 		elif choice[1] == 1000:

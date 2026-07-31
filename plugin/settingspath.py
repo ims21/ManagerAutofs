@@ -50,10 +50,11 @@ def findEntries(data, oldText):
 
 
 class SettingsPathEditor:
-	def __init__(self, session, bookmarks, callback=None):
+	def __init__(self, session, bookmarks, callback=None, beforeRestart=None):
 		self.session = session
 		self.bookmarks = bookmarks
 		self.callback = callback
+		self.beforeRestart = beforeRestart
 		self.selectPath()
 
 	def finish(self, *args):
@@ -240,6 +241,8 @@ class SettingsPathEditor:
 			self.showError(_("Failed to reload the settings file. The original file was restored."))
 			return
 
+		if self.beforeRestart:
+			self.beforeRestart()
 		self.session.open(TryQuitMainloop, 3)
 
 	def readSettings(self):
