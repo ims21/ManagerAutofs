@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.61"
+VERSION = "2.62"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org

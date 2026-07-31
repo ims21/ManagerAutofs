@@ -55,13 +55,32 @@ class SettingsPathEditor:
 		self.bookmarks = bookmarks
 		self.callback = callback
 		self.beforeRestart = beforeRestart
+		self.lines = None
+		self.changedEntries = 0
+		self.replacements = 0
+		self.changedEntryKeys = set()
+		self.pendingData = None
+		self.pendingPaths = 0
+		self.pendingReplacements = 0
+		self.pendingEntries = set()
 		self.selectPath()
+
+	def getWorkingData(self):
+		if self.pendingData is not None:
+			return self.pendingData
+		return self.readSettings()
 
 	def finish(self, *args):
 		if self.callback:
 			callback = self.callback
 			self.callback = None
 			callback()
+
+	def returnToSelection(self, *args):
+		if self.pendingPaths:
+			self.selectPath()
+		else:
+			self.finish()
 
 	def selectPath(self):
 		choices = [(_("Enter manually...") + "  " + DEFAULT_PATH, DEFAULT_PATH)]
@@ -87,11 +106,14 @@ class SettingsPathEditor:
 				text=choice[1]
 			)
 		else:
-			self.finish()
+			if self.pendingPaths:
+				self.writeChanges()
+			else:
+				self.finish()
 
 	def searchEntered(self, oldText):
 		if oldText is None:
-			self.finish()
+			self.returnToSelection()
 			return
 		if not oldText:
 			self.session.openWithCallback(
@@ -103,7 +125,7 @@ class SettingsPathEditor:
 			)
 			return
 		try:
-			data = self.readSettings()
+			data = self.getWorkingData()
 			_dummy, entries = findEntries(data, oldText)
 		except Exception as error:
 			print("[ManagerAutofs] Failed to read settings:", error)
@@ -112,7 +134,7 @@ class SettingsPathEditor:
 
 		if not entries:
 			self.session.openWithCallback(
-				self.finish,
+				self.returnToSelection,
 				MessageBox,
 				_("The search text was not found in any settings value."),
 				type=MessageBox.TYPE_INFO,
@@ -129,11 +151,11 @@ class SettingsPathEditor:
 
 	def replacementEntered(self, oldText, newText):
 		if newText is None:
-			self.finish()
+			self.returnToSelection()
 			return
 		if oldText == newText:
 			self.session.openWithCallback(
-				self.finish,
+				self.returnToSelection,
 				MessageBox,
 				_("The search and replacement texts are identical."),
 				type=MessageBox.TYPE_INFO,
@@ -141,7 +163,7 @@ class SettingsPathEditor:
 			)
 			return
 		try:
-			data = self.readSettings()
+			data = self.getWorkingData()
 			self.lines, self.entries = findEntries(data, oldText)
 		except Exception as error:
 			print("[ManagerAutofs] Failed to read settings:", error)
@@ -150,7 +172,7 @@ class SettingsPathEditor:
 
 		if not self.entries:
 			self.session.openWithCallback(
-				self.finish,
+				self.returnToSelection,
 				MessageBox,
 				_("The search text was not found in any settings value."),
 				type=MessageBox.TYPE_INFO,
@@ -165,6 +187,7 @@ class SettingsPathEditor:
 		self.entryIndex = 0
 		self.changedEntries = 0
 		self.replacements = 0
+		self.changedEntryKeys = set()
 		self.confirmEntry()
 
 	def confirmEntry(self):
@@ -187,17 +210,32 @@ class SettingsPathEditor:
 		)
 
 	def entryConfirmed(self, answer):
-		lineIndex, _key, occurrences = self.entries[self.entryIndex]
+		lineIndex, key, occurrences = self.entries[self.entryIndex]
 		if answer:
-			key, separator, value = self.lines[lineIndex].partition(b"=")
-			self.lines[lineIndex] = key + separator + value.replace(self.oldBytes, self.newBytes)
+			lineKey, separator, value = self.lines[lineIndex].partition(b"=")
+			self.lines[lineIndex] = lineKey + separator + value.replace(self.oldBytes, self.newBytes)
 			self.changedEntries += 1
 			self.replacements += occurrences
+			self.changedEntryKeys.add(key)
 		self.entryIndex += 1
 		self.confirmEntry()
 
+	def queueCurrentChanges(self):
+		self.pendingData = b"".join(self.lines)
+		if self.changedEntries:
+			self.pendingPaths += 1
+			self.pendingReplacements += self.replacements
+			self.pendingEntries.update(self.changedEntryKeys)
+		self.changedEntries = 0
+		self.replacements = 0
+		self.changedEntryKeys = set()
+
 	def writeChanges(self):
-		if not self.changedEntries:
+		changedEntries = self.pendingEntries | self.changedEntryKeys
+		paths = self.pendingPaths + (1 if self.changedEntries else 0)
+		replacements = self.pendingReplacements + self.replacements
+
+		if not changedEntries:
 			self.session.openWithCallback(
 				self.finish,
 				MessageBox,
@@ -207,18 +245,29 @@ class SettingsPathEditor:
 			)
 			return
 
-		text = ngettext("%d occurrence was updated.", "%d occurrences were updated.", self.replacements) % self.replacements
-		text += "\n" + ngettext("%d settings entry was changed.", "%d settings entries were changed.", self.changedEntries) % self.changedEntries
-		text += "\n\n" + _("Apply changes and restart the GUI?")
+		text = ngettext("%d path will be replaced.", "%d paths will be replaced.", paths) % paths
+		text += "\n" + ngettext("%d match will be replaced.", "%d matches will be replaced.", replacements) % replacements
+		text += "\n" + ngettext("%d settings entry will be changed.", "%d settings entries will be changed.", len(changedEntries)) % len(changedEntries)
+		text += "\n\n" + _("Apply all changes and restart the GUI?")
+		choices = [
+			(_("Yes"), True),
+			(_("No"), False),
+			(_("Next path"), "next")
+		]
 		self.session.openWithCallback(
 			self.applyConfirmed,
 			MessageBox,
 			text,
 			type=MessageBox.TYPE_YESNO,
-			default=False
+			default=False,
+			list=choices
 		)
 
 	def applyConfirmed(self, answer):
+		if answer == "next":
+			self.queueCurrentChanges()
+			self.selectPath()
+			return
 		if not answer:
 			self.finish()
 			return
