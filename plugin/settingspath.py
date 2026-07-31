@@ -50,10 +50,17 @@ def findEntries(data, oldText):
 
 
 class SettingsPathEditor:
-	def __init__(self, session, bookmarks):
+	def __init__(self, session, bookmarks, callback=None):
 		self.session = session
 		self.bookmarks = bookmarks
+		self.callback = callback
 		self.selectPath()
+
+	def finish(self, *args):
+		if self.callback:
+			callback = self.callback
+			self.callback = None
+			callback()
 
 	def selectPath(self):
 		choices = [(_("Enter manually...") + "  " + DEFAULT_PATH, DEFAULT_PATH)]
@@ -78,9 +85,12 @@ class SettingsPathEditor:
 				title=_("Text to replace in settings:"),
 				text=choice[1]
 			)
+		else:
+			self.finish()
 
 	def searchEntered(self, oldText):
 		if oldText is None:
+			self.finish()
 			return
 		if not oldText:
 			self.session.openWithCallback(
@@ -100,7 +110,8 @@ class SettingsPathEditor:
 			return
 
 		if not entries:
-			self.session.open(
+			self.session.openWithCallback(
+				self.finish,
 				MessageBox,
 				_("The search text was not found in any settings value."),
 				type=MessageBox.TYPE_INFO,
@@ -117,9 +128,11 @@ class SettingsPathEditor:
 
 	def replacementEntered(self, oldText, newText):
 		if newText is None:
+			self.finish()
 			return
 		if oldText == newText:
-			self.session.open(
+			self.session.openWithCallback(
+				self.finish,
 				MessageBox,
 				_("The search and replacement texts are identical."),
 				type=MessageBox.TYPE_INFO,
@@ -135,7 +148,8 @@ class SettingsPathEditor:
 			return
 
 		if not self.entries:
-			self.session.open(
+			self.session.openWithCallback(
+				self.finish,
 				MessageBox,
 				_("The search text was not found in any settings value."),
 				type=MessageBox.TYPE_INFO,
@@ -183,7 +197,8 @@ class SettingsPathEditor:
 
 	def writeChanges(self):
 		if not self.changedEntries:
-			self.session.open(
+			self.session.openWithCallback(
+				self.finish,
 				MessageBox,
 				_("No settings entries were changed."),
 				type=MessageBox.TYPE_INFO,
@@ -204,6 +219,7 @@ class SettingsPathEditor:
 
 	def applyConfirmed(self, answer):
 		if not answer:
+			self.finish()
 			return
 		try:
 			self.writeSettings(b"".join(self.lines))
@@ -253,4 +269,4 @@ class SettingsPathEditor:
 			raise
 
 	def showError(self, text):
-		self.session.open(MessageBox, text, type=MessageBox.TYPE_ERROR, timeout=10)
+		self.session.openWithCallback(self.finish, MessageBox, text, type=MessageBox.TYPE_ERROR, timeout=10)

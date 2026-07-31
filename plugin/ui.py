@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.60"
+VERSION = "2.61"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -205,6 +205,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 		self.delayTimer = eTimer()
 		self.selectionUtilitySubmenu = 0
+		self.utilityCommandPending = False
 		self.inExitProcess = False
 		self.onShown.append(self.setWindowTitle)
 
@@ -501,6 +502,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		self.showOutput()
 		self.data = ''
 		self["statusbar"].setText(txt)
+		if self.utilityCommandPending:
+			self.utilityCommandPending = False
+			self.utilitySubmenu()
 
 	def dataAvail(self, s):
 		self.data += s.decode()
@@ -867,6 +871,9 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			name = sel[2]
 			self.session.openWithCallback(boundFunction(callBack, name), MessageBox, _("Really remove autofile '%s'?" % name), type=MessageBox.TYPE_YESNO, default=False)
 
+	def utilityFinished(self, *args):
+		self.utilitySubmenu()
+
 	def utilitySubmenu(self):
 		menu = []
 		buttons = []
@@ -918,48 +925,56 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def utilityCallback(self, menu, choice):
 		if choice is None:
+			self.menu()
 			return
 		self.selectionUtilitySubmenu = menu.index(choice)
 		if choice[1] == 0:
 			self.updateAutoBackup()
 		elif choice[1] == 1:
-			def autobackupCallback(tmp1, tmp2):
-				self.utilitySubmenu()
 			self.saveMasterFile()
 			self.updateAutofs()
 			from Plugins.Extensions.AutoBackup.ui import Config
-			self.session.openWithCallback(autobackupCallback, Config)
+			self.session.openWithCallback(self.utilityFinished, Config)
 		elif choice[1] == 2:
 			self.refreshAutoBackup()
 		elif choice[1] == 3:
 			self.removeBackupFiles()
 		elif choice[1] == 10:
 			self.updateAutofs()
+			self.utilitySubmenu()
 		elif choice[1] == 11:
 			def callback(value=False):
 				if value:
 					self.saveMasterFile()
-					self.updateAutofs(option="restart", restartGui=True)
+					if not self.updateAutofs(option="restart", restartGui=True):
+						self.utilitySubmenu()
+				else:
+					self.utilitySubmenu()
 			self.session.openWithCallback(callback, MessageBox, _("Really reload autofs and restart GUI?"), type=MessageBox.TYPE_YESNO, default=False)
 		elif choice[1] == 12:
-			self.installAutofs()
+			self.utilityCommandPending = True
+			if not self.installAutofs():
+				self.utilityCommandPending = False
+				self.utilitySubmenu()
 		elif choice[1] == 20:
 			self.hddReplacement()
 		elif choice[1] == 21:
 			self.hddReplacementReset()
+			self.utilitySubmenu()
 		elif choice[1] == 90:
 			self.hostEdit()
 		elif choice[1] == 100:
 			config.movielist.videodirs.load()
+			self.utilitySubmenu()
 		elif choice[1] == 110:
-			self.session.open(ManagerAutofsEditBookmarks)
+			self.session.openWithCallback(self.utilityFinished, ManagerAutofsEditBookmarks)
 		elif choice[1] == 180:
-			self.session.open(ManagerAutofsSettingsIP)
+			self.session.openWithCallback(self.utilityFinished, ManagerAutofsSettingsIP)
 		elif choice[1] == 181:
 			from .settingspath import SettingsPathEditor
-			SettingsPathEditor(self.session, loadAllMovielistVideodirs())
+			SettingsPathEditor(self.session, loadAllMovielistVideodirs(), self.utilityFinished)
 		elif choice[1] == 200:
-			self.session.open(ManagerAutofsPreset)
+			self.session.openWithCallback(self.utilityFinished, ManagerAutofsPreset)
 		elif choice[1] == 1000:
 			self.selectionUtilitySubmenu += 1 # jump to next item
 			self.utilitySubmenu()
@@ -972,6 +987,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			name = sel[2]
 			if sel[0] != _X_:
 				MessageBoxNM(self.session, _("Point '%s' is not mounted!") % name.split('.')[1], 3)
+				self.utilitySubmenu()
 				return
 			lines = self.getAutoLines(name)
 			if lines == 1:	# single record file
@@ -981,13 +997,13 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					local_dir = data.split()[0].strip()
 					path = '/media/%s/%s' % (name.split('.')[1], local_dir)
 					self.callCreateSymlink(path)
-				else:
-					return
+				self.utilitySubmenu()
 			elif lines > 1: # multi record file
 				def callbackGetName(answer):
 					if answer:
 						path = '/media/%s/%s' % (name.split('.')[1], answer)
 						self.callCreateSymlink(path)
+					self.utilitySubmenu()
 				list = []
 				text = _("Select '%s' directory:") % name.split('.')[1]
 				for x in open(name, "r"):
@@ -996,10 +1012,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 						local_dir = line.split()[0].strip()
 						if local_dir:
 							list.append((local_dir, local_dir))
-						self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list)
+				self.session.openWithCallback(callbackGetName, MessageBox, text, MessageBox.TYPE_INFO, list=list)
 			else:
 				MessageBoxNM(self.session, _("'%s.auto' has wrong format or is empty!") % name.split('.')[1], 5)
-				return
+				self.utilitySubmenu()
+		else:
+			self.utilitySubmenu()
 
 	def hddReplacementReset(self):
 		makeMountAsHDD.setDefault()
@@ -1029,6 +1047,7 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				fi.close()
 		except:
 			print("[ManagerAutofs] failed to read etc/hostname")
+			self.utilitySubmenu()
 			return
 		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=(_("Enter new hostname for your Receiver")), text=hostname)
 
@@ -1042,10 +1061,12 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 					fo.write(hostname)
 					fo.close()
 					MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
+		self.utilitySubmenu()
 
 	def removeBackupFiles(self):
 		from .removebckp import ManagerAutofsRemoveBackupFiles
-		self.session.open(ManagerAutofsRemoveBackupFiles)
+		self.session.openWithCallback(self.utilityFinished, ManagerAutofsRemoveBackupFiles)
+
 
 	def updateAutoBackup(self):	# add missing /etc/auto. lines into /etc/backup.cfg
 		def callbackBackup(value=False):
@@ -1110,6 +1131,8 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		if self.container.execute(cmd):
 			print("[ManagerAutofs] failed to execute")
 			self.showOutput()
+			return False
+		return True
 
 	def updateAutofs(self, option="reload", restartGui=False):
 		if os.path.exists(AUTOFS):
@@ -1120,8 +1143,11 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 			if self.container.execute(cmd):
 				print("[ManagerAutofs] failed to execute")
 				self.showOutput()
+				return False
+			return True
 		else:
 			MessageBoxNM(self.session, _("Autofs is not installed!"), 3)
+			return False
 
 	def refreshPlugins(self):
 		plugins.clearPluginList()
