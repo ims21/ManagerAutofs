@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 22:15+0200\n"
-"PO-Revision-Date: 2026-07-30 22:20+0200\n"
+"PO-Revision-Date: 2026-07-31 02:04+0200\n"
 "Last-Translator: ims <ims@openpli.org>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -665,9 +665,9 @@ msgstr "OK"
 #, python-format
 msgid "Occurrence: %d"
 msgid_plural "Occurrences: %d"
-msgstr[0] "Výskyt: %d"
-msgstr[1] "Výskyty: %d"
-msgstr[2] "Výskytů: %d"
+msgstr[0] "Nalezen: %d"
+msgstr[1] "Nalezeny %d"
+msgstr[2] "Nalezeno: %d"
 
 #: ../ui.py:1353
 msgid "Only a map with one auto.file line can be converted."
@@ -856,7 +856,7 @@ msgstr "Nahradit text (%s, %s)"
 
 #: ../settingspath.py:168
 msgid "Replace with:"
-msgstr "Nahradit s:"
+msgstr "Nahradit za:"
 
 #: ../ui.py:899
 msgid "Restart autofs with GUI restart"
