@@ -245,9 +245,9 @@ class SettingsPathEditor:
 			)
 			return
 
-		text = ngettext("%d path will be replaced.", "%d paths will be replaced.", paths) % paths
-		text += "\n" + ngettext("%d match will be replaced.", "%d matches will be replaced.", replacements) % replacements
-		text += "\n" + ngettext("%d settings entry will be changed.", "%d settings entries will be changed.", len(changedEntries)) % len(changedEntries)
+		text = ngettext("%d path will be replaced:", "%d paths will be replaced.", paths) % paths
+		text += "\n" + 4 * " " + ngettext("%d match will be replaced.", "%d matches will be replaced.", replacements) % replacements
+		text += "\n" + 4 * " " + ngettext("%d settings entry will be changed.", "%d settings entries will be changed.", len(changedEntries)) % len(changedEntries)
 		text += "\n\n" + _("Apply all changes and restart the GUI?")
 		choices = [
 			(_("Yes"), True),
