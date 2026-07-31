@@ -75,7 +75,7 @@ class SettingsPathEditor:
 			self.session.openWithCallback(
 				self.searchEntered,
 				VirtualKeyBoard,
-				title=_("Text to find in settings values"),
+				title=_("Text to replace in settings:"),
 				text=choice[1]
 			)
 
@@ -108,13 +108,10 @@ class SettingsPathEditor:
 			)
 			return
 
-		replacements = sum(entry[2] for entry in entries)
-		occurrencesText = ngettext("%d occurrence", "%d occurrences", replacements) % replacements
-		entriesText = ngettext("%d entry", "%d entries", len(entries)) % len(entries)
 		self.session.openWithCallback(
 			lambda newText: self.replacementEntered(oldText, newText),
 			VirtualKeyBoard,
-			title=_("Replace text (%s, %s)") % (occurrencesText, entriesText),
+			title=_("Replace with text:"),
 			text=asText(oldText)
 		)
 
@@ -161,11 +158,11 @@ class SettingsPathEditor:
 			return
 
 		_dummy, key, occurrences = self.entries[self.entryIndex]
-		text = _("Replace in settings item?") + "  (%d/%d)" % (self.entryIndex + 1, len(self.entries))
+		text = _("Replace text in this settings entry?") + "  (%d/%d)" % (self.entryIndex + 1, len(self.entries))
 		text += "\n\n" + asText(key)
-		text += "\n\n" + ngettext("Occurrence: %d", "Occurrences: %d", occurrences) % occurrences
-		text += "\n\n" + _("Search:") + "\n" + asText(self.oldText)
-		text += "\n\n" + _("Replace with:") + "\n" + asText(self.newText)
+		text += "\n\n" + ngettext("- %d match found", "- %d matches found", occurrences) % occurrences
+		text += "\n\n" + _("Original text:") + "\n" + asText(self.oldText)
+		text += "\n\n" + _("New text:") + "\n" + asText(self.newText)
 		self.session.openWithCallback(
 			self.entryConfirmed,
 			MessageBox,

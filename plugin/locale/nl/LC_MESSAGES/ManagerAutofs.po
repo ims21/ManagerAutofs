@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 22:15+0200\n"
+"POT-Creation-Date: 2026-07-31 09:29+0200\n"
 "PO-Revision-Date: 2020-11-01 08:35+0100\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: PLi\n"
@@ -13,28 +13,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: ../settingspath.py:113
-#, python-format
-msgid "%d entry"
-msgid_plural "%d entries"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../settingspath.py:112
-#, python-format
-msgid "%d occurrence"
-msgid_plural "%d occurrences"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ../settingspath.py:197
+#: ../settingspath.py:194
 #, python-format
 msgid "%d occurrence was updated."
 msgid_plural "%d occurrences were updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../settingspath.py:198
+#: ../settingspath.py:195
 #, python-format
 msgid "%d settings entry was changed."
 msgid_plural "%d settings entries were changed."
@@ -104,6 +90,13 @@ msgstr ""
 #: ../helptexts.py:108
 msgid "+ very clear what is what"
 msgstr ""
+
+#: ../settingspath.py:163
+#, python-format
+msgid "- %d match found"
+msgid_plural "- %d matches found"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../helptexts.py:149
 #, python-format
@@ -242,7 +235,7 @@ msgstr ""
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr ""
 
-#: ../settingspath.py:199
+#: ../settingspath.py:196
 msgid "Apply changes and restart the GUI?"
 msgstr ""
 
@@ -481,15 +474,15 @@ msgstr ""
 msgid "Failed to convert auto.file."
 msgstr ""
 
-#: ../settingspath.py:99 ../settingspath.py:137
+#: ../settingspath.py:99 ../settingspath.py:134
 msgid "Failed to read the settings file."
 msgstr ""
 
-#: ../settingspath.py:227
+#: ../settingspath.py:224
 msgid "Failed to reload the settings file. The original file was restored."
 msgstr ""
 
-#: ../settingspath.py:215
+#: ../settingspath.py:212
 msgid "Failed to update the settings file."
 msgstr ""
 
@@ -615,6 +608,10 @@ msgstr ""
 msgid "New record"
 msgstr ""
 
+#: ../settingspath.py:165
+msgid "New text:"
+msgstr ""
+
 #: ../ui.py:883
 msgid "Next items are not needed standardly:"
 msgstr ""
@@ -623,7 +620,7 @@ msgstr ""
 msgid "Next utilities."
 msgstr ""
 
-#: ../settingspath.py:191
+#: ../settingspath.py:188
 msgid "No settings entries were changed."
 msgstr ""
 
@@ -647,19 +644,16 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../settingspath.py:166
-#, python-format
-msgid "Occurrence: %d"
-msgid_plural "Occurrences: %d"
-msgstr[0] ""
-msgstr[1] ""
-
 #: ../ui.py:1353
 msgid "Only a map with one auto.file line can be converted."
 msgstr ""
 
 #: ../ui.py:903
 msgid "Open AutoBackup plugin"
+msgstr ""
+
+#: ../settingspath.py:164
+msgid "Original text:"
 msgstr ""
 
 #: ../helptexts.py:142
@@ -826,21 +820,16 @@ msgstr ""
 msgid "Replace a path in all values in the local settings file."
 msgstr ""
 
-#: ../settingspath.py:164
-msgid "Replace in settings item?"
-msgstr ""
-
 #: ../ui.py:911
 msgid "Replace path in settings..."
 msgstr ""
 
-#: ../settingspath.py:117
-#, python-format
-msgid "Replace text (%s, %s)"
+#: ../settingspath.py:161
+msgid "Replace text in this settings entry?"
 msgstr ""
 
-#: ../settingspath.py:168
-msgid "Replace with:"
+#: ../settingspath.py:114
+msgid "Replace with text:"
 msgstr ""
 
 #: ../ui.py:899
@@ -857,10 +846,6 @@ msgstr ""
 
 #: ../ui.py:2389 ../ui.py:2395
 msgid "Save to file"
-msgstr ""
-
-#: ../settingspath.py:167
-msgid "Search:"
 msgstr ""
 
 #: ../ui.py:992
@@ -917,7 +902,7 @@ msgid "Tests enabled mount points on plugin start, but it increase plugin start 
 msgstr ""
 
 #: ../settingspath.py:78
-msgid "Text to find in settings values"
+msgid "Text to replace in settings:"
 msgstr ""
 
 #: ../helptexts.py:133
@@ -928,7 +913,7 @@ msgstr ""
 msgid "The corresponding auto.file entry must use an absolute mountpoint:"
 msgstr ""
 
-#: ../settingspath.py:127
+#: ../settingspath.py:124
 msgid "The search and replacement texts are identical."
 msgstr ""
 
@@ -936,7 +921,7 @@ msgstr ""
 msgid "The search text must not be empty."
 msgstr ""
 
-#: ../settingspath.py:105 ../settingspath.py:143
+#: ../settingspath.py:105 ../settingspath.py:140
 msgid "The search text was not found in any settings value."
 msgstr ""
 

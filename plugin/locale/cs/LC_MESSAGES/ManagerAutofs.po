@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 22:15+0200\n"
-"PO-Revision-Date: 2026-07-31 02:04+0200\n"
+"POT-Creation-Date: 2026-07-31 09:29+0200\n"
+"PO-Revision-Date: 2026-07-31 09:30+0200\n"
 "Last-Translator: ims <ims@openpli.org>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -13,23 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.9\n"
 
-#: ../settingspath.py:113
-#, python-format
-msgid "%d entry"
-msgid_plural "%d entries"
-msgstr[0] "%d položka"
-msgstr[1] "%d položky"
-msgstr[2] "%d položek"
-
-#: ../settingspath.py:112
-#, python-format
-msgid "%d occurrence"
-msgid_plural "%d occurrences"
-msgstr[0] "%d výskyt"
-msgstr[1] "%d výskyty"
-msgstr[2] "%d výskytů"
-
-#: ../settingspath.py:197
+#: ../settingspath.py:194
 #, python-format
 msgid "%d occurrence was updated."
 msgid_plural "%d occurrences were updated."
@@ -37,7 +21,7 @@ msgstr[0] "%d výskyt byl aktualizován."
 msgstr[1] "%d výskyty byly aktualizovány."
 msgstr[2] "%d výskytů bylo aktualizováno."
 
-#: ../settingspath.py:198
+#: ../settingspath.py:195
 #, python-format
 msgid "%d settings entry was changed."
 msgid_plural "%d settings entries were changed."
@@ -110,6 +94,14 @@ msgstr "+ pouze 2 soubory pro práci"
 #: ../helptexts.py:108
 msgid "+ very clear what is what"
 msgstr "+ velice přehledné, co je co"
+
+#: ../settingspath.py:163
+#, python-format
+msgid "- %d match found"
+msgid_plural "- %d matches found"
+msgstr[0] "- nalezen %d výskyt"
+msgstr[1] "- nalezeny %d výskyty"
+msgstr[2] "- nalezeno %d výskytů"
 
 #: ../helptexts.py:149
 #, python-format
@@ -248,7 +240,7 @@ msgstr "Vše (řádek '%s' a soubor '%s')"
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr "Všechny vzdálené adresáře ze všech zařízení budou připojeny pod '/media/test':"
 
-#: ../settingspath.py:199
+#: ../settingspath.py:196
 msgid "Apply changes and restart the GUI?"
 msgstr "Provést změny a restartovat enigma?"
 
@@ -495,15 +487,15 @@ msgstr "Chyba"
 msgid "Failed to convert auto.file."
 msgstr "Nepodařilo se převést auto.file."
 
-#: ../settingspath.py:99 ../settingspath.py:137
+#: ../settingspath.py:99 ../settingspath.py:134
 msgid "Failed to read the settings file."
 msgstr "Chyba při čtení souboru settings."
 
-#: ../settingspath.py:227
+#: ../settingspath.py:224
 msgid "Failed to reload the settings file. The original file was restored."
 msgstr "Nepodařilo se reload souboru nastavení. Původní soubor byl obnoven."
 
-#: ../settingspath.py:215
+#: ../settingspath.py:212
 msgid "Failed to update the settings file."
 msgstr "Chyba při aktualizaci souboru settings."
 
@@ -629,6 +621,10 @@ msgstr "Nový"
 msgid "New record"
 msgstr "Nový záznam"
 
+#: ../settingspath.py:165
+msgid "New text:"
+msgstr "Nový text:"
+
 #: ../ui.py:883
 msgid "Next items are not needed standardly:"
 msgstr "Následující položky nejsou standardně potřeba:"
@@ -637,7 +633,7 @@ msgstr "Následující položky nejsou standardně potřeba:"
 msgid "Next utilities."
 msgstr "Další nástroje."
 
-#: ../settingspath.py:191
+#: ../settingspath.py:188
 msgid "No settings entries were changed."
 msgstr "Žádné položky nastavení nebyly změněny."
 
@@ -661,14 +657,6 @@ msgstr "Nic"
 msgid "OK"
 msgstr "OK"
 
-#: ../settingspath.py:166
-#, python-format
-msgid "Occurrence: %d"
-msgid_plural "Occurrences: %d"
-msgstr[0] "Nalezen: %d"
-msgstr[1] "Nalezeny %d"
-msgstr[2] "Nalezeno: %d"
-
 #: ../ui.py:1353
 msgid "Only a map with one auto.file line can be converted."
 msgstr "Převést lze pouze mapu s jedním řádkem v auto.file."
@@ -676,6 +664,10 @@ msgstr "Převést lze pouze mapu s jedním řádkem v auto.file."
 #: ../ui.py:903
 msgid "Open AutoBackup plugin"
 msgstr "Otevřít AutoBackup plugin"
+
+#: ../settingspath.py:164
+msgid "Original text:"
+msgstr "Původní text:"
 
 #: ../helptexts.py:142
 msgid "PC side:"
@@ -841,22 +833,17 @@ msgstr "Odstranit nepoužívané soubory z '%s'?"
 msgid "Replace a path in all values in the local settings file."
 msgstr "Nahrazení cesty ve všech hodnotách místního souboru nastavení (settings)."
 
-#: ../settingspath.py:164
-msgid "Replace in settings item?"
-msgstr "Nahradit položku v nastavení?"
-
 #: ../ui.py:911
 msgid "Replace path in settings..."
 msgstr "Nahradit cestu v nastavení..."
 
-#: ../settingspath.py:117
-#, python-format
-msgid "Replace text (%s, %s)"
-msgstr "Nahradit text (%s, %s)"
+#: ../settingspath.py:161
+msgid "Replace text in this settings entry?"
+msgstr "Nahradit text v této položce nastavení?"
 
-#: ../settingspath.py:168
-msgid "Replace with:"
-msgstr "Nahradit za:"
+#: ../settingspath.py:114
+msgid "Replace with text:"
+msgstr "Nahradit textem:"
 
 #: ../ui.py:899
 msgid "Restart autofs with GUI restart"
@@ -873,10 +860,6 @@ msgstr "Spuštění AutoBackup pluginu k provedení zálohy."
 #: ../ui.py:2389 ../ui.py:2395
 msgid "Save to file"
 msgstr "Uložit do souboru"
-
-#: ../settingspath.py:167
-msgid "Search:"
-msgstr "Hledat:"
 
 #: ../ui.py:992
 #, python-format
@@ -932,8 +915,8 @@ msgid "Tests enabled mount points on plugin start, but it increase plugin start 
 msgstr "Testuje povolené body připojení při startu pluginu, ale prodlouží dobu spouštění pluginu."
 
 #: ../settingspath.py:78
-msgid "Text to find in settings values"
-msgstr "Text, který se má vyhledat v hodnotách nastavení"
+msgid "Text to replace in settings:"
+msgstr "Text k nahrazení v nastavení:"
 
 #: ../helptexts.py:133
 msgid "The '#map:' line is ManagerAutofs metadata for the displayed mountpoint and must immediately precede the '/-' line. Autofs itself ignores it as a comment."
@@ -943,7 +926,7 @@ msgstr "Řádek '#map:' obsahuje metadata ManagerAutofs pro zobrazený bod přip
 msgid "The corresponding auto.file entry must use an absolute mountpoint:"
 msgstr "Odpovídající záznam v auto.file musí používat absolutní cestu bodu připojení:"
 
-#: ../settingspath.py:127
+#: ../settingspath.py:124
 msgid "The search and replacement texts are identical."
 msgstr "Hledaný a nahrazující text jsou totožné."
 
@@ -951,7 +934,7 @@ msgstr "Hledaný a nahrazující text jsou totožné."
 msgid "The search text must not be empty."
 msgstr "Hledaný text nesmí být prázdný."
 
-#: ../settingspath.py:105 ../settingspath.py:143
+#: ../settingspath.py:105 ../settingspath.py:140
 msgid "The search text was not found in any settings value."
 msgstr "Hledaný text nebyl nalezen v žádné hodnotě nastavení."
 
