@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.62"
+VERSION = "2.63"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -2141,14 +2141,19 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 			"cancel": (self.exit, _("Close")),
 			"ok": (self.list.toggleSelection, _("Add or remove item of selection")),
 			})
-		self["ManagerAutofsActions"] = HelpableActionMap(self, ["ColorActions", "EPGSelectActions"],
+		self["ManagerAutofsActions"] = HelpableActionMap(self, ["ColorActions", "EPGSelectActions", "DirectionActions", "NumberActions"],
 			{
-			"red": (self.exit, _("Close")),
-			"green": (self.deleteSelected, _("Delete selected")),
-			"yellow": (self.editCurrent, _("Edit current bookmark")),
-			"blue": (self.list.toggleAllSelection, _("Invert selection")),
-			"info": (self.sortList, _("Sort list")),
-			}, -2)
+				"red": (self.exit, _("Close")),
+				"green": (self.deleteSelected, _("Delete selected")),
+				"yellow": (self.editCurrent, _("Edit current bookmark")),
+				"blue": (self.list.toggleAllSelection, _("Invert selection")),
+				"info": (self.sortList, _("Sort list")),
+				"moveUp": (self.moveUp, _("Move item up")),
+				"moveDown": (self.moveDown, _("Move item down")),
+				"0": (self.startMoving, _("Enable/disable moving item")),
+			},
+			-2
+		)
 
 		self["key_red"] = Button(_("Cancel"))
 		self["key_green"] = Button(_("Delete"))
@@ -2156,13 +2161,17 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		self["key_blue"] = Button(_("Inversion"))
 
 		self.sort = 0
-		self["text"] = Label(_("Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."))
+		self.moving = False
+		self["h_prev"] = Pixmap()
+		self["h_next"] = Pixmap()
+		self["h_prev"].hide()
+		self["h_next"].hide()
+		self.helpText = _("Use 'OK' to select multiple items. Use 'Info/EPG' to sort the list as 'A-Z', 'Selected top', or 'Z-A'. Use the '0' button to enable or disable moving an item with '<' and '>'.")
+		self["text"] = Label(self.helpText)
 		self["config"].onSelectionChanged.append(self.bookmark)
 
 	def bookmark(self):
-		item = self["config"].getCurrent()
-		if item:
-			self["text"].setText("%s" % item[0][0])
+		self["text"].setText(self.helpText)
 		self["key_yellow"].setText(_("Edit") if len(self.list.getSelectionsList()) <= 1 else "")
 
 	def sortList(self):
@@ -2176,6 +2185,40 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 			self.list.sort(sortType=0)
 			self.sort = 0
 		self["text"].setText(_("Sorted from Z to A.") if self.sort == 1 else _("Selected top.") if self.sort == 2 else _("Sorted from A to Z."))
+
+	def startMoving(self):
+		self.moving = not self.moving
+		if self.moving:
+			for item in self.list.getSelectionsList():
+				self.list.toggleItemSelection(item)
+		self.showPrevNext()
+
+	def showPrevNext(self):
+		if self.moving:
+			self["h_prev"].show()
+			self["h_next"].show()
+		else:
+			self["h_prev"].hide()
+			self["h_next"].hide()
+
+	def moveUp(self):
+		self.moveCurrent(-1)
+
+	def moveDown(self):
+		self.moveCurrent(1)
+
+	def moveCurrent(self, direction):
+		if not self.moving:
+			return
+		index = self["config"].getSelectedIndex()
+		newIndex = index + direction
+		if newIndex < 0 or newIndex >= len(self.list.list):
+			return
+		self.list.list[index], self.list.list[newIndex] = self.list.list[newIndex], self.list.list[index]
+		self.list.setList(self.list.list)
+		self.list.moveToIndex(newIndex)
+		config.movielist.videodirs.value = [item[0][0] for item in self.list.list]
+		config.movielist.videodirs.save()
 
 	def deleteSelected(self):
 		if self["config"].getCurrent():

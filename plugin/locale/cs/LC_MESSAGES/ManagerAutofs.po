@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-31 13:54+0200\n"
-"PO-Revision-Date: 2026-07-31 13:55+0200\n"
+"POT-Creation-Date: 2026-08-01 17:31+0200\n"
+"PO-Revision-Date: 2026-08-01 17:32+0200\n"
 "Last-Translator: ims <ims@openpli.org>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -222,7 +222,7 @@ msgstr "Přidá další řádek s parametry připojení do '%s' pro existující
 msgid "Add or remove item of selection"
 msgstr "Přidat nebo odebrat položku z výběru"
 
-#: ../ui.py:2417
+#: ../ui.py:2460
 msgid "Add or remove item to/from selection"
 msgstr "Přidat nebo odebrat položku z/do výběru"
 
@@ -252,7 +252,7 @@ msgstr "Všechny vzdálené adresáře ze všech zařízení budou připojeny po
 msgid "Apply all changes and restart the GUI?"
 msgstr "Provést všechny změny a restartovat enigma?"
 
-#: ../ui.py:2185
+#: ../ui.py:2228
 #, python-format
 msgid "Are You sure to delete %s selected bookmark?"
 msgid_plural "Are You sure to delete %s selected bookmarks?"
@@ -269,7 +269,7 @@ msgstr "Opravdu smazat soubor: '%s'?"
 msgid "Are you sure to remove selected files?"
 msgstr "Chcete odstranit vybrané soubory?"
 
-#: ../ui.py:2510
+#: ../ui.py:2553
 #, python-format
 msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
 msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
@@ -311,7 +311,7 @@ msgstr "Strana přijímače:"
 msgid "Brief help on how to use autofs."
 msgstr "Stručná nápověda k používání autofs."
 
-#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2153 ../ui.py:2328 ../ui.py:2427
+#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2158 ../ui.py:2371 ../ui.py:2470
 msgid "Cancel"
 msgstr "Zavřít"
 
@@ -343,8 +343,8 @@ msgid "Clone record with '%s' remote device in 'auto.master' file and create fil
 msgstr "Naklonování záznamu se vzdáleným zařízením '%s' v 'auto.master' souboru a zároveň vytvoření souboru s parametry připojení."
 
 #: ../helptexts.py:35 ../ui.py:172 ../ui.py:173 ../ui.py:197 ../ui.py:1209
-#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2416
-#: ../ui.py:2421
+#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2459
+#: ../ui.py:2464
 msgid "Close"
 msgstr "Zavřít"
 
@@ -360,7 +360,7 @@ msgstr "Vytvořit nový záznam z:"
 msgid "Create settings file..."
 msgstr "Vytvořit soubor nastavení..."
 
-#: ../ui.py:2154
+#: ../ui.py:2159
 msgid "Delete"
 msgstr "Odstranit"
 
@@ -380,11 +380,11 @@ msgstr "Bod připojení přímé mapy musí být absolutní cesta."
 msgid "Disable"
 msgstr "Zakázat"
 
-#: ../ui.py:2358
+#: ../ui.py:2401
 msgid "Display in description current item value."
 msgstr "V popisu se budou zobrazovat hodnoty aktuálních položek."
 
-#: ../ui.py:2358
+#: ../ui.py:2401
 msgid "Displaying values"
 msgstr "Zobrazovat hodnoty"
 
@@ -409,7 +409,7 @@ msgstr "Duplikovat řádek"
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr "Každý sdílený adresář má vlastní připojení pod /media:"
 
-#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2155 ../ui.py:2166
+#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2160 ../ui.py:2175
 msgid "Edit"
 msgstr "Upravit"
 
@@ -421,7 +421,7 @@ msgstr "Upravit -"
 msgid "Edit auto file"
 msgstr "Upravit auto soubor"
 
-#: ../ui.py:2220
+#: ../ui.py:2263
 msgid "Edit bookmark"
 msgstr "Upravte záložku"
 
@@ -467,7 +467,7 @@ msgstr "Povolit"
 msgid "Enable/disable mountpoint"
 msgstr "Povolit/zakázat bod připojení"
 
-#: ../ui.py:183
+#: ../ui.py:183 ../ui.py:2153
 msgid "Enable/disable moving item"
 msgstr "Povolit/zakázat přesun položky"
 
@@ -536,11 +536,11 @@ msgstr "Nainstalujte autofs příkazem:  opkg install autofs"
 msgid "Install required autofs package if missing."
 msgstr "Instaluje požadovaný balíček autofs, jestliže chybí."
 
-#: ../removebckp.py:79 ../ui.py:2156 ../ui.py:2430
+#: ../removebckp.py:79 ../ui.py:2161 ../ui.py:2473
 msgid "Inversion"
 msgstr "Inverze"
 
-#: ../ui.py:2149 ../ui.py:2424
+#: ../ui.py:2149 ../ui.py:2467
 msgid "Invert selection"
 msgstr "Inverze výběru"
 
@@ -613,11 +613,11 @@ msgstr "Bod připojení"
 msgid "Mountpoint name '%s' is used!"
 msgstr "Název bodu připojení '%s' je již použitý!"
 
-#: ../ui.py:182
+#: ../ui.py:182 ../ui.py:2152
 msgid "Move item down"
 msgstr "Přesun položky dolů"
 
-#: ../ui.py:181
+#: ../ui.py:181 ../ui.py:2151
 msgid "Move item up"
 msgstr "Přesun položky nahoru"
 
@@ -738,7 +738,7 @@ msgstr "Vložit auto.name"
 msgid "Put mountpoint name"
 msgstr "Vložit bod připojení"
 
-#: ../ui.py:2329
+#: ../ui.py:2372
 msgid "Read"
 msgstr "Načíst"
 
@@ -778,7 +778,7 @@ msgstr "Reload autofs"
 msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
 msgstr "Provede 'autofs reload', neboli aktualizaci map připojení. Standardně se provádí při každém ukončení pluginu, jestliže bylo něco změněno."
 
-#: ../ui.py:2357
+#: ../ui.py:2400
 msgid "Remote receiver's IP address"
 msgstr "IP adresa vzdáleného přijímače"
 
@@ -865,7 +865,7 @@ msgstr "Nahradit textem:"
 msgid "Restart autofs with GUI restart"
 msgstr "Restartovat autofs a enigma"
 
-#: ../ui.py:2357
+#: ../ui.py:2400
 msgid "Running box IP address for use its settings file as source."
 msgstr "IP adresa vzdáleného přijímače použitého pro získání souboru nastavení."
 
@@ -873,7 +873,7 @@ msgstr "IP adresa vzdáleného přijímače použitého pro získání souboru n
 msgid "Runs AutoBackup plugin."
 msgstr "Spuštění AutoBackup pluginu k provedení zálohy."
 
-#: ../ui.py:2422 ../ui.py:2428
+#: ../ui.py:2465 ../ui.py:2471
 msgid "Save to file"
 msgstr "Uložit do souboru"
 
@@ -890,19 +890,19 @@ msgstr "Zvolte operaci:"
 msgid "Select path to replace:"
 msgstr "Zvolte cestu pro náhradu:"
 
-#: ../ui.py:2433
+#: ../ui.py:2476
 msgid "Select with 'OK' or use 'Inverse'."
 msgstr "Označujte pomocí 'OK' nebo pomocí 'Inverze'."
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 msgid "Selected top."
 msgstr "Označené nahoře."
 
-#: ../ui.py:2405
+#: ../ui.py:2448
 msgid "Settings items list"
 msgstr "Seznam položek nastavení"
 
-#: ../ui.py:2326
+#: ../ui.py:2369
 msgid "Setup source with settings"
 msgstr "Výběr zdroje s nastavením"
 
@@ -910,19 +910,19 @@ msgstr "Výběr zdroje s nastavením"
 msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
 msgstr "Někdy je potřeba restartovat autofs daemon zároveň s restartem uživatelského rozhraní. K tomu použijte tuto volbu a poté čekejte na spuštění a dokončení restartu systému."
 
-#: ../ui.py:2429
+#: ../ui.py:2472
 msgid "Sort"
 msgstr "Třídění"
 
-#: ../ui.py:2150 ../ui.py:2423
+#: ../ui.py:2150 ../ui.py:2466
 msgid "Sort list"
 msgstr "Setřídit seznam"
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 msgid "Sorted from A to Z."
 msgstr "Setříděno od A do Z."
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 msgid "Sorted from Z to A."
 msgstr "Setříděno od Z do A."
 
@@ -972,11 +972,11 @@ msgstr "Aktualizují se body připojení a záložky..."
 msgid "Use '%s' as HDD replacement"
 msgstr "Použít '%s' jako náhradu HDD"
 
-#: ../ui.py:2159
-msgid "Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."
-msgstr "Použijte 'OK' pro označení více záložek. Seznam lze třídit pomocí 'Info/Epg'."
+#: ../ui.py:2169
+msgid "Use 'OK' to select multiple items. Use 'Info/EPG' to sort the list as 'A-Z', 'Selected top', or 'Z-A'. Use the '0' button to enable or disable moving an item with '<' and '>'."
+msgstr "Pomocí „OK“ označíte více položek. Pomocí „Info/EPG“ seřadíte seznam jako „A–Z“, „Vybrané nahoře“ nebo „Z–A“. Tlačítkem „0“ zapnete nebo vypnete přesun položky pomocí „<“ a „>“."
 
-#: ../ui.py:2355
+#: ../ui.py:2398
 msgid "Use local '/etc/enigma/settings' file as source."
 msgstr "Jako zdrojový soubor se použije místní '/etc/enigma/settings'."
 
@@ -984,7 +984,7 @@ msgstr "Jako zdrojový soubor se použije místní '/etc/enigma/settings'."
 msgid "Use preset"
 msgstr "Použít přednastavené"
 
-#: ../ui.py:2354
+#: ../ui.py:2397
 msgid "Use this receiver"
 msgstr "Použít tento přijímač"
 

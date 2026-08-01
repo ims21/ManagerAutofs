@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-31 13:54+0200\n"
+"POT-Creation-Date: 2026-08-01 17:31+0200\n"
 "PO-Revision-Date: 2021-08-10 14:47+0200\n"
 "Last-Translator: ims <ims21@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE\n"
@@ -223,7 +223,7 @@ msgstr "Добавить следующую строку параметров м
 msgid "Add or remove item of selection"
 msgstr "Добавить или удалить элемент выбора"
 
-#: ../ui.py:2417
+#: ../ui.py:2460
 #, fuzzy
 msgid "Add or remove item to/from selection"
 msgstr "Добавить или удалить элемент выбора"
@@ -255,7 +255,7 @@ msgstr "Все удаленные каталоги со всех устройс�
 msgid "Apply all changes and restart the GUI?"
 msgstr "Действительно перезагрузить autofs и перезапустить GUI?"
 
-#: ../ui.py:2185
+#: ../ui.py:2228
 #, python-format
 msgid "Are You sure to delete %s selected bookmark?"
 msgid_plural "Are You sure to delete %s selected bookmarks?"
@@ -272,7 +272,7 @@ msgstr "Вы уверены, что хотите удалите файл '%s'?"
 msgid "Are you sure to remove selected files?"
 msgstr "Вы действительно хотите удалить выбранные файлы?"
 
-#: ../ui.py:2510
+#: ../ui.py:2553
 #, fuzzy, python-format
 msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
 msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
@@ -314,7 +314,7 @@ msgstr "Сторона Тюнера:"
 msgid "Brief help on how to use autofs."
 msgstr "Краткая справка по использованию autofs."
 
-#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2153 ../ui.py:2328 ../ui.py:2427
+#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2158 ../ui.py:2371 ../ui.py:2470
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -346,8 +346,8 @@ msgid "Clone record with '%s' remote device in 'auto.master' file and create fil
 msgstr "Клонировать запись с удаленного устройства '%s' в файл 'auto.master' и создать файл с параметрами точки монтирования."
 
 #: ../helptexts.py:35 ../ui.py:172 ../ui.py:173 ../ui.py:197 ../ui.py:1209
-#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2416
-#: ../ui.py:2421
+#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2459
+#: ../ui.py:2464
 msgid "Close"
 msgstr "Закрыть"
 
@@ -364,7 +364,7 @@ msgstr "Создать новую запись из:"
 msgid "Create settings file..."
 msgstr "Предварительные настройки входных значений..."
 
-#: ../ui.py:2154
+#: ../ui.py:2159
 msgid "Delete"
 msgstr "Удалить"
 
@@ -384,11 +384,11 @@ msgstr ""
 msgid "Disable"
 msgstr "Отключить"
 
-#: ../ui.py:2358
+#: ../ui.py:2401
 msgid "Display in description current item value."
 msgstr ""
 
-#: ../ui.py:2358
+#: ../ui.py:2401
 msgid "Displaying values"
 msgstr ""
 
@@ -414,7 +414,7 @@ msgstr "Изменить строку"
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr "Каждый общий каталог имеет собственную точку монтирования в разделе /media:"
 
-#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2155 ../ui.py:2166
+#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2160 ../ui.py:2175
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -426,7 +426,7 @@ msgstr "Редактировать -"
 msgid "Edit auto file"
 msgstr "Редактировать auto file"
 
-#: ../ui.py:2220
+#: ../ui.py:2263
 #, fuzzy
 msgid "Edit bookmark"
 msgstr "Список закладок"
@@ -475,7 +475,7 @@ msgstr "Включить"
 msgid "Enable/disable mountpoint"
 msgstr "Включить/отключить точку монтирования"
 
-#: ../ui.py:183
+#: ../ui.py:183 ../ui.py:2153
 msgid "Enable/disable moving item"
 msgstr "Включить/отключить перемещение элемента"
 
@@ -546,11 +546,11 @@ msgstr "Установить autofs с помощью: opkg install autofs"
 msgid "Install required autofs package if missing."
 msgstr "Установите необходимый пакет autofs, если он отсутствует."
 
-#: ../removebckp.py:79 ../ui.py:2156 ../ui.py:2430
+#: ../removebckp.py:79 ../ui.py:2161 ../ui.py:2473
 msgid "Inversion"
 msgstr "Инвертировать"
 
-#: ../ui.py:2149 ../ui.py:2424
+#: ../ui.py:2149 ../ui.py:2467
 msgid "Invert selection"
 msgstr "Инвертировать выбор"
 
@@ -623,11 +623,11 @@ msgstr "Точка монтирования"
 msgid "Mountpoint name '%s' is used!"
 msgstr "Имя точки монтирования '%s' используется!"
 
-#: ../ui.py:182
+#: ../ui.py:182 ../ui.py:2152
 msgid "Move item down"
 msgstr "Переместить элемент вниз"
 
-#: ../ui.py:181
+#: ../ui.py:181 ../ui.py:2151
 msgid "Move item up"
 msgstr "Переместить элемент вверх"
 
@@ -749,7 +749,7 @@ msgstr "Вставить autoname"
 msgid "Put mountpoint name"
 msgstr "Вставить имя точки монтирования"
 
-#: ../ui.py:2329
+#: ../ui.py:2372
 msgid "Read"
 msgstr ""
 
@@ -789,7 +789,7 @@ msgstr "Перезагрузить autofs"
 msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
 msgstr "Перезагрузить карты монтирования autofs. Делается стандартно при каждом выходе плагина, если что-то было изменено."
 
-#: ../ui.py:2357
+#: ../ui.py:2400
 msgid "Remote receiver's IP address"
 msgstr ""
 
@@ -880,7 +880,7 @@ msgstr "Предварительные настройки входных зна�
 msgid "Restart autofs with GUI restart"
 msgstr "Перезапуск autofs с помощью рестарта GUI"
 
-#: ../ui.py:2357
+#: ../ui.py:2400
 msgid "Running box IP address for use its settings file as source."
 msgstr ""
 
@@ -888,7 +888,7 @@ msgstr ""
 msgid "Runs AutoBackup plugin."
 msgstr "Запустить плагин AutoBackup."
 
-#: ../ui.py:2422 ../ui.py:2428
+#: ../ui.py:2465 ../ui.py:2471
 #, fuzzy
 msgid "Save to file"
 msgstr "auto.file"
@@ -907,21 +907,21 @@ msgstr "Выберите операцию:"
 msgid "Select path to replace:"
 msgstr "Выберите операцию:"
 
-#: ../ui.py:2433
+#: ../ui.py:2476
 #, fuzzy
 msgid "Select with 'OK' or use 'Inverse'."
 msgstr "Выберите с помощью 'ОК' и затем удалите с помощью 'Удалить'."
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 #, fuzzy
 msgid "Selected top."
 msgstr "Выберите операцию:"
 
-#: ../ui.py:2405
+#: ../ui.py:2448
 msgid "Settings items list"
 msgstr ""
 
-#: ../ui.py:2326
+#: ../ui.py:2369
 msgid "Setup source with settings"
 msgstr ""
 
@@ -929,19 +929,19 @@ msgstr ""
 msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
 msgstr "Иногда требуется перезапуск autofs deamon и GUI. Используйте эту опцию и затем дождитесь завершения и рестарта GUI."
 
-#: ../ui.py:2429
+#: ../ui.py:2472
 msgid "Sort"
 msgstr "Сортировать"
 
-#: ../ui.py:2150 ../ui.py:2423
+#: ../ui.py:2150 ../ui.py:2466
 msgid "Sort list"
 msgstr "Сортировать список"
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 msgid "Sorted from A to Z."
 msgstr ""
 
-#: ../ui.py:2178
+#: ../ui.py:2187
 msgid "Sorted from Z to A."
 msgstr ""
 
@@ -992,11 +992,11 @@ msgstr "Обновление точек монтирования и заклад
 msgid "Use '%s' as HDD replacement"
 msgstr "Использовать '%s' в качестве замены HDD"
 
-#: ../ui.py:2159
-msgid "Use 'OK' to select multiple items. List can be sorted with 'Info/Epg'."
+#: ../ui.py:2169
+msgid "Use 'OK' to select multiple items. Use 'Info/EPG' to sort the list as 'A-Z', 'Selected top', or 'Z-A'. Use the '0' button to enable or disable moving an item with '<' and '>'."
 msgstr ""
 
-#: ../ui.py:2355
+#: ../ui.py:2398
 msgid "Use local '/etc/enigma/settings' file as source."
 msgstr ""
 
@@ -1004,7 +1004,7 @@ msgstr ""
 msgid "Use preset"
 msgstr "Использовать предустановку"
 
-#: ../ui.py:2354
+#: ../ui.py:2397
 msgid "Use this receiver"
 msgstr ""
 
