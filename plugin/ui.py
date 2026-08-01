@@ -2141,13 +2141,12 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 			"cancel": (self.exit, _("Close")),
 			"ok": (self.list.toggleSelection, _("Add or remove item of selection")),
 			})
-		self["ManagerAutofsActions"] = HelpableActionMap(self, ["ColorActions", "EPGSelectActions", "DirectionActions", "NumberActions"],
+		self["ManagerAutofsActions"] = HelpableActionMap(self, ["ColorActions", "DirectionActions", "NumberActions"],
 			{
 				"red": (self.exit, _("Close")),
 				"green": (self.deleteSelected, _("Delete selected")),
 				"yellow": (self.editCurrent, _("Edit current bookmark")),
 				"blue": (self.list.toggleAllSelection, _("Invert selection")),
-				"info": (self.sortList, _("Sort list")),
 				"moveUp": (self.moveUp, _("Move item up")),
 				"moveDown": (self.moveDown, _("Move item down")),
 				"0": (self.startMoving, _("Enable/disable moving item")),
@@ -2160,31 +2159,18 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		self["key_yellow"] = Button(_("Edit"))
 		self["key_blue"] = Button(_("Inversion"))
 
-		self.sort = 0
 		self.moving = False
 		self["h_prev"] = Pixmap()
 		self["h_next"] = Pixmap()
 		self["h_prev"].hide()
 		self["h_next"].hide()
-		self.helpText = _("Use 'OK' to select multiple items. Use 'Info/EPG' to sort the list as 'A-Z', 'Selected top', or 'Z-A'. Use the '0' button to enable or disable moving an item with '<' and '>'.")
+		self.helpText = _("Use 'OK' to select multiple items. Use the '0' button to enable or disable moving an item with '<' and '>'.")
 		self["text"] = Label(self.helpText)
 		self["config"].onSelectionChanged.append(self.bookmark)
 
 	def bookmark(self):
 		self["text"].setText(self.helpText)
 		self["key_yellow"].setText(_("Edit") if len(self.list.getSelectionsList()) <= 1 else "")
-
-	def sortList(self):
-		if self.sort == 0:	# z-a
-			self.list.sort(sortType=0, flag=True)
-			self.sort += 1
-		elif self.sort == 1 and len(self.list.getSelectionsList()):	# selected top
-			self.list.sort(sortType=3, flag=True)
-			self.sort += 1
-		else:			# a-z
-			self.list.sort(sortType=0)
-			self.sort = 0
-		self["text"].setText(_("Sorted from Z to A.") if self.sort == 1 else _("Selected top.") if self.sort == 2 else _("Sorted from A to Z."))
 
 	def startMoving(self):
 		self.moving = not self.moving
@@ -2217,7 +2203,10 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 		self.list.list[index], self.list.list[newIndex] = self.list.list[newIndex], self.list.list[index]
 		self.list.setList(self.list.list)
 		self.list.moveToIndex(newIndex)
-		config.movielist.videodirs.value = [item[0][0] for item in self.list.list]
+
+		bookmarks = [item[0][0] for item in self.list.list]
+		locations = dict((item[0], item) for item in config.movielist.videodirs.locations)
+		config.movielist.videodirs.locations = [locations[bookmark] for bookmark in bookmarks]
 		config.movielist.videodirs.save()
 
 	def deleteSelected(self):

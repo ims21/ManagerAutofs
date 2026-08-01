@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-01 17:31+0200\n"
+"POT-Creation-Date: 2026-08-01 18:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,7 +221,7 @@ msgstr ""
 msgid "Add or remove item of selection"
 msgstr ""
 
-#: ../ui.py:2460
+#: ../ui.py:2449
 msgid "Add or remove item to/from selection"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Apply all changes and restart the GUI?"
 msgstr ""
 
-#: ../ui.py:2228
+#: ../ui.py:2217
 #, python-format
 msgid "Are You sure to delete %s selected bookmark?"
 msgid_plural "Are You sure to delete %s selected bookmarks?"
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Are you sure to remove selected files?"
 msgstr ""
 
-#: ../ui.py:2553
+#: ../ui.py:2542
 #, python-format
 msgid "Are you sure to save %s selected config item to '/tmp/settings'?"
 msgid_plural "Are you sure to save %s selected config items to '/tmp/settings'?"
@@ -304,7 +304,7 @@ msgstr ""
 msgid "Brief help on how to use autofs."
 msgstr ""
 
-#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2158 ../ui.py:2371 ../ui.py:2470
+#: ../removebckp.py:77 ../ui.py:2052 ../ui.py:2157 ../ui.py:2360 ../ui.py:2459
 msgid "Cancel"
 msgstr ""
 
@@ -336,8 +336,8 @@ msgid "Clone record with '%s' remote device in 'auto.master' file and create fil
 msgstr ""
 
 #: ../helptexts.py:35 ../ui.py:172 ../ui.py:173 ../ui.py:197 ../ui.py:1209
-#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2459
-#: ../ui.py:2464
+#: ../ui.py:1502 ../ui.py:1885 ../ui.py:2141 ../ui.py:2146 ../ui.py:2448
+#: ../ui.py:2453
 msgid "Close"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgstr ""
 msgid "Create settings file..."
 msgstr ""
 
-#: ../ui.py:2159
+#: ../ui.py:2158
 msgid "Delete"
 msgstr ""
 
@@ -373,11 +373,11 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: ../ui.py:2401
+#: ../ui.py:2390
 msgid "Display in description current item value."
 msgstr ""
 
-#: ../ui.py:2401
+#: ../ui.py:2390
 msgid "Displaying values"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgstr ""
 msgid "Each shared directory has own mounpoint under /media:"
 msgstr ""
 
-#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2160 ../ui.py:2175
+#: ../ui.py:1887 ../ui.py:1904 ../ui.py:2159 ../ui.py:2173
 msgid "Edit"
 msgstr ""
 
@@ -412,7 +412,7 @@ msgstr ""
 msgid "Edit auto file"
 msgstr ""
 
-#: ../ui.py:2263
+#: ../ui.py:2252
 msgid "Edit bookmark"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Enable/disable mountpoint"
 msgstr ""
 
-#: ../ui.py:183 ../ui.py:2153
+#: ../ui.py:183 ../ui.py:2152
 msgid "Enable/disable moving item"
 msgstr ""
 
@@ -527,11 +527,11 @@ msgstr ""
 msgid "Install required autofs package if missing."
 msgstr ""
 
-#: ../removebckp.py:79 ../ui.py:2161 ../ui.py:2473
+#: ../removebckp.py:79 ../ui.py:2160 ../ui.py:2462
 msgid "Inversion"
 msgstr ""
 
-#: ../ui.py:2149 ../ui.py:2467
+#: ../ui.py:2149 ../ui.py:2456
 msgid "Invert selection"
 msgstr ""
 
@@ -604,11 +604,11 @@ msgstr ""
 msgid "Mountpoint name '%s' is used!"
 msgstr ""
 
-#: ../ui.py:182 ../ui.py:2152
+#: ../ui.py:182 ../ui.py:2151
 msgid "Move item down"
 msgstr ""
 
-#: ../ui.py:181 ../ui.py:2151
+#: ../ui.py:181 ../ui.py:2150
 msgid "Move item up"
 msgstr ""
 
@@ -729,7 +729,7 @@ msgstr ""
 msgid "Put mountpoint name"
 msgstr ""
 
-#: ../ui.py:2372
+#: ../ui.py:2361
 msgid "Read"
 msgstr ""
 
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Reload autofs mount maps. It is made standardly on each plugin exit if something was changed."
 msgstr ""
 
-#: ../ui.py:2400
+#: ../ui.py:2389
 msgid "Remote receiver's IP address"
 msgstr ""
 
@@ -856,7 +856,7 @@ msgstr ""
 msgid "Restart autofs with GUI restart"
 msgstr ""
 
-#: ../ui.py:2400
+#: ../ui.py:2389
 msgid "Running box IP address for use its settings file as source."
 msgstr ""
 
@@ -864,7 +864,7 @@ msgstr ""
 msgid "Runs AutoBackup plugin."
 msgstr ""
 
-#: ../ui.py:2465 ../ui.py:2471
+#: ../ui.py:2454 ../ui.py:2460
 msgid "Save to file"
 msgstr ""
 
@@ -881,19 +881,15 @@ msgstr ""
 msgid "Select path to replace:"
 msgstr ""
 
-#: ../ui.py:2476
+#: ../ui.py:2465
 msgid "Select with 'OK' or use 'Inverse'."
 msgstr ""
 
-#: ../ui.py:2187
-msgid "Selected top."
-msgstr ""
-
-#: ../ui.py:2448
+#: ../ui.py:2437
 msgid "Settings items list"
 msgstr ""
 
-#: ../ui.py:2369
+#: ../ui.py:2358
 msgid "Setup source with settings"
 msgstr ""
 
@@ -901,20 +897,12 @@ msgstr ""
 msgid "Sometimes it is needed restart autofs deamon and GUI. Use this option and then wait for finishing and for restart GUI."
 msgstr ""
 
-#: ../ui.py:2472
+#: ../ui.py:2461
 msgid "Sort"
 msgstr ""
 
-#: ../ui.py:2150 ../ui.py:2466
+#: ../ui.py:2455
 msgid "Sort list"
-msgstr ""
-
-#: ../ui.py:2187
-msgid "Sorted from A to Z."
-msgstr ""
-
-#: ../ui.py:2187
-msgid "Sorted from Z to A."
 msgstr ""
 
 #: ../ui.py:2076
@@ -963,11 +951,11 @@ msgstr ""
 msgid "Use '%s' as HDD replacement"
 msgstr ""
 
-#: ../ui.py:2169
-msgid "Use 'OK' to select multiple items. Use 'Info/EPG' to sort the list as 'A-Z', 'Selected top', or 'Z-A'. Use the '0' button to enable or disable moving an item with '<' and '>'."
+#: ../ui.py:2167
+msgid "Use 'OK' to select multiple items. Use the '0' button to enable or disable moving an item with '<' and '>'."
 msgstr ""
 
-#: ../ui.py:2398
+#: ../ui.py:2387
 msgid "Use local '/etc/enigma/settings' file as source."
 msgstr ""
 
@@ -975,7 +963,7 @@ msgstr ""
 msgid "Use preset"
 msgstr ""
 
-#: ../ui.py:2397
+#: ../ui.py:2386
 msgid "Use this receiver"
 msgstr ""
 
