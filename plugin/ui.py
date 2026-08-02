@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.63"
+VERSION = "2.64"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -1051,24 +1051,47 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 		try:
 			with open('/etc/hostname', 'r') as fi:
 				hostname = fi.read().rstrip("\n")
-				fi.close()
 		except:
 			print("[ManagerAutofs] failed to read etc/hostname")
 			self.utilitySubmenu()
 			return
-		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=(_("Enter new hostname for your Receiver")), text=hostname)
+		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=_("Enter new hostname for your Receiver"), text=hostname)
 
 	def hostnameCallback(self, hostname=None):
 		if hostname:
+			allowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-"
+			if (
+				len(hostname) > 63
+				or hostname.startswith("-")
+				or hostname.endswith("-")
+				or any(character not in allowed for character in hostname)
+			):
+				self.session.openWithCallback(
+					boundFunction(self.reopenHostnameKeyboard, hostname),
+					MessageBox,
+					_("The hostname may contain only letters, numbers and hyphens. A hyphen cannot be the first or last character."),
+					type=MessageBox.TYPE_ERROR,
+					timeout=5
+				)
+				return
+
 			with open('/etc/hostname', 'r') as fi:
 				oldhostname = fi.read().rstrip("\n")
-				fi.close()
+
 			if hostname != oldhostname:
-				with open('/etc/hostname', 'w+') as fo:
+				with open('/etc/hostname', 'w') as fo:
 					fo.write(hostname)
-					fo.close()
-					MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
+				MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
+
 		self.utilitySubmenu()
+
+	def reopenHostnameKeyboard(self, hostname, *args):
+		self.session.openWithCallback(
+			self.hostnameCallback,
+			VirtualKeyBoard,
+			title=_("Enter new hostname for your Receiver"),
+			text=hostname
+		)
 
 	def removeBackupFiles(self):
 		from .removebckp import ManagerAutofsRemoveBackupFiles
