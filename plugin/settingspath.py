@@ -9,6 +9,7 @@ from Screens.Standby import TryQuitMainloop
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Tools.Directories import resolveFilename, SCOPE_CONFIG
 
+from ast import literal_eval
 from shutil import copyfile
 import os
 import stat
@@ -47,6 +48,39 @@ def findEntries(data, oldText):
 		if separator and oldBytes in value:
 			entries.append((index, key, value.count(oldBytes)))
 	return lines, entries
+
+def replaceValue(value, oldBytes, newBytes):
+	replaced = value.replace(oldBytes, newBytes)
+	try:
+		items = literal_eval(asText(value).strip())
+	except (SyntaxError, ValueError):
+		return replaced
+
+	if not isinstance(items, list) or not all(isinstance(item, (str, unicode)) for item in items):
+		return replaced
+
+	oldText = asText(oldBytes)
+	newText = asText(newBytes)
+	changedItems = [item.replace(oldText, newText) for item in items]
+	unchangedItems = {
+		item for item, changedItem in zip(items, changedItems)
+		if item == changedItem
+	}
+	result = []
+	changedItemsSeen = set()
+
+	for item, changedItem in zip(items, changedItems):
+		if item != changedItem:
+			if changedItem in unchangedItems or changedItem in changedItemsSeen:
+				continue
+			changedItemsSeen.add(changedItem)
+		result.append(changedItem)
+
+	if len(result) == len(items):
+		return replaced
+
+	lineEnd = b"\r\n" if value.endswith(b"\r\n") else b"\n" if value.endswith(b"\n") else b""
+	return asBytes(repr(result)) + lineEnd
 
 
 class SettingsPathEditor:
@@ -213,7 +247,7 @@ class SettingsPathEditor:
 		lineIndex, key, occurrences = self.entries[self.entryIndex]
 		if answer:
 			lineKey, separator, value = self.lines[lineIndex].partition(b"=")
-			self.lines[lineIndex] = lineKey + separator + value.replace(self.oldBytes, self.newBytes)
+			self.lines[lineIndex] = lineKey + separator + replaceValue(value, self.oldBytes, self.newBytes)
 			self.changedEntries += 1
 			self.replacements += occurrences
 			self.changedEntryKeys.add(key)

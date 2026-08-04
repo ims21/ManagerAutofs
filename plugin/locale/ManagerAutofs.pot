@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-02 09:35+0200\n"
+"POT-Creation-Date: 2026-08-04 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,21 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../settingspath.py:249
+#: ../settingspath.py:283
 #, python-format
 msgid "%d match will be replaced."
 msgid_plural "%d matches will be replaced."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../settingspath.py:248
+#: ../settingspath.py:282
 #, python-format
 msgid "%d path will be replaced:"
 msgid_plural "%d paths will be replaced."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../settingspath.py:250
+#: ../settingspath.py:284
 #, python-format
 msgid "%d settings entry will be changed."
 msgid_plural "%d settings entries will be changed."
@@ -103,7 +103,7 @@ msgstr ""
 msgid "+ very clear what is what"
 msgstr ""
 
-#: ../settingspath.py:201
+#: ../settingspath.py:235
 #, python-format
 msgid "- %d match found"
 msgid_plural "- %d matches found"
@@ -247,7 +247,7 @@ msgstr ""
 msgid "All remote directories from all devices will be mounted under '/media/test':"
 msgstr ""
 
-#: ../settingspath.py:251
+#: ../settingspath.py:285
 msgid "Apply all changes and restart the GUI?"
 msgstr ""
 
@@ -466,7 +466,7 @@ msgstr ""
 msgid "Enter local directory for the indirect map"
 msgstr ""
 
-#: ../settingspath.py:86
+#: ../settingspath.py:120
 msgid "Enter manually..."
 msgstr ""
 
@@ -486,15 +486,15 @@ msgstr ""
 msgid "Failed to convert auto.file."
 msgstr ""
 
-#: ../settingspath.py:132 ../settingspath.py:170
+#: ../settingspath.py:166 ../settingspath.py:204
 msgid "Failed to read the settings file."
 msgstr ""
 
-#: ../settingspath.py:290
+#: ../settingspath.py:324
 msgid "Failed to reload the settings file. The original file was restored."
 msgstr ""
 
-#: ../settingspath.py:278
+#: ../settingspath.py:312
 msgid "Failed to update the settings file."
 msgstr ""
 
@@ -620,7 +620,7 @@ msgstr ""
 msgid "New record"
 msgstr ""
 
-#: ../settingspath.py:203
+#: ../settingspath.py:237
 msgid "New text:"
 msgstr ""
 
@@ -628,7 +628,7 @@ msgstr ""
 msgid "Next items are not needed standardly:"
 msgstr ""
 
-#: ../settingspath.py:255
+#: ../settingspath.py:289
 msgid "Next path"
 msgstr ""
 
@@ -636,11 +636,11 @@ msgstr ""
 msgid "Next utilities."
 msgstr ""
 
-#: ../settingspath.py:254
+#: ../settingspath.py:288
 msgid "No"
 msgstr ""
 
-#: ../settingspath.py:242
+#: ../settingspath.py:276
 msgid "No settings entries were changed."
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Open AutoBackup plugin"
 msgstr ""
 
-#: ../settingspath.py:202
+#: ../settingspath.py:236
 msgid "Original text:"
 msgstr ""
 
@@ -844,11 +844,11 @@ msgstr ""
 msgid "Replace path in settings..."
 msgstr ""
 
-#: ../settingspath.py:199
+#: ../settingspath.py:233
 msgid "Replace text in this settings entry?"
 msgstr ""
 
-#: ../settingspath.py:148
+#: ../settingspath.py:182
 msgid "Replace with text:"
 msgstr ""
 
@@ -877,7 +877,7 @@ msgstr ""
 msgid "Select operation:"
 msgstr ""
 
-#: ../settingspath.py:95
+#: ../settingspath.py:129
 msgid "Select path to replace:"
 msgstr ""
 
@@ -909,7 +909,7 @@ msgstr ""
 msgid "Tests enabled mount points on plugin start, but it increase plugin start time."
 msgstr ""
 
-#: ../settingspath.py:105
+#: ../settingspath.py:139
 msgid "Text to replace in settings:"
 msgstr ""
 
@@ -925,15 +925,15 @@ msgstr ""
 msgid "The hostname may contain only letters, numbers and hyphens. A hyphen cannot be the first or last character."
 msgstr ""
 
-#: ../settingspath.py:160
+#: ../settingspath.py:194
 msgid "The search and replacement texts are identical."
 msgstr ""
 
-#: ../settingspath.py:122
+#: ../settingspath.py:156
 msgid "The search text must not be empty."
 msgstr ""
 
-#: ../settingspath.py:139 ../settingspath.py:177
+#: ../settingspath.py:173 ../settingspath.py:211
 msgid "The search text was not found in any settings value."
 msgstr ""
 
@@ -987,7 +987,7 @@ msgstr ""
 msgid "Wrong file format!"
 msgstr ""
 
-#: ../settingspath.py:253
+#: ../settingspath.py:287
 msgid "Yes"
 msgstr ""
 
