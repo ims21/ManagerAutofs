@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.65"
+VERSION = "2.66"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -81,6 +81,8 @@ cfg = config.plugins.mautofs
 AUTOMASTER = "/etc/auto.master"
 BACKUPCFG = "/etc/backup.cfg"
 AUTOFS = "/etc/init.d/autofs"
+HOSTNAME = "/etc/hostname"
+BOXTYPE = "/proc/stb/info/boxtype"
 DEFAULT_HDD = '/media/hdd'
 DIRECT_MAP = "/-"
 MAP_COMMENT = "#map:"
@@ -1049,10 +1051,10 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 
 	def hostEdit(self):
 		try:
-			with open('/etc/hostname', 'r') as fi:
+			with open(HOSTNAME, 'r') as fi:
 				hostname = fi.read().rstrip("\n")
 		except:
-			print("[ManagerAutofs] failed to read etc/hostname")
+			print("[ManagerAutofs] failed to read %s" % HOSTNAME)
 			self.utilitySubmenu()
 			return
 		self.session.openWithCallback(self.hostnameCallback, VirtualKeyBoard, title=_("Enter new hostname for your Receiver"), text=hostname)
@@ -1075,12 +1077,65 @@ class ManagerAutofsMasterSelection(Screen, HelpableScreen):
 				)
 				return
 
-			with open('/etc/hostname', 'r') as fi:
+			with open(HOSTNAME, 'r') as fi:
 				oldhostname = fi.read().rstrip("\n")
 
+			changed = hostname != oldhostname
 			if hostname != oldhostname:
-				with open('/etc/hostname', 'w') as fo:
+				with open(HOSTNAME, 'w') as fo:
 					fo.write(hostname)
+			try:
+				with open(BOXTYPE, "r") as fi:
+					boxtype = fi.readline().strip()
+			except:
+				boxtype = ""
+				print("[ManagerAutofs] failed to read %s" % BOXTYPE)
+
+			backup = []
+			if os.path.exists(BACKUPCFG):
+				with open(BACKUPCFG, "r") as fi:
+					backup = fi.read().splitlines()
+
+			customHostname = boxtype and hostname.lower() != boxtype.lower()
+			hostnameInBackup = HOSTNAME in backup
+
+			if boxtype and customHostname != hostnameInBackup:
+				def callbackBackup(value=False):
+					if value:
+						if customHostname:
+							with open(BACKUPCFG, "a+") as fo:
+								fo.seek(0)
+								content = fo.read()
+								if content and not content.endswith("\n"):
+									fo.write("\n")
+								fo.write(HOSTNAME + "\n")
+						else:
+							with open(BACKUPCFG, "r") as fi:
+								lines = fi.readlines()
+							with open(BACKUPCFG, "w") as fo:
+								fo.writelines(
+									line for line in lines
+									if line.rstrip("\r\n") != HOSTNAME
+								)
+					if changed:
+						MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
+					self.utilitySubmenu()
+
+				if customHostname:
+					question = _("Hostname '%s' differs from original '%s'.\nAdd '%s' to '%s'?") % (hostname, boxtype, HOSTNAME, BACKUPCFG)
+				else:
+					question = _("Hostname '%s' is original.\nRemove '%s' from '%s'?") % (hostname, HOSTNAME, BACKUPCFG)
+
+				self.session.openWithCallback(
+					callbackBackup,
+					MessageBox,
+					question,
+					type=MessageBox.TYPE_YESNO,
+					default=True
+				)
+				return
+
+			if changed:
 				MessageBoxNM(self.session, _("For apply new hostname restart box!"), 5)
 
 		self.utilitySubmenu()
