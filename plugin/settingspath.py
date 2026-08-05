@@ -224,17 +224,55 @@ class SettingsPathEditor:
 		self.changedEntryKeys = set()
 		self.confirmEntry()
 
+	def getChangedTexts(self, value, newValue):
+		valueText = asText(value).rstrip("\r\n")
+		newValueText = asText(newValue).rstrip("\r\n")
+		oldText = asText(self.oldText)
+		newText = asText(self.newText)
+
+		try:
+			items = literal_eval(valueText)
+			newItems = literal_eval(newValueText)
+		except (SyntaxError, ValueError):
+			return valueText, newValueText
+
+		if (
+			isinstance(items, list)
+			and isinstance(newItems, list)
+			and all(isinstance(item, (str, unicode)) for item in items + newItems)
+		):
+			originalItems = []
+			targetItems = set()
+
+			for item in items:
+				changedItem = item.replace(oldText, newText)
+				if changedItem != item:
+					originalItems.append(item)
+					targetItems.add(changedItem)
+
+			if originalItems:
+				changedItems = [
+					item for item in newItems
+					if item in targetItems
+				]
+				return "\n".join(originalItems), "\n".join(changedItems)
+
+		return valueText, newValueText
+
 	def confirmEntry(self):
 		if self.entryIndex >= len(self.entries):
 			self.writeChanges()
 			return
 
-		_dummy, key, occurrences = self.entries[self.entryIndex]
+		lineIndex, key, occurrences = self.entries[self.entryIndex]
+		_lineKey, _separator, value = self.lines[lineIndex].partition(b"=")
+		self.entryNewValue = replaceValue(value, self.oldBytes, self.newBytes)
+		originalText, changedText = self.getChangedTexts(value, self.entryNewValue)
 		text = _("Replace text in this settings entry?") + "  (%d/%d)" % (self.entryIndex + 1, len(self.entries))
 		text += "\n\n" + asText(key)
 		text += "\n\n" + ngettext("- %d match found", "- %d matches found", occurrences) % occurrences
-		text += "\n\n" + _("Original text:") + "\n" + asText(self.oldText)
-		text += "\n\n" + _("New text:") + "\n" + asText(self.newText)
+		text += "\n\n" + _("Original text:") + "\n" + originalText
+		text += "\n\n" + _("New text:") + "\n" + changedText
 		self.session.openWithCallback(
 			self.entryConfirmed,
 			MessageBox,
@@ -246,8 +284,8 @@ class SettingsPathEditor:
 	def entryConfirmed(self, answer):
 		lineIndex, key, occurrences = self.entries[self.entryIndex]
 		if answer:
-			lineKey, separator, value = self.lines[lineIndex].partition(b"=")
-			self.lines[lineIndex] = lineKey + separator + replaceValue(value, self.oldBytes, self.newBytes)
+			lineKey, separator, _value = self.lines[lineIndex].partition(b"=")
+			self.lines[lineIndex] = lineKey + separator + self.entryNewValue
 			self.changedEntries += 1
 			self.replacements += occurrences
 			self.changedEntryKeys.add(key)

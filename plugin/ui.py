@@ -2297,17 +2297,24 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 
 	def delete(self, choice):
 		if choice:
-			bookmarks = config.movielist.videodirs.value
 			data = self.list.getSelectionsList()
-			selected = len(data)
-			if not selected:
+			if not data:
 				data = [self["config"].getCurrent()[0]]
-				selected = 1
-			for item in data:
-				# item ... (name, name, index, status)
-				self.list.removeSelection(item)
-				bookmarks.remove(item[0])
-			config.movielist.videodirs.value = bookmarks
+
+			selectedItems = set(item[0:3] for item in data)
+			locations = config.movielist.videodirs.locations
+
+			indexes = [
+				index for index, item in enumerate(self.list.list)
+				if item[0][0:3] in selectedItems
+			]
+
+			for index in reversed(indexes):
+				del self.list.list[index]
+				del locations[index]
+
+			self.list.setList(self.list.list)
+			config.movielist.videodirs.locations = locations
 			config.movielist.videodirs.save()
 
 	def editCurrent(self):

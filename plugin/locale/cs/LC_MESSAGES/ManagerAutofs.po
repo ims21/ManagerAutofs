@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Enigma2 ManagerAutofs Plugin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-05 10:16+0200\n"
-"PO-Revision-Date: 2026-08-05 10:24+0200\n"
+"PO-Revision-Date: 2026-08-05 18:54+0200\n"
 "Last-Translator: ims <ims@openpli.org>\n"
 "Language-Team: PLi\n"
 "Language: cs_CZ\n"
@@ -938,7 +938,7 @@ msgstr "Testuje povolené body připojení při startu pluginu, ale prodlouží 
 
 #: ../settingspath.py:139
 msgid "Text to replace in settings:"
-msgstr "Text k nahrazení v nastavení:"
+msgstr "Nahrazovaný text v položkách nastavení:"
 
 #: ../helptexts.py:133
 msgid "The '#map:' line is ManagerAutofs metadata for the displayed mountpoint and must immediately precede the '/-' line. Autofs itself ignores it as a comment."
