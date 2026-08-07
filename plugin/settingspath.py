@@ -79,7 +79,7 @@ def replaceValue(value, oldBytes, newBytes):
 	if len(result) == len(items):
 		return replaced
 
-	lineEnd = b"\r\n" if value.endswith(b"\r\n") else b"\n" if value.endswith(b"\n") else b""
+	lineEnd = b"\n" if value.endswith(b"\n") else b""
 	return asBytes(repr(result)) + lineEnd
 
 
@@ -225,8 +225,8 @@ class SettingsPathEditor:
 		self.confirmEntry()
 
 	def getChangedTexts(self, value, newValue):
-		valueText = asText(value).rstrip("\r\n")
-		newValueText = asText(newValue).rstrip("\r\n")
+		valueText = asText(value).rstrip("\n")
+		newValueText = asText(newValue).rstrip("\n")
 		oldText = asText(self.oldText)
 		newText = asText(self.newText)
 
