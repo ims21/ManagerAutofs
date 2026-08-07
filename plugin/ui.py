@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.66"
+VERSION = "2.67"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -43,6 +43,7 @@ from urllib.request import urlopen, HTTPError, URLError
 
 import xml.etree.ElementTree as ET
 
+from ast import literal_eval
 from shutil import copyfile
 from enigma import eSize, ePoint, eConsoleAppContainer, eTimer, getDesktop
 import skin
@@ -2172,16 +2173,8 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 
 
 def loadAllMovielistVideodirs():
-	if config.movielist.videodirs.saved_value:
-		sv = config.movielist.videodirs.saved_value
-		tmp = eval(sv)
-		locations = [[x, None, False, False] for x in tmp]
-		for x in locations:
-			x[1] = x[0]
-			x[2] = True
-		config.movielist.videodirs.locations = locations
-		return tmp
-	return []
+	sv = config.movielist.videodirs.saved_value
+	return literal_eval(sv) if sv else []
 
 
 class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
@@ -2322,12 +2315,16 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 			if changedBookmark:
 				if not changedBookmark.endswith('/'):
 					changedBookmark += '/'
-				bookmarks = config.movielist.videodirs.value
-				for i, text in enumerate(bookmarks):
-					if data[0] == text:
-						bookmarks[i] = changedBookmark
+				locations = config.movielist.videodirs.locations
+				for i, location in enumerate(locations):
+					if data[0] == location[0]:
+						location = location[:]
+						location[0] = changedBookmark
+						if location[1] == data[0]:
+							location[1] = changedBookmark
+						locations[i] = location
 						self.list.changeCurrentItem(data,(changedBookmark, changedBookmark, data[2], False))
-						config.movielist.videodirs.value = bookmarks
+						config.movielist.videodirs.locations = locations
 						config.movielist.videodirs.save()
 						return
 
@@ -2337,7 +2334,6 @@ class ManagerAutofsEditBookmarks(Screen, HelpableScreen):
 				self.session.openWithCallback(editBookmark, VirtualKeyBoard, title=(_("Edit bookmark")), text=data[0])
 
 	def exit(self):
-		config.movielist.videodirs.load()
 		self.close()
 
 class useMountAsHDD():
