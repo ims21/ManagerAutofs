@@ -116,7 +116,7 @@ class SettingsPathEditor:
 		else:
 			self.finish()
 
-	def selectPath(self):
+	def selectPath(self, *args):
 		choices = [(_("Enter manually...") + "  " + DEFAULT_PATH, DEFAULT_PATH)]
 		seen = {DEFAULT_PATH}
 		for path in self.bookmarks:
@@ -133,67 +133,36 @@ class SettingsPathEditor:
 
 	def pathSelected(self, choice):
 		if choice:
-			self.session.openWithCallback(
-				self.searchEntered,
-				VirtualKeyBoard,
-				title=_("Text to replace in settings:"),
-				text=choice[1]
-			)
+			self.searchText = choice[1]
+			self.openSearch()
 		else:
 			if self.pendingPaths:
 				self.writeChanges()
 			else:
 				self.finish()
 
+	def openSearch(self, *args):
+		self.session.openWithCallback(
+			self.searchEntered,
+			VirtualKeyBoard,
+			title=_("Text to replace in settings:"),
+			text=asText(self.searchText)
+		)
+
 	def searchEntered(self, oldText):
 		if oldText is None:
-			self.returnToSelection()
+			self.selectPath()
 			return
+
+		self.searchText = oldText
+
 		if not oldText:
 			self.session.openWithCallback(
-				lambda *_: self.selectPath(),
+				self.openSearch,
 				MessageBox,
 				_("The search text must not be empty."),
 				type=MessageBox.TYPE_ERROR,
-				timeout=10
-			)
-			return
-		try:
-			data = self.getWorkingData()
-			_dummy, entries = findEntries(data, oldText)
-		except Exception as error:
-			print("[ManagerAutofs] Failed to read settings:", error)
-			self.showError(_("Failed to read the settings file."))
-			return
-
-		if not entries:
-			self.session.openWithCallback(
-				self.returnToSelection,
-				MessageBox,
-				_("The search text was not found in any settings value."),
-				type=MessageBox.TYPE_INFO,
-				timeout=8
-			)
-			return
-
-		self.session.openWithCallback(
-			lambda newText: self.replacementEntered(oldText, newText),
-			VirtualKeyBoard,
-			title=_("Replace with text:"),
-			text=asText(oldText)
-		)
-
-	def replacementEntered(self, oldText, newText):
-		if newText is None:
-			self.returnToSelection()
-			return
-		if oldText == newText:
-			self.session.openWithCallback(
-				self.returnToSelection,
-				MessageBox,
-				_("The search and replacement texts are identical."),
-				type=MessageBox.TYPE_INFO,
-				timeout=8
+				timeout=5
 			)
 			return
 		try:
@@ -206,17 +175,67 @@ class SettingsPathEditor:
 
 		if not self.entries:
 			self.session.openWithCallback(
-				self.returnToSelection,
+				self.openSearch,
 				MessageBox,
 				_("The search text was not found in any settings value."),
 				type=MessageBox.TYPE_INFO,
-				timeout=8
+				timeout=5
 			)
 			return
 
 		self.oldText = oldText
+		self.openReplacement()
+
+	def openReplacement(self, *args):
+		self.session.openWithCallback(
+			self.replacementEntered,
+			VirtualKeyBoard,
+			title=_("Replace with text:"),
+			text=asText(self.oldText)
+		)
+
+	def replacementEntered(self, newText):
+		if newText is None:
+			self.selectPath()
+			return
+
+		if not newText:
+			self.session.openWithCallback(
+				self.openReplacement,
+				MessageBox,
+				_("The replacement path must not be empty."),
+				type=MessageBox.TYPE_ERROR,
+				timeout=5
+			)
+			return
+
+		if (
+			not newText.startswith("/")
+			or "\\" in newText
+			or newText != newText.strip()
+			or any(ord(char) < 32 or ord(char) == 127 for char in newText)
+		):
+			self.session.openWithCallback(
+				self.openReplacement,
+				MessageBox,
+				_("The replacement path contains invalid characters."),
+				type=MessageBox.TYPE_ERROR,
+				timeout=5
+			)
+			return
+
+		if self.oldText == newText:
+			self.session.openWithCallback(
+				self.openReplacement,
+				MessageBox,
+				_("The search and replacement texts are identical."),
+				type=MessageBox.TYPE_INFO,
+				timeout=5
+			)
+			return
+
 		self.newText = newText
-		self.oldBytes = asBytes(oldText)
+		self.oldBytes = asBytes(self.oldText)
 		self.newBytes = asBytes(newText)
 		self.entryIndex = 0
 		self.changedEntries = 0
