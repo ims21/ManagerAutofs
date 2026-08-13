@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.69"
+VERSION = "2.70"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -28,7 +28,7 @@ from Components.Label import Label
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Screens.HelpMenu import HelpableScreen
 from Components.ConfigList import ConfigListScreen
-from Components.config import config, ConfigIP, ConfigInteger, ConfigText, getConfigListEntry, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
+from Components.config import config, ConfigIP, ConfigInteger, ConfigText, ConfigYesNo, NoSave, ConfigSelection, ConfigPassword
 from Tools.BoundFunction import boundFunction
 from Screens.ChoiceBox import ChoiceBox
 from Components.Sources.List import List
@@ -1317,21 +1317,21 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 	def createConfig(self):
 		dx = 4 * ' '
 		self.list = []
-		self.list.append(getConfigListEntry(_("enabled"), cfg.enabled))
+		self.list.append((_("enabled"), cfg.enabled))
 		self.maptype = _("Direct map")
-		self.list.append(getConfigListEntry(self.maptype, cfg.maptype))
+		self.list.append((self.maptype, cfg.maptype))
 		self.mountpoint = _("mountpoint name")
 		if not self.pars or not cfg.maptype.value:
-			self.list.append(getConfigListEntry(self.mountpoint, cfg.mountpoint))
+			self.list.append((self.mountpoint, cfg.mountpoint))
 		self.autofile = _("auto.name")
-		self.list.append(getConfigListEntry(self.autofile, cfg.autofile))
-		self.list.append(getConfigListEntry(_("debug"), cfg.debug))
+		self.list.append((self.autofile, cfg.autofile))
+		self.list.append((_("debug"), cfg.debug))
 		self.timeout = _("timeout")
-		self.list.append(getConfigListEntry(self.timeout, cfg.timeout))
+		self.list.append((self.timeout, cfg.timeout))
 		if cfg.timeout.value:
-			self.list.append(getConfigListEntry(dx + _("time"), cfg.timeouttime))
+			self.list.append((dx + _("time"), cfg.timeouttime))
 		if not cfg.maptype.value:
-			self.list.append(getConfigListEntry(_("browse"), cfg.browse))
+			self.list.append((_("browse"), cfg.browse))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 		self.actualizeString()
@@ -1608,6 +1608,8 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		else:
 			self.parseParams(line)
 		self.createConfig()
+		self["config"].onSelectionChanged.append(self.updateBlueKey)
+		self.updateBlueKey()
 
 	def keyOk(self):
 		if self.direct and not cfg.localdir.value.startswith("/"):
@@ -1633,55 +1635,55 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 		self.list = []
 		dx = 4 * ' '
 		self.enabled = _("enabled")
-		self.list.append(getConfigListEntry(self.enabled, cfg.enabled))
+		self.list.append((self.enabled, cfg.enabled))
 		self.localdir = _("mountpoint") if self.direct else _("local directory")
-		self.list.append(getConfigListEntry(self.localdir, cfg.localdir))
+		self.list.append((self.localdir, cfg.localdir))
 		self.fstype = _("fstype")
-		self.list.append(getConfigListEntry(self.fstype, cfg.fstype))
+		self.list.append((self.fstype, cfg.fstype))
 		if cfg.fstype.value == "nfs":
-			self.list.append(getConfigListEntry(dx + _("soft"), cfg.soft))
-			self.list.append(getConfigListEntry(dx + _("intr"), cfg.intr))
-		self.list.append(getConfigListEntry(_("rw/ro"), cfg.rw))
+			self.list.append((dx + _("soft"), cfg.soft))
+			self.list.append((dx + _("intr"), cfg.intr))
+		self.list.append((_("rw/ro"), cfg.rw))
 		self.useduserpass = _("use user/pass")
-		self.list.append(getConfigListEntry(self.useduserpass, cfg.useduserpass))
+		self.list.append((self.useduserpass, cfg.useduserpass))
 		self.user = dx + _("user")
 		self.passwd = dx + _("password")
 		if cfg.useduserpass.value:
-			self.list.append(getConfigListEntry(self.user, cfg.user))
-			self.list.append(getConfigListEntry(self.passwd, cfg.passwd))
+			self.list.append((self.user, cfg.user))
+			self.list.append((self.passwd, cfg.passwd))
 		self.useddomain = _("domain/workgroup")
 		self.domain = ""
-		self.list.append(getConfigListEntry(self.useddomain, cfg.useddomain))
+		self.list.append((self.useddomain, cfg.useddomain))
 		if cfg.useddomain.value:
 			self.domain = dx + _("domain") if cfg.useddomain.value == "domain" else dx + _("workgroup")
-			self.list.append(getConfigListEntry(self.domain, cfg.domain))
+			self.list.append((self.domain, cfg.domain))
 			if cfg.useddomain.value == "domain":
-				self.list.append(getConfigListEntry(dx + _("noperm"), cfg.noperm))
+				self.list.append((dx + _("noperm"), cfg.noperm))
 		if cfg.fstype.value == "nfs":
-			self.list.append(getConfigListEntry(_("noatime"), cfg.noatime))
-		self.list.append(getConfigListEntry(_("noserverino"), cfg.noserverino))
-		self.list.append(getConfigListEntry(_("nosuid"), cfg.nosuid))
-		self.list.append(getConfigListEntry(_("nodev"), cfg.nodev))
-		self.list.append(getConfigListEntry(_("rsize"), cfg.rsize))
-		self.list.append(getConfigListEntry(_("wsize"), cfg.wsize))
-		self.list.append(getConfigListEntry(_("iocharset"), cfg.iocharset))
-		self.list.append(getConfigListEntry(_("security"), cfg.sec))
+			self.list.append((_("noatime"), cfg.noatime))
+		self.list.append((_("noserverino"), cfg.noserverino))
+		self.list.append((_("nosuid"), cfg.nosuid))
+		self.list.append((_("nodev"), cfg.nodev))
+		self.list.append((_("rsize"), cfg.rsize))
+		self.list.append((_("wsize"), cfg.wsize))
+		self.list.append((_("iocharset"), cfg.iocharset))
+		self.list.append((_("security"), cfg.sec))
 		self.use_ip_or_name = _("use ip/name or dev")
-		self.list.append(getConfigListEntry(self.use_ip_or_name, cfg.use_ip_or_name))
+		self.list.append((self.use_ip_or_name, cfg.use_ip_or_name))
 		if cfg.use_ip_or_name.value:
 			self.usedip = dx + _("ip or name")
-			self.list.append(getConfigListEntry(self.usedip, cfg.usedip))
+			self.list.append((self.usedip, cfg.usedip))
 			if cfg.usedip.value:
-				self.list.append(getConfigListEntry(2 * dx + _("ip"), cfg.ip))
+				self.list.append((2 * dx + _("ip"), cfg.ip))
 			else:
-				self.list.append(getConfigListEntry(2 * dx + _("name"), cfg.name))
+				self.list.append((2 * dx + _("name"), cfg.name))
 		else:
-			self.list.append(getConfigListEntry(dx + _("dev"), cfg.dev))
+			self.list.append((dx + _("dev"), cfg.dev))
 		self.remotedir = _("shared remote directory")
-		self.list.append(getConfigListEntry(self.remotedir, cfg.remotedir))
+		self.list.append((self.remotedir, cfg.remotedir))
 		if cfg.fstype.value == "cifs":
-			self.list.append(getConfigListEntry(_("smb version"), cfg.smb))
-		self.list.append(getConfigListEntry(_("user string"), cfg.rest))
+			self.list.append((_("smb version"), cfg.smb))
+		self.list.append((_("user string"), cfg.rest))
 
 		self["config"].list = self.list
 		self["config"].setList(self.list)
@@ -1713,7 +1715,7 @@ class ManagerAutofsAutoEdit(Screen, ConfigListScreen):
 			cfg.remotedir.value = cfg.pre_remotedir.value
 			self.createConfig()
 
-	def getCurrentEntry(self):
+	def updateBlueKey(self):
 		if self["config"].getCurrent()[0] in (self.localdir, self.user, self.passwd, self.remotedir, self.domain):
 			self["key_blue"].setText(_("Use preset"))
 		else:
@@ -2147,13 +2149,13 @@ class ManagerAutofsPreset(Screen, ConfigListScreen):
 
 		self["config"] = List()
 		self.presetList = []
-		self.presetList.append(getConfigListEntry(_("user"), cfg.pre_user, _("Preset username account value.")))
-		self.presetList.append(getConfigListEntry(_("password"), cfg.pre_passwd, _("Preset account password value.")))
-		self.presetList.append(getConfigListEntry(_("domain/group"), cfg.pre_domain, _("Preset domain/group value.")))
-		self.presetList.append(getConfigListEntry(_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
-		self.presetList.append(getConfigListEntry(_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
-		self.presetList.append(getConfigListEntry(_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
-		self.presetList.append(getConfigListEntry(_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
+		self.presetList.append((_("user"), cfg.pre_user, _("Preset username account value.")))
+		self.presetList.append((_("password"), cfg.pre_passwd, _("Preset account password value.")))
+		self.presetList.append((_("domain/group"), cfg.pre_domain, _("Preset domain/group value.")))
+		self.presetList.append((_("save preset account values"), cfg.pre_save, _("Preset account values will be or will not be saved on plugin exit.")))
+		self.presetList.append((_("local directory"), cfg.pre_localdir, _("Preset value for local directory.")))
+		self.presetList.append((_("shared remote directory"), cfg.pre_remotedir, _("Preset value for shared remote directory.")))
+		self.presetList.append((_("test mount points on plugin start"), cfg.testmountpoints, _("Tests enabled mount points on plugin start, but it increase plugin start time.")))
 		self["config"].list = self.presetList
 
 		ConfigListScreen.__init__(self, self.presetList, session=self.session)
@@ -2466,10 +2468,10 @@ class ManagerAutofsSettingsIP(Screen, ConfigListScreen):
 	def createConfig(self):
 		self.list = []
 		self.localsetting = _("Use this receiver")
-		self.list.append(getConfigListEntry(self.localsetting, cfg.settings_local, _("Use local '/etc/enigma/settings' file as source.")))
+		self.list.append((self.localsetting, cfg.settings_local, _("Use local '/etc/enigma/settings' file as source.")))
 		if not cfg.settings_local.value:
-			self.list.append(getConfigListEntry(_("Remote receiver's IP address"), cfg.settings_ip, _("Running box IP address for use its settings file as source.")))
-		self.list.append(getConfigListEntry(_("Displaying values"), cfg.settings_values, _("Display in description current item value.")))
+			self.list.append((_("Remote receiver's IP address"), cfg.settings_ip, _("Running box IP address for use its settings file as source.")))
+		self.list.append((_("Displaying values"), cfg.settings_values, _("Display in description current item value.")))
 		self["config"].list = self.list
 		self["config"].setList(self.list)
 
