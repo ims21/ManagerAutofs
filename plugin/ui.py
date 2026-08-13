@@ -1,7 +1,7 @@
 #
 #  Manager Autofs
 #
-VERSION = "2.68"
+VERSION = "2.69"
 #
 #  Coded by ims (c) 2017-2026
 #  Support: openpli.org
@@ -61,7 +61,7 @@ config.plugins.mautofs.autofile = NoSave(ConfigText(default="remote", visible_wi
 config.plugins.mautofs.debug = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeout = NoSave(ConfigYesNo(default=False))
 config.plugins.mautofs.timeouttime = NoSave(ConfigInteger(default=600, limits=(0, 900)))
-config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=False))
+config.plugins.mautofs.browse = NoSave(ConfigYesNo(default=True))
 
 # parameters for prefilled user/pass
 config.plugins.mautofs.pre_user = ConfigText(default="", fixed_size=False)
@@ -1376,6 +1376,7 @@ class ManagerAutofsMasterEdit(Screen, ConfigListScreen):
 
 	def changedEntry(self):
 		if self["config"].getCurrent()[0] == self.maptype:
+			cfg.browse.value = not cfg.maptype.value
 			self.createConfig()
 		elif self["config"].getCurrent()[0] == self.timeout:
 			self.createConfig()
