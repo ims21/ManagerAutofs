@@ -97,6 +97,8 @@ class SettingsPathEditor:
 		self.pendingPaths = 0
 		self.pendingReplacements = 0
 		self.pendingEntries = set()
+
+		configfile.save()
 		self.selectPath()
 
 	def getWorkingData(self):
